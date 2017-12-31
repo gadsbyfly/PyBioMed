@@ -23,4 +23,5 @@ PyMolecule
    moreaubroto
    topology
    Scaffolds
+   PubChemFingerprints
    

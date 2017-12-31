@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PubChemFingerprints module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="PyProtein" href="PyProtein.html" />
+    <link rel="prev" title="Scaffolds module" href="Scaffolds.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PyProtein.html" title="PyProtein"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Scaffolds.html" title="Scaffolds module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Scaffolds.html"
+                        title="previous chapter">Scaffolds module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="PyProtein.html"
+                        title="next chapter">PyProtein</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/PubChemFingerprints.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-PubChemFingerprints">
+<span id="pubchemfingerprints-module"></span><h1>PubChemFingerprints module<a class="headerlink" href="#module-PubChemFingerprints" title="Permalink to this headline">¶</a></h1>
+<p>This file provides internal functions to calculate pubchem fingerprints
+If you have any questions, please feel free to contact us.
+E-mail: <a class="reference external" href="mailto:biomed&#37;&#52;&#48;csu&#46;edu&#46;cn">biomed<span>&#64;</span>csu<span>&#46;</span>edu<span>&#46;</span>cn</a></p>
+<p>&#64;File name: PubChemFingerprints
+&#64;author: Jie Dong and Zhijiang Yao</p>
+<dl class="function">
+<dt id="PubChemFingerprints.InitKeys">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">InitKeys</code><span class="sig-paren">(</span><em>keyList</em>, <em>keyDict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#InitKeys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.InitKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>generates SMARTS patterns for the keys, run once</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.calcPubChemFingerAll">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">calcPubChemFingerAll</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#calcPubChemFingerAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.calcPubChemFingerAll" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>Calculate PubChem Fingerprints</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.calcPubChemFingerPart1">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">calcPubChemFingerPart1</code><span class="sig-paren">(</span><em>mol</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#calcPubChemFingerPart1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.calcPubChemFingerPart1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate PubChem Fingerprints （1-115; 263-881)</p>
+<blockquote>
+<div><p><strong>Arguments</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>mol: the molecule to be fingerprinted</li>
+<li>any extra keyword arguments are ignored</li>
+</ul>
+</div></blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<div>a _DataStructs.SparseBitVect_ containing the fingerprint.</div></blockquote>
+</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;CNO&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bv</span> <span class="o">=</span> <span class="n">PubChemFingerPart1</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">tuple</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">GetOnBits</span><span class="p">())</span>
+<span class="go">(24, 68, 69, 71, 93, 94, 102, 124, 131, 139, 151, 158, 160, 161, 164)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bv</span> <span class="o">=</span> <span class="n">PubChemFingerPart1</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;CCC&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">tuple</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">GetOnBits</span><span class="p">())</span>
+<span class="go">(74, 114, 149, 155, 160)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.calcPubChemFingerPart2">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">calcPubChemFingerPart2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#calcPubChemFingerPart2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.calcPubChemFingerPart2" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>Calculate PubChem Fingerprints （116-263)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.func_1">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">func_1</code><span class="sig-paren">(</span><em>mol</em>, <em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#func_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.func_1" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>Calculate PubChem Fingerprints （116-263)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.func_2">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">func_2</code><span class="sig-paren">(</span><em>mol</em>, <em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#func_2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.func_2" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>saturated or aromatic carbon-only ring</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.func_3">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">func_3</code><span class="sig-paren">(</span><em>mol</em>, <em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#func_3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.func_3" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>saturated or aromatic nitrogen-containing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.func_4">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">func_4</code><span class="sig-paren">(</span><em>mol</em>, <em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#func_4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.func_4" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>saturated or aromatic heteroatom-containing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.func_5">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">func_5</code><span class="sig-paren">(</span><em>mol</em>, <em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#func_5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.func_5" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>unsaturated non-aromatic carbon-only</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.func_6">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">func_6</code><span class="sig-paren">(</span><em>mol</em>, <em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#func_6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.func_6" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>unsaturated non-aromatic nitrogen-containing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.func_7">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">func_7</code><span class="sig-paren">(</span><em>mol</em>, <em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#func_7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.func_7" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>unsaturated non-aromatic heteroatom-containing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PubChemFingerprints.func_8">
+<code class="descclassname">PubChemFingerprints.</code><code class="descname">func_8</code><span class="sig-paren">(</span><em>mol</em>, <em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PubChemFingerprints.html#func_8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PubChemFingerprints.func_8" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Internal Use Only</em></p>
+<p>aromatic rings or hetero-aromatic rings</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PyProtein.html" title="PyProtein"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Scaffolds.html" title="Scaffolds module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

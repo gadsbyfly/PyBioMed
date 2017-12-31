@@ -129,9 +129,9 @@ def ReadFasta(f):
 
 
 if __name__ == '__main__':
-
-    from PyBioMed.PyGetMol.GetProtein import timelimited
     print '-'*10+'START'+'-'*10
+    print 'Only PyBioMed is successfully installed the code below can be run！'
+    from PyBioMed.PyGetMol.GetProtein import timelimited
     @timelimited(10)
     def run_GetDNAFromUniGene():
         seqid = 'AA954964'

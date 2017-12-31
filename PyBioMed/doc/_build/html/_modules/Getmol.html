@@ -270,9 +270,9 @@
 <span class="c1">#############################################################################</span>
 
 <span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-
-    <span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol.GetProtein</span> <span class="k">import</span> <span class="n">timelimited</span>
     <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="s1">&#39;START&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span>
+    <span class="nb">print</span> <span class="s1">&#39;Only PyBioMed is successfully installed the code below can be run！&#39;</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol.GetProtein</span> <span class="k">import</span> <span class="n">timelimited</span>
     <span class="nd">@timelimited</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">run_GetMolFromCAS</span><span class="p">():</span>
         <span class="n">temp</span><span class="o">=</span><span class="n">GetMolFromCAS</span><span class="p">(</span><span class="n">casid</span><span class="o">=</span><span class="s2">&quot;50-12-4&quot;</span><span class="p">)</span>
