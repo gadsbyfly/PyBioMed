@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>molproperty &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for molproperty</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">Calculation of Molecular physical/chemical properties based on some special </span>
+
+<span class="sd">type of approaches(6), including: LogP; LogP2; MR; TPSA, UI and Hy.You can </span>
+
+<span class="sd">freely use and distribute it. If you hava  any problem, you could contact </span>
+
+<span class="sd">with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">Crippen</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">MolSurf</span> <span class="k">as</span> <span class="n">MS</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="c1">##############################################################</span>
+<div class="viewcode-block" id="CalculateMolLogP"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.CalculateMolLogP">[docs]</a><span class="k">def</span> <span class="nf">CalculateMolLogP</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Cacluation of LogP value based on Crippen method</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;LogP</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMolLogP(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">Crippen</span><span class="o">.</span><span class="n">_pyMolLogP</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateMolLogP2"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.CalculateMolLogP2">[docs]</a><span class="k">def</span> <span class="nf">CalculateMolLogP2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Cacluation of LogP^2 value based on Crippen method</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;LogP2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMolLogP2(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">Crippen</span><span class="o">.</span><span class="n">_pyMolLogP</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">res</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateMolMR"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.CalculateMolMR">[docs]</a><span class="k">def</span> <span class="nf">CalculateMolMR</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Cacluation of molecular refraction value based on Crippen method</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;MR</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMolMR(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">Crippen</span><span class="o">.</span><span class="n">_pyMolMR</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateTPSA"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.CalculateTPSA">[docs]</a><span class="k">def</span> <span class="nf">CalculateTPSA</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    calculates the polar surface area of a molecule based upon fragments</span>
+
+<span class="sd">    Algorithm in:</span>
+<span class="sd">        </span>
+<span class="sd">    P. Ertl, B. Rohde, P. Selzer</span>
+<span class="sd">    </span>
+<span class="sd">    Fast Calculation of Molecular Polar Surface Area as a Sum of </span>
+<span class="sd">     </span>
+<span class="sd">    Fragment-based Contributions and Its Application to the Prediction</span>
+<span class="sd">     </span>
+<span class="sd">    of Drug Transport Properties, J.Med.Chem. 43, 3714-3717, 2000</span>
+
+<span class="sd">    Implementation based on the Daylight contrib program tpsa.</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;TPSA</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateTPSA(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">MS</span><span class="o">.</span><span class="n">TPSA</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_CalculateBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bondtype</span><span class="o">=</span><span class="s1">&#39;SINGLE&#39;</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ################################################################# </span>
+<span class="sd">    **Internal used only*</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of bond counts in a molecule. it may be </span>
+<span class="sd">    </span>
+<span class="sd">    SINGLE, DOUBLE, TRIPLE and AROMATIC</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="o">==</span><span class="n">bondtype</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            
+    <span class="k">return</span> <span class="n">i</span>
+
+
+<div class="viewcode-block" id="CalculateUnsaturationIndex"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.CalculateUnsaturationIndex">[docs]</a><span class="k">def</span> <span class="nf">CalculateUnsaturationIndex</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of unsaturation index.</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;UI</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateUnsaturationIndex(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nd</span><span class="o">=</span><span class="n">_CalculateBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bondtype</span><span class="o">=</span><span class="s1">&#39;DOUBLE&#39;</span><span class="p">)</span>
+    <span class="n">nt</span><span class="o">=</span><span class="n">_CalculateBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bondtype</span><span class="o">=</span><span class="s1">&#39;TRIPLE&#39;</span><span class="p">)</span>
+    <span class="n">na</span><span class="o">=</span><span class="n">_CalculateBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bondtype</span><span class="o">=</span><span class="s1">&#39;AROMATIC&#39;</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">nd</span><span class="o">+</span><span class="n">nt</span><span class="o">+</span><span class="n">na</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="CalculateHydrophilicityFactor"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.CalculateHydrophilicityFactor">[docs]</a><span class="k">def</span> <span class="nf">CalculateHydrophilicityFactor</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of hydrophilicity factor. The hydrophilicity </span>
+<span class="sd">    </span>
+<span class="sd">    index is described in more detail on page 225 of the </span>
+<span class="sd">    </span>
+<span class="sd">    Handbook of Molecular Descriptors (Todeschini and Consonni 2000).</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Hy</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHydrophilicityFactor(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nheavy</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">(</span><span class="n">onlyHeavy</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">nc</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">6</span><span class="p">:</span>
+            <span class="n">nc</span><span class="o">=</span><span class="n">nc</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">nhy</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">7</span> <span class="ow">or</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">8</span> <span class="ow">or</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">16</span><span class="p">:</span>
+            <span class="n">atomn</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">GetNeighbors</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">atomn</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">nhy</span><span class="o">=</span><span class="n">nhy</span><span class="o">+</span><span class="mi">1</span>
+                
+    <span class="n">res</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">nhy</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">nhy</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">nc</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">nheavy</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">nheavy</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">+</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">nhy</span><span class="o">+</span><span class="mf">0.0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">nheavy</span><span class="o">^</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="CalculateXlogP"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.CalculateXlogP">[docs]</a><span class="k">def</span> <span class="nf">CalculateXlogP</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Wang octanol water partition coefficient.</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;XLogP</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateXlogP(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CalculateXlogP2"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.CalculateXlogP2">[docs]</a><span class="k">def</span> <span class="nf">CalculateXlogP2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Wang octanol water partition coefficient (XLogP^2).</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;XLogP2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMolLogP(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<span class="n">MolecularProperty</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;LogP&#39;</span><span class="p">:</span><span class="n">CalculateMolLogP</span><span class="p">,</span>
+                   <span class="s1">&#39;LogP2&#39;</span><span class="p">:</span><span class="n">CalculateMolLogP2</span><span class="p">,</span>
+                   <span class="s1">&#39;MR&#39;</span><span class="p">:</span><span class="n">CalculateMolMR</span><span class="p">,</span>
+                   <span class="s1">&#39;TPSA&#39;</span><span class="p">:</span><span class="n">CalculateTPSA</span><span class="p">,</span>
+                   <span class="s1">&#39;Hy&#39;</span><span class="p">:</span><span class="n">CalculateHydrophilicityFactor</span><span class="p">,</span>
+                   <span class="s1">&#39;UI&#39;</span><span class="p">:</span><span class="n">CalculateUnsaturationIndex</span>
+    <span class="p">}</span>
+
+<div class="viewcode-block" id="GetMolecularProperty"><a class="viewcode-back" href="../reference/molproperty.html#molproperty.GetMolecularProperty">[docs]</a><span class="k">def</span> <span class="nf">GetMolecularProperty</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Get the dictionary of constitutional descriptors for </span>
+<span class="sd">    </span>
+<span class="sd">    given moelcule mol</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=GetMolecularProperty(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing 6 molecular properties.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">DesLabel</span> <span class="ow">in</span> <span class="n">MolecularProperty</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">]</span><span class="o">=</span><span class="n">MolecularProperty</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">](</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+    
+<span class="c1">##########################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetMolecularProperty</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="c1">#f.close()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

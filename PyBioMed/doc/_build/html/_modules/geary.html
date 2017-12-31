@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>geary &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for geary</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">The calculation of Geary autocorrelation indices based on its topological</span>
+
+<span class="sd">structure. You can get 32 molecular autocorrelation descriptors. You can </span>
+
+<span class="sd">freely use and distribute it. If you hava  any problem, you could contact </span>
+
+<span class="sd">with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">AtomProperty</span> <span class="k">import</span> <span class="n">GetRelativeAtomicProperty</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+
+
+<span class="c1">################################################################</span>
+<span class="k">def</span> <span class="nf">_CalculateGearyAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of Geary autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    different property weights.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">    res=_CalculateGearyAutocorrelation(mol,lag=1,propertylabel=&#39;m&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    lag is the topological distance between atom i and atom j.</span>
+<span class="sd">    </span>
+<span class="sd">    propertylabel is the weighted property.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Natom</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    
+    <span class="n">prolist</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">temp</span><span class="o">=</span><span class="n">GetRelativeAtomicProperty</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">(),</span><span class="n">propertyname</span><span class="o">=</span><span class="n">propertylabel</span><span class="p">)</span>
+        <span class="n">prolist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        
+    <span class="n">aveweight</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">prolist</span><span class="p">)</span><span class="o">/</span><span class="n">Natom</span>
+    
+    <span class="n">tempp</span><span class="o">=</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">aveweight</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">prolist</span><span class="p">]</span>   
+    
+    <span class="n">GetDistanceMatrix</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">index</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Natom</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Natom</span><span class="p">):</span>  
+            <span class="k">if</span> <span class="n">GetDistanceMatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="n">lag</span><span class="p">:</span>
+                <span class="n">atom1</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">atom2</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">temp1</span><span class="o">=</span><span class="n">GetRelativeAtomicProperty</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">atom1</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">(),</span><span class="n">propertyname</span><span class="o">=</span><span class="n">propertylabel</span><span class="p">)</span>
+                <span class="n">temp2</span><span class="o">=</span><span class="n">GetRelativeAtomicProperty</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">atom2</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">(),</span><span class="n">propertyname</span><span class="o">=</span><span class="n">propertylabel</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="o">+</span><span class="n">numpy</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">temp1</span><span class="o">-</span><span class="n">temp2</span><span class="p">)</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="o">+</span><span class="mf">0.0</span>
+                
+                
+    <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">tempp</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">index</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">result</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span><span class="o">=</span><span class="p">(</span><span class="n">res</span><span class="o">/</span><span class="n">index</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">tempp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">Natom</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoMass"><a class="viewcode-back" href="../reference/geary.html#geary.CalculateGearyAutoMass">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoMass</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Geary autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    carbon-scaled atomic mass.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">    res=CalculateMoranAutoMass(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing eight geary autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;GATSm&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">_CalculateGearyAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoVolume"><a class="viewcode-back" href="../reference/geary.html#geary.CalculateGearyAutoVolume">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoVolume</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Geary autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    carbon-scaled atomic van der Waals volume.</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">    res=CalculateGearyAutoVolume(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing eight geary autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;GATSv&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">_CalculateGearyAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateGearyAutoElectronegativity"><a class="viewcode-back" href="../reference/geary.html#geary.CalculateGearyAutoElectronegativity">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoElectronegativity</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Geary autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    carbon-scaled atomic Sanderson electronegativity.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">    res=CalculateGearyAutoElectronegativity(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing eight geary autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;GATSe&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">_CalculateGearyAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;En&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateGearyAutoPolarizability"><a class="viewcode-back" href="../reference/geary.html#geary.CalculateGearyAutoPolarizability">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoPolarizability</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Geary autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    carbon-scaled atomic polarizability.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">    res=CalculateGearyAutoPolarizability(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing eight geary autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;GATSp&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">_CalculateGearyAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;alapha&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="GetGearyAuto"><a class="viewcode-back" href="../reference/geary.html#geary.GetGearyAuto">[docs]</a><span class="k">def</span> <span class="nf">GetGearyAuto</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calcualate all Geary autocorrelation descriptors.</span>
+
+<span class="sd">    (carbon-scaled atomic mass, carbon-scaled atomic van der Waals volume,</span>
+<span class="sd">     </span>
+<span class="sd">    carbon-scaled atomic Sanderson electronegativity,</span>
+<span class="sd">     </span>
+<span class="sd">    carbon-scaled atomic polarizability)</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">    res=GetGearyAuto(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing all geary autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoMass</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoVolume</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoElectronegativity</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoPolarizability</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+<span class="c1">###########################################################################</span>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+    
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;COCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCOCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+<span class="c1">##        print &#39;\t&#39;,CalculateEstateFingerprint(m)</span>
+<span class="c1">##        print &#39;\t&#39;,CalculateEstateValue(m)</span>
+<span class="c1">##        print &#39;\t&#39;,CalculateMaxAtomTypeEState(m)</span>
+<span class="c1">##        print &#39;\t&#39;, CalculateMinAtomTypeEState(m)</span>
+        
+        <span class="nb">print</span> <span class="n">GetGearyAuto</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

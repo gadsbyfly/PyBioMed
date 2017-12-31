@@ -1,0 +1,640 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>basak &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for basak</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">The calculation of some commonly used basak information index  based on its </span>
+
+<span class="sd">topological structure. You can get 21 molecular connectivity descriptors. </span>
+
+<span class="sd">You can freely use and distribute it. If you hava  any problem, you could </span>
+
+<span class="sd">contact with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+
+<span class="c1">############################################################################</span>
+
+<span class="k">def</span> <span class="nf">_CalculateEntropy</span><span class="p">(</span><span class="n">Probability</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of entropy (Information content) for probability given</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Probability</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>       
+            <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<div class="viewcode-block" id="CalculateBasakIC0"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakIC0">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakIC0</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the information content with order 0 proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;IC0</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BasakIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">):</span>
+        <span class="n">at</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">IC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">at</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">())</span>
+    <span class="n">Unique</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">IC</span><span class="p">)</span>
+    <span class="n">NAtomType</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Unique</span><span class="p">)</span>
+    <span class="n">NTAtomType</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">NAtomType</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NAtomType</span><span class="p">):</span>
+        <span class="n">NTAtomType</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">IC</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">Unique</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="c1">#print sum(NTAtomType/nAtoms)</span>
+        <span class="n">BasakIC</span><span class="o">=</span><span class="n">_CalculateEntropy</span><span class="p">(</span><span class="n">NTAtomType</span><span class="o">/</span><span class="n">nAtoms</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakIC</span><span class="o">=</span><span class="mf">0.0</span>
+        
+    <span class="k">return</span> <span class="n">BasakIC</span></div>
+        
+
+<div class="viewcode-block" id="CalculateBasakSIC0"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakSIC0">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakSIC0</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the structural information content with order 0 </span>
+<span class="sd">    </span>
+<span class="sd">    proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;SIC0</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC0</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="n">IC</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">BasakSIC</span></div>
+    
+
+<div class="viewcode-block" id="CalculateBasakCIC0"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakCIC0">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakCIC0</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the complementary information content with order 0 </span>
+<span class="sd">    </span>
+<span class="sd">    proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;CIC0</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC0</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span><span class="o">-</span><span class="n">IC</span>
+        
+    <span class="k">return</span> <span class="n">BasakCIC</span></div>
+
+
+<span class="k">def</span> <span class="nf">_CalculateBasakICn</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Obtain the information content with order n proposed by Basak</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">TotalPath</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">FindAllPathsOfLengthN</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">NumPath</span><span class="p">,</span><span class="n">useBonds</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">useHs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">TotalPath</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">BasakIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">IC</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">):</span>
+            <span class="n">temp</span><span class="o">=</span><span class="p">[]</span>
+            <span class="n">at</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">at</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">TotalPath</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">kk</span><span class="p">)</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span>
+                <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">cds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+                    <span class="n">cds</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+                    <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">kk</span><span class="p">)</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">cds</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span>
+            <span class="c1">#print temp</span>
+    
+            <span class="n">IC</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="n">temp</span>
+        <span class="n">cds</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">IC</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">value</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="n">cds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">kkk</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cds</span><span class="p">))</span>
+        <span class="n">aaa</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">kkk</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">aaa</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kkk</span><span class="p">:</span>
+                <span class="n">jishu</span><span class="o">=</span><span class="mi">0</span>
+                <span class="n">kong</span><span class="o">=</span><span class="p">[]</span>
+                <span class="n">temp1</span><span class="o">=</span><span class="n">cds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">aaa</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cds</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="n">temp1</span><span class="p">:</span>
+                        <span class="n">jishu</span><span class="o">=</span><span class="n">jishu</span><span class="o">+</span><span class="mi">1</span>
+                        <span class="n">kong</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">ks</span> <span class="ow">in</span> <span class="n">kong</span><span class="p">:</span>
+                    <span class="n">kkk</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jishu</span><span class="p">)</span>    
+        
+        <span class="c1">#print res</span>
+        <span class="n">BasakIC</span><span class="o">=</span><span class="n">_CalculateEntropy</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        
+    <span class="k">return</span> <span class="n">BasakIC</span>
+                
+
+
+<div class="viewcode-block" id="CalculateBasakIC1"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakIC1">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakIC1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the information content with order 1 proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;IC1</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateBasakICn</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateBasakIC2"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakIC2">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakIC2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the information content with order 2 proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;IC2</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateBasakICn</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateBasakIC3"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakIC3">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakIC3</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the information content with order 3 proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;IC3</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateBasakICn</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateBasakIC4"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakIC4">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakIC4</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the information content with order 4 proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;IC4</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateBasakICn</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateBasakIC5"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakIC5">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakIC5</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the information content with order 5 proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;IC5</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateBasakICn</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateBasakIC6"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakIC6">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakIC6</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the information content with order 6 proposed by Basak</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;IC6</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateBasakICn</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateBasakSIC1"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakSIC1">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakSIC1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the structural information content with order 1 </span>
+<span class="sd">    </span>
+<span class="sd">    proposed by Basak.</span>
+
+<span class="sd">    ----&gt;SIC1</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC1</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="n">IC</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">BasakSIC</span></div>
+
+<div class="viewcode-block" id="CalculateBasakSIC2"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakSIC2">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakSIC2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the structural information content with order 2 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;SIC2</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC2</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="n">IC</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">BasakSIC</span></div>
+
+<div class="viewcode-block" id="CalculateBasakSIC3"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakSIC3">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakSIC3</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the structural information content with order 3 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;SIC3</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC3</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="n">IC</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">BasakSIC</span></div>
+
+<div class="viewcode-block" id="CalculateBasakSIC4"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakSIC4">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakSIC4</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the structural information content with order 4 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;SIC4</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC4</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="n">IC</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">BasakSIC</span></div>
+
+<div class="viewcode-block" id="CalculateBasakSIC5"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakSIC5">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakSIC5</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the structural information content with order 5 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;SIC5</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC5</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="n">IC</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">BasakSIC</span></div>
+
+<div class="viewcode-block" id="CalculateBasakSIC6"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakSIC6">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakSIC6</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the structural information content with order 6 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;SIC6</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC6</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakSIC</span><span class="o">=</span><span class="n">IC</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">BasakSIC</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateBasakCIC1"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakCIC1">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakCIC1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the complementary information content with order 1 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;CIC1</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC1</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span><span class="o">-</span><span class="n">IC</span>
+        
+    <span class="k">return</span> <span class="n">BasakCIC</span></div>
+
+<div class="viewcode-block" id="CalculateBasakCIC2"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakCIC2">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakCIC2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the complementary information content with order 2 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;CIC2</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC2</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span><span class="o">-</span><span class="n">IC</span>
+        
+    <span class="k">return</span> <span class="n">BasakCIC</span></div>
+
+<div class="viewcode-block" id="CalculateBasakCIC3"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakCIC3">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakCIC3</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the complementary information content with order 3 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;CIC3</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC3</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span><span class="o">-</span><span class="n">IC</span>
+        
+    <span class="k">return</span> <span class="n">BasakCIC</span></div>
+
+<div class="viewcode-block" id="CalculateBasakCIC4"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakCIC4">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakCIC4</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the complementary information content with order 4 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;CIC4</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC4</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span><span class="o">-</span><span class="n">IC</span>
+        
+    <span class="k">return</span> <span class="n">BasakCIC</span></div>
+
+
+<div class="viewcode-block" id="CalculateBasakCIC5"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakCIC5">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakCIC5</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the complementary information content with order 5 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;CIC5</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC5</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span><span class="o">-</span><span class="n">IC</span>
+        
+    <span class="k">return</span> <span class="n">BasakCIC</span></div>
+
+
+<div class="viewcode-block" id="CalculateBasakCIC6"><a class="viewcode-back" href="../reference/basak.html#basak.CalculateBasakCIC6">[docs]</a><span class="k">def</span> <span class="nf">CalculateBasakCIC6</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain the complementary information content with order 6 proposed </span>
+<span class="sd">    </span>
+<span class="sd">    by Basak.</span>
+
+<span class="sd">    ----&gt;CIC6</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">IC</span><span class="o">=</span><span class="n">CalculateBasakIC6</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nAtoms</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">BasakCIC</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">)</span><span class="o">-</span><span class="n">IC</span>
+        
+    <span class="k">return</span> <span class="n">BasakCIC</span></div>
+
+
+
+<span class="n">_basak</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;CIC0&#39;</span><span class="p">:</span><span class="n">CalculateBasakCIC0</span><span class="p">,</span>
+                      <span class="s1">&#39;CIC1&#39;</span><span class="p">:</span><span class="n">CalculateBasakCIC1</span><span class="p">,</span>
+                      <span class="s1">&#39;CIC2&#39;</span><span class="p">:</span><span class="n">CalculateBasakCIC2</span><span class="p">,</span>
+                      <span class="s1">&#39;CIC3&#39;</span><span class="p">:</span><span class="n">CalculateBasakCIC3</span><span class="p">,</span>
+                      <span class="s1">&#39;CIC4&#39;</span><span class="p">:</span><span class="n">CalculateBasakCIC4</span><span class="p">,</span>
+                      <span class="s1">&#39;CIC5&#39;</span><span class="p">:</span><span class="n">CalculateBasakCIC5</span><span class="p">,</span>
+                      <span class="s1">&#39;CIC6&#39;</span><span class="p">:</span><span class="n">CalculateBasakCIC6</span><span class="p">,</span>
+                      <span class="s1">&#39;SIC0&#39;</span><span class="p">:</span><span class="n">CalculateBasakSIC0</span><span class="p">,</span>
+                      <span class="s1">&#39;SIC1&#39;</span><span class="p">:</span><span class="n">CalculateBasakSIC1</span><span class="p">,</span>
+                      <span class="s1">&#39;SIC2&#39;</span><span class="p">:</span><span class="n">CalculateBasakSIC2</span><span class="p">,</span>
+                      <span class="s1">&#39;SIC3&#39;</span><span class="p">:</span><span class="n">CalculateBasakSIC3</span><span class="p">,</span>
+                      <span class="s1">&#39;SIC4&#39;</span><span class="p">:</span><span class="n">CalculateBasakSIC4</span><span class="p">,</span>
+                      <span class="s1">&#39;SIC5&#39;</span><span class="p">:</span><span class="n">CalculateBasakSIC5</span><span class="p">,</span>
+                      <span class="s1">&#39;SIC6&#39;</span><span class="p">:</span><span class="n">CalculateBasakSIC6</span><span class="p">,</span>
+                      <span class="s1">&#39;IC0&#39;</span><span class="p">:</span><span class="n">CalculateBasakIC0</span><span class="p">,</span>
+                      <span class="s1">&#39;IC1&#39;</span><span class="p">:</span><span class="n">CalculateBasakIC1</span><span class="p">,</span>
+                      <span class="s1">&#39;IC2&#39;</span><span class="p">:</span><span class="n">CalculateBasakIC2</span><span class="p">,</span>
+                      <span class="s1">&#39;IC3&#39;</span><span class="p">:</span><span class="n">CalculateBasakIC3</span><span class="p">,</span>
+                      <span class="s1">&#39;IC4&#39;</span><span class="p">:</span><span class="n">CalculateBasakIC4</span><span class="p">,</span>
+                      <span class="s1">&#39;IC5&#39;</span><span class="p">:</span><span class="n">CalculateBasakIC5</span><span class="p">,</span>
+                      <span class="s1">&#39;IC6&#39;</span><span class="p">:</span><span class="n">CalculateBasakIC6</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="Getbasak"><a class="viewcode-back" href="../reference/basak.html#basak.Getbasak">[docs]</a><span class="k">def</span> <span class="nf">Getbasak</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Get the dictionary of basak descriptors for given moelcule mol</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">DesLabel</span> <span class="ow">in</span> <span class="n">_basak</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">_basak</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">](</span><span class="n">mol</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_GetHTMLDoc</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Write HTML documentation for this module.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">pydoc</span>
+    <span class="n">pydoc</span><span class="o">.</span><span class="n">writedoc</span><span class="p">(</span><span class="s1">&#39;basak&#39;</span><span class="p">)</span>    
+<span class="c1">################################################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+    
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smi5</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">Getbasak</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">Getbasak</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

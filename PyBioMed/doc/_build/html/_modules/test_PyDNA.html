@@ -1,0 +1,472 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>test_PyDNA &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for test_PyDNA</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The script is used for testing.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.14</span>
+
+<span class="sd">Email: gadsby@163.com </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAutil</span> <span class="k">import</span> <span class="n">NormalizeIndex</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAac</span> <span class="k">import</span> <span class="n">GetDAC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAac</span> <span class="k">import</span> <span class="n">GetDCC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAac</span> <span class="k">import</span> <span class="n">GetDACC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAac</span> <span class="k">import</span> <span class="n">GetTAC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAac</span> <span class="k">import</span> <span class="n">GetTCC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAac</span> <span class="k">import</span> <span class="n">GetTACC</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAnac</span> <span class="k">import</span> <span class="n">GetKmer</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAnac</span> <span class="k">import</span> <span class="n">GetRevcKmer</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAnac</span> <span class="k">import</span> <span class="n">GetIdKmer</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenac</span> <span class="k">import</span> <span class="n">GetPseDNC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenac</span> <span class="k">import</span> <span class="n">GetPseKNC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenac</span> <span class="k">import</span> <span class="n">GetPCPseDNC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenac</span> <span class="k">import</span> <span class="n">GetPCPseTNC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenac</span> <span class="k">import</span> <span class="n">GetSCPseDNC</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenac</span> <span class="k">import</span> <span class="n">GetSCPseTNC</span>
+
+
+<div class="viewcode-block" id="test_pydna"><a class="viewcode-back" href="../reference/test_PyDNA.html#test_PyDNA.test_pydna">[docs]</a><span class="k">def</span> <span class="nf">test_pydna</span><span class="p">():</span>
+    
+    <span class="c1">#os.chdir(os.path.join(os.path.dirname(__file__), os.path.pardir))</span>
+    
+
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># PyDNAac</span>
+    <span class="c1">#==============================================================================</span>
+    
+    <span class="n">extra_phyche_value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;AA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11</span><span class="p">],</span>
+                          <span class="s1">&#39;AC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">1.29</span><span class="p">,</span> <span class="mf">1.04</span><span class="p">],</span>
+                          <span class="s1">&#39;AG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.78</span><span class="p">,</span> <span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">],</span>
+                          <span class="s1">&#39;AT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.07</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">2.51</span><span class="p">,</span> <span class="mf">1.17</span><span class="p">],</span>
+                          <span class="s1">&#39;CA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.38</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.36</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.27</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">],</span>
+                          <span class="s1">&#39;CC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">1.08</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">],</span>
+                          <span class="s1">&#39;CG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.66</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.22</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.44</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.29</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.39</span><span class="p">],</span>
+                          <span class="s1">&#39;CT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.78</span><span class="p">,</span> <span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">],</span>
+                          <span class="s1">&#39;GA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39</span><span class="p">,</span> <span class="mf">0.71</span><span class="p">],</span>
+                          <span class="s1">&#39;GC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">,</span> <span class="mf">1.33</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">],</span>
+                          <span class="s1">&#39;GG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">1.08</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">],</span>
+                          <span class="s1">&#39;GT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">1.29</span><span class="p">,</span> <span class="mf">1.04</span><span class="p">],</span>
+                          <span class="s1">&#39;TA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.37</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.44</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.51</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.39</span><span class="p">],</span>
+                          <span class="s1">&#39;TC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39</span><span class="p">,</span> <span class="mf">0.71</span><span class="p">],</span>
+                          <span class="s1">&#39;TG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.38</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.36</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.27</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">],</span>
+                          <span class="s1">&#39;TT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11</span><span class="p">]}</span>
+    <span class="n">phyche_index</span> <span class="o">=</span> \
+        <span class="p">[[</span><span class="mf">2.26</span><span class="p">,</span> <span class="mf">3.03</span><span class="p">,</span> <span class="mf">2.03</span><span class="p">,</span> <span class="mf">3.83</span><span class="p">,</span> <span class="mf">1.78</span><span class="p">,</span> <span class="mf">1.65</span><span class="p">,</span> <span class="mf">2.00</span><span class="p">,</span> <span class="mf">2.03</span><span class="p">,</span> <span class="mf">1.93</span><span class="p">,</span> <span class="mf">2.61</span><span class="p">,</span> <span class="mf">1.65</span><span class="p">,</span> <span class="mf">3.03</span><span class="p">,</span> <span class="mf">1.20</span><span class="p">,</span> <span class="mf">1.93</span><span class="p">,</span> <span class="mf">1.78</span><span class="p">,</span> <span class="mf">2.26</span><span class="p">],</span>
+         <span class="p">[</span><span class="mf">7.65</span><span class="p">,</span> <span class="mf">8.93</span><span class="p">,</span> <span class="mf">7.08</span><span class="p">,</span> <span class="mf">9.07</span><span class="p">,</span> <span class="mf">6.38</span><span class="p">,</span> <span class="mf">8.04</span><span class="p">,</span> <span class="mf">6.23</span><span class="p">,</span> <span class="mf">7.08</span><span class="p">,</span> <span class="mf">8.56</span><span class="p">,</span> <span class="mf">9.53</span><span class="p">,</span> <span class="mf">8.04</span><span class="p">,</span> <span class="mf">8.93</span><span class="p">,</span> <span class="mf">6.23</span><span class="p">,</span> <span class="mf">8.56</span><span class="p">,</span> <span class="mf">6.38</span><span class="p">,</span> <span class="mf">7.65</span><span class="p">]]</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetDAC module&#39;</span>
+    
+    <span class="n">dac</span> <span class="o">=</span> <span class="n">GetDAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dac</span><span class="p">))</span>
+    
+    <span class="n">dac</span> <span class="o">=</span> <span class="n">GetDAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dac</span><span class="p">))</span>
+    
+    <span class="n">dac</span> <span class="o">=</span> <span class="n">GetDAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dac</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetDCC module&#39;</span>
+    
+    <span class="n">dcc</span> <span class="o">=</span> <span class="n">GetDCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dcc</span><span class="p">))</span>
+    
+    <span class="n">dcc</span> <span class="o">=</span> <span class="n">GetDCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span>  <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dcc</span><span class="p">))</span>
+    
+    <span class="n">dcc</span> <span class="o">=</span> <span class="n">GetDCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dcc</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the DACC module&#39;</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DACC&#39;</span><span class="p">)</span>
+    <span class="n">dacc</span> <span class="o">=</span> <span class="n">GetDACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dacc</span><span class="p">))</span>
+    
+    <span class="n">dacc</span> <span class="o">=</span> <span class="n">GetDACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dacc</span><span class="p">))</span>
+    
+    <span class="n">dac</span> <span class="o">=</span> <span class="n">GetDACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dac</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mf">7.176</span><span class="p">,</span> <span class="mf">6.272</span><span class="p">,</span> <span class="mf">4.736</span><span class="p">,</span> <span class="mf">7.237</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">6.033</span><span class="p">,</span> <span class="mf">3.410</span><span class="p">,</span> <span class="mf">3.524</span><span class="p">,</span> <span class="mf">4.445</span><span class="p">,</span> <span class="mf">6.033</span><span class="p">,</span> <span class="mf">1.613</span><span class="p">,</span> <span class="mf">5.087</span><span class="p">,</span> <span class="mf">2.169</span><span class="p">,</span> <span class="mf">7.237</span><span class="p">,</span>
+         <span class="mf">3.581</span><span class="p">,</span> <span class="mf">3.239</span><span class="p">,</span> <span class="mf">1.668</span><span class="p">,</span> <span class="mf">2.169</span><span class="p">,</span> <span class="mf">6.813</span><span class="p">,</span> <span class="mf">3.868</span><span class="p">,</span> <span class="mf">5.440</span><span class="p">,</span> <span class="mf">4.445</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">4.678</span><span class="p">,</span> <span class="mf">5.440</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">2.673</span><span class="p">,</span> <span class="mf">3.353</span><span class="p">,</span> <span class="mf">1.668</span><span class="p">,</span> <span class="mf">4.736</span><span class="p">,</span>
+         <span class="mf">4.214</span><span class="p">,</span> <span class="mf">3.925</span><span class="p">,</span> <span class="mf">3.353</span><span class="p">,</span> <span class="mf">5.087</span><span class="p">,</span> <span class="mf">2.842</span><span class="p">,</span> <span class="mf">2.448</span><span class="p">,</span> <span class="mf">4.678</span><span class="p">,</span> <span class="mf">3.524</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">2.448</span><span class="p">,</span> <span class="mf">3.868</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">3.467</span><span class="p">,</span> <span class="mf">3.925</span><span class="p">,</span> <span class="mf">3.239</span><span class="p">,</span> <span class="mf">6.272</span><span class="p">,</span>
+         <span class="mf">2.955</span><span class="p">,</span> <span class="mf">3.467</span><span class="p">,</span> <span class="mf">2.673</span><span class="p">,</span> <span class="mf">1.613</span><span class="p">,</span> <span class="mf">1.447</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">3.410</span><span class="p">,</span> <span class="mf">1.447</span><span class="p">,</span> <span class="mf">2.842</span><span class="p">,</span> <span class="mf">6.813</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">2.955</span><span class="p">,</span> <span class="mf">4.214</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">7.176</span><span class="p">]</span>
+    <span class="p">]</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetTAC module&#39;</span>
+    
+    <span class="n">tac</span> <span class="o">=</span> <span class="n">GetTAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tac</span><span class="p">))</span>
+    
+    <span class="n">tac</span> <span class="o">=</span> <span class="n">GetTAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tac</span><span class="p">))</span>
+    
+    <span class="n">tac</span> <span class="o">=</span> <span class="n">GetTAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tac</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetTCC module&#39;</span>
+    
+    <span class="n">tcc</span> <span class="o">=</span> <span class="n">GetTCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tcc</span><span class="p">))</span>
+    
+    <span class="n">tcc</span> <span class="o">=</span> <span class="n">GetTCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span>  <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tcc</span><span class="p">))</span>
+    
+    <span class="n">tcc</span> <span class="o">=</span> <span class="n">GetTCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tcc</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the TACC module&#39;</span>
+    <span class="n">tacc</span> <span class="o">=</span> <span class="n">GetTACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tacc</span><span class="p">))</span>
+    
+    <span class="n">tacc</span> <span class="o">=</span> <span class="n">GetTACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tacc</span><span class="p">))</span>
+    
+    
+    <span class="n">tacc</span> <span class="o">=</span> <span class="n">GetTACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span>  <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span>
+                             <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tacc</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># PyDNAnac</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetKmer module&#39;</span>
+    
+    <span class="n">kmer</span> <span class="o">=</span> <span class="n">GetKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">kmer</span><span class="p">)</span>
+     
+    <span class="n">kmer</span> <span class="o">=</span> <span class="n">GetKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">kmer</span><span class="p">)</span>
+    
+    <span class="n">kmer</span> <span class="o">=</span> <span class="n">GetKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">upto</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">kmer</span><span class="p">)</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetRevcKmer module&#39;</span>
+    <span class="n">revckmer</span> <span class="o">=</span> <span class="n">GetRevcKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">upto</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">revckmer</span><span class="p">)</span>
+    
+    
+    <span class="n">revckmer</span> <span class="o">=</span> <span class="n">GetRevcKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">upto</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">revckmer</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+      
+    
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># PyDNApsenac</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetPseDNC module&#39;</span>
+    
+    <span class="n">psednc</span> <span class="o">=</span> <span class="n">GetPseDNC</span><span class="p">(</span><span class="s1">&#39;ACCCCA&#39;</span><span class="p">,</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">psednc</span><span class="p">)</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetPCPseDNC module&#39;</span>
+    
+    <span class="n">PC_psednc</span> <span class="o">=</span> <span class="n">GetPCPseDNC</span><span class="p">(</span><span class="s1">&#39;ACCCCA&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tilt&quot;</span><span class="p">,</span> <span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Rise&#39;</span><span class="p">,</span> <span class="s1">&#39;Roll&#39;</span><span class="p">,</span> <span class="s1">&#39;Shift&#39;</span><span class="p">,</span> <span class="s1">&#39;Slide&#39;</span><span class="p">],</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">PC_psednc</span><span class="p">)</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetPCPseTNC module&#39;</span>
+    
+    <span class="n">pc_psetnc</span> <span class="o">=</span> <span class="n">GetPCPseTNC</span><span class="p">(</span><span class="s1">&#39;ACCCCA&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pc_psetnc</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetSCPseDNC module&#39;</span>
+    
+    <span class="n">sc_psednc</span> <span class="o">=</span> <span class="n">GetSCPseDNC</span><span class="p">(</span><span class="s1">&#39;ACCCCCA&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">],</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sc_psednc</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetSCPseTNC module&#39;</span>
+    
+    <span class="n">sc_psetnc</span> <span class="o">=</span> <span class="n">GetSCPseTNC</span><span class="p">(</span><span class="s1">&#39;ACCCCCA&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span><span class="n">lamada</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sc_psetnc</span><span class="p">)</span>
+    
+    <span class="n">sc_psetnc</span> <span class="o">=</span> <span class="n">GetSCPseTNC</span><span class="p">(</span><span class="s1">&#39;ACCCCA&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Dnase I&quot;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span> <span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sc_psetnc</span><span class="p">)</span>
+    
+    
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.019</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.918</span><span class="p">,</span> <span class="mf">0.488</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.070</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.579</span><span class="p">,</span> <span class="mf">0.488</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.654</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.455</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.070</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.918</span><span class="p">,</span> <span class="mf">1.603</span><span class="p">,</span>
+                     <span class="o">-</span><span class="mf">0.654</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="mf">1.019</span><span class="p">]]</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetPseDNC module&#39;</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetPseDNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetPseKNC module&#39;</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetPseKNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the PC-PseDNC module&#39;</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PC-PseDNC&#39;</span><span class="p">)</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetPCPseDNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetPCPseTNC module&#39;</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetPCPseTNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">lamada</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    
+      
+    
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mf">7.176</span><span class="p">,</span> <span class="mf">6.272</span><span class="p">,</span> <span class="mf">4.736</span><span class="p">,</span> <span class="mf">7.237</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">6.033</span><span class="p">,</span> <span class="mf">3.410</span><span class="p">,</span> <span class="mf">3.524</span><span class="p">,</span> <span class="mf">4.445</span><span class="p">,</span> <span class="mf">6.033</span><span class="p">,</span> <span class="mf">1.613</span><span class="p">,</span> <span class="mf">5.087</span><span class="p">,</span> <span class="mf">2.169</span><span class="p">,</span> <span class="mf">7.237</span><span class="p">,</span>
+         <span class="mf">3.581</span><span class="p">,</span> <span class="mf">3.239</span><span class="p">,</span> <span class="mf">1.668</span><span class="p">,</span> <span class="mf">2.169</span><span class="p">,</span> <span class="mf">6.813</span><span class="p">,</span> <span class="mf">3.868</span><span class="p">,</span> <span class="mf">5.440</span><span class="p">,</span> <span class="mf">4.445</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">4.678</span><span class="p">,</span> <span class="mf">5.440</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">2.673</span><span class="p">,</span> <span class="mf">3.353</span><span class="p">,</span> <span class="mf">1.668</span><span class="p">,</span> <span class="mf">4.736</span><span class="p">,</span>
+         <span class="mf">4.214</span><span class="p">,</span> <span class="mf">3.925</span><span class="p">,</span> <span class="mf">3.353</span><span class="p">,</span> <span class="mf">5.087</span><span class="p">,</span> <span class="mf">2.842</span><span class="p">,</span> <span class="mf">2.448</span><span class="p">,</span> <span class="mf">4.678</span><span class="p">,</span> <span class="mf">3.524</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">2.448</span><span class="p">,</span> <span class="mf">3.868</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">3.467</span><span class="p">,</span> <span class="mf">3.925</span><span class="p">,</span> <span class="mf">3.239</span><span class="p">,</span> <span class="mf">6.272</span><span class="p">,</span>
+         <span class="mf">2.955</span><span class="p">,</span> <span class="mf">3.467</span><span class="p">,</span> <span class="mf">2.673</span><span class="p">,</span> <span class="mf">1.613</span><span class="p">,</span> <span class="mf">1.447</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">3.410</span><span class="p">,</span> <span class="mf">1.447</span><span class="p">,</span> <span class="mf">2.842</span><span class="p">,</span> <span class="mf">6.813</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">2.955</span><span class="p">,</span> <span class="mf">4.214</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">7.176</span><span class="p">]</span>
+    <span class="p">]</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetPCPseTNC module&#39;</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetPCPseTNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span>
+                                      <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetSCPseDNC module&#39;</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetSCPseDNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetSCPseDNC module&#39;</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetSCPseDNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.019</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.918</span><span class="p">,</span> <span class="mf">0.488</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.070</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.579</span><span class="p">,</span> <span class="mf">0.488</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.654</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.455</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.070</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.918</span><span class="p">,</span> <span class="mf">1.603</span><span class="p">,</span>
+                     <span class="o">-</span><span class="mf">0.654</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="mf">1.019</span><span class="p">]]</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetSCPseDNC module&#39;</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetSCPseDNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">],</span>
+                                      <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetSCPseTNC module&#39;</span>
+    
+    <span class="n">dic</span><span class="o">=</span> <span class="n">GetSCPseTNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetSCPseTNC module&#39;</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetSCPseTNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mf">7.176</span><span class="p">,</span> <span class="mf">6.272</span><span class="p">,</span> <span class="mf">4.736</span><span class="p">,</span> <span class="mf">7.237</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">6.033</span><span class="p">,</span> <span class="mf">3.410</span><span class="p">,</span> <span class="mf">3.524</span><span class="p">,</span> <span class="mf">4.445</span><span class="p">,</span> <span class="mf">6.033</span><span class="p">,</span> <span class="mf">1.613</span><span class="p">,</span> <span class="mf">5.087</span><span class="p">,</span> <span class="mf">2.169</span><span class="p">,</span> <span class="mf">7.237</span><span class="p">,</span>
+         <span class="mf">3.581</span><span class="p">,</span> <span class="mf">3.239</span><span class="p">,</span> <span class="mf">1.668</span><span class="p">,</span> <span class="mf">2.169</span><span class="p">,</span> <span class="mf">6.813</span><span class="p">,</span> <span class="mf">3.868</span><span class="p">,</span> <span class="mf">5.440</span><span class="p">,</span> <span class="mf">4.445</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">4.678</span><span class="p">,</span> <span class="mf">5.440</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">2.673</span><span class="p">,</span> <span class="mf">3.353</span><span class="p">,</span> <span class="mf">1.668</span><span class="p">,</span> <span class="mf">4.736</span><span class="p">,</span>
+         <span class="mf">4.214</span><span class="p">,</span> <span class="mf">3.925</span><span class="p">,</span> <span class="mf">3.353</span><span class="p">,</span> <span class="mf">5.087</span><span class="p">,</span> <span class="mf">2.842</span><span class="p">,</span> <span class="mf">2.448</span><span class="p">,</span> <span class="mf">4.678</span><span class="p">,</span> <span class="mf">3.524</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">2.448</span><span class="p">,</span> <span class="mf">3.868</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">3.467</span><span class="p">,</span> <span class="mf">3.925</span><span class="p">,</span> <span class="mf">3.239</span><span class="p">,</span> <span class="mf">6.272</span><span class="p">,</span>
+         <span class="mf">2.955</span><span class="p">,</span> <span class="mf">3.467</span><span class="p">,</span> <span class="mf">2.673</span><span class="p">,</span> <span class="mf">1.613</span><span class="p">,</span> <span class="mf">1.447</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">3.410</span><span class="p">,</span> <span class="mf">1.447</span><span class="p">,</span> <span class="mf">2.842</span><span class="p">,</span> <span class="mf">6.813</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">2.955</span><span class="p">,</span> <span class="mf">4.214</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">7.176</span><span class="p">]</span>
+    <span class="p">]</span>
+    
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">GetSCPseTNC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span>
+                                      <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+    
+    <span class="c1"># Normalize PseDNC index Twist, Tilt, Roll, Shift, Slide, Rise.</span>
+    <span class="n">original_phyche_value</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.014</span><span class="p">,</span> <span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.017</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.017</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.017</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.69</span><span class="p">,</span> <span class="mf">1.32</span><span class="p">,</span> <span class="mf">1.46</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">,</span> <span class="mf">1.07</span><span class="p">,</span> <span class="mf">1.43</span><span class="p">,</span> <span class="mf">1.08</span><span class="p">,</span> <span class="mf">1.46</span><span class="p">,</span> <span class="mf">1.32</span><span class="p">,</span> <span class="mf">1.20</span><span class="p">,</span> <span class="mf">1.43</span><span class="p">,</span> <span class="mf">1.32</span><span class="p">,</span> <span class="mf">0.72</span><span class="p">,</span> <span class="mf">1.32</span><span class="p">,</span> <span class="mf">1.07</span><span class="p">,</span> <span class="mf">1.69</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">2.26</span><span class="p">,</span> <span class="mf">3.03</span><span class="p">,</span> <span class="mf">2.03</span><span class="p">,</span> <span class="mf">3.83</span><span class="p">,</span> <span class="mf">1.78</span><span class="p">,</span> <span class="mf">1.65</span><span class="p">,</span> <span class="mf">2.00</span><span class="p">,</span> <span class="mf">2.03</span><span class="p">,</span> <span class="mf">1.93</span><span class="p">,</span> <span class="mf">2.61</span><span class="p">,</span> <span class="mf">1.65</span><span class="p">,</span> <span class="mf">3.03</span><span class="p">,</span> <span class="mf">1.20</span><span class="p">,</span> <span class="mf">1.93</span><span class="p">,</span> <span class="mf">1.78</span><span class="p">,</span> <span class="mf">2.26</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">7.65</span><span class="p">,</span> <span class="mf">8.93</span><span class="p">,</span> <span class="mf">7.08</span><span class="p">,</span> <span class="mf">9.07</span><span class="p">,</span> <span class="mf">6.38</span><span class="p">,</span> <span class="mf">8.04</span><span class="p">,</span> <span class="mf">6.23</span><span class="p">,</span> <span class="mf">7.08</span><span class="p">,</span> <span class="mf">8.56</span><span class="p">,</span> <span class="mf">9.53</span><span class="p">,</span> <span class="mf">8.04</span><span class="p">,</span> <span class="mf">8.93</span><span class="p">,</span> <span class="mf">6.23</span><span class="p">,</span> <span class="mf">8.56</span><span class="p">,</span> <span class="mf">6.38</span><span class="p">,</span> <span class="mf">7.65</span><span class="p">]]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">original_phyche_value</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_pydna</span><span class="p">()</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

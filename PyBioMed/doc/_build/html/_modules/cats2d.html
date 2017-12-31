@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cats2d &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for cats2d</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># CATS2D  Potential Pharmacophore Point (PPP) definitions as describes in</span>
+<span class="sd"># Pharmacophores and Pharmacophore Searches 2006 (Eds. T. Langer and R.D. Hoffmann), Chapter 3:</span>
+<span class="sd"># Alignment-free Pharmacophore Patterns - A Correlattion-vector Approach.</span>
+<span class="sd"># The last lipophilic pattern on page 55 of the book is realized as a graph search and not</span>
+<span class="sd"># as a SMARTS search. Therefore, the list contains only two lipophilic SMARTS patterns.</span>
+<span class="sd"># The format is tab separated and contains in the first column the PPP type (D = H-bond donor,</span>
+<span class="sd"># A = H-bond acceptor, P = positive, N = negative, L = lipophilic). The second column of each entry</span>
+<span class="sd"># contains the SMARTS pattern(s). The last entry is a description of the molecular feature</span>
+
+<span class="sd">D	[OH]	Oxygen atom of an OH group</span>
+<span class="sd">D	[#7H,#7H2]	Nitrogen atom of an NH or NH2 group</span>
+<span class="sd">A	[O]	Oxygen atom</span>
+<span class="sd">A	[#7H0]	Nitrogen atom not adjacent to a hydrogen atom</span>
+<span class="sd">P	[*+]	atom with a positive charge</span>
+<span class="sd">P	[#7H2]	Nitrogen atom of an NH2 group</span>
+<span class="sd">N	[*-]	Atom with a negative charge</span>
+<span class="sd">N	[C&amp;D2&amp;$(C(=O)O),P&amp;D2&amp;$(P(=O)O),S&amp;D2&amp;$(S(=O)O)] 	Carbon, sulfur or phosphorus atom of a COOH, SOOH or POOH group. This pattern is realized by an graph algorithm</span>
+<span class="sd">L	[Cl,Br,I]	Chlorine, bromine, or iodine atom</span>
+<span class="sd">L	[S;D2;$(S(C)(C))]	Sulfur atom adjacent to exactly two carbon atoms</span>
+
+
+<span class="sd">Created on Thu Sep  1 20:13:38 2016</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">###############################################################################</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+
+
+<span class="n">PPP</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;D&quot;</span><span class="p">:[</span><span class="s1">&#39;[OH]&#39;</span><span class="p">,</span><span class="s1">&#39;[#7H,#7H2]&#39;</span><span class="p">],</span>
+      <span class="s2">&quot;A&quot;</span><span class="p">:[</span><span class="s1">&#39;[O]&#39;</span><span class="p">,</span><span class="s1">&#39;[#7H0]&#39;</span><span class="p">],</span>
+      <span class="s1">&#39;P&#39;</span><span class="p">:[</span><span class="s1">&#39;[*+]&#39;</span><span class="p">,</span><span class="s1">&#39;[#7H2]&#39;</span><span class="p">],</span>
+      <span class="s1">&#39;N&#39;</span><span class="p">:[</span><span class="s1">&#39;[*-]&#39;</span><span class="p">,</span><span class="s1">&#39;[C&amp;$(C(=O)O)]&#39;</span><span class="p">,</span><span class="s1">&#39;[P&amp;$(P(=O)O)]&#39;</span><span class="p">,</span><span class="s1">&#39;[S&amp;$(S(=O)O)]&#39;</span><span class="p">],</span>
+      <span class="s2">&quot;L&quot;</span><span class="p">:[</span><span class="s1">&#39;[Cl,Br,I]&#39;</span><span class="p">,</span><span class="s1">&#39;[S;D2;$(S(C)(C))]&#39;</span><span class="p">]}</span>
+
+<span class="n">Version</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="c1">###############################################################################</span>
+<div class="viewcode-block" id="MatchAtomType"><a class="viewcode-back" href="../reference/cats2d.html#cats2d.MatchAtomType">[docs]</a><span class="k">def</span> <span class="nf">MatchAtomType</span><span class="p">(</span><span class="n">IndexList</span><span class="p">,</span><span class="n">AtomTypeDict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Mapping two atoms with a certain distance into their atom types </span>
+<span class="sd">    </span>
+<span class="sd">    such as AA,AL, DP,LD etc.</span>
+<span class="sd">    </span>
+<span class="sd">    The result is a list format.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">First</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Second</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">AtomTypeDict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">IndexList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">AtomTypeDict</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">First</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">IndexList</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">AtomTypeDict</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">Second</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">First</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">Second</span><span class="p">:</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">)</span>
+     
+    <span class="n">temp1</span> <span class="o">=</span> <span class="p">[]</span>       
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;AD&#39;</span><span class="p">,</span><span class="s1">&#39;PD&#39;</span><span class="p">,</span><span class="s1">&#39;ND&#39;</span><span class="p">,</span><span class="s1">&#39;LD&#39;</span><span class="p">,</span><span class="s1">&#39;PA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;LA&#39;</span><span class="p">,</span> <span class="s1">&#39;NP&#39;</span><span class="p">,</span> <span class="s1">&#39;LN&#39;</span><span class="p">,</span><span class="s1">&#39;LP&#39;</span><span class="p">]:</span>
+            <span class="n">temp1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<span class="c1">###################################</span>
+<div class="viewcode-block" id="ContructLFromGraphSearch"><a class="viewcode-back" href="../reference/cats2d.html#cats2d.ContructLFromGraphSearch">[docs]</a><span class="k">def</span> <span class="nf">ContructLFromGraphSearch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The last lipophilic pattern on page 55 of the book is realized as a graph </span>
+<span class="sd">    search and not as a SMARTS search.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;L&quot; carbon atom adjacent only to carbon atoms.</span>
+<span class="sd">    </span>
+<span class="sd">    The result is a list format.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">AtomIndex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Hmol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">RemoveHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">neighatom</span> <span class="ow">in</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetNeighbors</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">neighatom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                    <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">neighatom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">AtomIndex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">())</span>
+    
+    <span class="k">return</span> <span class="n">AtomIndex</span></div>
+            
+            
+<span class="c1">###################################</span>
+<div class="viewcode-block" id="FormCATSLabel"><a class="viewcode-back" href="../reference/cats2d.html#cats2d.FormCATSLabel">[docs]</a><span class="k">def</span> <span class="nf">FormCATSLabel</span><span class="p">(</span><span class="n">PathLength</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Construct the CATS label such as AA0, AA1,....AP3,.......</span>
+<span class="sd">    </span>
+<span class="sd">    The result is a list format.</span>
+<span class="sd">    </span>
+<span class="sd">    A   acceptor;</span>
+<span class="sd">    P   positive;</span>
+<span class="sd">    N   negative;</span>
+<span class="sd">    L   lipophilic;</span>
+<span class="sd">    D   donor;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">AtomPair</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;DD&#39;</span><span class="p">,</span><span class="s1">&#39;DA&#39;</span><span class="p">,</span><span class="s1">&#39;DP&#39;</span><span class="p">,</span><span class="s1">&#39;DN&#39;</span><span class="p">,</span><span class="s1">&#39;DL&#39;</span><span class="p">,</span><span class="s1">&#39;AA&#39;</span><span class="p">,</span><span class="s1">&#39;AP&#39;</span><span class="p">,</span><span class="s1">&#39;AN&#39;</span><span class="p">,</span><span class="s1">&#39;AL&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;PP&#39;</span><span class="p">,</span><span class="s1">&#39;PN&#39;</span><span class="p">,</span><span class="s1">&#39;PL&#39;</span><span class="p">,</span><span class="s1">&#39;NN&#39;</span><span class="p">,</span><span class="s1">&#39;NL&#39;</span><span class="p">,</span><span class="s1">&#39;LL&#39;</span><span class="p">]</span>
+    <span class="n">CATSLabel</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">AtomPair</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PathLength</span><span class="p">):</span>
+            <span class="n">CATSLabel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;CATS_&quot;</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">CATSLabel</span></div>
+  
+<span class="c1">###################################          </span>
+
+<div class="viewcode-block" id="FormCATSDict"><a class="viewcode-back" href="../reference/cats2d.html#cats2d.FormCATSDict">[docs]</a><span class="k">def</span> <span class="nf">FormCATSDict</span><span class="p">(</span><span class="n">AtomDict</span><span class="p">,</span><span class="n">CATSLabel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Construt the CATS dict.</span>
+<span class="sd">    </span>
+<span class="sd">    The result is a dict format.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+                    
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">AtomDict</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">AtomDict</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;CATS_&quot;</span><span class="o">+</span><span class="n">i</span><span class="p">:</span><span class="n">temp</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)})</span>
+        
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">CATSLabel</span><span class="p">,[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">CATSLabel</span><span class="p">]))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+<span class="c1">###################################        </span>
+
+<div class="viewcode-block" id="AssignAtomType"><a class="viewcode-back" href="../reference/cats2d.html#cats2d.AssignAtomType">[docs]</a><span class="k">def</span> <span class="nf">AssignAtomType</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Assign the atoms in the mol object into each of the PPP type </span>
+<span class="sd">    </span>
+<span class="sd">    according to PPP list definition.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: res is a dict form such as {&#39;A&#39;: [2], &#39;P&#39;: [], &#39;N&#39;: [4]}  </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">ppptype</span> <span class="ow">in</span> <span class="n">PPP</span><span class="p">:</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">PPP</span><span class="p">[</span><span class="n">ppptype</span><span class="p">]:</span>
+            <span class="n">patt</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">atomindex</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">)</span>
+            <span class="n">atomindex</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">atomindex</span><span class="p">]</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">atomindex</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">ppptype</span><span class="p">:</span><span class="n">temp</span><span class="p">})</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">ContructLFromGraphSearch</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">])</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;L&#39;</span><span class="p">:</span><span class="n">temp</span><span class="p">})</span>
+        
+    <span class="k">return</span> <span class="n">res</span></div>
+    
+<span class="c1">###################################</span>
+<div class="viewcode-block" id="CATS2D"><a class="viewcode-back" href="../reference/cats2d.html#cats2d.CATS2D">[docs]</a><span class="k">def</span> <span class="nf">CATS2D</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">PathLength</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span><span class="n">scale</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The main program for calculating the CATS descriptors.</span>
+<span class="sd">    </span>
+<span class="sd">    CATS: chemically advanced template serach</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt; CATS_DA0 ....</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CATS2D(mol,PathLength = 10,scale = 1)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">               PathLength is the max topological distance between two atoms.</span>
+<span class="sd">               </span>
+<span class="sd">               scale is the normalization method (descriptor scaling method)</span>
+<span class="sd">               </span>
+<span class="sd">               scale = 1 indicates that no normalization. That is to say: the </span>
+<span class="sd">               </span>
+<span class="sd">               values of the vector represent raw counts (&quot;counts&quot;).</span>
+<span class="sd">               </span>
+<span class="sd">               scale = 2 indicates that division by the number of non-hydrogen</span>
+<span class="sd">               </span>
+<span class="sd">               atoms (heavy atoms) in the molecule.</span>
+<span class="sd">               </span>
+<span class="sd">               scale = 3 indicates that division of each of 15 possible PPP pairs</span>
+<span class="sd">               </span>
+<span class="sd">               by the added occurrences of the two respective PPPs.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict format with the definitions of each descritor.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">RemoveHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">AtomNum</span> <span class="o">=</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>    
+    <span class="n">atomtype</span> <span class="o">=</span> <span class="n">AssignAtomType</span><span class="p">(</span><span class="n">Hmol</span><span class="p">)</span>
+    <span class="n">DistanceMatrix</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">Hmol</span><span class="p">)</span>
+    <span class="n">DM</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">DistanceMatrix</span><span class="p">)</span>
+    <span class="n">tempdict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">PL</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">PathLength</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">PL</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>            
+            <span class="n">Index</span> <span class="o">=</span> <span class="p">[[</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">AtomNum</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Index1</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">DM</span> <span class="o">==</span> <span class="n">PL</span><span class="p">)</span>
+            <span class="n">Index</span> <span class="o">=</span> <span class="p">[[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">Index1</span><span class="p">]</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">Index</span><span class="p">:</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">MatchAtomType</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">atomtype</span><span class="p">))</span>
+        <span class="n">tempdict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">PL</span><span class="p">:</span><span class="n">temp</span><span class="p">})</span>
+    
+    <span class="n">CATSLabel</span> <span class="o">=</span> <span class="n">FormCATSLabel</span><span class="p">(</span><span class="n">PathLength</span><span class="p">)</span>
+    <span class="n">CATS1</span> <span class="o">=</span> <span class="n">FormCATSDict</span><span class="p">(</span><span class="n">tempdict</span><span class="p">,</span><span class="n">CATSLabel</span><span class="p">)</span>
+    
+    <span class="c1">####set normalization 3</span>
+    <span class="n">AtomPair</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DD&#39;</span><span class="p">,</span><span class="s1">&#39;DA&#39;</span><span class="p">,</span><span class="s1">&#39;DP&#39;</span><span class="p">,</span><span class="s1">&#39;DN&#39;</span><span class="p">,</span><span class="s1">&#39;DL&#39;</span><span class="p">,</span><span class="s1">&#39;AA&#39;</span><span class="p">,</span><span class="s1">&#39;AP&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;AN&#39;</span><span class="p">,</span><span class="s1">&#39;AL&#39;</span><span class="p">,</span><span class="s1">&#39;PP&#39;</span><span class="p">,</span><span class="s1">&#39;PN&#39;</span><span class="p">,</span><span class="s1">&#39;PL&#39;</span><span class="p">,</span><span class="s1">&#39;NN&#39;</span><span class="p">,</span><span class="s1">&#39;NL&#39;</span><span class="p">,</span><span class="s1">&#39;LL&#39;</span><span class="p">]</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="n">tempdict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+        
+    <span class="n">AtomPairNum</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">AtomPair</span><span class="p">:</span>
+        <span class="n">AtomPairNum</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="n">temp</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)})</span>
+    <span class="c1">############################################</span>
+    <span class="n">CATS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">CATS</span> <span class="o">=</span> <span class="n">CATS1</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">CATS1</span><span class="p">:</span>
+            <span class="n">CATS</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="nb">round</span><span class="p">(</span><span class="n">CATS1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">AtomNum</span><span class="o">+</span><span class="mf">0.0</span><span class="p">),</span><span class="mi">3</span><span class="p">)})</span>            
+    <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">CATS1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">AtomPairNum</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">CATS</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="nb">round</span><span class="p">(</span><span class="n">CATS1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">3</span><span class="p">)})</span>
+            <span class="k">else</span><span class="p">:</span>               
+                <span class="n">CATS</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="nb">round</span><span class="p">(</span><span class="n">CATS1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">AtomPairNum</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]]</span><span class="o">+</span><span class="mf">0.0</span><span class="p">),</span><span class="mi">3</span><span class="p">)})</span>  
+    
+    <span class="k">return</span> <span class="n">CATS</span></div>
+    
+<span class="c1">###############################################################################</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+    <span class="kn">import</span> <span class="nn">string</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+<span class="c1">#    import pandas as pd</span>
+    <span class="n">smif</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">AllDes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">smif</span><span class="p">:</span> 
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cats</span> <span class="o">=</span> <span class="n">CATS2D</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">PathLength</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span><span class="n">scale</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">AllDes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cats</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">AllDes</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

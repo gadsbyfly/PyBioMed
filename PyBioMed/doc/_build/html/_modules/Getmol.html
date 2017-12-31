@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getmol &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for Getmol</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module is to get different formats of molecules from file and web. If you</span>
+
+<span class="sd">have any question please contact me via email.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+
+<div class="viewcode-block" id="ReadMolFromSDF"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.ReadMolFromSDF">[docs]</a><span class="k">def</span> <span class="nf">ReadMolFromSDF</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read a set of molecules by SDF file format.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: the output of this function is a set of molecular objects.</span>
+<span class="sd">    </span>
+<span class="sd">    You need to use for statement to call each object.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        res=ReadMolFromSDF(filename)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: filename is a file name with path.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: res is a set of molecular object.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">molset</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">SDMolSupplier</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">molset</span></div>
+    
+
+
+<div class="viewcode-block" id="ReadMolFromMOL"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.ReadMolFromMOL">[docs]</a><span class="k">def</span> <span class="nf">ReadMolFromMOL</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read a  molecule by mol file format.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        res=ReadMolFromMOL(filename)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: filename is a file name with path.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: res is a  molecular object.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromMolFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mol</span></div>
+
+
+
+<div class="viewcode-block" id="ReadMolFromSmile"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.ReadMolFromSmile">[docs]</a><span class="k">def</span> <span class="nf">ReadMolFromSmile</span><span class="p">(</span><span class="n">smi</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Read a molecule by SMILES string.</span>
+<span class="sd">        </span>
+<span class="sd">    Usage:</span>
+<span class="sd">            </span>
+<span class="sd">        res=ReadMolFromSmile(smi)</span>
+<span class="sd">            </span>
+<span class="sd">        Input: smi is a SMILES string.</span>
+<span class="sd">            </span>
+<span class="sd">        Output: res is a molecule object.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">smi</span><span class="p">))</span>
+        
+    <span class="k">return</span> <span class="n">mol</span></div>
+        
+        
+<div class="viewcode-block" id="ReadMolFromInchi"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.ReadMolFromInchi">[docs]</a><span class="k">def</span> <span class="nf">ReadMolFromInchi</span><span class="p">(</span><span class="n">inchi</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Read a molecule by Inchi string.</span>
+<span class="sd">        </span>
+<span class="sd">    Usage:</span>
+<span class="sd">            </span>
+<span class="sd">        res=ReadMolFromInchi(inchi)</span>
+<span class="sd">            </span>
+<span class="sd">        Input: inchi is a InChi string.</span>
+<span class="sd">            </span>
+<span class="sd">        Output: res is a molecule object.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">pybel</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">&quot;inchi&quot;</span><span class="p">,</span><span class="n">inchi</span><span class="p">)</span>
+    <span class="n">smi</span><span class="o">=</span><span class="n">temp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;smi&quot;</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">smi</span><span class="p">))</span>
+        
+    <span class="k">return</span> <span class="n">mol</span></div>
+ 
+       
+<div class="viewcode-block" id="ReadMolFromMol"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.ReadMolFromMol">[docs]</a><span class="k">def</span> <span class="nf">ReadMolFromMol</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Read a molecule with mol file format.</span>
+<span class="sd">        </span>
+<span class="sd">    Usage:</span>
+<span class="sd">            </span>
+<span class="sd">        res=ReadMolFromMol(filename)</span>
+<span class="sd">            </span>
+<span class="sd">        Input: filename is a file name.</span>
+<span class="sd">            </span>
+<span class="sd">        Output: res is a molecule object.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromMolFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mol</span></div>
+<span class="c1">#############################################################################</span>
+
+<div class="viewcode-block" id="GetMolFromCAS"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.GetMolFromCAS">[docs]</a><span class="k">def</span> <span class="nf">GetMolFromCAS</span><span class="p">(</span><span class="n">casid</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloading the molecules from http://www.chemnet.com/cas/ by CAS ID (casid).</span>
+<span class="sd">    if you want to use this function, you must be install pybel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">pybel</span>
+    <span class="n">casid</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">casid</span><span class="p">)</span>
+    <span class="n">localfile</span><span class="o">=</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.chemnet.com/cas/supplier.cgi?terms=&#39;</span><span class="o">+</span><span class="n">casid</span><span class="o">+</span><span class="s1">&#39;&amp;l=&amp;exact=dict&#39;</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">localfile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;InChI=&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="o">==</span><span class="p">[</span><span class="s1">&#39;InChI=&#39;</span><span class="p">]:</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;    &lt;td align=&quot;left&quot;&gt;&#39;</span><span class="p">)</span>
+            <span class="n">kk</span><span class="o">=</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&lt;/td&gt;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">kk</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;InChI&quot;</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">=</span><span class="n">kk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>    
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">=</span><span class="s2">&quot;None&quot;</span>
+    <span class="n">localfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">mol</span><span class="o">=</span><span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s1">&#39;inchi&#39;</span><span class="p">,</span><span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+    <span class="n">smile</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;smi&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">smile</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetMolFromEBI"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.GetMolFromEBI">[docs]</a><span class="k">def</span> <span class="nf">GetMolFromEBI</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="GetMolFromNCBI"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.GetMolFromNCBI">[docs]</a><span class="k">def</span> <span class="nf">GetMolFromNCBI</span><span class="p">(</span><span class="n">cid</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloading the molecules from http://pubchem.ncbi.nlm.nih.gov/ by cid (cid).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cid</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
+    <span class="n">localfile</span><span class="o">=</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=&#39;</span><span class="o">+</span><span class="n">cid</span><span class="o">+</span><span class="s1">&#39;&amp;disopt=SaveSDF&#39;</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">localfile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>   
+    <span class="n">f</span><span class="o">=</span><span class="n">file</span><span class="p">(</span><span class="s2">&quot;temp.sdf&quot;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">localfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">m</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromMolFile</span><span class="p">(</span><span class="s2">&quot;temp.sdf&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;temp.sdf&quot;</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">temp</span></div>
+
+
+<div class="viewcode-block" id="GetMolFromDrugbank"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.GetMolFromDrugbank">[docs]</a><span class="k">def</span> <span class="nf">GetMolFromDrugbank</span><span class="p">(</span><span class="n">dbid</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloading the molecules from http://www.drugbank.ca/ by dbid (dbid).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dbid</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">dbid</span><span class="p">)</span>
+    
+    <span class="n">localfile</span><span class="o">=</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.drugbank.ca/drugs/&#39;</span><span class="o">+</span><span class="n">dbid</span><span class="o">+</span><span class="s1">&#39;.sdf&#39;</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">localfile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>   
+    <span class="n">f</span><span class="o">=</span><span class="n">file</span><span class="p">(</span><span class="s2">&quot;temp.sdf&quot;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">localfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">m</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromMolFile</span><span class="p">(</span><span class="s2">&quot;temp.sdf&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;temp.sdf&quot;</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">temp</span></div>
+
+
+
+<div class="viewcode-block" id="GetMolFromKegg"><a class="viewcode-back" href="../reference/Getmol.html#Getmol.GetMolFromKegg">[docs]</a><span class="k">def</span> <span class="nf">GetMolFromKegg</span><span class="p">(</span><span class="n">kid</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloading the molecules from http://www.genome.jp/ by kegg id (kid).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ID</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">kid</span><span class="p">)</span>
+    <span class="n">localfile</span><span class="o">=</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.genome.jp/dbget-bin/www_bget?-f+m+drug+&#39;</span><span class="o">+</span><span class="n">ID</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">localfile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span> 
+    <span class="n">f</span><span class="o">=</span><span class="n">file</span><span class="p">(</span><span class="s2">&quot;temp.mol&quot;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">localfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">m</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromMolFile</span><span class="p">(</span><span class="s2">&quot;temp.mol&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;temp.mol&quot;</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">temp</span></div>
+<span class="c1">#############################################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol.GetProtein</span> <span class="k">import</span> <span class="n">timelimited</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="s1">&#39;START&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span>
+    <span class="nd">@timelimited</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">run_GetMolFromCAS</span><span class="p">():</span>
+        <span class="n">temp</span><span class="o">=</span><span class="n">GetMolFromCAS</span><span class="p">(</span><span class="n">casid</span><span class="o">=</span><span class="s2">&quot;50-12-4&quot;</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">temp</span>
+
+    <span class="nd">@timelimited</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">run_GetMolFromNCBI</span><span class="p">():</span>
+        <span class="n">temp</span><span class="o">=</span><span class="n">GetMolFromNCBI</span><span class="p">(</span><span class="n">cid</span><span class="o">=</span><span class="s2">&quot;2244&quot;</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">temp</span>
+
+    <span class="nd">@timelimited</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">run_GetMolFromDrugbank</span><span class="p">():</span>
+        <span class="n">temp</span><span class="o">=</span><span class="n">GetMolFromDrugbank</span><span class="p">(</span><span class="n">dbid</span><span class="o">=</span><span class="s2">&quot;DB00133&quot;</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">temp</span>
+
+    <span class="nd">@timelimited</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">run_GetMolFromKegg</span><span class="p">():</span>
+        <span class="n">temp</span><span class="o">=</span><span class="n">GetMolFromKegg</span><span class="p">(</span><span class="n">kid</span><span class="o">=</span><span class="s2">&quot;D02176&quot;</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">temp</span>
+
+    <span class="n">run_GetMolFromCAS</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">run_GetMolFromNCBI</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">run_GetMolFromDrugbank</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">run_GetMolFromKegg</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="s1">&#39;END&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

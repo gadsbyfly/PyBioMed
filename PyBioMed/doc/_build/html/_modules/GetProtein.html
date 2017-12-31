@@ -1,0 +1,526 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GetProtein &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for GetProtein</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Sat Jul 13 11:18:26 2013</span>
+
+<span class="sd">This module is used for downloading the PDB file from RCSB PDB web and </span>
+
+<span class="sd">extract its amino acid sequence. This module can also download the protein </span>
+
+<span class="sd">sequence from the uniprot (http://www.uniprot.org/) website. You can only </span>
+
+<span class="sd">need input a protein ID or prepare a file (ID.txt) related to ID. You can</span>
+
+<span class="sd">obtain a .txt (ProteinSequence.txt) file saving protein sequence you need.  </span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">ftplib</span><span class="o">,</span> <span class="nn">gzip</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Thread</span>
+
+<span class="n">ThreadStop</span> <span class="o">=</span> <span class="n">Thread</span><span class="o">.</span><span class="n">_Thread__stop</span>
+<div class="viewcode-block" id="TimeoutException"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.TimeoutException">[docs]</a><span class="k">class</span> <span class="nc">TimeoutException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+<span class="n">HOSTNAME</span> <span class="o">=</span> <span class="s2">&quot;ftp.wwpdb.org&quot;</span>
+<span class="n">DIRECTORY</span> <span class="o">=</span> <span class="s2">&quot;/pub/pdb/data/structures/all/pdb/&quot;</span>
+<span class="n">PREFIX</span> <span class="o">=</span> <span class="s2">&quot;pdb&quot;</span>
+<span class="n">SUFFIX</span> <span class="o">=</span> <span class="s2">&quot;.ent.gz&quot;</span>
+
+<span class="c1"># List of three and one letter amino acid codes</span>
+<span class="n">_aa_index</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;ALA&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;CYS&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;ASP&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;GLU&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;PHE&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;GLY&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;HIS&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;HSE&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;HSD&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;ILE&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;LYS&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;LEU&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;MET&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;MSE&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;ASN&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;PRO&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;GLN&#39;</span><span class="p">,</span> <span class="s1">&#39;Q&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;ARG&#39;</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;SER&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;THR&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;VAL&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;TRP&#39;</span><span class="p">,</span> <span class="s1">&#39;W&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;TYR&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)]</span>
+
+
+<span class="c1"># AA3_TO_AA1 = dict(_aa_index)</span>
+<span class="c1"># AA1_TO_AA3 = dict([(aa[1],aa[0]) for aa in _aa_index])</span>
+
+
+<div class="viewcode-block" id="timelimited"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.timelimited">[docs]</a><span class="k">def</span> <span class="nf">timelimited</span><span class="p">(</span><span class="n">timeout</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A decorator to limit the execution time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">decorator2</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">class</span> <span class="nc">TimeLimited</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
+                <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_error</span><span class="o">=</span> <span class="kc">None</span><span class="p">,):</span>
+                    <span class="n">Thread</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="n">_error</span>
+
+                <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="n">e</span>
+
+                <span class="k">def</span> <span class="nf">_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isAlive</span><span class="p">():</span>
+                        <span class="n">ThreadStop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+            <span class="n">t</span> <span class="o">=</span> <span class="n">TimeLimited</span><span class="p">()</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">_error</span><span class="p">,</span><span class="n">TimeoutException</span><span class="p">):</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">_stop</span><span class="p">()</span>
+                <span class="nb">print</span> <span class="s1">&#39;Network timeout, skip!!&#39;</span>
+                <span class="k">return</span> <span class="s1">&#39;Network timeout, skip!!&#39;</span>
+
+            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">isAlive</span><span class="p">():</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">_stop</span><span class="p">()</span>
+                <span class="nb">print</span> <span class="s1">&#39;Network timeout, skip!!&#39;</span>
+                <span class="k">return</span> <span class="s1">&#39;Network timeout, skip!!&#39;</span>
+
+            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">_error</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">decorator2</span>
+    <span class="k">return</span> <span class="n">decorator</span></div>
+
+
+<div class="viewcode-block" id="unZip"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.unZip">[docs]</a><span class="k">def</span> <span class="nf">unZip</span><span class="p">(</span><span class="n">some_file</span><span class="p">,</span> <span class="n">some_output</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unzip some_file using the gzip library and write to some_output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">some_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">some_output</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">some_file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pdbDownload"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.pdbDownload">[docs]</a><span class="k">def</span> <span class="nf">pdbDownload</span><span class="p">(</span><span class="n">file_list</span><span class="p">,</span> <span class="n">hostname</span><span class="o">=</span><span class="n">HOSTNAME</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">DIRECTORY</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">PREFIX</span><span class="p">,</span>
+                <span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download all pdb files in file_list and unzip them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># Log into server</span>
+    <span class="nb">print</span> <span class="s2">&quot;Connecting...&quot;</span>
+    <span class="n">ftp</span> <span class="o">=</span> <span class="n">ftplib</span><span class="o">.</span><span class="n">FTP</span><span class="p">()</span>
+    <span class="n">ftp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
+    <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+    <span class="c1"># Remove .pdb extensions from file_list</span>
+    <span class="k">for</span> <span class="n">file_index</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">file_list</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">file_list</span><span class="p">[</span><span class="n">file_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">file</span><span class="p">[:</span><span class="n">file</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;.pdb&quot;</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="c1"># Download all files in file_list</span>
+    <span class="n">to_get</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">file_list</span><span class="p">]</span>
+    <span class="n">to_write</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">file_list</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">to_get</span><span class="p">)):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s2">&quot;RETR </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">to_get</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">to_write</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
+            <span class="n">final_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.pdb&quot;</span> <span class="o">%</span> <span class="n">to_write</span><span class="p">[</span><span class="n">i</span><span class="p">][:</span><span class="n">to_write</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)]</span>
+            <span class="n">unZip</span><span class="p">(</span><span class="n">to_write</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">final_name</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> retrieved successfully.&quot;</span> <span class="o">%</span> <span class="n">final_name</span>
+        <span class="k">except</span> <span class="n">ftplib</span><span class="o">.</span><span class="n">error_perm</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">to_write</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="nb">print</span> <span class="s2">&quot;ERROR!  </span><span class="si">%s</span><span class="s2"> could not be retrieved!&quot;</span> <span class="o">%</span> <span class="n">file_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Log out</span>
+    <span class="n">ftp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="GetPDB"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.GetPDB">[docs]</a><span class="k">def</span> <span class="nf">GetPDB</span><span class="p">(</span><span class="n">pdbidlist</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download the PDB file from PDB FTP server by providing a list of pdb id.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pdbidlist</span><span class="p">:</span>
+        <span class="n">templist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">templist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">pdbDownload</span><span class="p">(</span><span class="n">templist</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="pdbSeq"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.pdbSeq">[docs]</a><span class="k">def</span> <span class="nf">pdbSeq</span><span class="p">(</span><span class="n">pdb</span><span class="p">,</span> <span class="n">use_atoms</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse the SEQRES entries in a pdb file.  If this fails, use the ATOM</span>
+<span class="sd">    entries.  Return dictionary of sequences keyed to chain and type of</span>
+<span class="sd">    sequence used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Try using SEQRES</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">pdb</span> <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SEQRES&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_atoms</span><span class="p">:</span>
+        <span class="n">seq_type</span> <span class="o">=</span> <span class="s2">&quot;SEQRES&quot;</span>
+        <span class="n">chain_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">l</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chain_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">chain_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">19</span><span class="p">:</span><span class="mi">70</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">seq</span> <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">chain_seq</span><span class="p">:</span>
+                <span class="n">chain_dict</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="c1"># Otherwise, use ATOM</span>
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="n">seq_type</span> <span class="o">=</span> <span class="s2">&quot;ATOM  &quot;</span>
+
+        <span class="c1"># Check to see if there are multiple models.  If there are, only look</span>
+        <span class="c1"># at the first model.</span>
+        <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdb</span><span class="p">)</span> <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;MODEL&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">pdb</span> <span class="o">=</span> <span class="n">pdb</span><span class="p">[</span><span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">models</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+            <span class="c1"># Grab all CA from ATOM entries, as well as MSE from HETATM</span>
+        <span class="n">atoms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">pdb</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ATOM  &quot;</span> <span class="ow">and</span> <span class="n">l</span><span class="p">[</span><span class="mi">13</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CA &quot;</span><span class="p">:</span>
+
+                <span class="c1"># Check to see if this is a second conformation of the previous</span>
+                <span class="c1"># atom</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">atoms</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">17</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span> <span class="o">==</span> <span class="n">l</span><span class="p">[</span><span class="mi">17</span><span class="p">:</span><span class="mi">26</span><span class="p">]:</span>
+                        <span class="k">continue</span>
+
+                <span class="n">atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;HETATM&quot;</span> <span class="ow">and</span> <span class="n">l</span><span class="p">[</span><span class="mi">13</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CA &quot;</span> <span class="ow">and</span> <span class="n">l</span><span class="p">[</span><span class="mi">17</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MSE&quot;</span><span class="p">:</span>
+
+                <span class="c1"># Check to see if this is a second conformation of the previous</span>
+                <span class="c1"># atom</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">atoms</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">17</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span> <span class="o">==</span> <span class="n">l</span><span class="p">[</span><span class="mi">17</span><span class="p">:</span><span class="mi">26</span><span class="p">]:</span>
+                        <span class="k">continue</span>
+
+                <span class="n">atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+
+        <span class="n">chain_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">l</span><span class="p">[</span><span class="mi">21</span><span class="p">],</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">atoms</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chain_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">chain_dict</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">17</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">atoms</span> <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">]</span>
+
+    <span class="n">AA3_TO_AA1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">_aa_index</span><span class="p">)</span>
+    <span class="n">tempchain</span> <span class="o">=</span> <span class="n">chain_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">tempchain</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tempchain</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">chain_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">AA3_TO_AA1</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span> <span class="o">+</span> <span class="p">(</span><span class="n">AA3_TO_AA1</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">seq</span><span class="p">,</span> <span class="n">seq_type</span></div>
+
+
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">string</span>
+
+
+<span class="c1">##################################################################################################</span>
+<div class="viewcode-block" id="GetProteinSequence"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.GetProteinSequence">[docs]</a><span class="k">def</span> <span class="nf">GetProteinSequence</span><span class="p">(</span><span class="n">ProteinID</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #########################################################################################</span>
+<span class="sd">    Get the protein sequence from the uniprot website by ID.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=GetProteinSequence(ProteinID)</span>
+
+<span class="sd">    Input: ProteinID is a string indicating ID such as &quot;P48039&quot;.</span>
+
+<span class="sd">    Output: result is a protein sequence.</span>
+<span class="sd">    #########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ID</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ProteinID</span><span class="p">)</span>
+    <span class="n">localfile</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.uniprot.org/uniprot/&#39;</span> <span class="o">+</span> <span class="n">ID</span> <span class="o">+</span> <span class="s1">&#39;.fasta&#39;</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">localfile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+<div class="viewcode-block" id="GetProteinSequenceFromTxt"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.GetProteinSequenceFromTxt">[docs]</a><span class="k">def</span> <span class="nf">GetProteinSequenceFromTxt</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">openfile</span><span class="p">,</span> <span class="n">savefile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #########################################################################################</span>
+<span class="sd">    Get the protein sequence from the uniprot website by the file containing ID.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=GetProteinSequenceFromTxt(path,openfile,savefile)</span>
+
+<span class="sd">    Input: path is a directory path containing the ID file such as &quot;/home/orient/protein/&quot;</span>
+
+<span class="sd">    openfile is the ID file such as &quot;proteinID.txt&quot;</span>
+
+<span class="sd">    savefile is the file saving the obtained protein sequences such as &quot;protein.txt&quot;</span>
+<span class="sd">    #########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">file</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="n">savefile</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">file</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="n">openfile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="c1">#	res=[]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f2</span><span class="p">):</span>
+
+        <span class="n">itrim</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">itrim</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">GetProteinSequence</span><span class="p">(</span><span class="n">itrim</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+            <span class="nb">print</span> <span class="s2">&quot;The </span><span class="si">%d</span><span class="s2"> protein sequence has been downloaded!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="n">temp</span>
+            <span class="n">f1</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">temp</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+        <span class="c1">#		res.append(temp+&#39;\n&#39;)</span>
+        <span class="c1">#	f1.writelines(res)</span>
+    <span class="n">f2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">f1</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="GetSeqFromPDB"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.GetSeqFromPDB">[docs]</a><span class="k">def</span> <span class="nf">GetSeqFromPDB</span><span class="p">(</span><span class="n">pdbfile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the amino acids sequences from pdb file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">file</span><span class="p">(</span><span class="n">pdbfile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">res1</span><span class="p">,</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">pdbSeq</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+    <span class="n">f1</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">res1</span></div>
+
+
+<div class="viewcode-block" id="Seq"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.Seq">[docs]</a><span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">no</span> <span class="o">=</span> <span class="n">no</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Output seq when &#39;print&#39; method is called.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="s2">No:</span><span class="si">%s</span><span class="se">\t</span><span class="s2">length:</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IsFasta"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.IsFasta">[docs]</a><span class="k">def</span> <span class="nf">IsFasta</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Judge the Seq object is in FASTA format.</span>
+<span class="sd">    Two situation:</span>
+<span class="sd">    1. No seq name.</span>
+<span class="sd">    2. Seq name is illegal.</span>
+<span class="sd">    3. No sequence.</span>
+
+<span class="sd">    :param seq: Seq object.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">seq</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+        <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Error, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">no</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has no sequence name.&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="o">-</span><span class="mi">1</span> <span class="o">!=</span> <span class="n">seq</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">):</span>
+        <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Error, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">no</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; name has &gt; character.&#39;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">seq</span><span class="o">.</span><span class="n">length</span><span class="p">:</span>
+        <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Error, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">no</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; is null.&#39;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="ReadFasta"><a class="viewcode-back" href="../reference/GetProtein.html#GetProtein.ReadFasta">[docs]</a><span class="k">def</span> <span class="nf">ReadFasta</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Read a fasta file.</span>
+
+<span class="sd">    :param f: HANDLE to input. e.g. sys.stdin, or open(&lt;file&gt;)</span>
+
+<span class="sd">    Return Seq obj list.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">seq_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="k">if</span> <span class="s1">&#39;&gt;&#39;</span> <span class="o">==</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">!=</span> <span class="n">count</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">count</span> <span class="ow">and</span> <span class="n">seq</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">IsFasta</span><span class="p">(</span><span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">)):</span>
+                    <span class="n">seq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seq</span> <span class="o">+=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">IsFasta</span><span class="p">(</span><span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">)):</span>
+        <span class="n">seq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">seq_list</span></div>
+
+
+<span class="c1">####################################################################</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="s1">&#39;START&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span>
+    <span class="nd">@timelimited</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">run_GetPDB</span><span class="p">():</span>
+
+        <span class="n">GetPDB</span><span class="p">([</span><span class="s1">&#39;1atp&#39;</span><span class="p">,</span> <span class="s1">&#39;1efz&#39;</span><span class="p">,</span> <span class="s1">&#39;1f88&#39;</span><span class="p">])</span>
+
+    <span class="nd">@timelimited</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">run_GetSeqFromPDB</span><span class="p">():</span>
+
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">GetSeqFromPDB</span><span class="p">(</span><span class="s1">&#39;1atp.pdb&#39;</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">seq</span>
+
+    <span class="nd">@timelimited</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">run_GetProteinSequence</span><span class="p">():</span>
+        <span class="n">GetProteinSequence</span><span class="p">(</span><span class="s1">&#39;O00560&#39;</span><span class="p">)</span>
+
+        <span class="nb">print</span> <span class="n">ReadFasta</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;../test/test_data/protein.fasta&#39;</span><span class="p">))</span>
+
+    <span class="n">run_GetPDB</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">run_GetSeqFromPDB</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">run_GetProteinSequence</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="s1">&#39;END&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

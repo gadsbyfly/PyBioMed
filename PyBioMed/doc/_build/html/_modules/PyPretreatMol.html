@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyPretreatMol &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyPretreatMol</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#from PyPretreatMolutil import Standardizer</span>
+<span class="c1">#from PyPretreatMolutil import validate_smiles</span>
+<span class="c1">#from PyPretreatMolutil import standardize_smiles</span>
+<span class="c1">#from PyPretreatMolutil import Validator</span>
+<span class="kn">from</span> <span class="nn">PyPretreatMolutil</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="n">map_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span><span class="s1">&#39;disconnect_metals&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span><span class="s1">&#39;normalize&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span><span class="s1">&#39;addhs&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">:</span><span class="s1">&#39;rmhs&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;5&#39;</span><span class="p">:</span><span class="s1">&#39;reionize&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">:</span><span class="s1">&#39;uncharge&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">:</span><span class="s1">&#39;largest_fragment&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">:</span><span class="s1">&#39;canonicalize_tautomer&#39;</span><span class="p">}</span>
+
+<span class="c1">#NORMALIZATIONS = NORMALIZATIONS</span>
+
+<div class="viewcode-block" id="StandardizeMol"><a class="viewcode-back" href="../reference/PyPretreatMol.html#PyPretreatMol.StandardizeMol">[docs]</a><span class="k">class</span> <span class="nc">StandardizeMol</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The main class for performing standardization of molecules and deriving parent molecules.</span>
+
+<span class="sd">    The primary usage is via the :meth:`~molvs.standardize.Standardizer.standardize` method::</span>
+
+<span class="sd">        s = Standardizer()</span>
+<span class="sd">        mol1 = Chem.MolFromSmiles(&#39;C1=CC=CC=C1&#39;)</span>
+<span class="sd">        mol2 = s.standardize(mol1)</span>
+
+<span class="sd">    There are separate methods to derive fragment, charge, tautomer, isotope and stereo parent molecules.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">normalizations</span><span class="o">=</span><span class="n">NORMALIZATIONS</span><span class="p">,</span> <span class="n">acid_base_pairs</span><span class="o">=</span><span class="n">ACID_BASE_PAIRS</span><span class="p">,</span>
+                 <span class="n">tautomer_transforms</span><span class="o">=</span><span class="n">TAUTOMER_TRANSFORMS</span><span class="p">,</span> <span class="n">tautomer_scores</span><span class="o">=</span><span class="n">TAUTOMER_SCORES</span><span class="p">,</span>
+                 <span class="n">max_restarts</span><span class="o">=</span><span class="n">MAX_RESTARTS</span><span class="p">,</span> <span class="n">max_tautomers</span><span class="o">=</span><span class="n">MAX_TAUTOMERS</span><span class="p">,</span> <span class="n">prefer_organic</span><span class="o">=</span><span class="n">PREFER_ORGANIC</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a Standardizer with optional custom parameters.</span>
+
+<span class="sd">        :param normalizations: A list of Normalizations to apply (default: :data:`~molvs.normalize.NORMALIZATIONS`).</span>
+<span class="sd">        :param acid_base_pairs: A list of AcidBasePairs for competitive reionization (default:</span>
+<span class="sd">                                :data:`~molvs.charge.ACID_BASE_PAIRS`).</span>
+<span class="sd">        :param tautomer_transforms: A list of TautomerTransforms to apply (default:</span>
+<span class="sd">                                    :data:`~molvs.tautomer.TAUTOMER_TRANSFORMS`).</span>
+<span class="sd">        :param tautomer_scores: A list of TautomerScores used to determine canonical tautomer (default:</span>
+<span class="sd">                                :data:`~molvs.tautomer.TAUTOMER_SCORES`).</span>
+<span class="sd">        :param max_restarts: The maximum number of times to attempt to apply the series of normalizations (default 200).</span>
+<span class="sd">        :param max_tautomers: The maximum number of tautomers to enumerate (default 1000).</span>
+<span class="sd">        :param prefer_organic: Whether to prioritize organic fragments when choosing fragment parent (default False).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Initializing Standardizer&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalizations</span> <span class="o">=</span> <span class="n">normalizations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acid_base_pairs</span> <span class="o">=</span> <span class="n">acid_base_pairs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tautomer_transforms</span> <span class="o">=</span> <span class="n">tautomer_transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tautomer_scores</span> <span class="o">=</span> <span class="n">tautomer_scores</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_restarts</span> <span class="o">=</span> <span class="n">max_restarts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tautomers</span> <span class="o">=</span> <span class="n">max_tautomers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefer_organic</span> <span class="o">=</span> <span class="n">prefer_organic</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calling a Standardizer instance like a function is the same as calling its</span>
+<span class="sd">        :meth:`~molvs.standardize.Standardizer.standardize` method.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    
+    
+<div class="viewcode-block" id="StandardizeMol.addhs"><a class="viewcode-back" href="../reference/PyPretreatMol.html#PyPretreatMol.StandardizeMol.addhs">[docs]</a>    <span class="k">def</span> <span class="nf">addhs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mol</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">AddHs</span>
+        <span class="k">return</span> <span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="StandardizeMol.rmhs"><a class="viewcode-back" href="../reference/PyPretreatMol.html#PyPretreatMol.StandardizeMol.rmhs">[docs]</a>    <span class="k">def</span> <span class="nf">rmhs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">RemoveHs</span>
+        <span class="k">return</span> <span class="n">RemoveHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
+
+    <span class="nd">@memoized_property</span>
+    <span class="k">def</span> <span class="nf">disconnect_metals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: A callable :class:`~molvs.metal.MetalDisconnector` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">MetalDisconnector</span><span class="p">()</span>
+
+    <span class="nd">@memoized_property</span>
+    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: A callable :class:`~molvs.normalize.Normalizer` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Normalizer</span><span class="p">(</span><span class="n">normalizations</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">normalizations</span><span class="p">,</span> <span class="n">max_restarts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_restarts</span><span class="p">)</span>
+
+    <span class="nd">@memoized_property</span>
+    <span class="k">def</span> <span class="nf">reionize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: A callable :class:`~molvs.charge.Reionizer` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Reionizer</span><span class="p">(</span><span class="n">acid_base_pairs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">acid_base_pairs</span><span class="p">)</span>
+
+    <span class="nd">@memoized_property</span>
+    <span class="k">def</span> <span class="nf">uncharge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: A callable :class:`~molvs.charge.Uncharger` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Uncharger</span><span class="p">()</span>
+
+    <span class="nd">@memoized_property</span>
+    <span class="k">def</span> <span class="nf">largest_fragment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: A callable :class:`~molvs.fragment.LargestFragmentChooser` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">LargestFragmentChooser</span><span class="p">(</span><span class="n">prefer_organic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefer_organic</span><span class="p">)</span>
+
+    <span class="nd">@memoized_property</span>
+    <span class="k">def</span> <span class="nf">canonicalize_tautomer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: A callable :class:`~molvs.tautomer.TautomerCanonicalizer` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">TautomerCanonicalizer</span><span class="p">(</span><span class="n">transforms</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tautomer_transforms</span><span class="p">,</span> <span class="n">scores</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tautomer_scores</span><span class="p">,</span>
+                                     <span class="n">max_tautomers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tautomers</span><span class="p">)</span>   </div>
+    
+
+<div class="viewcode-block" id="StandardMol"><a class="viewcode-back" href="../reference/PyPretreatMol.html#PyPretreatMol.StandardMol">[docs]</a><span class="k">def</span> <span class="nf">StandardMol</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The function for performing standardization of molecules and deriving parent molecules.</span>
+<span class="sd">    The function contains derive fragment, charge, tautomer, isotope and stereo parent molecules.</span>
+<span class="sd">    The primary usage is::</span>
+<span class="sd">    </span>
+<span class="sd">        mol1 = Chem.MolFromSmiles(&#39;C1=CC=CC=C1&#39;)</span>
+<span class="sd">        mol2 = s.standardize(mol1)</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">Standardizer</span><span class="p">()</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">disconnect_metals</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">uncharge</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">largest_fragment</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">canonicalize_tautomer</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">reionize</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">addhs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">rmhs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mol</span></div>
+    
+<div class="viewcode-block" id="StandardSmi"><a class="viewcode-back" href="../reference/PyPretreatMol.html#PyPretreatMol.StandardSmi">[docs]</a><span class="k">def</span> <span class="nf">StandardSmi</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The function for performing standardization of molecules and deriving parent molecules.</span>
+<span class="sd">    The function contains derive fragment, charge, tautomer, isotope and stereo parent molecules.</span>
+<span class="sd">    The primary usage is::</span>
+<span class="sd">    </span>
+<span class="sd">        smi = StandardSmi(&#39;C[n+]1c([N-](C))cccc1&#39;)</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">StandardMol</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">smi</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smi</span></div>
+
+<div class="viewcode-block" id="ValidatorMol"><a class="viewcode-back" href="../reference/PyPretreatMol.html#PyPretreatMol.ValidatorMol">[docs]</a><span class="k">def</span> <span class="nf">ValidatorMol</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Return log messages for a given SMILES string using the default validations.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: This is a convenience function for quickly validating a single SMILES string.</span>
+<span class="sd">    </span>
+<span class="sd">    :param string smiles: The SMILES for the molecule.</span>
+<span class="sd">    :returns: A list of log messages.</span>
+<span class="sd">    :rtype: list of strings.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">Validator</span><span class="p">()</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ValidatorSmi"><a class="viewcode-back" href="../reference/PyPretreatMol.html#PyPretreatMol.ValidatorSmi">[docs]</a><span class="k">def</span> <span class="nf">ValidatorSmi</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Return log messages for a given SMILES string using the default validations.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: This is a convenience function for quickly validating a single SMILES string.</span>
+<span class="sd">    </span>
+<span class="sd">    :param string smiles: The SMILES for the molecule.</span>
+<span class="sd">    :returns: A list of log messages.</span>
+<span class="sd">    :rtype: list of strings.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>    
+    
+    <span class="k">return</span> <span class="n">validate_smiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">smiles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;O=C([O-])c1ccccc1&#39;</span><span class="p">,</span><span class="s1">&#39;C[n+]1c([N-](C))cccc1&#39;</span><span class="p">,</span><span class="s1">&#39;[2H]C(Cl)(Cl)Cl&#39;</span><span class="p">]</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;[Na]OC(=O)c1ccc(C[S+2]([O-])([O-]))cc1&#39;</span><span class="p">)</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">StandardizeMol</span><span class="p">()</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">addhs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">disconnect_metals</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">largest_fragment</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">uncharge</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">canonicalize_tautomer</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">reionize</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">rmhs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">addhs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

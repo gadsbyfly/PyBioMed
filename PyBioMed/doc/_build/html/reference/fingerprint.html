@@ -1,0 +1,416 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fingerprint module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="geary module" href="geary.html" />
+    <link rel="prev" title="estate module" href="estate.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="geary.html" title="geary module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="estate.html" title="estate module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="estate.html"
+                        title="previous chapter">estate module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="geary.html"
+                        title="next chapter">geary module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/fingerprint.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fingerprint">
+<span id="fingerprint-module"></span><h1>fingerprint module<a class="headerlink" href="#module-fingerprint" title="Permalink to this headline">¶</a></h1>
+<p>fingerprint system. If you have any question please contact me via email.</p>
+<p>2016.11.15</p>
+<p>&#64;author: Zhijiang Yao and Dongsheng Cao</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="fingerprint.CalculateAtomPairsFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateAtomPairsFingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateAtomPairsFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateAtomPairsFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate atom pairs fingerprints</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateAtomPairsFingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateDaylightFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateDaylightFingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateDaylightFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateDaylightFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Daylight-like fingerprint or topological fingerprint</p>
+<p>(2048 bits).</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDaylightFingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateECFP2Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateECFP2Fingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>radius=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateECFP2Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateECFP2Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate ECFP2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateECFP2Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>radius is a radius.</p>
+<p>Output: result is a tuple form. The first is the vector of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateECFP4Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateECFP4Fingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>radius=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateECFP4Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateECFP4Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate ECFP4</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateECFP4Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>radius is a radius.</p>
+<p>Output: result is a tuple form. The first is the vector of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateECFP6Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateECFP6Fingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>radius=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateECFP6Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateECFP6Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate ECFP6</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateECFP6Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>radius is a radius.</p>
+<p>Output: result is a tuple form. The first is the vector of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateEstateFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateEstateFingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateEstateFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateEstateFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate E-state fingerprints (79 bits).</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateEstateFingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateFCFP2Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateFCFP2Fingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>radius=1</em>, <em>nBits=1024</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateFCFP2Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateFCFP2Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate FCFP2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateFCFP2Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>radius is a radius.</p>
+<p>Output: result is a tuple form. The first is the vector of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateFCFP4Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateFCFP4Fingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>radius=2</em>, <em>nBits=1024</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateFCFP4Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateFCFP4Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate FCFP4</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateFCFP4Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>radius is a radius.</p>
+<p>Output: result is a tuple form. The first is the vector of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateFCFP6Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateFCFP6Fingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>radius=3</em>, <em>nBits=1024</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateFCFP6Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateFCFP6Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate FCFP6</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateFCFP4Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>radius is a radius.</p>
+<p>Output: result is a tuple form. The first is the vector of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateFP2Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateFP2Fingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateFP2Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateFP2Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate FP2 fingerprints (1024 bits).</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateFP2Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateFP3Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateFP3Fingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateFP3Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateFP3Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate FP3 fingerprints (210 bits).</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateFP3Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateFP4Fingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateFP4Fingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateFP4Fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateFP4Fingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate FP4 fingerprints (307 bits).</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateFP4Fingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateGhoseCrippenFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateGhoseCrippenFingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>count=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateGhoseCrippenFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateGhoseCrippenFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate GhoseCrippen Fingerprints</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateMACCSFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateMACCSFingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateMACCSFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateMACCSFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate MACCS keys (166 bits).</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMACCSFingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateMorganFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateMorganFingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>radius=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateMorganFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateMorganFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Morgan</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMorganFingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>radius is a radius.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculatePharm2D2pointFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculatePharm2D2pointFingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>featFactory=&lt;rdkit.Chem.rdMolChemicalFeatures.MolChemicalFeatureFactory object at 0x08D36260&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculatePharm2D2pointFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculatePharm2D2pointFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Pharm2D2point Fingerprints</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculatePharm2D3pointFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculatePharm2D3pointFingerprint</code><span class="sig-paren">(</span><em>mol</em>, <em>featFactory=&lt;rdkit.Chem.rdMolChemicalFeatures.MolChemicalFeatureFactory object at 0x08D36260&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculatePharm2D3pointFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculatePharm2D3pointFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Pharm2D3point Fingerprints</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculatePubChemFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculatePubChemFingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculatePubChemFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculatePubChemFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate PubChem Fingerprints</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateSimilarityPybel">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateSimilarityPybel</code><span class="sig-paren">(</span><em>fp1</em>, <em>fp2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateSimilarityPybel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateSimilarityPybel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Tanimoto similarity between two molecules.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSimilarityPybel(fp1,fp2)</p>
+<p>Input: fp1 and fp2 are two DataStructs.</p>
+<p>Output: result is a Tanimoto similarity value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateSimilarityRdkit">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateSimilarityRdkit</code><span class="sig-paren">(</span><em>fp1</em>, <em>fp2</em>, <em>similarity='Tanimoto'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateSimilarityRdkit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateSimilarityRdkit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate similarity between two molecules.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSimilarity(fp1,fp2)
+Users can choose 11 different types:
+Tanimoto, Dice, Cosine, Sokal, Russel,
+RogotGoldberg, AllBit, Kulczynski, 
+McConnaughey, Asymmetric, BraunBlanquet       
+Input: fp1 and fp2 are two DataStructs.</p>
+<p>Output: result is a similarity value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="fingerprint.CalculateTopologicalTorsionFingerprint">
+<code class="descclassname">fingerprint.</code><code class="descname">CalculateTopologicalTorsionFingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fingerprint.html#CalculateTopologicalTorsionFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fingerprint.CalculateTopologicalTorsionFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Topological Torsion Fingerprints</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateTopologicalTorsionFingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a tuple form. The first is the number of</p>
+<p>fingerprints. The second is a dict form whose keys are the</p>
+<p>position which this molecule has some substructure. The third</p>
+<p>is the DataStructs which is used for calculating the similarity.</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="geary.html" title="geary module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="estate.html" title="estate module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

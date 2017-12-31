@@ -1,0 +1,490 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>constitution module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="estate module" href="estate.html" />
+    <link rel="prev" title="connectivity module" href="connectivity.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="estate.html" title="estate module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="connectivity.html" title="connectivity module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="connectivity.html"
+                        title="previous chapter">connectivity module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="estate.html"
+                        title="next chapter">estate module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/constitution.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-constitution">
+<span id="constitution-module"></span><h1>constitution module<a class="headerlink" href="#module-constitution" title="Permalink to this headline">¶</a></h1>
+<p>structure. You can get 30 molecular connectivity descriptors. You can freely</p>
+<p>use and distribute it. If you hava  any problem, you could contact with us timely!</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="constitution.CalculateAllAtomNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateAllAtomNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateAllAtomNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateAllAtomNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of all atom counts in a molecule</p>
+<p>&#8212;-&gt;nta</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateAllAtomNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateAromaticBondNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateAromaticBondNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateAromaticBondNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateAromaticBondNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of aromatic bond counts in a molecule</p>
+<p>&#8212;-&gt;naro</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateAromaticBondNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateAverageMolWeight">
+<code class="descclassname">constitution.</code><code class="descname">CalculateAverageMolWeight</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateAverageMolWeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateAverageMolWeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcualtion of average molecular weight</p>
+<p>Note that not including H</p>
+<p>&#8212;-&gt;AWeight</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateAverageMolWeight(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateBromineNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateBromineNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateBromineNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateBromineNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Bromine counts in a molecule</p>
+<p>&#8212;-&gt;ncobr</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateBromineNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateCarbonNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateCarbonNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateCarbonNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateCarbonNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Carbon number in a molecule</p>
+<p>&#8212;-&gt;ncarb</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateCarbonNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateChlorinNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateChlorinNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateChlorinNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateChlorinNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Chlorin counts in a molecule</p>
+<p>&#8212;-&gt;ncocl</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChlorinNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateDoubleBondNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateDoubleBondNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateDoubleBondNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateDoubleBondNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of double bond counts in a molecule</p>
+<p>&#8212;-&gt;ndb</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDoubleBondNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateFluorinNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateFluorinNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateFluorinNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateFluorinNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Fluorin counts in a molecule</p>
+<p>&#8212;-&gt;ncof</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateFluorinNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateHacceptorNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateHacceptorNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateHacceptorNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateHacceptorNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Hydrogen bond acceptor counts in a molecule</p>
+<p>&#8212;-&gt;naccr</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHacceptorNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateHalogenNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateHalogenNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateHalogenNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateHalogenNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Halogen counts in a molecule</p>
+<p>&#8212;-&gt;nhal</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHalogenNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateHdonorNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateHdonorNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateHdonorNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateHdonorNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Hydrongen bond donor counts in a molecule</p>
+<p>&#8212;-&gt;ndonr</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHdonorNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateHeavyAtomNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateHeavyAtomNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateHeavyAtomNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateHeavyAtomNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Heavy atom counts in a molecule</p>
+<p>&#8212;-&gt;nhev</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHeavyAtomNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateHeteroNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateHeteroNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateHeteroNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateHeteroNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Hetero counts in a molecule</p>
+<p>&#8212;-&gt;nhet</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHeteroNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateHydrogenNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateHydrogenNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateHydrogenNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateHydrogenNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Number of Hydrogen in a molecule</p>
+<p>&#8212;-&gt;nhyd</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHydrogenNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateIodineNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateIodineNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateIodineNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateIodineNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Iodine counts in a molecule</p>
+<p>&#8212;-&gt;ncoi</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateIodineNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateMolWeight">
+<code class="descclassname">constitution.</code><code class="descname">CalculateMolWeight</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateMolWeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateMolWeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular weight</p>
+<p>Note that not including H</p>
+<p>&#8212;-&gt;Weight</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMolWeight(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateNitrogenNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateNitrogenNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateNitrogenNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateNitrogenNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Nitrogen counts in a molecule</p>
+<p>&#8212;-&gt;nnitro</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateNitrogenNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateOxygenNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateOxygenNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateOxygenNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateOxygenNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Oxygen counts in a molecule</p>
+<p>&#8212;-&gt;noxy</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateOxygenNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculatePath1">
+<code class="descclassname">constitution.</code><code class="descname">CalculatePath1</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculatePath1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculatePath1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculatePath2">
+<code class="descclassname">constitution.</code><code class="descname">CalculatePath2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculatePath2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculatePath2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculatePath3">
+<code class="descclassname">constitution.</code><code class="descname">CalculatePath3</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculatePath3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculatePath3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculatePath4">
+<code class="descclassname">constitution.</code><code class="descname">CalculatePath4</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculatePath4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculatePath4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculatePath5">
+<code class="descclassname">constitution.</code><code class="descname">CalculatePath5</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculatePath5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculatePath5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculatePath6">
+<code class="descclassname">constitution.</code><code class="descname">CalculatePath6</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculatePath6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculatePath6" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculatePhosphorNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculatePhosphorNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculatePhosphorNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculatePhosphorNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcualtion of Phosphor number in a molecule</p>
+<p>&#8212;-&gt;nphos</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculatePhosphorNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateRingNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateRingNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateRingNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateRingNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of ring counts in a molecule</p>
+<p>&#8212;-&gt;nring</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateRingNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateRotationBondNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateRotationBondNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateRotationBondNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateRotationBondNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of rotation bonds counts in a molecule</p>
+<p>&#8212;-&gt;nrot</p>
+<p>Note that this is the same as calculation of single bond</p>
+<p>counts in a molecule.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateRotationBondNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateSingleBondNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateSingleBondNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateSingleBondNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateSingleBondNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of single bond counts in a molecule</p>
+<p>&#8212;-&gt;nsb</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSingleBondNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateSulfurNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateSulfurNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateSulfurNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateSulfurNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Sulfur counts in a molecule</p>
+<p>&#8212;-&gt;nsulph</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSulfurNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.CalculateTripleBondNumber">
+<code class="descclassname">constitution.</code><code class="descname">CalculateTripleBondNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#CalculateTripleBondNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.CalculateTripleBondNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of triple bond counts in a molecule</p>
+<p>&#8212;-&gt;ntb</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateTripleBondNumber(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="constitution.GetConstitutional">
+<code class="descclassname">constitution.</code><code class="descname">GetConstitutional</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/constitution.html#GetConstitutional"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constitution.GetConstitutional" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the dictionary of constitutional descriptors for given moelcule mol</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=GetConstitutional(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing all constitutional values.</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="estate.html" title="estate module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="connectivity.html" title="connectivity module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

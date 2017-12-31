@@ -1,0 +1,535 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Autocorrelation module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyProtein" href="PyProtein.html" />
+    <link rel="next" title="CTD module" href="CTD.html" />
+    <link rel="prev" title="AAIndex module" href="AAIndex.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CTD.html" title="CTD module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="AAIndex.html" title="AAIndex module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyProtein.html" accesskey="U">PyProtein</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="AAIndex.html"
+                        title="previous chapter">AAIndex module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CTD.html"
+                        title="next chapter">CTD module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/Autocorrelation.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Autocorrelation">
+<span id="autocorrelation-module"></span><h1>Autocorrelation module<a class="headerlink" href="#module-Autocorrelation" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<p>This module is used for computing the Autocorrelation descriptors based different</p>
+<blockquote>
+<div>properties of AADs.You can also input your properties of AADs, then it can help you</div></blockquote>
+<p>to compute Autocorrelation descriptors based on the property of AADs. Currently, You</p>
+<p>can get 720 descriptors for a given protein sequence based on our provided physicochemical</p>
+<p>properties of AADs. You can freely use and distribute it. If you hava  any problem,</p>
+<p>you could contact with us timely!</p>
+<p>References:</p>
+<p>[1]: <a class="reference external" href="http://www.genome.ad.jp/dbget/aaindex.html">http://www.genome.ad.jp/dbget/aaindex.html</a></p>
+<p>[2]:Feng, Z.P. and Zhang, C.T. (2000) Prediction of membrane protein types based on</p>
+<p>the hydrophobic index of amino acids. J Protein Chem, 19, 269-275.</p>
+<p>[3]:Horne, D.S. (1988) Prediction of protein helix content from an autocorrelation</p>
+<p>analysis of sequence hydrophobicities. Biopolymers, 27, 451-477.</p>
+<p>[4]:Sokal, R.R. and Thomson, B.A. (2006) Population structure inferred by local</p>
+<p>spatial autocorrelation: an Usage from an Amerindian tribal population. Am J</p>
+<p>Phys Anthropol, 129, 121-131.</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="Autocorrelation.CalculateAutoTotal">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateAutoTotal</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateAutoTotal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateAutoTotal" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing all autocorrelation descriptors based on 8 properties of AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoTotal(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30*8*3=720 normalized Moreau Broto, Moran, and Geary</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateEachGearyAuto">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateEachGearyAuto</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAP</em>, <em>AAPName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateEachGearyAuto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateEachGearyAuto" title="Permalink to this definition">¶</a></dt>
+<dd><p>you can use the function to compute GearyAuto</p>
+<p>descriptors for different properties based on AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateEachGearyAuto(protein,AAP,AAPName)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>AAP is a dict form containing the properties of 20 amino acids (e.g., _AvFlexibility).</p>
+<p>AAPName is a string used for indicating the property (e.g., &#8216;_AvFlexibility&#8217;).</p>
+<p>Output: result is a dict form containing 30 Geary autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateEachMoranAuto">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateEachMoranAuto</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAP</em>, <em>AAPName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateEachMoranAuto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateEachMoranAuto" title="Permalink to this definition">¶</a></dt>
+<dd><p>you can use the function to compute MoranAuto</p>
+<p>descriptors for different properties based on AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateEachMoranAuto(protein,AAP,AAPName)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>AAP is a dict form containing the properties of 20 amino acids (e.g., _AvFlexibility).</p>
+<p>AAPName is a string used for indicating the property (e.g., &#8216;_AvFlexibility&#8217;).</p>
+<p>Output: result is a dict form containing 30 Moran autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateEachNormalizedMoreauBrotoAuto">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateEachNormalizedMoreauBrotoAuto</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAP</em>, <em>AAPName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateEachNormalizedMoreauBrotoAuto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateEachNormalizedMoreauBrotoAuto" title="Permalink to this definition">¶</a></dt>
+<dd><p>you can use the function to compute MoreauBrotoAuto</p>
+<p>descriptors for different properties based on AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateEachNormalizedMoreauBrotoAuto(protein,AAP,AAPName)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>AAP is a dict form containing the properties of 20 amino acids (e.g., _AvFlexibility).</p>
+<p>AAPName is a string used for indicating the property (e.g., &#8216;_AvFlexibility&#8217;).</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAuto">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAuto</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAProperty</em>, <em>AAPropertyName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAuto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAuto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing GearyAuto for all properties</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAuto(protein,AAP,AAPName)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>AAProperty is a list or tuple form containing the properties of 20 amino acids (e.g., _AAProperty).</p>
+<p>AAPName is a list or tuple form used for indicating the property (e.g., &#8216;_AAPropertyName&#8217;).</p>
+<p>Output: result is a dict form containing 30*p Geary autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoAvFlexibility">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoAvFlexibility</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoAvFlexibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoAvFlexibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the GearyAuto Autocorrelation descriptors based on</p>
+<p>AvFlexibility.</p>
+<p>Usage:
+result=CalculateGearyAutoAvFlexibility(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Geary Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoFreeEnergy">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoFreeEnergy</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoFreeEnergy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoFreeEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the GearyAuto Autocorrelation descriptors based on</p>
+<p>FreeEnergy.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoFreeEnergy(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Geary Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoHydrophobicity">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoHydrophobicity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoHydrophobicity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoHydrophobicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the GearyAuto Autocorrelation descriptors based on</p>
+<p>hydrophobicity.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoHydrophobicity(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Geary Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoMutability">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoMutability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoMutability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoMutability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the GearyAuto Autocorrelation descriptors based on</p>
+<p>Mutability.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoMutability(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Geary Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoPolarizability">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoPolarizability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoPolarizability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoPolarizability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the GearyAuto Autocorrelation descriptors based on</p>
+<p>Polarizability.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoPolarizability(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Geary Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoResidueASA">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoResidueASA</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoResidueASA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoResidueASA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the GearyAuto Autocorrelation descriptors based on</p>
+<p>ResidueASA.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoResidueASA(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Geary Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoResidueVol">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoResidueVol</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoResidueVol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoResidueVol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the GearyAuto Autocorrelation descriptors based on</p>
+<p>ResidueVol.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoResidueVol(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Geary Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoSteric">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoSteric</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoSteric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoSteric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the GearyAuto Autocorrelation descriptors based on</p>
+<p>Steric.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoSteric(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Geary Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateGearyAutoTotal">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateGearyAutoTotal</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateGearyAutoTotal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateGearyAutoTotal" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing Geary autocorrelation descriptors based on 8 properties of AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateGearyAutoTotal(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30*8=240 Geary</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAuto">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAuto</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAProperty</em>, <em>AAPropertyName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAuto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAuto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing MoranAuto for all properties</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAuto(protein,AAP,AAPName)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>AAProperty is a list or tuple form containing the properties of 20 amino acids (e.g., _AAProperty).</p>
+<p>AAPName is a list or tuple form used for indicating the property (e.g., &#8216;_AAPropertyName&#8217;).</p>
+<p>Output: result is a dict form containing 30*p Moran autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoAvFlexibility">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoAvFlexibility</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoAvFlexibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoAvFlexibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the MoranAuto Autocorrelation descriptors based on</p>
+<p>AvFlexibility.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoAvFlexibility(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Moran Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoFreeEnergy">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoFreeEnergy</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoFreeEnergy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoFreeEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the MoranAuto Autocorrelation descriptors based on</p>
+<p>FreeEnergy.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoFreeEnergy(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Moran Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoHydrophobicity">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoHydrophobicity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoHydrophobicity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoHydrophobicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the MoranAuto Autocorrelation descriptors based on hydrophobicity.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoHydrophobicity(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Moran Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoMutability">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoMutability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoMutability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoMutability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the MoranAuto Autocorrelation descriptors based on</p>
+<p>Mutability.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoMutability(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Moran Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoPolarizability">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoPolarizability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoPolarizability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoPolarizability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the MoranAuto Autocorrelation descriptors based on</p>
+<p>Polarizability.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoPolarizability(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Moran Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoResidueASA">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoResidueASA</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoResidueASA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoResidueASA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the MoranAuto Autocorrelation descriptors based on</p>
+<p>ResidueASA.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoResidueASA(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Moran Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoResidueVol">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoResidueVol</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoResidueVol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoResidueVol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the MoranAuto Autocorrelation descriptors based on</p>
+<p>ResidueVol.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoResidueVol(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Moran Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoSteric">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoSteric</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoSteric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoSteric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the MoranAuto Autocorrelation descriptors based on</p>
+<p>AutoSteric.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoSteric(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Moran Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateMoranAutoTotal">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateMoranAutoTotal</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateMoranAutoTotal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateMoranAutoTotal" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing Moran autocorrelation descriptors based on 8 properties of AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateMoranAutoTotal(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30*8=240 Moran</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAuto">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAuto</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAProperty</em>, <em>AAPropertyName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAuto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAuto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing MoreauBrotoAuto for all properties.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAuto(protein,AAP,AAPName)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>AAProperty is a list or tuple form containing the properties of 20 amino acids (e.g., _AAProperty).</p>
+<p>AAPName is a list or tuple form used for indicating the property (e.g., &#8216;_AAPropertyName&#8217;).</p>
+<p>Output: result is a dict form containing 30*p Normalized Moreau-Broto autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoAvFlexibility">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoAvFlexibility</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoAvFlexibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoAvFlexibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</p>
+<p>AvFlexibility.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoAvFlexibility(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoFreeEnergy">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoFreeEnergy</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoFreeEnergy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoFreeEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</p>
+<p>FreeEnergy.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoFreeEnergy(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoHydrophobicity">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoHydrophobicity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoHydrophobicity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoHydrophobicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</p>
+<p>hydrophobicity.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoHydrophobicity(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoMutability">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoMutability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoMutability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoMutability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on Mutability.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoMutability(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoPolarizability">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoPolarizability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoPolarizability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoPolarizability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</p>
+<p>Polarizability.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoPolarizability(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoResidueASA">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoResidueASA</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoResidueASA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoResidueASA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</p>
+<p>ResidueASA.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoResidueASA(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoResidueVol">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoResidueVol</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoResidueVol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoResidueVol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</p>
+<p>ResidueVol.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoResidueVol(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoSteric">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoSteric</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoSteric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoSteric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on Steric.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoSteric(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.CalculateNormalizedMoreauBrotoAutoTotal">
+<code class="descclassname">Autocorrelation.</code><code class="descname">CalculateNormalizedMoreauBrotoAutoTotal</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#CalculateNormalizedMoreauBrotoAutoTotal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.CalculateNormalizedMoreauBrotoAutoTotal" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing normalized Moreau Broto autocorrelation descriptors based</p>
+<p>on 8 proterties of AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateNormalizedMoreauBrotoAutoTotal(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing 30*8=240 normalized Moreau Broto</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autocorrelation.NormalizeEachAAP">
+<code class="descclassname">Autocorrelation.</code><code class="descname">NormalizeEachAAP</code><span class="sig-paren">(</span><em>AAP</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Autocorrelation.html#NormalizeEachAAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autocorrelation.NormalizeEachAAP" title="Permalink to this definition">¶</a></dt>
+<dd><p>All of the amino acid indices are centralized and</p>
+<p>standardized before the calculation.</p>
+<p>Usage:</p>
+<p>result=NormalizeEachAAP(AAP)</p>
+<p>Input: AAP is a dict form containing the properties of 20 amino acids.</p>
+<p>Output: result is the a dict form containing the normalized properties</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CTD.html" title="CTD module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="AAIndex.html" title="AAIndex module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyProtein.html" >PyProtein</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

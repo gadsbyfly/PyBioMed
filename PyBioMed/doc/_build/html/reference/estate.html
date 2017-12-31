@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>estate module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="fingerprint module" href="fingerprint.html" />
+    <link rel="prev" title="constitution module" href="constitution.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fingerprint.html" title="fingerprint module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="constitution.html" title="constitution module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="constitution.html"
+                        title="previous chapter">constitution module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fingerprint.html"
+                        title="next chapter">fingerprint module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/estate.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-estate">
+<span id="estate-module"></span><h1>estate module<a class="headerlink" href="#module-estate" title="Permalink to this headline">¶</a></h1>
+<p>and Hall&#8217;s paper. If you have any question please contact me via email.</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="estate.CalculateEstateFingerprint">
+<code class="descclassname">estate.</code><code class="descname">CalculateEstateFingerprint</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/estate.html#CalculateEstateFingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estate.CalculateEstateFingerprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Calculation of EState Fingerprints.</p>
+<p>It is the number of times each possible atom type is hit.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateEstateFingerprint(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing 79 estate fragments.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="estate.CalculateEstateValue">
+<code class="descclassname">estate.</code><code class="descname">CalculateEstateValue</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/estate.html#CalculateEstateValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estate.CalculateEstateValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Calculate of EState Values.</p>
+<p>It is the sum of the Estate indices for atoms of each type.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateEstateValue(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing 79 estate values.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="estate.CalculateMaxAtomTypeEState">
+<code class="descclassname">estate.</code><code class="descname">CalculateMaxAtomTypeEState</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/estate.html#CalculateMaxAtomTypeEState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estate.CalculateMaxAtomTypeEState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of maximum of E-State value of specified atom type</p>
+<p>res&#8212;-&gt;dict type</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMaxAtomTypeEState(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing 79 max estate values.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="estate.CalculateMinAtomTypeEState">
+<code class="descclassname">estate.</code><code class="descname">CalculateMinAtomTypeEState</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/estate.html#CalculateMinAtomTypeEState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estate.CalculateMinAtomTypeEState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of minimum of E-State value of specified atom type</p>
+<p>res&#8212;-&gt;dict type</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMinAtomTypeEState(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing 79 min estate values.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="estate.GetEstate">
+<code class="descclassname">estate.</code><code class="descname">GetEstate</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/estate.html#GetEstate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estate.GetEstate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain all descriptors related to Estate.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=GetEstate(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing all estate values.</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fingerprint.html" title="fingerprint module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="constitution.html" title="constitution module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

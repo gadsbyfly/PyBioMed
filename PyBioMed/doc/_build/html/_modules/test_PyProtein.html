@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>test_PyProtein &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for test_PyProtein</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The script is used for testing.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.14</span>
+
+<span class="sd">Email: gadsby@163.com </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.AAComposition</span> <span class="k">import</span> <span class="n">CalculateAAComposition</span><span class="p">,</span> <span class="n">CalculateDipeptideComposition</span><span class="p">,</span> <span class="n">GetSpectrumDict</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.Autocorrelation</span> <span class="k">import</span> <span class="n">CalculateNormalizedMoreauBrotoAutoTotal</span><span class="p">,</span><span class="n">CalculateMoranAutoTotal</span><span class="p">,</span><span class="n">CalculateGearyAutoTotal</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.Autocorrelation</span> <span class="k">import</span> <span class="n">CalculateEachGearyAuto</span><span class="p">,</span><span class="n">CalculateEachMoranAuto</span><span class="p">,</span><span class="n">CalculateEachNormalizedMoreauBrotoAuto</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.CTD</span> <span class="k">import</span> <span class="n">CalculateCTD</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.QuasiSequenceOrder</span> <span class="k">import</span> <span class="n">GetSequenceOrderCouplingNumberTotal</span><span class="p">,</span> <span class="n">GetQuasiSequenceOrder</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.QuasiSequenceOrder</span> <span class="k">import</span> <span class="n">GetSequenceOrderCouplingNumberp</span><span class="p">,</span><span class="n">GetQuasiSequenceOrderp</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.PseudoAAC</span> <span class="k">import</span> <span class="n">_GetPseudoAAC</span><span class="p">,</span> <span class="n">GetAPseudoAAC</span><span class="p">,</span><span class="n">GetPseudoAAC</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.GetSubSeq</span> <span class="k">import</span> <span class="n">GetSubSequence</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.AAIndex</span> <span class="k">import</span> <span class="n">GetAAIndex1</span><span class="p">,</span> <span class="n">GetAAIndex23</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.ConjointTriad</span> <span class="k">import</span> <span class="n">CalculateConjointTriad</span>
+
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein</span> <span class="k">import</span> <span class="n">AAComposition</span><span class="p">,</span><span class="n">Autocorrelation</span><span class="p">,</span><span class="n">CTD</span><span class="p">,</span><span class="n">QuasiSequenceOrder</span><span class="p">,</span><span class="n">PseudoAAC</span><span class="p">,</span><span class="n">GetProteinFromUniprot</span><span class="p">,</span><span class="n">GetSubSeq</span>
+
+
+
+<span class="n">modulelists</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AAComposition&#39;</span><span class="p">,</span><span class="s1">&#39;Autocorrelation&#39;</span><span class="p">,</span><span class="s1">&#39;CTD&#39;</span><span class="p">,</span><span class="s1">&#39;QuasiSequenceOrder&#39;</span><span class="p">,</span><span class="s1">&#39;PseudoAAC&#39;</span><span class="p">,</span><span class="s1">&#39;GetProteinFromUniprot&#39;</span><span class="p">,</span><span class="s1">&#39;GetSubSeq&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="test_pyprotein"><a class="viewcode-back" href="../reference/test_PyProtein.html#test_PyProtein.test_pyprotein">[docs]</a><span class="k">def</span> <span class="nf">test_pyprotein</span><span class="p">():</span>
+
+    <span class="n">AAC</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">modulelists</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">AC</span>   <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">modulelists</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">CTD</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">modulelists</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">QSO</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">modulelists</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">PAAC</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">modulelists</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">GPFU</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">modulelists</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+    <span class="n">GSS</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">modulelists</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+    
+   
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    
+    <span class="nb">print</span> <span class="s2">&quot;testing the GetSubSeq module&quot;</span>
+    
+    <span class="n">ProteinSequence</span> <span class="o">=</span> <span class="s1">&#39;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS&#39;</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">GSS</span><span class="o">.</span><span class="n">GetSubSequence</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span><span class="n">ToAA</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    
+    <span class="nb">print</span> <span class="s2">&quot;testing the AAComposition module&quot;</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">AAC</span><span class="o">.</span><span class="n">CalculateAAComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">AAC</span><span class="o">.</span><span class="n">CalculateDipeptideComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">AAC</span><span class="o">.</span><span class="n">GetSpectrumDict</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">AAC</span><span class="o">.</span><span class="n">CalculateAADipeptideComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    
+    <span class="nb">print</span> <span class="s2">&quot;testing the Autocorrelation module&quot;</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">AC</span><span class="o">.</span><span class="n">CalculateNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,[</span><span class="n">AC</span><span class="o">.</span><span class="n">_ResidueASA</span><span class="p">],[</span><span class="s1">&#39;ResidueASA&#39;</span><span class="p">])</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">AC</span><span class="o">.</span><span class="n">CalculateMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,[</span><span class="n">AC</span><span class="o">.</span><span class="n">_ResidueASA</span><span class="p">],[</span><span class="s1">&#39;ResidueASA&#39;</span><span class="p">])</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">AC</span><span class="o">.</span><span class="n">CalculateGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,[</span><span class="n">AC</span><span class="o">.</span><span class="n">_ResidueASA</span><span class="p">],[</span><span class="s1">&#39;ResidueASA&#39;</span><span class="p">])</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">AC</span><span class="o">.</span><span class="n">CalculateAutoTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    
+    <span class="nb">print</span> <span class="s2">&quot;testing the CTD module&quot;</span>
+    
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">CTD</span><span class="o">.</span><span class="n">CalculateC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">CTD</span><span class="o">.</span><span class="n">CalculateT</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">CTD</span><span class="o">.</span><span class="n">CalculateD</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">CTD</span><span class="o">.</span><span class="n">CalculateCTD</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    
+    <span class="nb">print</span> <span class="s2">&quot;testing the QuasiSequenceOrder module&quot;</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">QSO</span><span class="o">.</span><span class="n">GetSequenceOrderCouplingNumberTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span><span class="n">maxlag</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">QSO</span><span class="o">.</span><span class="n">GetQuasiSequenceOrder</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span><span class="n">maxlag</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    
+    <span class="nb">print</span> <span class="s2">&quot;testing the PseudoAAC module&quot;</span>
+    
+    <span class="n">temp</span><span class="o">=</span> <span class="n">PAAC</span><span class="o">.</span><span class="n">GetAPseudoAAC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span><span class="n">lamda</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    
+    <span class="n">temp</span><span class="o">=</span> <span class="n">PAAC</span><span class="o">.</span><span class="n">_GetPseudoAAC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span><span class="n">lamda</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="n">temp</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    
+    <span class="nb">print</span> <span class="s2">&quot;Tested successfully!&quot;</span></div>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_pyprotein</span><span class="p">()</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,805 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>constitution &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for constitution</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">The calculation of molecular constitutional indices based on its topological</span>
+
+<span class="sd">structure. You can get 30 molecular connectivity descriptors. You can freely</span>
+
+<span class="sd">use and distribute it. If you hava  any problem, you could contact with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="c1">#from rdkit.Chem import rdchem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">Lipinski</span> <span class="k">as</span> <span class="n">LPK</span>
+
+<span class="c1">#import math</span>
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="c1">#############################################################</span>
+
+<div class="viewcode-block" id="CalculateMolWeight"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateMolWeight">[docs]</a><span class="k">def</span> <span class="nf">CalculateMolWeight</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular weight</span>
+<span class="sd">    </span>
+<span class="sd">    Note that not including H</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Weight  </span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMolWeight(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">        </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">MolWeight</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">MolWeight</span><span class="o">=</span><span class="n">MolWeight</span><span class="o">+</span><span class="n">atom</span><span class="o">.</span><span class="n">GetMass</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">MolWeight</span></div>
+
+
+<div class="viewcode-block" id="CalculateAverageMolWeight"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateAverageMolWeight">[docs]</a><span class="k">def</span> <span class="nf">CalculateAverageMolWeight</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calcualtion of average molecular weight</span>
+<span class="sd">    </span>
+<span class="sd">    Note that not including H</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;AWeight</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateAverageMolWeight(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">MolWeight</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">MolWeight</span><span class="o">=</span><span class="n">MolWeight</span><span class="o">+</span><span class="n">atom</span><span class="o">.</span><span class="n">GetMass</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">MolWeight</span><span class="o">/</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CalculateHydrogenNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateHydrogenNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateHydrogenNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Number of Hydrogen in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nhyd</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHydrogenNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            
+    <span class="k">return</span> <span class="n">i</span></div>
+
+<div class="viewcode-block" id="CalculateHalogenNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateHalogenNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateHalogenNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Halogen counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nhal</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHalogenNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">9</span> <span class="ow">or</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">17</span> <span class="ow">or</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">35</span> <span class="ow">or</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">53</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">i</span></div>
+            
+
+
+<div class="viewcode-block" id="CalculateHeteroNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateHeteroNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateHeteroNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Hetero counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nhet</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHeteroNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">6</span> <span class="ow">or</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span><span class="o">-</span><span class="n">i</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateHeavyAtomNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateHeavyAtomNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateHeavyAtomNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Heavy atom counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nhev</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHeavyAtomNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">(</span><span class="n">onlyHeavy</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of element counts with atomic number equal to n in a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="n">AtomicNumber</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            
+    <span class="k">return</span> <span class="n">i</span>
+
+
+<div class="viewcode-block" id="CalculateFluorinNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateFluorinNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateFluorinNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Fluorin counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ncof</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateFluorinNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+            
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateChlorinNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateChlorinNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateChlorinNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Chlorin counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ncocl</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChlorinNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">17</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateBromineNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateBromineNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateBromineNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Bromine counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ncobr</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateBromineNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateIodineNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateIodineNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateIodineNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Iodine counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ncoi</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateIodineNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">53</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateCarbonNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateCarbonNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateCarbonNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Carbon number in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ncarb</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateCarbonNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculatePhosphorNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculatePhosphorNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculatePhosphorNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calcualtion of Phosphor number in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nphos</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculatePhosphorNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateSulfurNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateSulfurNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateSulfurNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Sulfur counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nsulph</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateSulfurNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateOxygenNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateOxygenNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateOxygenNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Oxygen counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;noxy</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateOxygenNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
+        
+
+
+<div class="viewcode-block" id="CalculateNitrogenNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateNitrogenNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateNitrogenNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Nitrogen counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nnitro</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateNitrogenNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">_CalculateElementNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNumber</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateRingNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateRingNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateRingNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of ring counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nring</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateRingNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetSSSR</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateRotationBondNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateRotationBondNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateRotationBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of rotation bonds counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nrot</span>
+<span class="sd">    </span>
+<span class="sd">    Note that this is the same as calculation of single bond</span>
+<span class="sd">    </span>
+<span class="sd">    counts in a molecule.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateRotationBondNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">LPK</span><span class="o">.</span><span class="n">NumRotatableBonds</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateHdonorNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateHdonorNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateHdonorNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Hydrongen bond donor counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ndonr</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHdonorNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">LPK</span><span class="o">.</span><span class="n">NumHDonors</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateHacceptorNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateHacceptorNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateHacceptorNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Hydrogen bond acceptor counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;naccr</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHacceptorNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">LPK</span><span class="o">.</span><span class="n">NumHAcceptors</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateSingleBondNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateSingleBondNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateSingleBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of single bond counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nsb</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateSingleBondNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="o">==</span><span class="s1">&#39;SINGLE&#39;</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            
+    <span class="k">return</span> <span class="n">i</span></div>
+            
+
+<div class="viewcode-block" id="CalculateDoubleBondNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateDoubleBondNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateDoubleBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of double bond counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ndb</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDoubleBondNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="o">==</span><span class="s1">&#39;DOUBLE&#39;</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            
+    <span class="k">return</span> <span class="n">i</span></div>
+            
+        
+
+<div class="viewcode-block" id="CalculateTripleBondNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateTripleBondNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateTripleBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of triple bond counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ntb</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateTripleBondNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="o">==</span><span class="s1">&#39;TRIPLE&#39;</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            
+    <span class="k">return</span> <span class="n">i</span></div>
+            
+<div class="viewcode-block" id="CalculateAromaticBondNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateAromaticBondNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateAromaticBondNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of aromatic bond counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;naro</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateAromaticBondNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="o">==</span><span class="s1">&#39;AROMATIC&#39;</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            
+    <span class="k">return</span> <span class="n">i</span></div>
+    
+<div class="viewcode-block" id="CalculateAllAtomNumber"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculateAllAtomNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculateAllAtomNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of all atom counts in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;nta</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateAllAtomNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span></div>
+        
+<span class="k">def</span> <span class="nf">_CalculatePathN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">PathLength</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    *Internal Use Only*</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of the counts of path length N for a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;PC1-PC6</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMolWeight(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">FindAllPathsOfLengthN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">PathLength</span><span class="p">,</span><span class="n">useBonds</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CalculatePath1"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculatePath1">[docs]</a><span class="k">def</span> <span class="nf">CalculatePath1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the counts of path length 1 for a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculatePathN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculatePath2"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculatePath2">[docs]</a><span class="k">def</span> <span class="nf">CalculatePath2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the counts of path length 2 for a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculatePathN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculatePath3"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculatePath3">[docs]</a><span class="k">def</span> <span class="nf">CalculatePath3</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the counts of path length 3 for a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculatePathN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculatePath4"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculatePath4">[docs]</a><span class="k">def</span> <span class="nf">CalculatePath4</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the counts of path length 4 for a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculatePathN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculatePath5"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculatePath5">[docs]</a><span class="k">def</span> <span class="nf">CalculatePath5</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the counts of path length 5 for a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculatePathN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculatePath6"><a class="viewcode-back" href="../reference/constitution.html#constitution.CalculatePath6">[docs]</a><span class="k">def</span> <span class="nf">CalculatePath6</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the counts of path length 6 for a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculatePathN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span></div>
+
+
+<span class="n">_constitutional</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Weight&#39;</span><span class="p">:</span><span class="n">CalculateMolWeight</span><span class="p">,</span>
+                <span class="s1">&#39;AWeight&#39;</span><span class="p">:</span><span class="n">CalculateAverageMolWeight</span><span class="p">,</span>
+                <span class="s1">&#39;nhyd&#39;</span><span class="p">:</span><span class="n">CalculateHydrogenNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nhal&#39;</span><span class="p">:</span><span class="n">CalculateHalogenNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nhet&#39;</span><span class="p">:</span><span class="n">CalculateHeteroNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nhev&#39;</span><span class="p">:</span><span class="n">CalculateHeavyAtomNumber</span><span class="p">,</span>
+                <span class="s1">&#39;ncof&#39;</span><span class="p">:</span><span class="n">CalculateFluorinNumber</span><span class="p">,</span>
+                <span class="s1">&#39;ncocl&#39;</span><span class="p">:</span><span class="n">CalculateChlorinNumber</span><span class="p">,</span>
+                <span class="s1">&#39;ncobr&#39;</span><span class="p">:</span><span class="n">CalculateBromineNumber</span><span class="p">,</span>
+                <span class="s1">&#39;ncoi&#39;</span><span class="p">:</span><span class="n">CalculateIodineNumber</span><span class="p">,</span>
+                <span class="s1">&#39;ncarb&#39;</span><span class="p">:</span><span class="n">CalculateCarbonNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nphos&#39;</span><span class="p">:</span><span class="n">CalculatePhosphorNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nsulph&#39;</span><span class="p">:</span><span class="n">CalculateOxygenNumber</span><span class="p">,</span>
+                <span class="s1">&#39;noxy&#39;</span><span class="p">:</span><span class="n">CalculateOxygenNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nnitro&#39;</span><span class="p">:</span><span class="n">CalculateNitrogenNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nring&#39;</span><span class="p">:</span><span class="n">CalculateRingNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nrot&#39;</span><span class="p">:</span><span class="n">CalculateRotationBondNumber</span><span class="p">,</span>
+                <span class="s1">&#39;ndonr&#39;</span><span class="p">:</span><span class="n">CalculateHdonorNumber</span><span class="p">,</span>
+                <span class="s1">&#39;naccr&#39;</span><span class="p">:</span><span class="n">CalculateHacceptorNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nsb&#39;</span><span class="p">:</span><span class="n">CalculateSingleBondNumber</span><span class="p">,</span>
+                <span class="s1">&#39;ndb&#39;</span><span class="p">:</span><span class="n">CalculateDoubleBondNumber</span><span class="p">,</span>
+                <span class="s1">&#39;naro&#39;</span><span class="p">:</span><span class="n">CalculateAromaticBondNumber</span><span class="p">,</span>
+                <span class="s1">&#39;ntb&#39;</span><span class="p">:</span><span class="n">CalculateTripleBondNumber</span><span class="p">,</span>
+                <span class="s1">&#39;nta&#39;</span><span class="p">:</span><span class="n">CalculateAllAtomNumber</span><span class="p">,</span>
+                <span class="s1">&#39;PC1&#39;</span><span class="p">:</span><span class="n">CalculatePath1</span><span class="p">,</span>
+                <span class="s1">&#39;PC2&#39;</span><span class="p">:</span><span class="n">CalculatePath2</span><span class="p">,</span>
+                <span class="s1">&#39;PC3&#39;</span><span class="p">:</span><span class="n">CalculatePath3</span><span class="p">,</span>
+                <span class="s1">&#39;PC4&#39;</span><span class="p">:</span><span class="n">CalculatePath4</span><span class="p">,</span>
+                <span class="s1">&#39;PC5&#39;</span><span class="p">:</span><span class="n">CalculatePath5</span><span class="p">,</span>
+                <span class="s1">&#39;PC6&#39;</span><span class="p">:</span><span class="n">CalculatePath6</span>
+    <span class="p">}</span>
+
+<div class="viewcode-block" id="GetConstitutional"><a class="viewcode-back" href="../reference/constitution.html#constitution.GetConstitutional">[docs]</a><span class="k">def</span> <span class="nf">GetConstitutional</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Get the dictionary of constitutional descriptors for given moelcule mol</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=GetConstitutional(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing all constitutional values.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">DesLabel</span> <span class="ow">in</span> <span class="n">_constitutional</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">_constitutional</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">](</span><span class="n">mol</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<span class="c1">#############################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetConstitutional</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetConstitutional</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

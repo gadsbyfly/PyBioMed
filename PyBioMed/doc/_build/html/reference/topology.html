@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>topology module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="Scaffolds module" href="Scaffolds.html" />
+    <link rel="prev" title="moreaubroto module" href="moreaubroto.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Scaffolds.html" title="Scaffolds module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="moreaubroto.html" title="moreaubroto module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="moreaubroto.html"
+                        title="previous chapter">moreaubroto module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Scaffolds.html"
+                        title="next chapter">Scaffolds module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/topology.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-topology">
+<span id="topology-module"></span><h1>topology module<a class="headerlink" href="#module-topology" title="Permalink to this headline">¶</a></h1>
+<p>structure. You can get 25 molecular topological descriptors. You can freely</p>
+<p>use and distribute it. If you hava  any problem, you could contact with us timely!</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="topology.CalculateArithmeticTopoIndex">
+<code class="descclassname">topology.</code><code class="descname">CalculateArithmeticTopoIndex</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateArithmeticTopoIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateArithmeticTopoIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arithmetic topological index by Narumi</p>
+<p>&#8212;-&gt;Arto</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateArithmeticTopoIndex(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateBalaban">
+<code class="descclassname">topology.</code><code class="descname">CalculateBalaban</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateBalaban"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateBalaban" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Balaban index in a molecule</p>
+<p>&#8212;-&gt;J</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateBalaban(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateBertzCT">
+<code class="descclassname">topology.</code><code class="descname">CalculateBertzCT</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateBertzCT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateBertzCT" title="Permalink to this definition">¶</a></dt>
+<dd><p>A topological index meant to quantify &#8220;complexity&#8221; of molecules.</p>
+<p>Consists of a sum of two terms, one representing the complexity</p>
+<p>of the bonding, the other representing the complexity of the</p>
+<p>distribution of heteroatoms.</p>
+<p>From S. H. Bertz, J. Am. Chem. Soc., vol 103, 3599-3601 (1981)</p>
+<p>&#8212;-&gt;BertzCT(log value)</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateBertzCT(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateDiameter">
+<code class="descclassname">topology.</code><code class="descname">CalculateDiameter</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateDiameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateDiameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of diameter, which is   Largest value</p>
+<p>in the distance matrix [Petitjean 1992].</p>
+<p>&#8212;-&gt;diametert</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDiameter(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateGeometricTopoIndex">
+<code class="descclassname">topology.</code><code class="descname">CalculateGeometricTopoIndex</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateGeometricTopoIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateGeometricTopoIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Geometric topological index by Narumi</p>
+<p>&#8212;-&gt;Geto</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateGeometricTopoIndex(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateGraphDistance">
+<code class="descclassname">topology.</code><code class="descname">CalculateGraphDistance</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateGraphDistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateGraphDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of graph distance index</p>
+<p>&#8212;-&gt;Tigdi(log value)</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateGraphDistance(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateGutmanTopo">
+<code class="descclassname">topology.</code><code class="descname">CalculateGutmanTopo</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateGutmanTopo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateGutmanTopo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Gutman molecular topological index based on</p>
+<p>simple vertex degree</p>
+<p>&#8212;-&gt;GMTI(log value)</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateGutmanTopo(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateHarary">
+<code class="descclassname">topology.</code><code class="descname">CalculateHarary</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateHarary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateHarary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Harary number</p>
+<p>&#8212;-&gt;Thara</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHarary(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateHarmonicTopoIndex">
+<code class="descclassname">topology.</code><code class="descname">CalculateHarmonicTopoIndex</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateHarmonicTopoIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateHarmonicTopoIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of harmonic topological index proposed by Narnumi.</p>
+<p>&#8212;-&gt;Hato</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHarmonicTopoIndex(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateIpc">
+<code class="descclassname">topology.</code><code class="descname">CalculateIpc</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateIpc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateIpc" title="Permalink to this definition">¶</a></dt>
+<dd><p>This returns the information content of the coefficients of the</p>
+<p>characteristic polynomial of the adjacency matrix of a</p>
+<p>hydrogen-suppressed graph of a molecule.</p>
+<p>&#8216;avg = 1&#8217; returns the information content divided by the total</p>
+<p>population.</p>
+<p>From D. Bonchev &amp; N. Trinajstic, J. Chem. Phys. vol 67,</p>
+<p>4517-4533 (1977)</p>
+<blockquote>
+<div>&#8212;-&gt;Ipc(log value)</div></blockquote>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateIpc(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateMZagreb1">
+<code class="descclassname">topology.</code><code class="descname">CalculateMZagreb1</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateMZagreb1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateMZagreb1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Modified Zagreb index with order 1 in a molecule</p>
+<p>&#8212;-&gt;MZM1</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMZagreb1(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateMZagreb2">
+<code class="descclassname">topology.</code><code class="descname">CalculateMZagreb2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateMZagreb2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateMZagreb2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Modified Zagreb index with order 2 in a molecule</p>
+<p>&#8212;-&gt;MZM2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMZagreb2(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateMeanWeiner">
+<code class="descclassname">topology.</code><code class="descname">CalculateMeanWeiner</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateMeanWeiner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateMeanWeiner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Mean Weiner number in a molecule</p>
+<p>&#8212;-&gt;AW</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateWeiner(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculatePetitjean">
+<code class="descclassname">topology.</code><code class="descname">CalculatePetitjean</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculatePetitjean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculatePetitjean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Petitjean based on topology.</p>
+<p>Value of (diameter - radius) / diameter as defined in [Petitjean 1992].</p>
+<p>&#8212;-&gt;petitjeant</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculatePetitjean(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculatePlatt">
+<code class="descclassname">topology.</code><code class="descname">CalculatePlatt</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculatePlatt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculatePlatt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Platt number in a molecule</p>
+<p>&#8212;-&gt;Platt</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculatePlatt(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculatePoglianiIndex">
+<code class="descclassname">topology.</code><code class="descname">CalculatePoglianiIndex</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculatePoglianiIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculatePoglianiIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Poglicani index</p>
+<p>The Pogliani index (Dz) is the sum over all non-hydrogen atoms</p>
+<p>of a modified vertex degree calculated as the ratio</p>
+<p>of the number of valence electrons over the principal</p>
+<p>quantum number of an atom [L. Pogliani, J.Phys.Chem.</p>
+<p>1996, 100, 18065-18077].</p>
+<p>&#8212;-&gt;DZ</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculatePoglianiIndex(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculatePolarityNumber">
+<code class="descclassname">topology.</code><code class="descname">CalculatePolarityNumber</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculatePolarityNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculatePolarityNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Polarity number.</p>
+<p>It is the number of pairs of vertexes at</p>
+<p>distance matrix equal to 3</p>
+<p>&#8212;-&gt;Pol</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculatePolarityNumber(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateQuadratic">
+<code class="descclassname">topology.</code><code class="descname">CalculateQuadratic</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateQuadratic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateQuadratic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Quadratic index in a molecule</p>
+<p>&#8212;-&gt;Qindex</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateQuadratic(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateRadius">
+<code class="descclassname">topology.</code><code class="descname">CalculateRadius</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateRadius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateRadius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of radius based on topology.</p>
+<p>It is :If ri is the largest matrix entry in row i of the distance</p>
+<p>matrix D,then the radius is defined as the smallest of the ri</p>
+<p>[Petitjean 1992].</p>
+<p>&#8212;-&gt;radiust</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateRadius(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateSchiultz">
+<code class="descclassname">topology.</code><code class="descname">CalculateSchiultz</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateSchiultz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateSchiultz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Schiultz number</p>
+<p>&#8212;-&gt;Tsch(log value)</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSchiultz(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateSimpleTopoIndex">
+<code class="descclassname">topology.</code><code class="descname">CalculateSimpleTopoIndex</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateSimpleTopoIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateSimpleTopoIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the logarithm of the simple topological index by Narumi,</p>
+<p>which is defined as the product of the vertex degree.</p>
+<p>&#8212;-&gt;Sito</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSimpleTopoIndex(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateWeiner">
+<code class="descclassname">topology.</code><code class="descname">CalculateWeiner</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateWeiner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateWeiner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Weiner number in a molecule</p>
+<p>&#8212;-&gt;W</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateWeiner(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateXuIndex">
+<code class="descclassname">topology.</code><code class="descname">CalculateXuIndex</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateXuIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateXuIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Xu index</p>
+<p>&#8212;-&gt;Xu</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateXuIndex(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateZagreb1">
+<code class="descclassname">topology.</code><code class="descname">CalculateZagreb1</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateZagreb1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateZagreb1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Zagreb index with order 1 in a molecule</p>
+<p>&#8212;-&gt;ZM1</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateZagreb1(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.CalculateZagreb2">
+<code class="descclassname">topology.</code><code class="descname">CalculateZagreb2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#CalculateZagreb2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.CalculateZagreb2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Zagreb index with order 2 in a molecule</p>
+<p>&#8212;-&gt;ZM2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateZagreb2(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="topology.GetTopology">
+<code class="descclassname">topology.</code><code class="descname">GetTopology</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/topology.html#GetTopology"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.GetTopology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the dictionary of constitutional descriptors for given</p>
+<p>moelcule mol</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateWeiner(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form containing all topological indices.</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Scaffolds.html" title="Scaffolds module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="moreaubroto.html" title="moreaubroto module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

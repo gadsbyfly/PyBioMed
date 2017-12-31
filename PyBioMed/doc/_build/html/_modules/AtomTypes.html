@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AtomTypes &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for AtomTypes</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">You can freely use and distribute it. If you hava  </span>
+
+<span class="sd">any problem, you could contact with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com</span>
+
+<span class="sd">contains SMARTS definitions and calculators for EState atom types</span>
+
+<span class="sd">defined in: Hall and Kier JCICS _35_ 1039-1045 (1995)  Table 1</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">_rawD</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">(</span><span class="s1">&#39;sLi&#39;</span><span class="p">,</span><span class="s1">&#39;[LiD1]-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;ssBe&#39;</span><span class="p">,</span><span class="s1">&#39;[BeD2](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssssBe&#39;</span><span class="p">,</span><span class="s1">&#39;[BeD4](-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;ssBH&#39;</span><span class="p">,</span> <span class="s1">&#39;[BD2H](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssB&#39;</span><span class="p">,</span> <span class="s1">&#39;[BD3](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssssB&#39;</span><span class="p">,</span><span class="s1">&#39;[BD4](-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sCH3&#39;</span><span class="p">,</span> <span class="s1">&#39;[CD1H3]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dCH2&#39;</span><span class="p">,</span> <span class="s1">&#39;[CD1H2]=*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssCH2&#39;</span><span class="p">,</span><span class="s1">&#39;[CD2H2](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;tCH&#39;</span><span class="p">,</span>  <span class="s1">&#39;[CD1H]#*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dsCH&#39;</span><span class="p">,</span> <span class="s1">&#39;[CD2H](=*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;aaCH&#39;</span><span class="p">,</span> <span class="s1">&#39;[C,c;D2H](:*):*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssCH&#39;</span><span class="p">,</span><span class="s1">&#39;[CD3H](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ddC&#39;</span><span class="p">,</span>  <span class="s1">&#39;[CD2H0](=*)=*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;tsC&#39;</span><span class="p">,</span>  <span class="s1">&#39;[CD2H0](#*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dssC&#39;</span><span class="p">,</span> <span class="s1">&#39;[CD3H0](=*)(-*)-*&#39;</span><span class="p">),</span>  
+  <span class="p">(</span><span class="s1">&#39;aasC&#39;</span><span class="p">,</span> <span class="s1">&#39;[C,c;D3H0](:*)(:*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;aaaC&#39;</span><span class="p">,</span> <span class="s1">&#39;[C,c;D3H0](:*)(:*):*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssssC&#39;</span><span class="p">,</span><span class="s1">&#39;[CD4H0](-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sNH3&#39;</span><span class="p">,</span> <span class="s1">&#39;[ND1H3]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sNH2&#39;</span><span class="p">,</span> <span class="s1">&#39;[ND1H2]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssNH2&#39;</span><span class="p">,</span><span class="s1">&#39;[ND2H2](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dNH&#39;</span><span class="p">,</span>  <span class="s1">&#39;[ND1H]=*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssNH&#39;</span><span class="p">,</span> <span class="s1">&#39;[ND2H](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;aaNH&#39;</span><span class="p">,</span> <span class="s1">&#39;[N,nD2H](:*):*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;tN&#39;</span><span class="p">,</span>   <span class="s1">&#39;[ND1H0]#*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssNH&#39;</span><span class="p">,</span><span class="s1">&#39;[ND3H](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dsN&#39;</span><span class="p">,</span>  <span class="s1">&#39;[ND2H0](=*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;aaN&#39;</span><span class="p">,</span>  <span class="s1">&#39;[N,nD2H0](:*):*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssN&#39;</span><span class="p">,</span> <span class="s1">&#39;[ND3H0](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ddsN&#39;</span><span class="p">,</span> <span class="s1">&#39;[ND3H0](~[OD1H0])(~[OD1H0])-,:*&#39;</span><span class="p">),</span>  <span class="c1"># mod</span>
+  <span class="p">(</span><span class="s1">&#39;aasN&#39;</span><span class="p">,</span> <span class="s1">&#39;[N,nD3H0](:*)(:*)-,:*&#39;</span><span class="p">),</span>              <span class="c1"># mod</span>
+  <span class="p">(</span><span class="s1">&#39;ssssN&#39;</span><span class="p">,</span><span class="s1">&#39;[ND4H0](-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sOH&#39;</span><span class="p">,</span><span class="s1">&#39;[OD1H]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dO&#39;</span><span class="p">,</span> <span class="s1">&#39;[OD1H0]=*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssO&#39;</span><span class="p">,</span><span class="s1">&#39;[OD2H0](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;aaO&#39;</span><span class="p">,</span><span class="s1">&#39;[O,oD2H0](:*):*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sF&#39;</span><span class="p">,</span><span class="s1">&#39;[FD1]-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sSiH3&#39;</span><span class="p">,</span> <span class="s1">&#39;[SiD1H3]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssSiH2&#39;</span><span class="p">,</span><span class="s1">&#39;[SiD2H2](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssSiH&#39;</span><span class="p">,</span><span class="s1">&#39;[SiD3H1](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssssSi&#39;</span><span class="p">,</span><span class="s1">&#39;[SiD4H0](-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sPH2&#39;</span><span class="p">,</span>  <span class="s1">&#39;[PD1H2]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssPH&#39;</span><span class="p">,</span>  <span class="s1">&#39;[PD2H1](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssP&#39;</span><span class="p">,</span>  <span class="s1">&#39;[PD3H0](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dsssP&#39;</span><span class="p">,</span> <span class="s1">&#39;[PD4H0](=*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssssP&#39;</span><span class="p">,</span><span class="s1">&#39;[PD5H0](-*)(-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+   
+  <span class="p">(</span><span class="s1">&#39;sSH&#39;</span><span class="p">,</span>  <span class="s1">&#39;[SD1H1]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dS&#39;</span><span class="p">,</span>   <span class="s1">&#39;[SD1H0]=*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssS&#39;</span><span class="p">,</span>  <span class="s1">&#39;[SD2H0](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;aaS&#39;</span><span class="p">,</span>  <span class="s1">&#39;[S,sD2H0](:*):*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dssS&#39;</span><span class="p">,</span> <span class="s1">&#39;[SD3H0](=*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ddssS&#39;</span><span class="p">,</span><span class="s1">&#39;[SD4H0](~[OD1H0])(~[OD1H0])(-*)-*&#39;</span><span class="p">),</span>  <span class="c1"># mod</span>
+
+  <span class="p">(</span><span class="s1">&#39;sCl&#39;</span><span class="p">,</span> <span class="s1">&#39;[ClD1]-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sGeH3&#39;</span><span class="p">,</span> <span class="s1">&#39;[GeD1H3](-*)&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssGeH2&#39;</span><span class="p">,</span><span class="s1">&#39;[GeD2H2](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssGeH&#39;</span><span class="p">,</span><span class="s1">&#39;[GeD3H1](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssssGe&#39;</span><span class="p">,</span><span class="s1">&#39;[GeD4H0](-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sAsH2&#39;</span><span class="p">,</span>  <span class="s1">&#39;[AsD1H2]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssAsH&#39;</span><span class="p">,</span>  <span class="s1">&#39;[AsD2H1](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssAs&#39;</span><span class="p">,</span>  <span class="s1">&#39;[AsD3H0](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssdAs&#39;</span><span class="p">,</span> <span class="s1">&#39;[AsD4H0](=*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssssAs&#39;</span><span class="p">,</span><span class="s1">&#39;[AsD5H0](-*)(-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sSeH&#39;</span><span class="p">,</span>  <span class="s1">&#39;[SeD1H1]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dSe&#39;</span><span class="p">,</span>   <span class="s1">&#39;[SeD1H0]=*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssSe&#39;</span><span class="p">,</span>  <span class="s1">&#39;[SeD2H0](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;aaSe&#39;</span><span class="p">,</span>  <span class="s1">&#39;[SeD2H0](:*):*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;dssSe&#39;</span><span class="p">,</span> <span class="s1">&#39;[SeD3H0](=*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ddssSe&#39;</span><span class="p">,</span><span class="s1">&#39;[SeD4H0](=*)(=*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sBr&#39;</span><span class="p">,</span><span class="s1">&#39;[BrD1]-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sSnH3&#39;</span><span class="p">,</span> <span class="s1">&#39;[SnD1H3]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssSnH2&#39;</span><span class="p">,</span><span class="s1">&#39;[SnD2H2](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssSnH&#39;</span><span class="p">,</span><span class="s1">&#39;[SnD3H1](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssssSn&#39;</span><span class="p">,</span><span class="s1">&#39;[SnD4H0](-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sI&#39;</span><span class="p">,</span><span class="s1">&#39;[ID1]-*&#39;</span><span class="p">),</span>
+
+  <span class="p">(</span><span class="s1">&#39;sPbH3&#39;</span><span class="p">,</span> <span class="s1">&#39;[PbD1H3]-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssPbH2&#39;</span><span class="p">,</span><span class="s1">&#39;[PbD2H2](-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;sssPbH&#39;</span><span class="p">,</span><span class="s1">&#39;[PbD3H1](-*)(-*)-*&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;ssssPb&#39;</span><span class="p">,</span><span class="s1">&#39;[PbD4H0](-*)(-*)(-*)-*&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">esPatterns</span><span class="o">=</span><span class="kc">None</span>
+<div class="viewcode-block" id="BuildPatts"><a class="viewcode-back" href="../reference/AtomTypes.html#AtomTypes.BuildPatts">[docs]</a><span class="k">def</span> <span class="nf">BuildPatts</span><span class="p">(</span><span class="n">rawV</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; Internal Use Only</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">global</span> <span class="n">esPatterns</span><span class="p">,</span><span class="n">_rawD</span>
+  <span class="k">if</span> <span class="n">rawV</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">rawV</span> <span class="o">=</span> <span class="n">_rawD</span>
+
+  <span class="n">esPatterns</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">rawV</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">name</span><span class="p">,</span><span class="n">sma</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rawV</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">patt</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="n">sma</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+      <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;WARNING: problems with pattern </span><span class="si">%s</span><span class="s1"> (name: </span><span class="si">%s</span><span class="s1">), skipped.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">sma</span><span class="p">,</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">esPatterns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span><span class="n">patt</span></div>
+      
+
+<div class="viewcode-block" id="TypeAtoms"><a class="viewcode-back" href="../reference/AtomTypes.html#AtomTypes.TypeAtoms">[docs]</a><span class="k">def</span> <span class="nf">TypeAtoms</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;  assigns each atom in a molecule to an EState type</span>
+
+<span class="sd">  **Returns:**</span>
+
+<span class="sd">     list of tuples (atoms can possibly match multiple patterns) with atom types</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="n">esPatterns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">BuildPatts</span><span class="p">()</span>
+  <span class="n">nAtoms</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+  <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">nAtoms</span>
+  <span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">patt</span> <span class="ow">in</span> <span class="n">esPatterns</span><span class="p">:</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">,</span><span class="n">uniquify</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+      <span class="n">idx</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>
+      <span class="k">elif</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span>  
+        <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+  <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="GetAtomLabel"><a class="viewcode-back" href="../reference/AtomTypes.html#AtomTypes.GetAtomLabel">[docs]</a><span class="k">def</span> <span class="nf">GetAtomLabel</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Obtain the atom index in a molecule for the above given atom types</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  
+  <span class="k">if</span> <span class="n">esPatterns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">BuildPatts</span><span class="p">()</span>
+  <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+  <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">patt</span> <span class="ow">in</span> <span class="n">esPatterns</span><span class="p">:</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">,</span><span class="n">uniquify</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">cc</span><span class="o">=</span><span class="p">[]</span>
+  
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+<span class="c1">#      remain=match[1:]</span>
+      <span class="n">cc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">bb</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cc</span><span class="p">)))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">res</span></div>
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

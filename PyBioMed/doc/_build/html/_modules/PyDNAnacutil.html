@@ -1,0 +1,843 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyDNAnacutil &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyDNAnacutil</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+
+<span class="sd">A class used for computing different types of DNA descriptors! </span>
+
+<span class="sd">You can freely use and distribute it. If you have any problem, </span>
+
+<span class="sd">you could contact with us timely.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.14</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+
+<div class="viewcode-block" id="Frequency"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.Frequency">[docs]</a><span class="k">def</span> <span class="nf">Frequency</span><span class="p">(</span><span class="n">tol_str</span><span class="p">,</span> <span class="n">tar_str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Generate the frequency of tar_str in tol_str.</span>
+
+<span class="sd">    :param tol_str: mother string.</span>
+<span class="sd">    :param tar_str: substring.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">tar_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="n">len_tol_str</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tol_str</span><span class="p">)</span>
+    <span class="n">len_tar_str</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tar_str</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len_tol_str</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">len_tar_str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tol_str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">tar_str</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">len_tar_str</span><span class="p">:</span>
+                <span class="n">tar_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">tar_count</span></div>
+
+
+<div class="viewcode-block" id="MakeKmerList"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.MakeKmerList">[docs]</a><span class="k">def</span> <span class="nf">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">alphabet</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">k</span><span class="p">)]</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TypeError: k must be an inter and larger than 0, alphabet must be a string.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TypeError: k must be an inter and larger than 0&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span></div>
+
+
+<div class="viewcode-block" id="MakeUptoKmerList"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.MakeUptoKmerList">[docs]</a><span class="k">def</span> <span class="nf">MakeUptoKmerList</span><span class="p">(</span><span class="n">k_values</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">):</span>
+    <span class="c1"># Compute the k-mer for each value of k.</span>
+    <span class="n">return_value</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_values</span><span class="p">:</span>
+        <span class="n">return_value</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">return_value</span></div>
+
+
+<div class="viewcode-block" id="NormalizeVector"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.NormalizeVector">[docs]</a><span class="k">def</span> <span class="nf">NormalizeVector</span><span class="p">(</span><span class="n">normalize_method</span><span class="p">,</span> <span class="n">k_values</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">kmer_list</span><span class="p">):</span>
+    <span class="c1"># Do nothing if there&#39;s no normalization.</span>
+    <span class="k">if</span> <span class="n">normalize_method</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">vector</span>
+
+    <span class="c1"># Initialize all vector lengths to zeroes.</span>
+    <span class="n">vector_lengths</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_values</span><span class="p">}</span>
+
+    <span class="c1"># Compute sum or sum-of-squares separately for each k.</span>
+    <span class="n">num_kmers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i_kmer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_kmers</span><span class="p">):</span>
+        <span class="n">kmer_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">[</span><span class="n">i_kmer</span><span class="p">])</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">vector</span><span class="p">[</span><span class="n">i_kmer</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">normalize_method</span> <span class="o">==</span> <span class="s2">&quot;frequency&quot;</span><span class="p">:</span>
+            <span class="n">vector_lengths</span><span class="p">[</span><span class="n">kmer_length</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count</span>
+        <span class="k">elif</span> <span class="n">normalize_method</span> <span class="o">==</span> <span class="s2">&quot;unitsphere&quot;</span><span class="p">:</span>
+            <span class="n">vector_lengths</span><span class="p">[</span><span class="n">kmer_length</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">*</span> <span class="n">count</span>
+
+    <span class="c1"># Square root each sum if we&#39;re doing 2-norm.</span>
+    <span class="k">if</span> <span class="n">normalize_method</span> <span class="o">==</span> <span class="s2">&quot;unitsphere&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_values</span><span class="p">:</span>
+            <span class="n">vector_lengths</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vector_lengths</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+    <span class="c1"># Divide through by each sum.</span>
+    <span class="n">return_value</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i_kmer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_kmers</span><span class="p">):</span>
+        <span class="n">kmer_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">[</span><span class="n">i_kmer</span><span class="p">])</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">vector</span><span class="p">[</span><span class="n">i_kmer</span><span class="p">]</span>
+        <span class="n">vector_length</span> <span class="o">=</span> <span class="n">vector_lengths</span><span class="p">[</span><span class="n">kmer_length</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">vector_length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">return_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">return_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">vector_length</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">return_value</span></div>
+
+
+<span class="c1"># Make a copy of a given string, substituting one letter.</span>
+<div class="viewcode-block" id="Substitute"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.Substitute">[docs]</a><span class="k">def</span> <span class="nf">Substitute</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">letter</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+    <span class="n">return_value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">position</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">return_value</span> <span class="o">=</span> <span class="n">return_value</span> <span class="o">+</span> <span class="n">string</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">return_value</span> <span class="o">=</span> <span class="n">return_value</span> <span class="o">+</span> <span class="n">letter</span>
+    <span class="k">if</span> <span class="n">position</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">return_value</span> <span class="o">=</span> <span class="n">return_value</span> <span class="o">+</span> <span class="n">string</span><span class="p">[</span><span class="n">position</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">return_value</span></div>
+
+
+<div class="viewcode-block" id="ComputeBinNum"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.ComputeBinNum">[docs]</a><span class="k">def</span> <span class="nf">ComputeBinNum</span><span class="p">(</span><span class="n">num_bins</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">numbers</span><span class="p">):</span>
+    <span class="c1"># If no binning, just return.</span>
+    <span class="k">if</span> <span class="n">num_bins</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="c1"># Compute the mean value for this k-mer.</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="n">mean</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">position</span> <span class="o">+</span> <span class="n">i</span><span class="p">])</span>
+    <span class="n">mean</span> <span class="o">/=</span> <span class="n">k</span>
+
+    <span class="c1"># Find what quantile it lies in.</span>
+    <span class="k">for</span> <span class="n">i_bin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bins</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mean</span> <span class="o">&lt;=</span> <span class="n">boundaries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i_bin</span><span class="p">]:</span>
+            <span class="k">break</span>
+
+    <span class="c1"># Make sure we didn&#39;t go too far.</span>
+    <span class="k">if</span> <span class="n">i_bin</span> <span class="o">==</span> <span class="n">num_bins</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;bin=num_bins=</span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">i_bin</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">i_bin</span></div>
+
+
+<div class="viewcode-block" id="MakeSequenceVector"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.MakeSequenceVector">[docs]</a><span class="k">def</span> <span class="nf">MakeSequenceVector</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span>
+                         <span class="n">numbers</span><span class="p">,</span>
+                         <span class="n">num_bins</span><span class="p">,</span>
+                         <span class="n">revcomp</span><span class="p">,</span>
+                         <span class="n">revcomp_dictionary</span><span class="p">,</span>
+                         <span class="n">normalize_method</span><span class="p">,</span>
+                         <span class="n">k_values</span><span class="p">,</span>
+                         <span class="n">mismatch</span><span class="p">,</span>
+                         <span class="n">alphabet</span><span class="p">,</span>
+                         <span class="n">kmer_list</span><span class="p">,</span>
+                         <span class="n">boundaries</span><span class="p">,</span>
+                         <span class="n">pseudocount</span><span class="p">):</span>
+    <span class="c1"># Make an empty counts vector.</span>
+    <span class="n">kmer_counts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i_bin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bins</span><span class="p">):</span>
+        <span class="n">kmer_counts</span><span class="o">.</span><span class="n">append</span><span class="p">({})</span>
+
+    <span class="c1"># Iterate along the sequence.</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_values</span><span class="p">:</span>
+        <span class="n">seq_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i_seq</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">):</span>
+
+            <span class="c1"># Compute which bin number this goes in.</span>
+            <span class="n">bin_num</span> <span class="o">=</span> <span class="n">ComputeBinNum</span><span class="p">(</span><span class="n">num_bins</span><span class="p">,</span> <span class="n">i_seq</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">numbers</span><span class="p">)</span>
+
+            <span class="c1"># Extract this k-mer.</span>
+            <span class="n">kmer</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="n">i_seq</span><span class="p">:</span> <span class="n">i_seq</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span>
+
+            <span class="c1"># If we&#39;re doing reverse complement, store the count in the</span>
+            <span class="c1"># the version that starts with A or C.</span>
+            <span class="k">if</span> <span class="n">revcomp</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">rev_kmer</span> <span class="o">=</span> <span class="n">FindRevcomp</span><span class="p">(</span><span class="n">kmer</span><span class="p">,</span> <span class="n">revcomp_dictionary</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">kmer</span><span class="p">,</span> <span class="n">rev_kmer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">kmer</span> <span class="o">=</span> <span class="n">rev_kmer</span>
+
+            <span class="c1"># Increment the count.</span>
+            <span class="k">if</span> <span class="n">kmer</span> <span class="ow">in</span> <span class="n">kmer_counts</span><span class="p">[</span><span class="n">bin_num</span><span class="p">]:</span>
+                <span class="n">kmer_counts</span><span class="p">[</span><span class="n">bin_num</span><span class="p">][</span><span class="n">kmer</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">kmer_counts</span><span class="p">[</span><span class="n">bin_num</span><span class="p">][</span><span class="n">kmer</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># Should we also do the mismatch?</span>
+            <span class="k">if</span> <span class="n">mismatch</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="c1"># Loop through all possible mismatches.</span>
+                <span class="k">for</span> <span class="n">i_kmer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">alphabet</span><span class="p">:</span>
+
+                        <span class="c1"># Don&#39;t count yourself as a mismatch.</span>
+                        <span class="k">if</span> <span class="n">kmer</span><span class="p">[</span><span class="n">i_kmer</span><span class="p">:</span><span class="n">i_kmer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">letter</span><span class="p">:</span>
+
+                            <span class="c1"># Find the neighboring sequence.</span>
+                            <span class="n">neighbor</span> <span class="o">=</span> <span class="n">Substitute</span><span class="p">(</span><span class="n">i_kmer</span><span class="p">,</span> <span class="n">letter</span><span class="p">,</span> <span class="n">kmer</span><span class="p">)</span>
+
+                            <span class="c1"># If we&#39;re doing reverse complement, store the</span>
+                            <span class="c1"># count in the version that starts with A or C.</span>
+                            <span class="k">if</span> <span class="n">revcomp</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="n">rev_kmer</span> <span class="o">=</span> <span class="n">FindRevcomp</span><span class="p">(</span><span class="n">kmer</span><span class="p">,</span>
+                                                        <span class="n">revcomp_dictionary</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">kmer</span><span class="p">,</span> <span class="n">rev_kmer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                                    <span class="n">kmer</span> <span class="o">=</span> <span class="n">rev_kmer</span>
+
+                            <span class="c1"># Increment the neighboring sequence.</span>
+                            <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">kmer_counts</span><span class="p">[</span><span class="n">bin_num</span><span class="p">]:</span>
+                                <span class="n">kmer_counts</span><span class="p">[</span><span class="n">bin_num</span><span class="p">][</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">+=</span> <span class="n">mismatch</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">kmer_counts</span><span class="p">[</span><span class="n">bin_num</span><span class="p">][</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="n">mismatch</span>
+
+    <span class="c1"># Build the sequence vector.</span>
+    <span class="n">sequence_vector</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i_bin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bins</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">kmer</span> <span class="ow">in</span> <span class="n">kmer_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kmer</span> <span class="ow">in</span> <span class="n">kmer_counts</span><span class="p">[</span><span class="n">i_bin</span><span class="p">]:</span>
+                <span class="n">sequence_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmer_counts</span><span class="p">[</span><span class="n">i_bin</span><span class="p">][</span><span class="n">kmer</span><span class="p">]</span> <span class="o">+</span> <span class="n">pseudocount</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sequence_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pseudocount</span><span class="p">)</span>
+
+    <span class="c1"># Normalize it</span>
+    <span class="n">return_value</span> <span class="o">=</span> <span class="n">NormalizeVector</span><span class="p">(</span><span class="n">normalize_method</span><span class="p">,</span>
+                                    <span class="n">k_values</span><span class="p">,</span>
+                                    <span class="n">sequence_vector</span><span class="p">,</span>
+                                    <span class="n">kmer_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">return_value</span></div>
+
+
+<div class="viewcode-block" id="ReadFastaSequence"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.ReadFastaSequence">[docs]</a><span class="k">def</span> <span class="nf">ReadFastaSequence</span><span class="p">(</span><span class="n">numeric</span><span class="p">,</span>
+                        <span class="n">fasta_file</span><span class="p">):</span>
+    <span class="c1"># Read 1 byte.</span>
+    <span class="n">first_char</span> <span class="o">=</span> <span class="n">fasta_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># If it&#39;s empty, we&#39;re done.</span>
+    <span class="k">if</span> <span class="n">first_char</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span>
+    <span class="c1"># If it&#39;s &quot;&gt;&quot;, then this is the first sequence in the file.</span>
+    <span class="k">elif</span> <span class="n">first_char</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">first_char</span>
+
+    <span class="c1"># Read the rest of the header line.</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span> <span class="o">+</span> <span class="n">fasta_file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+    <span class="c1"># Get the rest of the ID.</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;No words in header line (</span><span class="si">%s</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Read the sequence, through the next &quot;&gt;&quot;.</span>
+    <span class="n">first_char</span> <span class="o">=</span> <span class="n">fasta_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">first_char</span> <span class="o">!=</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">first_char</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">first_char</span> <span class="o">!=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>  <span class="c1"># Handle blank lines.</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">fasta_file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="n">sequence</span> <span class="o">+</span> <span class="n">first_char</span> <span class="o">+</span> <span class="n">line</span>
+        <span class="n">first_char</span> <span class="o">=</span> <span class="n">fasta_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Remove EOLs.</span>
+    <span class="n">clean_sequence</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">letter</span> <span class="o">!=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>
+            <span class="n">clean_sequence</span> <span class="o">+=</span> <span class="n">letter</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="n">clean_sequence</span>
+
+    <span class="c1"># Remove spaces.</span>
+    <span class="k">if</span> <span class="n">numeric</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">clean_sequence</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">letter</span> <span class="o">!=</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
+                <span class="n">clean_sequence</span> <span class="o">=</span> <span class="n">clean_sequence</span> <span class="o">+</span> <span class="n">letter</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="n">clean_sequence</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="nb">id</span><span class="p">,</span> <span class="n">sequence</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ReadSequenceAndNumbers"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.ReadSequenceAndNumbers">[docs]</a><span class="k">def</span> <span class="nf">ReadSequenceAndNumbers</span><span class="p">(</span><span class="n">fasta_file</span><span class="p">,</span>
+                              <span class="n">numbers_filename</span><span class="p">,</span>
+                              <span class="n">numbers_file</span><span class="p">):</span>
+    <span class="p">[</span><span class="n">fasta_id</span><span class="p">,</span> <span class="n">fasta_sequence</span><span class="p">]</span> <span class="o">=</span> <span class="n">ReadFastaSequence</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fasta_file</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">numbers_filename</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">number_id</span><span class="p">,</span> <span class="n">number_sequence</span><span class="p">]</span> <span class="o">=</span> <span class="n">ReadFastaSequence</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_file</span><span class="p">)</span>
+
+        <span class="c1"># Make sure we got the same ID.</span>
+        <span class="k">if</span> <span class="n">fasta_id</span> <span class="o">!=</span> <span class="n">number_id</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Found mismatching IDs (</span><span class="si">%s</span><span class="s2"> != </span><span class="si">%d</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span>
+                             <span class="p">(</span><span class="n">fasta_id</span><span class="p">,</span> <span class="n">number_id</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Split the numbers into a list.</span>
+        <span class="n">number_list</span> <span class="o">=</span> <span class="n">number_sequence</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+        <span class="c1"># Verify that they are the same length.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fasta_sequence</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">number_list</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Found sequence of length </span><span class="si">%d</span><span class="s2"> with </span><span class="si">%d</span><span class="s2"> numbers.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                             <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">number_list</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">number_list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">fasta_id</span><span class="p">,</span> <span class="n">fasta_sequence</span><span class="p">,</span> <span class="n">number_list</span></div>
+
+
+<div class="viewcode-block" id="FindRevcomp"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.FindRevcomp">[docs]</a><span class="k">def</span> <span class="nf">FindRevcomp</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span>
+                 <span class="n">revcomp_dictionary</span><span class="p">):</span>
+    <span class="c1"># Save time by storing reverse complements in a hash.</span>
+    <span class="k">if</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">revcomp_dictionary</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">revcomp_dictionary</span><span class="p">[</span><span class="n">sequence</span><span class="p">]</span>
+
+    <span class="c1"># Make a reversed version of the string.</span>
+    <span class="n">rev_sequence</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+    <span class="n">rev_sequence</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="n">rev_sequence</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rev_sequence</span><span class="p">)</span>
+
+    <span class="n">return_value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">rev_sequence</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">letter</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">:</span>
+            <span class="n">return_value</span> <span class="o">+=</span> <span class="s2">&quot;T&quot;</span>
+        <span class="k">elif</span> <span class="n">letter</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span>
+            <span class="n">return_value</span> <span class="o">+=</span> <span class="s2">&quot;G&quot;</span>
+        <span class="k">elif</span> <span class="n">letter</span> <span class="o">==</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span>
+            <span class="n">return_value</span> <span class="o">+=</span> <span class="s2">&quot;C&quot;</span>
+        <span class="k">elif</span> <span class="n">letter</span> <span class="o">==</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span>
+            <span class="n">return_value</span> <span class="o">+=</span> <span class="s2">&quot;A&quot;</span>
+        <span class="k">elif</span> <span class="n">letter</span> <span class="o">==</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span>
+            <span class="n">return_value</span> <span class="o">+=</span> <span class="s2">&quot;N&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Unknown DNA character (</span><span class="si">%s</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">letter</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Store this value for future use.</span>
+    <span class="n">revcomp_dictionary</span><span class="p">[</span><span class="n">sequence</span><span class="p">]</span> <span class="o">=</span> <span class="n">return_value</span>
+
+    <span class="k">return</span> <span class="n">return_value</span></div>
+
+
+<div class="viewcode-block" id="ComputeQuantileBoundaries"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.ComputeQuantileBoundaries">[docs]</a><span class="k">def</span> <span class="nf">ComputeQuantileBoundaries</span><span class="p">(</span><span class="n">num_bins</span><span class="p">,</span>
+                                <span class="n">k_values</span><span class="p">,</span>
+                                <span class="n">number_filename</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num_bins</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="c1"># The boundaries are stored in a 2D dictionary.</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Enumerate all values of k.</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_values</span><span class="p">:</span>
+
+        <span class="c1"># Open the number file for reading.</span>
+        <span class="n">number_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">number_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Read it sequence by sequence.</span>
+        <span class="n">all_numbers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="p">[</span><span class="nb">id</span><span class="p">,</span> <span class="n">numbers</span><span class="p">]</span> <span class="o">=</span> <span class="n">ReadFastaSequence</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_file</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+
+            <span class="c1"># Compute and store the mean of all k-mers.</span>
+            <span class="n">number_list</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">num_numbers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">number_list</span><span class="p">)</span> <span class="o">-</span> <span class="n">k</span>
+            <span class="k">for</span> <span class="n">i_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_numbers</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i_number</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+                        <span class="nb">sum</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">number_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">sum</span> <span class="o">-=</span> <span class="nb">float</span><span class="p">(</span><span class="n">number_list</span><span class="p">[</span><span class="n">i_number</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                    <span class="nb">sum</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">number_list</span><span class="p">[</span><span class="n">i_number</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">all_numbers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span>
+            <span class="p">[</span><span class="nb">id</span><span class="p">,</span> <span class="n">numbers</span><span class="p">]</span> <span class="o">=</span> <span class="n">ReadFastaSequence</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_file</span><span class="p">)</span>
+        <span class="n">number_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># Sort them.</span>
+        <span class="n">all_numbers</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># Record the quantile.</span>
+        <span class="n">boundaries</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">num_values</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_numbers</span><span class="p">)</span>
+        <span class="n">bin_size</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_values</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_bins</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;boundaries k=</span><span class="si">%d</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i_bin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bins</span><span class="p">):</span>
+            <span class="n">value_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">bin_size</span> <span class="o">*</span> <span class="p">(</span><span class="n">i_bin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value_index</span> <span class="o">==</span> <span class="n">num_bins</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">value_index</span> <span class="o">=</span> <span class="n">num_values</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">all_numbers</span><span class="p">[</span><span class="n">value_index</span><span class="p">]</span>
+            <span class="n">boundaries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i_bin</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">boundaries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i_bin</span><span class="p">])</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">boundaries</span></div>
+
+
+<span class="c1">#########################################################################</span>
+<span class="c1"># The start of Changing by aleeee.</span>
+<span class="c1">#########################################################################</span>
+<div class="viewcode-block" id="cmp"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.cmp">[docs]</a><span class="k">def</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MakeRevcompKmerList"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.MakeRevcompKmerList">[docs]</a><span class="k">def</span> <span class="nf">MakeRevcompKmerList</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">):</span>
+    <span class="n">revcomp_dictionary</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">new_kmer_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">kmer</span> <span class="k">for</span> <span class="n">kmer</span> <span class="ow">in</span> <span class="n">kmer_list</span> <span class="k">if</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">kmer</span><span class="p">,</span> <span class="n">FindRevcomp</span><span class="p">(</span><span class="n">kmer</span><span class="p">,</span> <span class="n">revcomp_dictionary</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">new_kmer_list</span></div>
+
+
+<div class="viewcode-block" id="MakeIndexUptoKRevcomp"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.MakeIndexUptoKRevcomp">[docs]</a><span class="k">def</span> <span class="nf">MakeIndexUptoKRevcomp</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Generate the index for revcomp and from 1 to k.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">sum</span> <span class="o">+=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">index</span></div>
+
+
+<div class="viewcode-block" id="MakeIndexUptoK"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.MakeIndexUptoK">[docs]</a><span class="k">def</span> <span class="nf">MakeIndexUptoK</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Generate the index from 1 to k.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="nb">sum</span> <span class="o">+=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">index</span></div>
+
+
+<div class="viewcode-block" id="MakeIndex"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.MakeIndex">[docs]</a><span class="k">def</span> <span class="nf">MakeIndex</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Generate the index just for k.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">k</span><span class="p">))]</span>
+
+    <span class="k">return</span> <span class="n">index</span></div>
+
+
+<div class="viewcode-block" id="MakeKmerVector"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.MakeKmerVector">[docs]</a><span class="k">def</span> <span class="nf">MakeKmerVector</span><span class="p">(</span><span class="n">seq_list</span><span class="p">,</span> <span class="n">kmer_list</span><span class="p">,</span> <span class="n">rev_kmer_list</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">revcomp</span><span class="p">,</span> <span class="n">normalize</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Generate kmer vector.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Generate the alphabet index.</span>
+    <span class="k">if</span> <span class="n">upto</span><span class="p">:</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">MakeIndexUptoK</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="nb">sum</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">k</span>
+        <span class="n">len_k</span> <span class="o">=</span> <span class="n">k</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">MakeIndex</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="nb">sum</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">len_k</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">vector</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">seq_list</span><span class="p">:</span>
+        <span class="n">kmer_count</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Generate the kmer frequency vector.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_k</span><span class="p">):</span>
+            <span class="nb">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">index</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+                <span class="n">kmer</span> <span class="o">=</span> <span class="n">kmer_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">temp_count</span> <span class="o">=</span> <span class="n">Frequency</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">kmer</span><span class="p">)</span>
+                <span class="c1"># print temp_count</span>
+                <span class="k">if</span> <span class="n">revcomp</span><span class="p">:</span>
+                    <span class="n">rev_kmer</span> <span class="o">=</span> <span class="n">FindRevcomp</span><span class="p">(</span><span class="n">kmer</span><span class="p">,</span> <span class="p">{})</span>
+                    <span class="k">if</span> <span class="n">kmer</span> <span class="o">&lt;=</span> <span class="n">rev_kmer</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">kmer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kmer_count</span><span class="p">:</span>
+                            <span class="n">kmer_count</span><span class="p">[</span><span class="n">kmer</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="n">kmer_count</span><span class="p">[</span><span class="n">kmer</span><span class="p">]</span> <span class="o">+=</span> <span class="n">temp_count</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">rev_kmer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kmer_count</span><span class="p">:</span>
+                            <span class="n">kmer_count</span><span class="p">[</span><span class="n">rev_kmer</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="n">kmer_count</span><span class="p">[</span><span class="n">rev_kmer</span><span class="p">]</span> <span class="o">+=</span> <span class="n">temp_count</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">kmer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kmer_count</span><span class="p">:</span>
+                        <span class="n">kmer_count</span><span class="p">[</span><span class="n">kmer</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">kmer_count</span><span class="p">[</span><span class="n">kmer</span><span class="p">]</span> <span class="o">+=</span> <span class="n">temp_count</span>
+                <span class="nb">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">temp_count</span>
+        <span class="nb">print</span> <span class="n">kmer_count</span>
+        <span class="c1"># Store the kmer frequency vector.</span>
+        <span class="k">if</span> <span class="n">revcomp</span><span class="p">:</span>
+            <span class="n">temp_vec</span> <span class="o">=</span> <span class="p">[</span><span class="n">kmer_count</span><span class="p">[</span><span class="n">kmer</span><span class="p">]</span> <span class="k">for</span> <span class="n">kmer</span> <span class="ow">in</span> <span class="n">rev_kmer_list</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp_vec</span> <span class="o">=</span> <span class="p">[</span><span class="n">kmer_count</span><span class="p">[</span><span class="n">kmer</span><span class="p">]</span> <span class="k">for</span> <span class="n">kmer</span> <span class="ow">in</span> <span class="n">kmer_list</span><span class="p">]</span>
+
+        <span class="c1"># Normalize.</span>
+        <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">upto</span><span class="p">:</span>
+                <span class="n">temp_vec</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">temp_vec</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">upto</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">revcomp</span><span class="p">:</span>
+                    <span class="n">upto_index</span> <span class="o">=</span> <span class="n">MakeIndexUptoKRevcomp</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">upto_index</span> <span class="o">=</span> <span class="n">MakeIndexUptoK</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">temp_vec</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">upto_index</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">temp_vec</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+                    <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_vec</span><span class="p">)</span>
+    <span class="c1"># if 0 != len(rev_kmer_list):</span>
+    <span class="c1">#     print &quot;The kmer is&quot;, rev_kmer_list</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     print &quot;The kmer is&quot;, kmer_list</span>
+    <span class="k">return</span> <span class="n">vector</span></div>
+
+
+<div class="viewcode-block" id="Diversity"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.Diversity">[docs]</a><span class="k">def</span> <span class="nf">Diversity</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Calculate diversity.</span>
+
+<span class="sd">    :param vec: kmer vec</span>
+<span class="sd">    :return: Diversity(X)</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log</span>
+    <span class="k">return</span> <span class="n">m_sum</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">m_sum</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">([</span><span class="n">e</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vec</span> <span class="k">if</span> <span class="n">e</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="IdXS"><a class="viewcode-back" href="../reference/PyDNAnacutil.html#PyDNAnacutil.IdXS">[docs]</a><span class="k">def</span> <span class="nf">IdXS</span><span class="p">(</span><span class="n">vec_x</span><span class="p">,</span> <span class="n">vec_s</span><span class="p">,</span> <span class="n">diversity_s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Calculate ID(X, S)</span>
+
+<span class="sd">    :param vec_x: kmer X</span>
+<span class="sd">    :param vec_s: kmer S</span>
+<span class="sd">    :return: ID(X, S) = Diversity(X + S) - Diversity(X) - Diversity(S)</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print &#39;vec_x&#39;, vec_x</span>
+    <span class="c1"># print &#39;vec_s&#39;, vec_s</span>
+    <span class="n">vec_x_s</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vec_x</span><span class="p">,</span> <span class="n">vec_s</span><span class="p">)]</span>
+    <span class="c1"># print &#39;vec_x_s&#39;, vec_x_s</span>
+    <span class="c1"># print diversity(vec_x_s), diversity(vec_x), diversity_s</span>
+    <span class="k">return</span> <span class="n">Diversity</span><span class="p">(</span><span class="n">vec_x_s</span><span class="p">)</span> <span class="o">-</span> <span class="n">Diversity</span><span class="p">(</span><span class="n">vec_x</span><span class="p">)</span> <span class="o">-</span> <span class="n">diversity_s</span></div>
+
+
+<span class="c1">##############################################################################</span>
+<span class="c1"># End of aleeee&#39;s change.</span>
+<span class="c1">##############################################################################</span>
+
+<span class="c1">##############################################################################</span>
+<span class="c1"># MAIN</span>
+<span class="c1">##############################################################################</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="c1"># Define the command line usage.</span>
+    <span class="n">usage</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Usage: fasta2matrix [options] &lt;k&gt; &lt;fasta file&gt;</span>
+
+<span class="s2">      Options:</span>
+
+<span class="s2">        -upto       Use all values from 1 up to the specified k.</span>
+
+<span class="s2">        -revcomp    Collapse reverse complement counts.</span>
+
+<span class="s2">        -normalize [frequency|unitsphere] Normalize counts to be</span>
+<span class="s2">                    frequencies or project onto unit sphere.  With -upto,</span>
+<span class="s2">                    normalization is done separately for each k.</span>
+
+<span class="s2">        -protein    Use an amino acid alphabet.  Default=ACGT.</span>
+
+<span class="s2">        -alphabet &lt;string&gt; Set the alphabet arbitrarily.</span>
+
+<span class="s2">        -mismatch &lt;value&gt;  Assign count of &lt;value&gt; to k-mers that</span>
+<span class="s2">                           are 1 mismatch away.</span>
+
+<span class="s2">        -binned &lt;numbins&gt; &lt;file&gt;  Create &lt;numbins&gt; vectors for each</span>
+<span class="s2">                                  sequence, and place each k-mer count</span>
+<span class="s2">                                  into the bin based upon its corresponding</span>
+<span class="s2">                                  mean value from the &lt;file&gt;.  The</span>
+<span class="s2">                                  &lt;file&gt; is in FASTA-like format, with</span>
+<span class="s2">                                  space-delimited numbers in place of</span>
+<span class="s2">                                  the sequences.  The sequences must</span>
+<span class="s2">                                  have the same names and be in the same</span>
+<span class="s2">                                  order as the given FASTA file.</span>
+
+<span class="s2">       -pseudocount &lt;value&gt;  Assign the given pseudocount to each bin.</span>
+
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Define default options.</span>
+    <span class="n">upto</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">revcomp</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">normalize_method</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">alphabet</span> <span class="o">=</span> <span class="s2">&quot;ACGT&quot;</span>
+    <span class="n">mismatch</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">num_bins</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">pseudocount</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">number_filename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># Parse the command line.</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">next_arg</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">next_arg</span> <span class="o">==</span> <span class="s2">&quot;-revcomp&quot;</span><span class="p">:</span>
+            <span class="n">revcomp</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">next_arg</span> <span class="o">==</span> <span class="s2">&quot;-upto&quot;</span><span class="p">:</span>
+            <span class="n">upto</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">next_arg</span> <span class="o">==</span> <span class="s2">&quot;-normalize&quot;</span><span class="p">:</span>
+            <span class="n">normalize_method</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">normalize_method</span> <span class="o">!=</span> <span class="s2">&quot;unitsphere&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">normalize_method</span> <span class="o">!=</span> <span class="s2">&quot;frequency&quot;</span><span class="p">):</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Invalid normalization method (</span><span class="si">%s</span><span class="s2">).</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                 <span class="o">%</span> <span class="n">normalize_method</span><span class="p">);</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">next_arg</span> <span class="o">==</span> <span class="s2">&quot;-protein&quot;</span><span class="p">:</span>
+            <span class="n">alphabet</span> <span class="o">=</span> <span class="s2">&quot;ACDEFGHIKLMNPQRSTVWY&quot;</span>
+        <span class="k">elif</span> <span class="n">next_arg</span> <span class="o">==</span> <span class="s2">&quot;-alphabet&quot;</span><span class="p">:</span>
+            <span class="n">alphabet</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">elif</span> <span class="n">next_arg</span> <span class="o">==</span> <span class="s2">&quot;-mismatch&quot;</span><span class="p">:</span>
+            <span class="n">mismatch</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">elif</span> <span class="n">next_arg</span> <span class="o">==</span> <span class="s2">&quot;-binned&quot;</span><span class="p">:</span>
+            <span class="n">num_bins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">number_filename</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">elif</span> <span class="n">next_arg</span> <span class="o">==</span> <span class="s2">&quot;-pseudocount&quot;</span><span class="p">:</span>
+            <span class="n">pseudocount</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Invalid option (</span><span class="si">%s</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">next_arg</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">usage</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">fasta_filename</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Check for reverse complementing non-DNA alphabets.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">revcomp</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">alphabet</span> <span class="o">!=</span> <span class="s2">&quot;ACGT&quot;</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Attempted to reverse complement &quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;a non-DNA alphabet (</span><span class="si">%s</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">alphabet</span><span class="p">)</span>
+
+    <span class="c1"># Make a list of all values of k.</span>
+    <span class="n">k_values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">upto</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">start_i_k</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">start_i_k</span> <span class="o">=</span> <span class="n">k</span>
+    <span class="n">k_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">start_i_k</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># If numeric binning is turned on, compute quantile boundaries for various</span>
+    <span class="c1"># values of k.</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="n">ComputeQuantileBoundaries</span><span class="p">(</span><span class="n">num_bins</span><span class="p">,</span> <span class="n">k_values</span><span class="p">,</span> <span class="n">number_filename</span><span class="p">)</span>
+
+    <span class="c1"># Make a list of all k-mers.</span>
+    <span class="n">kmer_list</span> <span class="o">=</span> <span class="n">MakeUptoKmerList</span><span class="p">(</span><span class="n">k_values</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Considering </span><span class="si">%d</span><span class="s2"> kmers.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">))</span>
+
+    <span class="c1"># Set up a dictionary to cache reverse complements.</span>
+    <span class="n">revcomp_dictionary</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Use lexicographically first version of {kmer, revcomp(kmer)}.</span>
+    <span class="k">if</span> <span class="n">revcomp</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">kmer_list</span> <span class="o">=</span> <span class="n">MakeRevcompKmerList</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">)</span>
+    <span class="c1"># Print the corner of the matrix.</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fasta2matrix&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Print the title row.</span>
+    <span class="k">for</span> <span class="n">i_bin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">kmer</span> <span class="ow">in</span> <span class="n">kmer_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">num_bins</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="s2">-</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">kmer</span><span class="p">,</span> <span class="n">i_bin</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">kmer</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Open the sequence file.</span>
+    <span class="k">if</span> <span class="n">fasta_filename</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+        <span class="n">fasta_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fasta_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">number_filename</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">number_file</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">number_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">number_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Read the first sequence.</span>
+    <span class="p">[</span><span class="nb">id</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">numbers</span><span class="p">]</span> <span class="o">=</span> <span class="n">ReadSequenceAndNumbers</span><span class="p">(</span><span class="n">fasta_file</span><span class="p">,</span>
+                                                        <span class="n">number_filename</span><span class="p">,</span>
+                                                        <span class="n">number_file</span><span class="p">)</span>
+
+    <span class="c1"># Iterate till we&#39;ve read the whole file.</span>
+    <span class="n">i_sequence</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="nb">id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+
+        <span class="c1"># Tell the user what&#39;s happening.</span>
+        <span class="k">if</span> <span class="n">i_sequence</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Read </span><span class="si">%d</span><span class="s2"> sequences.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i_sequence</span><span class="p">)</span>
+
+        <span class="c1"># Compute the sequence vector.</span>
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">MakeSequenceVector</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span>
+                                      <span class="n">numbers</span><span class="p">,</span>
+                                      <span class="n">num_bins</span><span class="p">,</span>
+                                      <span class="n">revcomp</span><span class="p">,</span>
+                                      <span class="n">revcomp_dictionary</span><span class="p">,</span>
+                                      <span class="n">normalize_method</span><span class="p">,</span>
+                                      <span class="n">k_values</span><span class="p">,</span>
+                                      <span class="n">mismatch</span><span class="p">,</span>
+                                      <span class="n">alphabet</span><span class="p">,</span>
+                                      <span class="n">kmer_list</span><span class="p">,</span>
+                                      <span class="n">boundaries</span><span class="p">,</span>
+                                      <span class="n">pseudocount</span><span class="p">)</span>
+
+        <span class="c1"># Print the formatted vector.</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">vector</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">element</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+
+        <span class="c1"># Read the next sequence.</span>
+        <span class="p">[</span><span class="nb">id</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">numbers</span><span class="p">]</span> <span class="o">=</span> <span class="n">ReadSequenceAndNumbers</span><span class="p">(</span><span class="n">fasta_file</span><span class="p">,</span>
+                                                            <span class="n">number_filename</span><span class="p">,</span>
+                                                            <span class="n">number_file</span><span class="p">)</span>
+        <span class="n">i_sequence</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Close the file.</span>
+    <span class="n">fasta_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

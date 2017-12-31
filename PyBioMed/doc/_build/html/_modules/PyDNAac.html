@@ -1,0 +1,547 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyDNAac &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyDNAac</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+
+<span class="sd">A class used for computing different types of DNA descriptors! </span>
+
+<span class="sd">You can freely use and distribute it. If you have any problem, </span>
+
+<span class="sd">you could contact with us timely.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.07.11</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">PyDNAutil</span> <span class="k">import</span> <span class="n">GetData</span><span class="p">,</span> <span class="n">GeneratePhycheValue</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
+
+
+<div class="viewcode-block" id="CheckAcc"><a class="viewcode-back" href="../reference/PyDNAac.html#PyDNAac.CheckAcc">[docs]</a><span class="k">def</span> <span class="nf">CheckAcc</span><span class="p">(</span><span class="n">lag</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Check ACC parameter validation.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lag</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">lag</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, parameter lag must be an int type and larger than 0.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">lag</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, parameter k must be an int type and larger than 0.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="ReadyAcc"><a class="viewcode-back" href="../reference/PyDNAac.html#PyDNAac.ReadyAcc">[docs]</a><span class="k">def</span> <span class="nf">ReadyAcc</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">all_property</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Public function for get sequence_list and phyche_value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sequence_list</span> <span class="o">=</span> <span class="n">GetData</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">phyche_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">extra_phyche_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">phyche_value</span> <span class="o">=</span> <span class="n">GeneratePhycheValue</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">,</span> <span class="n">all_property</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sequence_list</span><span class="p">,</span> <span class="n">phyche_value</span></div>
+
+
+
+
+<div class="viewcode-block" id="GetDAC"><a class="viewcode-back" href="../reference/PyDNAac.html#PyDNAac.GetDAC">[docs]</a><span class="k">def</span> <span class="nf">GetDAC</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Make DAC dictionary.</span>
+
+<span class="sd">    :param input_data: file object or sequence list.</span>
+<span class="sd">    :param phyche_index: physicochemical properties list.</span>
+<span class="sd">    :param all_property: bool, choose all physicochemical properties or not.</span>
+<span class="sd">    :param extra_phyche_index: dict, the key is the dinucleotide (string), and its corresponding value is a list.</span>
+<span class="sd">                               It means user-defined phyche_index.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;lag&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;lag&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="s1">&#39;phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s1">&#39;all_property&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;all_property&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;extra_phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;extra_phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+        
+    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_data</span><span class="p">]</span>
+    <span class="n">sequence_list</span><span class="p">,</span> <span class="n">phyche_value</span> <span class="o">=</span> <span class="n">ReadyAcc</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">,</span> <span class="n">all_property</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">PyDNAacutil</span> <span class="k">import</span> <span class="n">MakeACVector</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">MakeACVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DAC_</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_keys</span><span class="p">,</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="GetDCC"><a class="viewcode-back" href="../reference/PyDNAac.html#PyDNAac.GetDCC">[docs]</a><span class="k">def</span> <span class="nf">GetDCC</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Make DCC vector.</span>
+
+<span class="sd">    :param input_data: file object or sequence list.</span>
+<span class="sd">    :param phyche_index: physicochemical properties list.</span>
+<span class="sd">    :param all_property: bool, choose all physicochemical properties or not.</span>
+<span class="sd">    :param extra_phyche_index: dict, the key is the dinucleotide (string), and its corresponding value is a list.</span>
+<span class="sd">                               It means user-defined phyche_index.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;lag&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;lag&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="s1">&#39;phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s1">&#39;all_property&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;all_property&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;extra_phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;extra_phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+        
+    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_data</span><span class="p">]</span>
+    <span class="n">sequence_list</span><span class="p">,</span> <span class="n">phyche_value</span> <span class="o">=</span> <span class="n">ReadyAcc</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">,</span> <span class="n">all_property</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">PyDNAacutil</span> <span class="k">import</span> <span class="n">MakeCCVector</span>
+
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">MakeCCVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DCC_</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_keys</span><span class="p">,</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+        
+
+
+
+
+<div class="viewcode-block" id="GetDACC"><a class="viewcode-back" href="../reference/PyDNAac.html#PyDNAac.GetDACC">[docs]</a><span class="k">def</span> <span class="nf">GetDACC</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Make DACC dictionary.</span>
+
+<span class="sd">    :param input_data: file object or sequence list.</span>
+<span class="sd">    :param phyche_index: physicochemical properties list.</span>
+<span class="sd">    :param all_property: bool, choose all physicochemical properties or not.</span>
+<span class="sd">    :param extra_phyche_index: dict, the key is the dinucleotide (string), and its corresponding value is a list.</span>
+<span class="sd">                               It means user-defined phyche_index.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;lag&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;lag&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="s1">&#39;phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s1">&#39;all_property&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;all_property&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;extra_phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;extra_phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+        
+    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_data</span><span class="p">]</span>
+    <span class="n">sequence_list</span><span class="p">,</span> <span class="n">phyche_value</span> <span class="o">=</span> <span class="n">ReadyAcc</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">,</span> <span class="n">all_property</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">PyDNAacutil</span> <span class="k">import</span> <span class="n">MakeACVector</span><span class="p">,</span> <span class="n">MakeCCVector</span>
+    <span class="n">zipped</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">MakeACVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span>
+                 <span class="n">MakeCCVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">k</span><span class="p">)))</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="p">[</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">zipped</span><span class="p">]</span>
+
+    <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DACC_</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_keys</span><span class="p">,</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="GetTAC"><a class="viewcode-back" href="../reference/PyDNAac.html#PyDNAac.GetTAC">[docs]</a><span class="k">def</span> <span class="nf">GetTAC</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Make TAC dictionary.</span>
+
+<span class="sd">    :param input_data: file object or sequence list.</span>
+<span class="sd">    :param phyche_index: physicochemical properties list.</span>
+<span class="sd">    :param all_property: bool, choose all physicochemical properties or not.</span>
+<span class="sd">    :param extra_phyche_index: dict, the key is the dinucleotide (string), and its corresponding value is a list.</span>
+<span class="sd">                               It means user-defined phyche_index.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;lag&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;lag&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="s1">&#39;phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s1">&#39;all_property&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;all_property&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;extra_phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;extra_phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+        
+    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_data</span><span class="p">]</span>
+    <span class="n">sequence_list</span><span class="p">,</span> <span class="n">phyche_value</span> <span class="o">=</span> <span class="n">ReadyAcc</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">,</span> <span class="n">all_property</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">PyDNAacutil</span> <span class="k">import</span> <span class="n">MakeACVector</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">MakeACVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TAC_</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_keys</span><span class="p">,</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="GetTCC"><a class="viewcode-back" href="../reference/PyDNAac.html#PyDNAac.GetTCC">[docs]</a><span class="k">def</span> <span class="nf">GetTCC</span><span class="p">(</span> <span class="n">input_data</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Make TCC dictionary.</span>
+
+<span class="sd">    :param input_data: file object or sequence list.</span>
+<span class="sd">    :param phyche_index: physicochemical properties list.</span>
+<span class="sd">    :param all_property: bool, choose all physicochemical properties or not.</span>
+<span class="sd">    :param extra_phyche_index: dict, the key is the dinucleotide (string), and its corresponding value is a list.</span>
+<span class="sd">                               It means user-defined phyche_index.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;lag&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;lag&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="s1">&#39;phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s1">&#39;all_property&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;all_property&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;extra_phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;extra_phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+        
+    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_data</span><span class="p">]</span>
+    <span class="n">sequence_list</span><span class="p">,</span> <span class="n">phyche_value</span> <span class="o">=</span> <span class="n">ReadyAcc</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">,</span> <span class="n">all_property</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">PyDNAacutil</span> <span class="k">import</span> <span class="n">MakeCCVector</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">MakeCCVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TCC_</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_keys</span><span class="p">,</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+
+<div class="viewcode-block" id="GetTACC"><a class="viewcode-back" href="../reference/PyDNAac.html#PyDNAac.GetTACC">[docs]</a><span class="k">def</span> <span class="nf">GetTACC</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Make TACC dictionary.</span>
+
+<span class="sd">    :param input_data: file object or sequence list.</span>
+<span class="sd">    :param phyche_index: physicochemical properties list.</span>
+<span class="sd">    :param all_property: bool, choose all physicochemical properties or not.</span>
+<span class="sd">    :param extra_phyche_index: dict, the key is the dinucleotide (string), and its corresponding value is a list.</span>
+<span class="sd">                               It means user-defined phyche_index.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;lag&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;lag&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lag</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="s1">&#39;phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s1">&#39;all_property&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;all_property&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">all_property</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;extra_phyche_index&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;extra_phyche_index&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="kc">None</span>
+        
+    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_data</span><span class="p">]</span>
+    <span class="n">sequence_list</span><span class="p">,</span> <span class="n">phyche_value</span> <span class="o">=</span> <span class="n">ReadyAcc</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">,</span> <span class="n">all_property</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="p">)</span>
+
+    <span class="kn">from</span> <span class="nn">PyDNAacutil</span> <span class="k">import</span> <span class="n">MakeACVector</span><span class="p">,</span> <span class="n">MakeCCVector</span>
+
+    <span class="n">zipped</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">MakeACVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span>
+                 <span class="n">MakeCCVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">k</span><span class="p">)))</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="p">[</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">zipped</span><span class="p">]</span>
+    <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TCC_</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_keys</span><span class="p">,</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">extra_phyche_value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;AA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11</span><span class="p">],</span>
+                          <span class="s1">&#39;AC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">1.29</span><span class="p">,</span> <span class="mf">1.04</span><span class="p">],</span>
+                          <span class="s1">&#39;AG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.78</span><span class="p">,</span> <span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">],</span>
+                          <span class="s1">&#39;AT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.07</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">2.51</span><span class="p">,</span> <span class="mf">1.17</span><span class="p">],</span>
+                          <span class="s1">&#39;CA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.38</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.36</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.27</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">],</span>
+                          <span class="s1">&#39;CC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">1.08</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">],</span>
+                          <span class="s1">&#39;CG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.66</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.22</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.44</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.29</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.39</span><span class="p">],</span>
+                          <span class="s1">&#39;CT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.78</span><span class="p">,</span> <span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">],</span>
+                          <span class="s1">&#39;GA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39</span><span class="p">,</span> <span class="mf">0.71</span><span class="p">],</span>
+                          <span class="s1">&#39;GC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">,</span> <span class="mf">1.33</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">],</span>
+                          <span class="s1">&#39;GG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">1.08</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">],</span>
+                          <span class="s1">&#39;GT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">1.29</span><span class="p">,</span> <span class="mf">1.04</span><span class="p">],</span>
+                          <span class="s1">&#39;TA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.37</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.44</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.51</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.39</span><span class="p">],</span>
+                          <span class="s1">&#39;TC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39</span><span class="p">,</span> <span class="mf">0.71</span><span class="p">],</span>
+                          <span class="s1">&#39;TG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.38</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.36</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.27</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">],</span>
+                          <span class="s1">&#39;TT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11</span><span class="p">]}</span>
+    <span class="n">phyche_index</span> <span class="o">=</span> \
+        <span class="p">[[</span><span class="mf">2.26</span><span class="p">,</span> <span class="mf">3.03</span><span class="p">,</span> <span class="mf">2.03</span><span class="p">,</span> <span class="mf">3.83</span><span class="p">,</span> <span class="mf">1.78</span><span class="p">,</span> <span class="mf">1.65</span><span class="p">,</span> <span class="mf">2.00</span><span class="p">,</span> <span class="mf">2.03</span><span class="p">,</span> <span class="mf">1.93</span><span class="p">,</span> <span class="mf">2.61</span><span class="p">,</span> <span class="mf">1.65</span><span class="p">,</span> <span class="mf">3.03</span><span class="p">,</span> <span class="mf">1.20</span><span class="p">,</span> <span class="mf">1.93</span><span class="p">,</span> <span class="mf">1.78</span><span class="p">,</span> <span class="mf">2.26</span><span class="p">],</span>
+         <span class="p">[</span><span class="mf">7.65</span><span class="p">,</span> <span class="mf">8.93</span><span class="p">,</span> <span class="mf">7.08</span><span class="p">,</span> <span class="mf">9.07</span><span class="p">,</span> <span class="mf">6.38</span><span class="p">,</span> <span class="mf">8.04</span><span class="p">,</span> <span class="mf">6.23</span><span class="p">,</span> <span class="mf">7.08</span><span class="p">,</span> <span class="mf">8.56</span><span class="p">,</span> <span class="mf">9.53</span><span class="p">,</span> <span class="mf">8.04</span><span class="p">,</span> <span class="mf">8.93</span><span class="p">,</span> <span class="mf">6.23</span><span class="p">,</span> <span class="mf">8.56</span><span class="p">,</span> <span class="mf">6.38</span><span class="p">,</span> <span class="mf">7.65</span><span class="p">]]</span>
+
+    <span class="kn">from</span> <span class="nn">PyDNAutil</span> <span class="k">import</span> <span class="n">NormalizeIndex</span>
+
+
+    <span class="n">dac</span> <span class="o">=</span> <span class="n">GetDAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dac</span><span class="p">))</span>
+
+    <span class="n">dac</span> <span class="o">=</span> <span class="n">GetDAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dac</span><span class="p">))</span>
+
+    <span class="n">dac</span> <span class="o">=</span> <span class="n">GetDAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dac</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+    <span class="n">dcc</span> <span class="o">=</span> <span class="n">GetDCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dcc</span><span class="p">))</span>
+
+    <span class="n">dcc</span> <span class="o">=</span> <span class="n">GetDCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span>  <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dcc</span><span class="p">))</span>
+
+    <span class="n">dcc</span> <span class="o">=</span> <span class="n">GetDCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dcc</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DACC&#39;</span><span class="p">)</span>
+    <span class="n">dacc</span> <span class="o">=</span> <span class="n">GetDACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dacc</span><span class="p">))</span>
+
+    <span class="n">dacc</span> <span class="o">=</span> <span class="n">GetDACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dacc</span><span class="p">))</span>
+
+    <span class="n">dac</span> <span class="o">=</span> <span class="n">GetDACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dac</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mf">7.176</span><span class="p">,</span> <span class="mf">6.272</span><span class="p">,</span> <span class="mf">4.736</span><span class="p">,</span> <span class="mf">7.237</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">6.033</span><span class="p">,</span> <span class="mf">3.410</span><span class="p">,</span> <span class="mf">3.524</span><span class="p">,</span> <span class="mf">4.445</span><span class="p">,</span> <span class="mf">6.033</span><span class="p">,</span> <span class="mf">1.613</span><span class="p">,</span> <span class="mf">5.087</span><span class="p">,</span> <span class="mf">2.169</span><span class="p">,</span> <span class="mf">7.237</span><span class="p">,</span>
+         <span class="mf">3.581</span><span class="p">,</span> <span class="mf">3.239</span><span class="p">,</span> <span class="mf">1.668</span><span class="p">,</span> <span class="mf">2.169</span><span class="p">,</span> <span class="mf">6.813</span><span class="p">,</span> <span class="mf">3.868</span><span class="p">,</span> <span class="mf">5.440</span><span class="p">,</span> <span class="mf">4.445</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">4.678</span><span class="p">,</span> <span class="mf">5.440</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">2.673</span><span class="p">,</span> <span class="mf">3.353</span><span class="p">,</span> <span class="mf">1.668</span><span class="p">,</span> <span class="mf">4.736</span><span class="p">,</span>
+         <span class="mf">4.214</span><span class="p">,</span> <span class="mf">3.925</span><span class="p">,</span> <span class="mf">3.353</span><span class="p">,</span> <span class="mf">5.087</span><span class="p">,</span> <span class="mf">2.842</span><span class="p">,</span> <span class="mf">2.448</span><span class="p">,</span> <span class="mf">4.678</span><span class="p">,</span> <span class="mf">3.524</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">2.448</span><span class="p">,</span> <span class="mf">3.868</span><span class="p">,</span> <span class="mf">4.156</span><span class="p">,</span> <span class="mf">3.467</span><span class="p">,</span> <span class="mf">3.925</span><span class="p">,</span> <span class="mf">3.239</span><span class="p">,</span> <span class="mf">6.272</span><span class="p">,</span>
+         <span class="mf">2.955</span><span class="p">,</span> <span class="mf">3.467</span><span class="p">,</span> <span class="mf">2.673</span><span class="p">,</span> <span class="mf">1.613</span><span class="p">,</span> <span class="mf">1.447</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">3.410</span><span class="p">,</span> <span class="mf">1.447</span><span class="p">,</span> <span class="mf">2.842</span><span class="p">,</span> <span class="mf">6.813</span><span class="p">,</span> <span class="mf">3.810</span><span class="p">,</span> <span class="mf">2.955</span><span class="p">,</span> <span class="mf">4.214</span><span class="p">,</span> <span class="mf">3.581</span><span class="p">,</span> <span class="mf">7.176</span><span class="p">]</span>
+    <span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Begin TAC&#39;</span><span class="p">)</span>
+    <span class="n">tac</span> <span class="o">=</span> <span class="n">GetTAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tac</span><span class="p">))</span>
+
+    <span class="n">tac</span> <span class="o">=</span> <span class="n">GetTAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tac</span><span class="p">))</span>
+
+    <span class="n">tac</span> <span class="o">=</span> <span class="n">GetTAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tac</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tac</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Begin TCC&#39;</span><span class="p">)</span>
+    <span class="n">tcc</span> <span class="o">=</span> <span class="n">GetTCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tcc</span><span class="p">))</span>
+
+    <span class="n">tcc</span> <span class="o">=</span> <span class="n">GetTCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span>  <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tcc</span><span class="p">))</span>
+
+    <span class="n">tcc</span> <span class="o">=</span> <span class="n">GetTCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span>
+                           <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tcc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tcc</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Begin TACC&#39;</span><span class="p">)</span>
+    <span class="n">tacc</span> <span class="o">=</span> <span class="n">GetTACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tacc</span><span class="p">))</span>
+
+    <span class="n">tacc</span> <span class="o">=</span> <span class="n">GetTACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">all_property</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tacc</span><span class="p">))</span>
+
+    
+    <span class="n">tacc</span> <span class="o">=</span> <span class="n">GetTACC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span>  <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">],</span>
+                             <span class="n">extra_phyche_index</span><span class="o">=</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tacc</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tacc</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

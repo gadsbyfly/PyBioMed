@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moreaubroto &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for moreaubroto</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+
+<span class="sd">The calculation of Moreau-Broto autocorrelation descriptors. You can get 32</span>
+
+<span class="sd">molecular decriptors. You can freely use and distribute it. If you hava  </span>
+
+<span class="sd">any problem, you could contact with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">AtomProperty</span> <span class="k">import</span> <span class="n">GetRelativeAtomicProperty</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="c1">################################################################</span>
+
+<span class="k">def</span> <span class="nf">_CalculateMoreauBrotoAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of Moreau-Broto autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    different property weights.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">    res=_CalculateMoreauBrotoAutocorrelation(mol, lag=1,propertylabel=&#39;m&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    lag is the topological distance between atom i and atom j.</span>
+<span class="sd">    </span>
+<span class="sd">    propertylabel is the weighted property.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Natom</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    
+    <span class="n">GetDistanceMatrix</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Natom</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Natom</span><span class="p">):</span>  
+            <span class="k">if</span> <span class="n">GetDistanceMatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="n">lag</span><span class="p">:</span>
+                <span class="n">atom1</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">atom2</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">temp1</span><span class="o">=</span><span class="n">GetRelativeAtomicProperty</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">atom1</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">(),</span><span class="n">propertyname</span><span class="o">=</span><span class="n">propertylabel</span><span class="p">)</span>
+                <span class="n">temp2</span><span class="o">=</span><span class="n">GetRelativeAtomicProperty</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">atom2</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">(),</span><span class="n">propertyname</span><span class="o">=</span><span class="n">propertylabel</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="o">+</span><span class="n">temp1</span><span class="o">*</span><span class="n">temp2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="o">+</span><span class="mf">0.0</span>
+                
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">res</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CalculateMoreauBrotoAutoMass"><a class="viewcode-back" href="../reference/moreaubroto.html#moreaubroto.CalculateMoreauBrotoAutoMass">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoreauBrotoAutoMass</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Moreau-Broto autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    carbon-scaled atomic mass.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">    res=CalculateMoreauBrotoAutoMass(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing eight moreau broto autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;ATSm&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">_CalculateMoreauBrotoAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoreauBrotoAutoVolume"><a class="viewcode-back" href="../reference/moreaubroto.html#moreaubroto.CalculateMoreauBrotoAutoVolume">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoreauBrotoAutoVolume</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Moreau-Broto autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    carbon-scaled atomic van der Waals volume.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">    </span>
+<span class="sd">    res=CalculateMoreauBrotoAutoVolume(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molcule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing eight moreau broto autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;ATSv&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">_CalculateMoreauBrotoAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateMoreauBrotoAutoElectronegativity"><a class="viewcode-back" href="../reference/moreaubroto.html#moreaubroto.CalculateMoreauBrotoAutoElectronegativity">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoreauBrotoAutoElectronegativity</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Moreau-Broto autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    carbon-scaled atomic Sanderson electronegativity.</span>
+
+<span class="sd">    Usage: </span>
+<span class="sd">    </span>
+<span class="sd">    res=CalculateMoreauBrotoAutoElectronegativity(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molcule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing eight moreau broto autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;ATSe&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">_CalculateMoreauBrotoAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;En&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateMoreauBrotoAutoPolarizability"><a class="viewcode-back" href="../reference/moreaubroto.html#moreaubroto.CalculateMoreauBrotoAutoPolarizability">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoreauBrotoAutoPolarizability</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Moreau-Broto autocorrelation descriptors based on </span>
+<span class="sd">    </span>
+<span class="sd">    carbon-scaled atomic polarizability.</span>
+
+<span class="sd">    res=CalculateMoreauBrotoAutoPolarizability(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molcule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing eight moreau broto autocorrealtion</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;ATSp&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">_CalculateMoreauBrotoAutocorrelation</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">lag</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">propertylabel</span><span class="o">=</span><span class="s1">&#39;alapha&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="GetMoreauBrotoAuto"><a class="viewcode-back" href="../reference/moreaubroto.html#moreaubroto.GetMoreauBrotoAuto">[docs]</a><span class="k">def</span> <span class="nf">GetMoreauBrotoAuto</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calcualate all Moreau-Broto autocorrelation descriptors. </span>
+<span class="sd">    </span>
+<span class="sd">    (carbon-scaled atomic mass, carbon-scaled atomic van der Waals volume,</span>
+<span class="sd">     </span>
+<span class="sd">    carbon-scaled atomic Sanderson electronegativity,</span>
+<span class="sd">     </span>
+<span class="sd">    carbon-scaled atomic polarizability)</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">    res=GetMoreauBrotoAuto(mol)</span>
+<span class="sd">    </span>
+<span class="sd">    Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">    Output: res is a dict form containing all moreau broto autocorrelation</span>
+<span class="sd">    </span>
+<span class="sd">    descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoreauBrotoAutoMass</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoreauBrotoAutoVolume</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoreauBrotoAutoElectronegativity</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoreauBrotoAutoPolarizability</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+<span class="c1">###########################################################################</span>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+   
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;COCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCOCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+<span class="c1">##        print &#39;\t&#39;,CalculateEstateFingerprint(m)</span>
+<span class="c1">##        print &#39;\t&#39;,CalculateEstateValue(m)</span>
+<span class="c1">##        print &#39;\t&#39;,CalculateMaxAtomTypeEState(m)</span>
+<span class="c1">##        print &#39;\t&#39;, CalculateMinAtomTypeEState(m)</span>
+        
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetMoreauBrotoAuto</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

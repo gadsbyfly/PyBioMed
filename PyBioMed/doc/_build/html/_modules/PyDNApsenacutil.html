@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyDNApsenacutil &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyDNApsenacutil</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+
+<span class="sd">A class used for computing different types of DNA descriptors! </span>
+
+<span class="sd">You can freely use and distribute it. If you have any problem, </span>
+
+<span class="sd">you could contact with us timely.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.14</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="nb">pow</span>
+
+<span class="kn">from</span> <span class="nn">PyDNAutil</span> <span class="k">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">PyDNAnacutil</span> <span class="k">import</span> <span class="n">MakeKmerList</span>
+
+
+<span class="n">ALPHABET</span> <span class="o">=</span> <span class="s1">&#39;ACGT&#39;</span>
+
+
+<div class="viewcode-block" id="ExtendPhycheIndex"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.ExtendPhycheIndex">[docs]</a><span class="k">def</span> <span class="nf">ExtendPhycheIndex</span><span class="p">(</span><span class="n">original_index</span><span class="p">,</span> <span class="n">extend_index</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extend {phyche:[value, ... ]}&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">extend_index</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">extend_index</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">original_index</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">original_index</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="n">original_index</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">extend_index</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">original_index</span></div>
+
+
+<span class="k">global</span> <span class="n">phyche_factor_dic1</span>
+<span class="k">global</span> <span class="n">phyche_factor_dic2</span>
+<span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/mmc3.data&quot;</span><span class="o">%</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">full_path</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">phyche_factor_dic1</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/mmc4.data&quot;</span><span class="o">%</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">full_path</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">phyche_factor_dic2</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GetPhycheFactorDic"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.GetPhycheFactorDic">[docs]</a><span class="k">def</span> <span class="nf">GetPhycheFactorDic</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get all {nucleotide: [(phyche, value), ...]} dict.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">phyche_factor_dic1</span>
+    <span class="k">global</span> <span class="n">phyche_factor_dic2</span>
+    <span class="k">if</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+        <span class="n">phyche_factor_dic</span> <span class="o">=</span> <span class="n">phyche_factor_dic1</span>
+    <span class="k">elif</span> <span class="mi">3</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+        <span class="n">phyche_factor_dic</span> <span class="o">=</span> <span class="n">phyche_factor_dic2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;The k can just be 2 or 3.&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">phyche_factor_dic</span></div>
+
+
+<div class="viewcode-block" id="GetPhycheIndex"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.GetPhycheIndex">[docs]</a><span class="k">def</span> <span class="nf">GetPhycheIndex</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">phyche_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get phyche_value according phyche_list.&quot;&quot;&quot;</span>
+    <span class="n">phyche_value</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">phyche_list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">nucleotide</span> <span class="ow">in</span> <span class="n">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">ALPHABET</span><span class="p">):</span>
+            <span class="n">phyche_value</span><span class="p">[</span><span class="n">nucleotide</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">phyche_value</span>
+
+    <span class="n">nucleotide_phyche_value</span> <span class="o">=</span> <span class="n">GetPhycheFactorDic</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">nucleotide</span> <span class="ow">in</span> <span class="n">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">ALPHABET</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">nucleotide</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">phyche_value</span><span class="p">:</span>
+            <span class="n">phyche_value</span><span class="p">[</span><span class="n">nucleotide</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">nucleotide_phyche_value</span><span class="p">[</span><span class="n">nucleotide</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">phyche_list</span><span class="p">:</span>
+                <span class="n">phyche_value</span><span class="p">[</span><span class="n">nucleotide</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">phyche_value</span></div>
+
+
+<div class="viewcode-block" id="ParallelCorFunction"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.ParallelCorFunction">[docs]</a><span class="k">def</span> <span class="nf">ParallelCorFunction</span><span class="p">(</span><span class="n">nucleotide1</span><span class="p">,</span> <span class="n">nucleotide2</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the cFactor.(Type1)&quot;&quot;&quot;</span>
+    <span class="n">temp_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">phyche_index_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">phyche_index</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">len_phyche_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phyche_index_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_phyche_index</span><span class="p">):</span>
+        <span class="n">temp_sum</span> <span class="o">+=</span> <span class="nb">pow</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">[</span><span class="n">nucleotide1</span><span class="p">][</span><span class="n">u</span><span class="p">])</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">[</span><span class="n">nucleotide2</span><span class="p">][</span><span class="n">u</span><span class="p">]),</span> <span class="mi">2</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">temp_sum</span> <span class="o">/</span> <span class="n">len_phyche_index</span></div>
+
+
+<div class="viewcode-block" id="SeriesCorFunction"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.SeriesCorFunction">[docs]</a><span class="k">def</span> <span class="nf">SeriesCorFunction</span><span class="p">(</span><span class="n">nucleotide1</span><span class="p">,</span> <span class="n">nucleotide2</span><span class="p">,</span> <span class="n">big_lamada</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the series correlation Factor(Type 2).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">phyche_value</span><span class="p">[</span><span class="n">nucleotide1</span><span class="p">][</span><span class="n">big_lamada</span><span class="p">])</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">phyche_value</span><span class="p">[</span><span class="n">nucleotide2</span><span class="p">][</span><span class="n">big_lamada</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="GetParallelFactor"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.GetParallelFactor">[docs]</a><span class="k">def</span> <span class="nf">GetParallelFactor</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">lamada</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the corresponding factor theta list.&quot;&quot;&quot;</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lamada</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">temp_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">nucleotide1</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="n">j</span><span class="p">:</span> <span class="n">j</span><span class="o">+</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">nucleotide2</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="n">i</span><span class="p">:</span> <span class="n">j</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">temp_sum</span> <span class="o">+=</span> <span class="n">ParallelCorFunction</span><span class="p">(</span><span class="n">nucleotide1</span><span class="p">,</span> <span class="n">nucleotide2</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">)</span>
+
+        <span class="n">theta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_sum</span> <span class="o">/</span> <span class="p">(</span><span class="n">l</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">theta</span></div>
+
+
+<div class="viewcode-block" id="GetSeriesFactor"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.GetSeriesFactor">[docs]</a><span class="k">def</span> <span class="nf">GetSeriesFactor</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">lamada</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the corresponding series factor theta list.&quot;&quot;&quot;</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">l_seq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+    <span class="n">temp_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">phyche_value</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">max_big_lamada</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">small_lamada</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lamada</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">big_lamada</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_big_lamada</span><span class="p">):</span>
+            <span class="n">temp_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l_seq</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="n">small_lamada</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">nucleotide1</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">+</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">nucleotide2</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">small_lamada</span><span class="p">:</span> <span class="n">i</span><span class="o">+</span><span class="n">small_lamada</span><span class="o">+</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">temp_sum</span> <span class="o">+=</span> <span class="n">SeriesCorFunction</span><span class="p">(</span><span class="n">nucleotide1</span><span class="p">,</span> <span class="n">nucleotide2</span><span class="p">,</span> <span class="n">big_lamada</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">)</span>
+
+            <span class="n">theta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_sum</span> <span class="o">/</span> <span class="p">(</span><span class="n">l_seq</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="n">small_lamada</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">theta</span></div>
+
+
+<div class="viewcode-block" id="MakePsekncVector"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.MakePsekncVector">[docs]</a><span class="k">def</span> <span class="nf">MakePsekncVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lamada</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">theta_type</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate the pseknc vector.&quot;&quot;&quot;</span>
+    <span class="n">kmer</span> <span class="o">=</span> <span class="n">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">ALPHABET</span><span class="p">)</span>
+    <span class="n">vector</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">sequence_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k</span> <span class="ow">or</span> <span class="n">lamada</span> <span class="o">+</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
+            <span class="n">error_info</span> <span class="o">=</span> <span class="s2">&quot;Sorry, the sequence length must be larger than &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lamada</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Get the nucleotide frequency in the DNA sequence.</span>
+        <span class="n">fre_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">Frequency</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kmer</span><span class="p">]</span>
+        <span class="n">fre_sum</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">fre_list</span><span class="p">))</span>
+
+        <span class="c1"># Get the normalized occurrence frequency of nucleotide in the DNA sequence.</span>
+        <span class="n">fre_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="o">/</span> <span class="n">fre_sum</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">fre_list</span><span class="p">]</span>
+
+        <span class="c1"># Get the theta_list according the Equation 5.</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">theta_type</span><span class="p">:</span>
+            <span class="n">theta_list</span> <span class="o">=</span> <span class="n">GetParallelFactor</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">lamada</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">theta_type</span><span class="p">:</span>
+            <span class="n">theta_list</span> <span class="o">=</span> <span class="n">GetSeriesFactor</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">lamada</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">)</span>
+        <span class="n">theta_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">theta_list</span><span class="p">)</span>
+
+        <span class="c1"># Generate the vector according the Equation 9.</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">w</span> <span class="o">*</span> <span class="n">theta_sum</span>
+
+        <span class="n">temp_vec</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fre_list</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="n">theta_list</span><span class="p">:</span>
+            <span class="n">temp_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_vec</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vector</span></div>
+
+
+<div class="viewcode-block" id="GetParallelFactorPsednc"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.GetParallelFactorPsednc">[docs]</a><span class="k">def</span> <span class="nf">GetParallelFactorPsednc</span><span class="p">(</span><span class="n">lamada</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the corresponding factor theta list.</span>
+<span class="sd">       This def is just for dinucleotide.&quot;&quot;&quot;</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lamada</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">temp_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">lamada</span><span class="p">):</span>
+            <span class="n">nucleotide1</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">sequence</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">nucleotide2</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">sequence</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">temp_sum</span> <span class="o">+=</span> <span class="n">ParallelCorFunction</span><span class="p">(</span><span class="n">nucleotide1</span><span class="p">,</span> <span class="n">nucleotide2</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">)</span>
+
+        <span class="n">theta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_sum</span> <span class="o">/</span> <span class="p">(</span><span class="n">l</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">theta</span></div>
+
+
+<div class="viewcode-block" id="MakeOldPsekncVector"><a class="viewcode-back" href="../reference/PyDNApsenacutil.html#PyDNApsenacutil.MakeOldPsekncVector">[docs]</a><span class="k">def</span> <span class="nf">MakeOldPsekncVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">lamada</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">,</span> <span class="n">theta_type</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate the pseknc vector.&quot;&quot;&quot;</span>
+    <span class="n">kmer</span> <span class="o">=</span> <span class="n">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">ALPHABET</span><span class="p">)</span>
+    <span class="n">vector</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">sequence_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k</span> <span class="ow">or</span> <span class="n">lamada</span> <span class="o">+</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
+            <span class="n">error_info</span> <span class="o">=</span> <span class="s2">&quot;Sorry, the sequence length must be larger than &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lamada</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Get the nucleotide frequency in the DNA sequence.</span>
+        <span class="n">fre_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">Frequency</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kmer</span><span class="p">]</span>
+        <span class="n">fre_sum</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">fre_list</span><span class="p">))</span>
+
+        <span class="c1"># Get the normalized occurrence frequency of nucleotide in the DNA sequence.</span>
+        <span class="n">fre_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="o">/</span> <span class="n">fre_sum</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">fre_list</span><span class="p">]</span>
+
+        <span class="c1"># Get the theta_list according the Equation 5.</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">theta_type</span><span class="p">:</span>
+            <span class="n">theta_list</span> <span class="o">=</span> <span class="n">GetParallelFactorPsednc</span><span class="p">(</span><span class="n">lamada</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">theta_type</span><span class="p">:</span>
+            <span class="n">theta_list</span> <span class="o">=</span> <span class="n">GetSeriesFactor</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">lamada</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">phyche_value</span><span class="p">)</span>
+        <span class="n">theta_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">theta_list</span><span class="p">)</span>
+
+        <span class="c1"># Generate the vector according the Equation 9.</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">w</span> <span class="o">*</span> <span class="n">theta_sum</span>
+
+        <span class="n">temp_vec</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fre_list</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="n">theta_list</span><span class="p">:</span>
+            <span class="n">temp_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_vec</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vector</span></div>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># get_phyche_index(2, [&#39;Base stacking&#39;])</span>
+    <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;AA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;AC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">1.29</span><span class="p">,</span> <span class="mf">1.04</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;AG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.78</span><span class="p">,</span> <span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;AT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.07</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">2.51</span><span class="p">,</span> <span class="mf">1.17</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;CA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.38</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.36</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.27</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;CC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">1.08</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;CG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.66</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.22</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.44</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.29</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.39</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;CT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.78</span><span class="p">,</span> <span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;GA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39</span><span class="p">,</span> <span class="mf">0.71</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;GC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">,</span> <span class="mf">1.33</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;GG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">1.08</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;GT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">1.29</span><span class="p">,</span> <span class="mf">1.04</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;TA&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.37</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.44</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.51</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.39</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;TC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39</span><span class="p">,</span> <span class="mf">0.71</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;TG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.38</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.36</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.27</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                          <span class="s1">&#39;TT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">ExtendPhycheIndex</span><span class="p">(</span><span class="n">GetPhycheIndex</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">phyche_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Base stacking&#39;</span><span class="p">,</span> <span class="s1">&#39;DNA denaturation&#39;</span><span class="p">]),</span>
+                                       <span class="n">extra_phyche_index</span><span class="p">)</span>
+    <span class="c1">#print(phyche_index)</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">GetPhycheFactorDic</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

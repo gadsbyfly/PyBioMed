@@ -1,0 +1,359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>estate &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for estate</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">This module is to compute the estate fingerprints and values based on Kier </span>
+
+<span class="sd">and Hall&#39;s paper. If you have any question please contact me via email.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rdkit.Chem.EState</span> <span class="k">import</span> <span class="n">Fingerprinter</span>  <span class="k">as</span> <span class="n">ESFP</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+
+<span class="kn">import</span> <span class="nn">AtomTypes</span> <span class="k">as</span> <span class="nn">ATEstate</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="c1">################################################################</span>
+
+<span class="k">def</span> <span class="nf">_CalculateEState</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">skipH</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Get the EState value of each atom in a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">skipH</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> 
+        <span class="n">mol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">RemoveHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">tb1</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetPeriodicTable</span><span class="p">()</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">Is</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">):</span>
+        <span class="n">at</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">atNum</span><span class="o">=</span><span class="n">at</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span>
+        <span class="n">d</span><span class="o">=</span><span class="n">at</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">h</span><span class="o">=</span><span class="n">at</span><span class="o">.</span><span class="n">GetTotalNumHs</span><span class="p">()</span>
+            <span class="n">dv</span><span class="o">=</span><span class="n">tb1</span><span class="o">.</span><span class="n">GetNOuterElecs</span><span class="p">(</span><span class="n">atNum</span><span class="p">)</span><span class="o">-</span><span class="n">h</span>         
+            <span class="c1">#dv=numpy.array(_AtomHKDeltas(at),&#39;d&#39;)</span>
+            <span class="n">N</span><span class="o">=</span><span class="n">_GetPrincipleQuantumNumber</span><span class="p">(</span><span class="n">atNum</span><span class="p">)</span>
+            <span class="n">Is</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="mf">4.0</span><span class="o">/</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="n">dv</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">d</span>
+    <span class="n">dists</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">useBO</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">useAtomWts</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dists</span> <span class="o">+=</span><span class="mi">1</span>
+    <span class="n">accum</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nAtoms</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">nAtoms</span><span class="p">):</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">dists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="n">e6</span><span class="p">:</span>
+                <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="n">Is</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">Is</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">p</span><span class="o">*</span><span class="n">p</span><span class="p">)</span>
+                <span class="n">accum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span><span class="n">temp</span>
+                <span class="n">accum</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-=</span><span class="n">temp</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">accum</span><span class="o">+</span><span class="n">Is</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">def</span> <span class="nf">_GetPrincipleQuantumNumber</span><span class="p">(</span><span class="n">atNum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    *Internal Use Only*</span>
+<span class="sd">    </span>
+<span class="sd">    Get the principle quantum number of atom with atomic</span>
+<span class="sd">    </span>
+<span class="sd">    number equal to atNum </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">18</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">3</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">36</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">4</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">54</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">5</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">86</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">6</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">7</span>
+
+
+<div class="viewcode-block" id="CalculateEstateFingerprint"><a class="viewcode-back" href="../reference/estate.html#estate.CalculateEstateFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateEstateFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The Calculation of EState Fingerprints.</span>
+<span class="sd">    </span>
+<span class="sd">    It is the number of times each possible atom type is hit.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateEstateFingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing 79 estate fragments.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">ESFP</span><span class="o">.</span><span class="n">FingerprintMol</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;Sfinger&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">j</span>
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculateEstateValue"><a class="viewcode-back" href="../reference/estate.html#estate.CalculateEstateValue">[docs]</a><span class="k">def</span> <span class="nf">CalculateEstateValue</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The Calculate of EState Values.</span>
+<span class="sd">    </span>
+<span class="sd">    It is the sum of the Estate indices for atoms of each type.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateEstateValue(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing 79 estate values.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">ESFP</span><span class="o">.</span><span class="n">FingerprintMol</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;S&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+        
+
+<div class="viewcode-block" id="CalculateMaxAtomTypeEState"><a class="viewcode-back" href="../reference/estate.html#estate.CalculateMaxAtomTypeEState">[docs]</a><span class="k">def</span> <span class="nf">CalculateMaxAtomTypeEState</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of maximum of E-State value of specified atom type</span>
+<span class="sd">    </span>
+<span class="sd">    res----&gt;dict type</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMaxAtomTypeEState(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing 79 max estate values.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">AT</span><span class="o">=</span><span class="n">ATEstate</span><span class="o">.</span><span class="n">GetAtomLabel</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">Estate</span><span class="o">=</span><span class="n">_CalculateEState</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">AT</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">([</span><span class="n">Estate</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">i</span><span class="p">]))</span>
+    <span class="n">ESresult</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span><span class="n">es</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">ESresult</span><span class="p">[</span><span class="s1">&#39;Smax&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">es</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">ESresult</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateMinAtomTypeEState"><a class="viewcode-back" href="../reference/estate.html#estate.CalculateMinAtomTypeEState">[docs]</a><span class="k">def</span> <span class="nf">CalculateMinAtomTypeEState</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of minimum of E-State value of specified atom type</span>
+<span class="sd">    </span>
+<span class="sd">    res----&gt;dict type</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMinAtomTypeEState(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing 79 min estate values.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">AT</span><span class="o">=</span><span class="n">ATEstate</span><span class="o">.</span><span class="n">GetAtomLabel</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">Estate</span><span class="o">=</span><span class="n">_CalculateEState</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">AT</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">min</span><span class="p">([</span><span class="n">Estate</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">i</span><span class="p">]))</span>
+    <span class="n">ESresult</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span><span class="n">es</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">ESresult</span><span class="p">[</span><span class="s1">&#39;Smin&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">es</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">ESresult</span></div>
+
+
+
+<div class="viewcode-block" id="GetEstate"><a class="viewcode-back" href="../reference/estate.html#estate.GetEstate">[docs]</a><span class="k">def</span> <span class="nf">GetEstate</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain all descriptors related to Estate.</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=GetEstate(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing all estate values.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateEstateFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateEstateValue</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMaxAtomTypeEState</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMinAtomTypeEState</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_GetEstate</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Obtain all Estate descriptors except Estate fingerprints .</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=_GetEstate(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing all estate values.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateEstateValue</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMaxAtomTypeEState</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMinAtomTypeEState</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">result</span>
+<span class="c1">################################################################</span>
+  
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;COCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCOCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+<span class="c1">##        print &#39;\t&#39;,CalculateEstateFingerprint(m)</span>
+<span class="c1">##        print &#39;\t&#39;,CalculateEstateValue(m)</span>
+<span class="c1">##        print &#39;\t&#39;,CalculateMaxAtomTypeEState(m)</span>
+<span class="c1">##        print &#39;\t&#39;, CalculateMinAtomTypeEState(m)</span>
+        
+        <span class="nb">print</span> <span class="n">GetEstate</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

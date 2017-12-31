@@ -1,0 +1,768 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fingerprint &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fingerprint</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">This module is to compute the various fingerprints  based on the provided </span>
+
+<span class="sd">fingerprint system. If you have any question please contact me via email.</span>
+
+<span class="sd">2016.11.15</span>
+
+<span class="sd">@author: Zhijiang Yao and Dongsheng Cao</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.Fingerprints</span> <span class="k">import</span> <span class="n">FingerprintMols</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">MACCSkeys</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">AllChem</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.AtomPairs</span> <span class="k">import</span> <span class="n">Pairs</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.AtomPairs</span> <span class="k">import</span> <span class="n">Torsions</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">DataStructs</span>
+<span class="kn">from</span> <span class="nn">estate</span> <span class="k">import</span> <span class="n">CalculateEstateFingerprint</span> <span class="k">as</span> <span class="n">EstateFingerprint</span>
+<span class="kn">import</span> <span class="nn">pybel</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">ChemicalFeatures</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.Pharm2D.SigFactory</span> <span class="k">import</span> <span class="n">SigFactory</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.Pharm2D</span> <span class="k">import</span> <span class="n">Generate</span>
+<span class="kn">from</span> <span class="nn">ghosecrippen</span> <span class="k">import</span> <span class="n">GhoseCrippenFingerprint</span>
+<span class="kn">from</span> <span class="nn">PubChemFingerprints</span> <span class="k">import</span> <span class="n">calcPubChemFingerAll</span>
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="n">similaritymeasure</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">DataStructs</span><span class="o">.</span><span class="n">similarityFunctions</span><span class="p">]</span>
+
+<span class="c1">################################################################</span>
+<div class="viewcode-block" id="CalculateFP2Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateFP2Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateFP2Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate FP2 fingerprints (1024 bits).</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateFP2Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">NumFinger</span> <span class="o">=</span> <span class="mi">1024</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">calcfp</span><span class="p">()</span><span class="o">.</span><span class="n">bits</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+    
+    <span class="k">return</span> <span class="n">NumFinger</span><span class="p">,</span><span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateFP3Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateFP3Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateFP3Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate FP3 fingerprints (210 bits).</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateFP3Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">NumFinger</span> <span class="o">=</span> <span class="mi">210</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">calcfp</span><span class="p">(</span><span class="s1">&#39;FP3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">bits</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+    
+    <span class="k">return</span> <span class="n">NumFinger</span><span class="p">,</span><span class="n">res</span>       </div>
+
+<div class="viewcode-block" id="CalculateFP4Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateFP4Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateFP4Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate FP4 fingerprints (307 bits).</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateFP4Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">NumFinger</span><span class="o">=</span><span class="mi">307</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">calcfp</span><span class="p">(</span><span class="s1">&#39;FP4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">bits</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">NumFinger</span><span class="p">,</span><span class="n">res</span></div>
+    
+
+<div class="viewcode-block" id="CalculateDaylightFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateDaylightFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateDaylightFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate Daylight-like fingerprint or topological fingerprint</span>
+<span class="sd">    </span>
+<span class="sd">    (2048 bits).</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDaylightFingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">NumFinger</span><span class="o">=</span><span class="mi">2048</span>
+    <span class="n">bv</span><span class="o">=</span><span class="n">FingerprintMols</span><span class="o">.</span><span class="n">FingerprintMol</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">GetOnBits</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">NumFinger</span><span class="p">,</span><span class="n">res</span><span class="p">,</span><span class="n">bv</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateMACCSFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateMACCSFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateMACCSFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate MACCS keys (166 bits).</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMACCSFingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">NumFinger</span><span class="o">=</span><span class="mi">166</span>
+    <span class="n">bv</span><span class="o">=</span><span class="n">MACCSkeys</span><span class="o">.</span><span class="n">GenMACCSKeys</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">GetOnBits</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">NumFinger</span><span class="p">,</span><span class="n">res</span><span class="p">,</span><span class="n">bv</span></div>
+
+
+
+
+<div class="viewcode-block" id="CalculateEstateFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateEstateFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateEstateFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate E-state fingerprints (79 bits).</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateEstateFingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">NumFinger</span><span class="o">=</span><span class="mi">79</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">EstateFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">7</span><span class="p">:]]</span><span class="o">=</span><span class="mi">1</span>
+       
+    <span class="k">return</span> <span class="n">NumFinger</span><span class="p">,</span><span class="n">res</span><span class="p">,</span><span class="n">temp</span></div>
+
+
+<div class="viewcode-block" id="CalculateAtomPairsFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateAtomPairsFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateAtomPairsFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate atom pairs fingerprints</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateAtomPairsFingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">Pairs</span><span class="o">.</span><span class="n">GetAtomPairFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">GetLength</span><span class="p">(),</span><span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span><span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateTopologicalTorsionFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateTopologicalTorsionFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateTopologicalTorsionFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate Topological Torsion Fingerprints</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateTopologicalTorsionFingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">Torsions</span><span class="o">.</span><span class="n">GetTopologicalTorsionFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">GetLength</span><span class="p">(),</span><span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span><span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateMorganFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateMorganFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateMorganFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate Morgan</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMorganFingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        radius is a radius.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the number of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">GetLength</span><span class="p">(),</span><span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span><span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateECFP2Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateECFP2Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateECFP2Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate ECFP2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateECFP2Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        radius is a radius.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the vector of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span>
+    
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprintAsBitVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">nBits</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">fp</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span> <span class="n">res</span></div>
+    
+<div class="viewcode-block" id="CalculateECFP4Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateECFP4Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateECFP4Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate ECFP4</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateECFP4Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        radius is a radius.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the vector of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span>
+    
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprintAsBitVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">nBits</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">fp</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateECFP6Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateECFP6Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateECFP6Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate ECFP6</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateECFP6Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        radius is a radius.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the vector of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span>   
+    
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprintAsBitVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">nBits</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">fp</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span> <span class="n">res</span></div>
+        
+<div class="viewcode-block" id="CalculateSimilarityPybel"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateSimilarityPybel">[docs]</a><span class="k">def</span> <span class="nf">CalculateSimilarityPybel</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span><span class="n">fp2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate Tanimoto similarity between two molecules.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateSimilarityPybel(fp1,fp2)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: fp1 and fp2 are two DataStructs.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a Tanimoto similarity value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">intersection</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">fp1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">fp2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">union</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">fp1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">fp2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">tanimoto</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">union</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">tanimoto</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateSimilarityRdkit"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateSimilarityRdkit">[docs]</a><span class="k">def</span> <span class="nf">CalculateSimilarityRdkit</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span><span class="n">fp2</span><span class="p">,</span><span class="n">similarity</span><span class="o">=</span><span class="s2">&quot;Tanimoto&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate similarity between two molecules.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateSimilarity(fp1,fp2)</span>
+<span class="sd">        Users can choose 11 different types:</span>
+<span class="sd">        Tanimoto, Dice, Cosine, Sokal, Russel,</span>
+<span class="sd">        RogotGoldberg, AllBit, Kulczynski, </span>
+<span class="sd">        McConnaughey, Asymmetric, BraunBlanquet       </span>
+<span class="sd">        Input: fp1 and fp2 are two DataStructs.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a similarity value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">DataStructs</span><span class="o">.</span><span class="n">similarityFunctions</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">similarity</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">similarityfunction</span><span class="o">=</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">similarityfunction</span><span class="o">=</span><span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            
+    <span class="n">res</span><span class="o">=</span><span class="n">similarityfunction</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span><span class="n">fp2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateFCFP2Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateFCFP2Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateFCFP2Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nBits</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate FCFP2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateFCFP2Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        radius is a radius.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the vector of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">useFeatures</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprintAsBitVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">nBits</span><span class="p">,</span> <span class="n">useFeatures</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">fp</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculateFCFP4Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateFCFP4Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateFCFP4Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nBits</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate FCFP4</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateFCFP4Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        radius is a radius.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the vector of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">useFeatures</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprintAsBitVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">nBits</span><span class="p">,</span> <span class="n">useFeatures</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">fp</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculateFCFP6Fingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateFCFP6Fingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateFCFP6Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nBits</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculate FCFP6</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateFCFP4Fingerprint(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        radius is a radius.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a tuple form. The first is the vector of </span>
+<span class="sd">        </span>
+<span class="sd">        fingerprints. The second is a dict form whose keys are the </span>
+<span class="sd">        </span>
+<span class="sd">        position which this molecule has some substructure. The third</span>
+<span class="sd">        </span>
+<span class="sd">        is the DataStructs which is used for calculating the similarity.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">useFeatures</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprintAsBitVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">nBits</span><span class="p">,</span> <span class="n">useFeatures</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">fp</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">GetNonzeroElements</span><span class="p">(),</span><span class="n">res</span></div>
+
+<span class="c1">################################################################</span>
+<span class="n">fdefstr</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">AtomType NDonor [N&amp;!H0&amp;v3,N&amp;!H0&amp;+1&amp;v4,n&amp;H1&amp;+0]</span>
+<span class="s1">AtomType ChalcDonor [O,S;H1;+0]</span>
+<span class="s1">DefineFeature SingleAtomDonor [</span><span class="si">{NDonor}</span><span class="s1">,</span><span class="si">{ChalcDonor}</span><span class="s1">,!$([D1]-[C;D3]=[O,S,N])]</span>
+<span class="s1">  Family Donor</span>
+<span class="s1">  Weights 1</span>
+<span class="s1">EndFeature</span>
+
+<span class="s1">AtomType NAcceptor [$([N&amp;v3;H1,H2]-[!$(*=[O,N,P,S])])]</span>
+<span class="s1">Atomtype NAcceptor [$([N;v3;H0])]</span>
+<span class="s1">AtomType NAcceptor [$([n;+0])]</span>
+<span class="s1">AtomType ChalcAcceptor [$([O,S;H1;v2]-[!$(*=[O,N,P,S])])]</span>
+<span class="s1">AtomType ChalcAcceptor [O,S;H0;v2]</span>
+<span class="s1">Atomtype ChalcAcceptor [O,S;-]</span>
+<span class="s1">Atomtype ChalcAcceptor [o,s;+0]</span>
+<span class="s1">AtomType HalogenAcceptor [F]</span>
+<span class="s1">DefineFeature SingleAtomAcceptor [</span><span class="si">{NAcceptor}</span><span class="s1">,</span><span class="si">{ChalcAcceptor}</span><span class="s1">,</span><span class="si">{HalogenAcceptor}</span><span class="s1">]</span>
+<span class="s1">  Family Acceptor</span>
+<span class="s1">  Weights 1</span>
+<span class="s1">EndFeature</span>
+
+<span class="s1"># this one is delightfully easy:</span>
+<span class="s1">DefineFeature AcidicGroup [C,S](=[O,S,P])-[O;H1,H0&amp;-1]</span>
+<span class="s1">  Family NegIonizable</span>
+<span class="s1">  Weights 1.0,1.0,1.0</span>
+<span class="s1">EndFeature</span>
+
+<span class="s1">AtomType CarbonOrArom_NonCarbonyl [$([C,a]);!$([C,a](=O))]</span>
+<span class="s1">AtomType BasicNH2 [$([N;H2&amp;+0][</span><span class="si">{CarbonOrArom_NonCarbonyl}</span><span class="s1">])]</span>
+<span class="s1">AtomType BasicNH1 [$([N;H1&amp;+0]([</span><span class="si">{CarbonOrArom_NonCarbonyl}</span><span class="s1">])[</span><span class="si">{CarbonOrArom_NonCarbonyl}</span><span class="s1">])]</span>
+<span class="s1">AtomType BasicNH0 [$([N;H0&amp;+0]([</span><span class="si">{CarbonOrArom_NonCarbonyl}</span><span class="s1">])([</span><span class="si">{CarbonOrArom_NonCarbonyl}</span><span class="s1">])[</span><span class="si">{CarbonOrArom_NonCarbonyl}</span><span class="s1">])]</span>
+<span class="s1">AtomType BasicNakedN [N,n;X2;+0]</span>
+<span class="s1">DefineFeature BasicGroup [</span><span class="si">{BasicNH2}</span><span class="s1">,</span><span class="si">{BasicNH1}</span><span class="s1">,</span><span class="si">{BasicNH0}</span><span class="s1">,</span><span class="si">{BasicNakedN}</span><span class="s1">]</span>
+<span class="s1">  Family PosIonizable</span>
+<span class="s1">  Weights 1.0</span>
+<span class="s1">EndFeature</span>
+
+<span class="s1"># aromatic rings of various sizes:</span>
+<span class="s1">DefineFeature Arom5 a1aaaa1</span>
+<span class="s1">  Family Aromatic</span>
+<span class="s1">  Weights 1.0,1.0,1.0,1.0,1.0</span>
+<span class="s1">EndFeature</span>
+<span class="s1">DefineFeature Arom6 a1aaaaa1</span>
+<span class="s1">  Family Aromatic</span>
+<span class="s1">  Weights 1.0,1.0,1.0,1.0,1.0,1.0</span>
+<span class="s1">EndFeature</span>
+<span class="s1">DefineFeature Arom7 a1aaaaaa1</span>
+<span class="s1">  Family Aromatic</span>
+<span class="s1">  Weights 1.0,1.0,1.0,1.0,1.0,1.0,1.0</span>
+<span class="s1">EndFeature</span>
+<span class="s1">DefineFeature Arom8 a1aaaaaaa1</span>
+<span class="s1">  Family Aromatic</span>
+<span class="s1">  Weights 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0</span>
+<span class="s1">EndFeature</span>
+<span class="s1">&#39;&#39;&#39;</span>
+<span class="n">featFactory</span> <span class="o">=</span> <span class="n">ChemicalFeatures</span><span class="o">.</span><span class="n">BuildFeatureFactoryFromString</span><span class="p">(</span><span class="n">fdefstr</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CalculatePharm2D2pointFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculatePharm2D2pointFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculatePharm2D2pointFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">featFactory</span> <span class="o">=</span> <span class="n">featFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate Pharm2D2point Fingerprints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sigFactory_2point</span> <span class="o">=</span> <span class="n">SigFactory</span><span class="p">(</span><span class="n">featFactory</span><span class="p">,</span><span class="n">minPointCount</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">maxPointCount</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">sigFactory_2point</span><span class="o">.</span><span class="n">SetBins</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">)])</span>
+    <span class="n">sigFactory_2point</span><span class="o">.</span><span class="n">Init</span><span class="p">()</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">Generate</span><span class="o">.</span><span class="n">Gen2DFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">sigFactory_2point</span><span class="p">)</span>
+    
+    <span class="n">res_keys</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">GetOnBits</span><span class="p">())</span>
+    <span class="n">init_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">135</span>
+    <span class="k">for</span> <span class="n">res_key</span> <span class="ow">in</span> <span class="n">res_keys</span><span class="p">:</span>
+        <span class="n">init_list</span><span class="p">[</span><span class="n">res_key</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        
+    <span class="n">BitVect</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">init_list</span><span class="p">)</span>   
+    
+    <span class="k">return</span> <span class="n">BitVect</span><span class="p">,</span> <span class="n">res_keys</span><span class="p">,</span> <span class="n">res</span></div>
+<span class="c1">################################################################</span>
+<div class="viewcode-block" id="CalculatePharm2D3pointFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculatePharm2D3pointFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculatePharm2D3pointFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">featFactory</span> <span class="o">=</span> <span class="n">featFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate Pharm2D3point Fingerprints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sigFactory_3point</span> <span class="o">=</span> <span class="n">SigFactory</span><span class="p">(</span><span class="n">featFactory</span><span class="p">,</span><span class="n">minPointCount</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">maxPointCount</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">sigFactory_3point</span><span class="o">.</span><span class="n">SetBins</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">)])</span>
+    <span class="n">sigFactory_3point</span><span class="o">.</span><span class="n">Init</span><span class="p">()</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">Generate</span><span class="o">.</span><span class="n">Gen2DFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">sigFactory_3point</span><span class="p">)</span>
+    
+    <span class="n">res_keys</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">GetOnBits</span><span class="p">())</span>
+    <span class="n">init_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">2135</span>
+    <span class="k">for</span> <span class="n">res_key</span> <span class="ow">in</span> <span class="n">res_keys</span><span class="p">:</span>
+        <span class="n">init_list</span><span class="p">[</span><span class="n">res_key</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        
+    <span class="n">BitVect</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">init_list</span><span class="p">)</span>   
+    
+    <span class="k">return</span> <span class="n">BitVect</span><span class="p">,</span> <span class="n">res_keys</span><span class="p">,</span> <span class="n">res</span></div>
+
+<span class="c1">################################################################</span>
+<div class="viewcode-block" id="CalculateGhoseCrippenFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculateGhoseCrippenFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculateGhoseCrippenFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate GhoseCrippen Fingerprints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">GhoseCrippenFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculatePubChemFingerprint"><a class="viewcode-back" href="../reference/fingerprint.html#fingerprint.CalculatePubChemFingerprint">[docs]</a><span class="k">def</span> <span class="nf">CalculatePubChemFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate PubChem Fingerprints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">calcPubChemFingerAll</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="n">_FingerprintFuncs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;FP2&#39;</span><span class="p">:</span><span class="n">CalculateFP2Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;FP3&#39;</span><span class="p">:</span><span class="n">CalculateFP3Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;FP4&#39;</span><span class="p">:</span><span class="n">CalculateFP4Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;topological&#39;</span><span class="p">:</span><span class="n">CalculateDaylightFingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;Estate&#39;</span><span class="p">:</span><span class="n">CalculateEstateFingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;atompairs&#39;</span><span class="p">:</span><span class="n">CalculateAtomPairsFingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;torsions&#39;</span><span class="p">:</span><span class="n">CalculateTopologicalTorsionFingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;morgan&#39;</span><span class="p">:</span><span class="n">CalculateMorganFingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;ECFP2&#39;</span><span class="p">:</span><span class="n">CalculateECFP2Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;ECFP4&#39;</span><span class="p">:</span><span class="n">CalculateECFP4Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;ECFP6&#39;</span><span class="p">:</span><span class="n">CalculateECFP6Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;MACCS&#39;</span><span class="p">:</span><span class="n">CalculateMACCSFingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;FCFP2&#39;</span><span class="p">:</span><span class="n">CalculateFCFP2Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;FCFP4&#39;</span><span class="p">:</span><span class="n">CalculateFCFP4Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;FCFP6&#39;</span><span class="p">:</span><span class="n">CalculateFCFP6Fingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;Pharm2D2point&#39;</span><span class="p">:</span><span class="n">CalculatePharm2D2pointFingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;Pharm2D3point&#39;</span><span class="p">:</span><span class="n">CalculatePharm2D3pointFingerprint</span><span class="p">,</span>
+                   <span class="s1">&#39;PubChem&#39;</span><span class="p">:</span> <span class="n">CalculatePubChemFingerprint</span><span class="p">,</span>
+                 <span class="s1">&#39;GhoseCrippen&#39;</span><span class="p">:</span> <span class="n">CalculateGhoseCrippenFingerprint</span><span class="p">}</span>
+<span class="c1">################################################################</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="s1">&#39;START&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span>
+    
+    <span class="n">ms</span> <span class="o">=</span> <span class="p">[</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;CCOC=N&#39;</span><span class="p">),</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;NC1=NC(=CC=N1)N1C=CC2=C1C=C(O)C=C2&#39;</span><span class="p">)]</span>
+    <span class="n">m2</span> <span class="o">=</span> <span class="p">[</span><span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">&quot;smi&quot;</span><span class="p">,</span><span class="s1">&#39;CCOC=N&#39;</span><span class="p">),</span><span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">&quot;smi&quot;</span><span class="p">,</span><span class="s1">&#39;CCO&#39;</span><span class="p">)]</span>
+    <span class="n">res1</span><span class="o">=</span><span class="n">CalculateECFP4Fingerprint</span><span class="p">(</span><span class="n">ms</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span> <span class="n">res1</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">res2</span><span class="o">=</span><span class="n">CalculateECFP4Fingerprint</span><span class="p">(</span><span class="n">ms</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span> <span class="n">res2</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">&quot;smi&quot;</span><span class="p">,</span> <span class="s1">&#39;CCOC=N&#39;</span><span class="p">)</span> 
+    <span class="n">res3</span> <span class="o">=</span> <span class="n">CalculateFP3Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">res3</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;O=C1NC(=O)NC(=O)C1(C(C)C)CC=C&#39;</span><span class="p">)</span>
+    <span class="n">res4</span> <span class="o">=</span> <span class="n">CalculatePharm2D2pointFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span> <span class="n">res4</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">res5</span> <span class="o">=</span> <span class="n">CalculatePharm2D3pointFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span> <span class="n">res5</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">res6</span> <span class="o">=</span> <span class="n">CalculateGhoseCrippenFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">res6</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">25</span>
+    <span class="n">res7</span> <span class="o">=</span> <span class="n">CalculatePubChemFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">res7</span>
+    <span class="nb">print</span> <span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="s1">&#39;END&#39;</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">10</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

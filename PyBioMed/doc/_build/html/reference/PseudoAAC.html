@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PseudoAAC module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyProtein" href="PyProtein.html" />
+    <link rel="next" title="PyProteinAAComposition module" href="PyProteinAAComposition.html" />
+    <link rel="prev" title="ProCheck module" href="ProCheck.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PyProteinAAComposition.html" title="PyProteinAAComposition module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ProCheck.html" title="ProCheck module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyProtein.html" accesskey="U">PyProtein</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ProCheck.html"
+                        title="previous chapter">ProCheck module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="PyProteinAAComposition.html"
+                        title="next chapter">PyProteinAAComposition module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/PseudoAAC.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-PseudoAAC">
+<span id="pseudoaac-module"></span><h1>PseudoAAC module<a class="headerlink" href="#module-PseudoAAC" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<p>Instead of using the conventional 20-D amino acid composition to represent the sample</p>
+<p>of a protein, Prof. Kuo-Chen Chou proposed the pseudo amino acid (PseAA) composition</p>
+<p>in order for inluding the sequence-order information. Based on the concept of Chou&#8217;s</p>
+<p>pseudo amino acid composition, the server PseAA was designed in a flexible way, allowing</p>
+<p>users to generate various kinds of pseudo amino acid composition for a given protein</p>
+<p>sequence by selecting different parameters and their combinations. This module aims at</p>
+<p>computing two types of PseAA descriptors: Type I and Type II.</p>
+<p>You can freely use and distribute it. If you have any problem, you could contact</p>
+<p>with us timely.</p>
+<p>References:</p>
+<p>[1]: Kuo-Chen Chou. Prediction of Protein Cellular Attributes Using Pseudo-Amino Acid</p>
+<p>Composition. PROTEINS: Structure, Function, and Genetics, 2001, 43: 246-255.</p>
+<p>[2]: <a class="reference external" href="http://www.csbio.sjtu.edu.cn/bioinf/PseAAC/">http://www.csbio.sjtu.edu.cn/bioinf/PseAAC/</a></p>
+<p>[3]: <a class="reference external" href="http://www.csbio.sjtu.edu.cn/bioinf/PseAAC/type2.htm">http://www.csbio.sjtu.edu.cn/bioinf/PseAAC/type2.htm</a></p>
+<p>[4]: Kuo-Chen Chou. Using amphiphilic pseudo amino acid composition to predict enzyme</p>
+<p>subfamily classes. Bioinformatics, 2005,21,10-19.</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="PseudoAAC.GetAAComposition">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetAAComposition</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetAAComposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetAAComposition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the composition of Amino acids</p>
+<p>for a given protein sequence.</p>
+<p>Usage:</p>
+<p>result=CalculateAAComposition(protein)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>Output: result is a dict form containing the composition of</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetAPseudoAAC">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetAPseudoAAC</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>lamda=30</em>, <em>weight=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetAPseudoAAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetAPseudoAAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing all of type II pseudo-amino acid compostion descriptors based on the given</p>
+<p>properties. Note that the number of PAAC strongly depends on the lamda value. if lamda</p>
+<p>= 20, we can obtain 20+20=40 PAAC descriptors. The size of these values depends on the</p>
+<p>choice of lamda and weight simultaneously.</p>
+<p>Usage:</p>
+<p>result=GetAPseudoAAC(protein,lamda,weight)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>lamda factor reflects the rank of correlation and is a non-Negative integer, such as 15.</p>
+<p>Note that (1)lamda should NOT be larger than the length of input protein sequence;</p>
+<ol class="arabic simple" start="2">
+<li>lamda must be non-Negative integer, such as 0, 1, 2, ...; (3) when lamda =0, the</li>
+</ol>
+<p>output of PseAA server is the 20-D amino acid composition.</p>
+<p>weight factor is designed for the users to put weight on the additional PseAA components</p>
+<p>with respect to the conventional AA components. The user can select any value within the</p>
+<p>region from 0.05 to 0.7 for the weight factor.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetAPseudoAAC1">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetAPseudoAAC1</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>lamda=30</em>, <em>weight=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetAPseudoAAC1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetAPseudoAAC1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the first 20 of type II pseudo-amino acid compostion descriptors based on</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetAPseudoAAC2">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetAPseudoAAC2</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>lamda=30</em>, <em>weight=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetAPseudoAAC2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetAPseudoAAC2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the last lamda of type II pseudo-amino acid compostion descriptors based on</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetCorrelationFunction">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetCorrelationFunction</code><span class="sig-paren">(</span><em>Ri='S'</em>, <em>Rj='D'</em>, <em>AAP=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetCorrelationFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetCorrelationFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the correlation between two given amino acids using the given</p>
+<p>properties.</p>
+<p>Usage:</p>
+<p>result=GetCorrelationFunction(Ri,Rj,AAP)</p>
+<p>Input: Ri and Rj are the amino acids, respectively.</p>
+<p>AAP is a list form containing the properties, each of which is a dict form.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetPseudoAAC">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetPseudoAAC</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>lamda=30</em>, <em>weight=0.05</em>, <em>AAP=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetPseudoAAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetPseudoAAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing all of type I pseudo-amino acid compostion descriptors based on the given</p>
+<p>properties. Note that the number of PAAC strongly depends on the lamda value. if lamda</p>
+<p>= 20, we can obtain 20+20=40 PAAC descriptors. The size of these values depends on the</p>
+<p>choice of lamda and weight simultaneously. You must specify some properties into AAP.</p>
+<p>Usage:</p>
+<p>result=GetPseudoAAC(protein,lamda,weight)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>lamda factor reflects the rank of correlation and is a non-Negative integer, such as 15.</p>
+<p>Note that (1)lamda should NOT be larger than the length of input protein sequence;</p>
+<ol class="arabic simple" start="2">
+<li>lamda must be non-Negative integer, such as 0, 1, 2, ...; (3) when lamda =0, the</li>
+</ol>
+<p>output of PseAA server is the 20-D amino acid composition.</p>
+<p>weight factor is designed for the users to put weight on the additional PseAA components</p>
+<p>with respect to the conventional AA components. The user can select any value within the</p>
+<p>region from 0.05 to 0.7 for the weight factor.</p>
+<p>AAP is a list form containing the properties, each of which is a dict form.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetPseudoAAC1">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetPseudoAAC1</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>lamda=30</em>, <em>weight=0.05</em>, <em>AAP=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetPseudoAAC1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetPseudoAAC1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the first 20 of type I pseudo-amino acid compostion descriptors based on the given</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetPseudoAAC2">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetPseudoAAC2</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>lamda=30</em>, <em>weight=0.05</em>, <em>AAP=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetPseudoAAC2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetPseudoAAC2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the last lamda of type I pseudo-amino acid compostion descriptors based on the given</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetSequenceOrderCorrelationFactor">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetSequenceOrderCorrelationFactor</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>k=1</em>, <em>AAP=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetSequenceOrderCorrelationFactor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetSequenceOrderCorrelationFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the Sequence order correlation factor with gap equal to k based on</p>
+<p>the given properities.</p>
+<p>Usage:</p>
+<p>result=GetSequenceOrderCorrelationFactor(protein,k,AAP)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>k is the gap.</p>
+<p>AAP is a list form containing the properties, each of which is a dict form.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.GetSequenceOrderCorrelationFactorForAPAAC">
+<code class="descclassname">PseudoAAC.</code><code class="descname">GetSequenceOrderCorrelationFactorForAPAAC</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>k=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#GetSequenceOrderCorrelationFactorForAPAAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.GetSequenceOrderCorrelationFactorForAPAAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the Sequence order correlation factor with gap equal to k based on</p>
+<p>[_Hydrophobicity,_hydrophilicity] for APAAC (type II PseAAC) .</p>
+<p>Usage:</p>
+<p>result=GetSequenceOrderCorrelationFactorForAPAAC(protein,k)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>k is the gap.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PseudoAAC.NormalizeEachAAP">
+<code class="descclassname">PseudoAAC.</code><code class="descname">NormalizeEachAAP</code><span class="sig-paren">(</span><em>AAP</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PseudoAAC.html#NormalizeEachAAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PseudoAAC.NormalizeEachAAP" title="Permalink to this definition">¶</a></dt>
+<dd><p>All of the amino acid indices are centralized and</p>
+<p>standardized before the calculation.</p>
+<p>Usage:</p>
+<p>result=NormalizeEachAAP(AAP)</p>
+<p>Input: AAP is a dict form containing the properties of 20 amino acids.</p>
+<p>Output: result is the a dict form containing the normalized properties</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PyProteinAAComposition.html" title="PyProteinAAComposition module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ProCheck.html" title="ProCheck module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyProtein.html" >PyProtein</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

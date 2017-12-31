@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyPretreatMol module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyPretreat" href="PyPretreat.html" />
+    <link rel="next" title="PyPretreatPro module" href="PyPretreatPro.html" />
+    <link rel="prev" title="PyPretreatDNA module" href="PyPretreatDNA.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PyPretreatPro.html" title="PyPretreatPro module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PyPretreatDNA.html" title="PyPretreatDNA module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyPretreat.html" accesskey="U">PyPretreat</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="PyPretreatDNA.html"
+                        title="previous chapter">PyPretreatDNA module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="PyPretreatPro.html"
+                        title="next chapter">PyPretreatPro module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/PyPretreatMol.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-PyPretreatMol">
+<span id="pypretreatmol-module"></span><h1>PyPretreatMol module<a class="headerlink" href="#module-PyPretreatMol" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="PyPretreatMol.StandardMol">
+<code class="descclassname">PyPretreatMol.</code><code class="descname">StandardMol</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyPretreatMol.html#StandardMol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyPretreatMol.StandardMol" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function for performing standardization of molecules and deriving parent molecules.
+The function contains derive fragment, charge, tautomer, isotope and stereo parent molecules.
+The primary usage is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mol1</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;C1=CC=CC=C1&#39;</span><span class="p">)</span>
+<span class="n">mol2</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">mol1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyPretreatMol.StandardSmi">
+<code class="descclassname">PyPretreatMol.</code><code class="descname">StandardSmi</code><span class="sig-paren">(</span><em>smi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyPretreatMol.html#StandardSmi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyPretreatMol.StandardSmi" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function for performing standardization of molecules and deriving parent molecules.
+The function contains derive fragment, charge, tautomer, isotope and stereo parent molecules.
+The primary usage is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">smi</span> <span class="o">=</span> <span class="n">StandardSmi</span><span class="p">(</span><span class="s1">&#39;C[n+]1c([N-](C))cccc1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="PyPretreatMol.StandardizeMol">
+<em class="property">class </em><code class="descclassname">PyPretreatMol.</code><code class="descname">StandardizeMol</code><span class="sig-paren">(</span><em>normalizations=(Normalization(u'Nitro to N+(O-)=O', u'[*:1][N,P,As,Sb:2](=[O,S,Se,Te:3])=[O,S,Se,Te:4]&gt;&gt;[*:1][*+1:2]([*-1:3])=[*:4]'), Normalization(u'Sulfone to S(=O)(=O)', u'[S+2:1]([O-:2])([O-:3])&gt;&gt;[S+0:1](=[O-0:2])(=[O-0:3])'), Normalization(u'Pyridine oxide to n+O-', u'[n:1]=[O:2]&gt;&gt;[n+:1][O-:2]'), Normalization(u'Azide to N=N+=N-', u'[*,H:1][N:2]=[N:3]#[N:4]&gt;&gt;[*,H:1][N:2]=[N+:3]=[N-:4]'), Normalization(u'Diazo/azo to =N+=N-', u'[*:1]=[N:2]#[N:3]&gt;&gt;[*:1]=[N+:2]=[N-:3]'), Normalization(u'Sulfoxide to -S+(O-)-', u'[!O:1][S+0;X3:2](=[O:3])[!O:4]&gt;&gt;[*:1][S+1:2]([O-:3])[*:4]'), Normalization(u'Phosphate to P(O-)=O', u'[O,S,Se,Te;-1:1][P+;D4:2][O,S,Se,Te;-1:3]&gt;&gt;[*+0:1]=[P+0;D5:2][*-1:3]'), Normalization(u'Amidinium to C(=NH2+)NH2', u'[C,S;X3+1:1]([NX3:2])[NX3!H0:3]&gt;&gt;[*+0:1]([N:2])=[N+:3]'), Normalization(u'Normalize hydrazine-diazonium', u'[CX4:1][NX3H:2]-[NX3H:3][CX4:4][NX2+:5]#[NX1:6]&gt;&gt;[CX4:1][NH0:2]=[NH+:3][C:4][N+0:5]=[NH:6]'), Normalization(u'Recombine 1,3-separated charges', u'[N,P,As,Sb,O,S,Se,Te;-1:1]-[A:2]=[N,P,As,Sb,O,S,Se,Te;+1:3]&gt;&gt;[*-0:1]=[*:2]-[*+0:3]'), Normalization(u'Recombine 1,3-separated charges', u'[n,o,p,s;-1:1]:[a:2]=[N,O,P,S;+1:3]&gt;&gt;[*-0:1]:[*:2]-[*+0:3]'), Normalization(u'Recombine 1,3-separated charges', u'[N,O,P,S;-1:1]-[a:2]:[n,o,p,s;+1:3]&gt;&gt;[*-0:1]=[*:2]:[*+0:3]'), Normalization(u'Recombine 1,5-separated charges', u'[N,P,As,Sb,O,S,Se,Te;-1:1]-[A+0:2]=[A:3]-[A:4]=[N,P,As,Sb,O,S,Se,Te;+1:5]&gt;&gt;[*-0:1]=[*:2]-[*:3]=[*:4]-[*+0:5]'), Normalization(u'Recombine 1,5-separated charges', u'[n,o,p,s;-1:1]:[a:2]:[a:3]:[c:4]=[N,O,P,S;+1:5]&gt;&gt;[*-0:1]:[*:2]:[*:3]:[c:4]-[*+0:5]'), Normalization(u'Recombine 1,5-separated charges', u'[N,O,P,S;-1:1]-[c:2]:[a:3]:[a:4]:[n,o,p,s;+1:5]&gt;&gt;[*-0:1]=[c:2]:[*:3]:[*:4]:[*+0:5]'), Normalization(u'Normalize 1,3 conjugated cation', u'[N,O;+0!H0:1]-[A:2]=[N!$(*[O-]),O;+1H0:3]&gt;&gt;[*+1:1]=[*:2]-[*+0:3]'), Normalization(u'Normalize 1,3 conjugated cation', u'[n;+0!H0:1]:[c:2]=[N!$(*[O-]),O;+1H0:3]&gt;&gt;[*+1:1]:[*:2]-[*+0:3]'), Normalization(u'Normalize 1,3 conjugated cation', u'[N,O;+0!H0:1]-[c:2]:[n!$(*[O-]),o;+1H0:3]&gt;&gt;[*+1:1]=[*:2]:[*+0:3]'), Normalization(u'Normalize 1,5 conjugated cation', u'[N,O;+0!H0:1]-[A:2]=[A:3]-[A:4]=[N!$(*[O-]),O;+1H0:5]&gt;&gt;[*+1:1]=[*:2]-[*:3]=[*:4]-[*+0:5]'), Normalization(u'Normalize 1,5 conjugated cation', u'[n;+0!H0:1]:[a:2]:[a:3]:[c:4]=[N!$(*[O-]),O;+1H0:5]&gt;&gt;[n+1:1]:[*:2]:[*:3]:[*:4]-[*+0:5]'), Normalization(u'Normalize 1,5 conjugated cation', u'[N,O;+0!H0:1]-[c:2]:[a:3]:[a:4]:[n!$(*[O-]),o;+1H0:5]&gt;&gt;[*+1:1]=[c:2]:[*:3]:[*:4]:[*+0:5]'), Normalization(u'Normalize 1,5 conjugated cation', u'[n;+0!H0:1]1:[a:2]:[a:3]:[a:4]:[n!$(*[O-]);+1H0:5]1&gt;&gt;[n+1:1]1:[*:2]:[*:3]:[*:4]:[n+0:5]1'), Normalization(u'Normalize 1,5 conjugated cation', u'[n;+0!H0:1]:[a:2]:[a:3]:[a:4]:[n!$(*[O-]);+1H0:5]&gt;&gt;[n+1:1]:[*:2]:[*:3]:[*:4]:[n+0:5]'), Normalization(u'Charge normalization', u'[F,Cl,Br,I,At;-1:1]=[O:2]&gt;&gt;[*-0:1][O-:2]'), Normalization(u'Charge recombination', u'[N,P,As,Sb;-1:1]=[C+;v3:2]&gt;&gt;[*+0:1]#[C+0:2]')), acid_base_pairs=(AcidBasePair(u'-OSO3H', u'OS(=O)(=O)[OH]', u'OS(=O)(=O)[O-]'), AcidBasePair(u'u2013SO3H', u'[!O]S(=O)(=O)[OH]', u'[!O]S(=O)(=O)[O-]'), AcidBasePair(u'-OSO2H', u'O[SD3](=O)[OH]', u'O[SD3](=O)[O-]'), AcidBasePair(u'-SO2H', u'[!O][SD3](=O)[OH]', u'[!O][SD3](=O)[O-]'), AcidBasePair(u'-OPO3H2', u'OP(=O)([OH])[OH]', u'OP(=O)([OH])[O-]'), AcidBasePair(u'-PO3H2', u'[!O]P(=O)([OH])[OH]', u'[!O]P(=O)([OH])[O-]'), AcidBasePair(u'-CO2H', u'C(=O)[OH]', u'C(=O)[O-]'), AcidBasePair(u'thiophenol', u'c[SH]', u'c[S-]'), AcidBasePair(u'(-OPO3H)-', u'OP(=O)([OH])[O-]', u'OP(=O)([O-])[O-]'), AcidBasePair(u'(-PO3H)-', u'[!O]P(=O)([OH])[O-]', u'[!O]P(=O)([O-])[O-]'), AcidBasePair(u'phthalimide', u'O=C2c1ccccc1C(=O)[NH]2', u'O=C2c1ccccc1C(=O)[N-]2'), AcidBasePair(u'CO3H (peracetyl)', u'C(=O)O[OH]', u'C(=O)O[O-]'), AcidBasePair(u'alpha-carbon-hydrogen-nitro group', u'O=N(O)[CH]', u'O=N(O)[C-]'), AcidBasePair(u'-SO2NH2', u'S(=O)(=O)[NH2]', u'S(=O)(=O)[NH-]'), AcidBasePair(u'-OBO2H2', u'OB([OH])[OH]', u'OB([OH])[O-]'), AcidBasePair(u'-BO2H2', u'[!O]B([OH])[OH]', u'[!O]B([OH])[O-]'), AcidBasePair(u'phenol', u'c[OH]', u'c[O-]'), AcidBasePair(u'SH (aliphatic)', u'C[SH]', u'C[S-]'), AcidBasePair(u'(-OBO2H)-', u'OB([OH])[O-]', u'OB([O-])[O-]'), AcidBasePair(u'(-BO2H)-', u'[!O]B([OH])[O-]', u'[!O]B([O-])[O-]'), AcidBasePair(u'cyclopentadiene', u'[CH2]1C=CC=C1', u'[C-]1C=CC=C1'), AcidBasePair(u'-CONH2', u'C(=O)[NH2]', u'C(=O)[NH-]'), AcidBasePair(u'imidazole', u'c1cnc[n]1', u'c1cnc[n-]1'), AcidBasePair(u'-OH', u'[CX4][OH]', u'[CX4][O-]'), AcidBasePair(u'alpha-carbon-hydrogen-keto group', u'O=C[CH]', u'O=C[C-]'), AcidBasePair(u'alpha-carbon-hydrogen-acetyl ester group', u'OC(=O)[CH]', u'OC(=O)[C-]'), AcidBasePair(u'sp carbon hydrogen', u'C#[CH]', u'C#[C-]'), AcidBasePair(u'alpha-carbon-hydrogen-sulfone group', u'CS(=O)(=O)C[CH]', u'CS(=O)(=O)C[C-]'), AcidBasePair(u'alpha-carbon-hydrogen-sulfoxide group', u'C[SD3](=O)C[CH]', u'C[SD3](=O)C[C-]'), AcidBasePair(u'-NH2', u'[CX4][NH2]', u'[CX4][NH-]'), AcidBasePair(u'benzyl hydrogen', u'c[CD4H]', u'c[CD3-]'), AcidBasePair(u'sp2-carbon hydrogen', u'[CX3]=[CX3H]', u'[CX3]=[CX2-]'), AcidBasePair(u'sp3-carbon hydrogen', u'[CX4H]', u'[CX3-]')), tautomer_transforms=(TautomerTransform(u'1,3 (thio)keto/enol f', u'[CX4!H0][C]=[O,S,Se,Te;X1]', [], []), TautomerTransform(u'1,3 (thio)keto/enol r', u'[O,S,Se,Te;X2!H0][C]=[C]', [], []), TautomerTransform(u'1,5 (thio)keto/enol f', u'[CX4,NX3;!H0][C]=[C][CH0]=[O,S,Se,Te;X1]', [], []), TautomerTransform(u'1,5 (thio)keto/enol r', u'[O,S,Se,Te;X2!H0][CH0]=,:[C][C]=,:[C,N]', [], []), TautomerTransform(u'aliphatic imine f', u'[CX4!H0][C]=[NX2]', [], []), TautomerTransform(u'aliphatic imine r', u'[NX3!H0][C]=[CX3]', [], []), TautomerTransform(u'special imine f', u'[N!H0][C]=[CX3R0]', [], []), TautomerTransform(u'special imine r', u'[CX4!H0][c]=,:[n]', [], []), TautomerTransform(u'1,3 aromatic heteroatom H shift f', u'[#7!H0][#6R1]=[O,#7X2]', [], []), TautomerTransform(u'1,3 aromatic heteroatom H shift r', u'[O,#7;!H0][#6R1]=,:[#7X2]', [], []), TautomerTransform(u'1,3 heteroatom H shift', u'[#7,S,O,Se,Te;!H0][#7X2,#6,#15]=[#7,#16,#8,Se,Te]', [], []), TautomerTransform(u'1,5 aromatic heteroatom H shift', u'[n,s,o;!H0]:[c,n]:[c]:[c,n]:[n,s,o;H0]', [], []), TautomerTransform(u'1,5 aromatic heteroatom H shift f', u'[#7,#16,#8,Se,Te;!H0][#6,nX2]=,:[#6,nX2][#6,#7X2]=,:[#7X2,S,O,Se,Te]', [], []), TautomerTransform(u'1,5 aromatic heteroatom H shift r', u'[#7,S,O,Se,Te;!H0][#6,#7X2]=,:[#6,nX2][#6,nX2]=,:[#7,#16,#8,Se,Te]', [], []), TautomerTransform(u'1,7 aromatic heteroatom H shift f', u'[#7,#8,#16,Se,Te;!H0][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6][#6,#7X2]=,:[#7X2,S,O,Se,Te,CX3]', [], []), TautomerTransform(u'1,7 aromatic heteroatom H shift r', u'[#7,S,O,Se,Te,CX4;!H0][#6,#7X2]=,:[#6][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[NX2,S,O,Se,Te]', [], []), TautomerTransform(u'1,9 aromatic heteroatom H shift f', u'[#7,O;!H0][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#7,O]', [], []), TautomerTransform(u'1,11 aromatic heteroatom H shift f', u'[#7,O;!H0][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#7X2,O]', [], []), TautomerTransform(u'furanone f', u'[O,S,N;!H0][#6X3r5;$([#6][!#6])]=,:[#6X3r5]', [], []), TautomerTransform(u'furanone r', u'[#6r5!H0][#6X3r5;$([#6][!#6])]=[O,S,N]', [], []), TautomerTransform(u'keten/ynol f', u'[C!H0]=[C]=[O,S,Se,Te;X1]', [rdkit.Chem.rdchem.BondType.TRIPLE, rdkit.Chem.rdchem.BondType.SINGLE], []), TautomerTransform(u'keten/ynol r', u'[O,S,Se,Te;!H0X2][C]#[C]', [rdkit.Chem.rdchem.BondType.DOUBLE, rdkit.Chem.rdchem.BondType.DOUBLE], []), TautomerTransform(u'ionic nitro/aci-nitro f', u'[C!H0][N+;$([N][O-])]=[O]', [], []), TautomerTransform(u'ionic nitro/aci-nitro r', u'[O!H0][N+;$([N][O-])]=[C]', [], []), TautomerTransform(u'oxim/nitroso f', u'[O!H0][N]=[C]', [], []), TautomerTransform(u'oxim/nitroso r', u'[C!H0][N]=[O]', [], []), TautomerTransform(u'oxim/nitroso via phenol f', u'[O!H0][N]=[C][C]=[C][C]=[OH0]', [], []), TautomerTransform(u'oxim/nitroso via phenol r', u'[O!H0][c]:[c]:[c]:[c][N]=[OH0]', [], []), TautomerTransform(u'cyano/iso-cyanic acid f', u'[O!H0][C]#[N]', [rdkit.Chem.rdchem.BondType.DOUBLE, rdkit.Chem.rdchem.BondType.DOUBLE], []), TautomerTransform(u'cyano/iso-cyanic acid r', u'[N!H0]=[C]=[O]', [rdkit.Chem.rdchem.BondType.TRIPLE, rdkit.Chem.rdchem.BondType.SINGLE], []), TautomerTransform(u'formamidinesulfinic acid f', u'[O,N;!H0][C][S,Se,Te]=[O]', [rdkit.Chem.rdchem.BondType.DOUBLE, rdkit.Chem.rdchem.BondType.SINGLE, rdkit.Chem.rdchem.BondType.SINGLE], []), TautomerTransform(u'formamidinesulfinic acid r', u'[O!H0][S,Se,Te][C]=[O,N]', [rdkit.Chem.rdchem.BondType.DOUBLE, rdkit.Chem.rdchem.BondType.SINGLE, rdkit.Chem.rdchem.BondType.SINGLE], []), TautomerTransform(u'isocyanide f', u'[C-0!H0]#[N+0]', [rdkit.Chem.rdchem.BondType.TRIPLE], [-1, 1]), TautomerTransform(u'isocyanide r', u'[N+!H0]#[C-]', [rdkit.Chem.rdchem.BondType.TRIPLE], [-1, 1]), TautomerTransform(u'phosphonic acid f', u'[OH][PH0]', [rdkit.Chem.rdchem.BondType.DOUBLE], []), TautomerTransform(u'phosphonic acid r', u'[PH]=[O]', [rdkit.Chem.rdchem.BondType.SINGLE], [])), tautomer_scores=(TautomerScore(u'benzoquinone', u'[#6]1([#6]=[#6][#6]([#6]=[#6]1)=,:[N,S,O])=,:[N,S,O]', 25), TautomerScore(u'oxim', u'[#6]=[N][OH]', 4), TautomerScore(u'C=O', u'[#6]=,:[#8]', 2), TautomerScore(u'N=O', u'[#7]=,:[#8]', 2), TautomerScore(u'P=O', u'[#15]=,:[#8]', 2), TautomerScore(u'C=hetero', u'[#6]=[!#1;!#6]', 1), TautomerScore(u'methyl', u'[CX4H3]', 1), TautomerScore(u'guanidine terminal=N', u'[#7][#6](=[NR0])[#7H0]', 1), TautomerScore(u'guanidine endocyclic=N', u'[#7;R][#6;R]([N])=[#7;R]', 2), TautomerScore(u'aci-nitro', u'[#6]=[N+]([O-])[OH]', -4)), max_restarts=200, max_tautomers=1000, prefer_organic=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyPretreatMol.html#StandardizeMol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyPretreatMol.StandardizeMol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>The main class for performing standardization of molecules and deriving parent molecules.</p>
+<p>The primary usage is via the <code class="xref py py-meth docutils literal"><span class="pre">standardize()</span></code> method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">Standardizer</span><span class="p">()</span>
+<span class="n">mol1</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;C1=CC=CC=C1&#39;</span><span class="p">)</span>
+<span class="n">mol2</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">mol1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are separate methods to derive fragment, charge, tautomer, isotope and stereo parent molecules.</p>
+<dl class="method">
+<dt id="PyPretreatMol.StandardizeMol.addhs">
+<code class="descname">addhs</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyPretreatMol.html#StandardizeMol.addhs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyPretreatMol.StandardizeMol.addhs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="PyPretreatMol.StandardizeMol.canonicalize_tautomer">
+<code class="descname">canonicalize_tautomer</code><a class="headerlink" href="#PyPretreatMol.StandardizeMol.canonicalize_tautomer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A callable <code class="xref py py-class docutils literal"><span class="pre">TautomerCanonicalizer</span></code> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyPretreatMol.StandardizeMol.disconnect_metals">
+<code class="descname">disconnect_metals</code><a class="headerlink" href="#PyPretreatMol.StandardizeMol.disconnect_metals" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A callable <code class="xref py py-class docutils literal"><span class="pre">MetalDisconnector</span></code> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyPretreatMol.StandardizeMol.largest_fragment">
+<code class="descname">largest_fragment</code><a class="headerlink" href="#PyPretreatMol.StandardizeMol.largest_fragment" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A callable <code class="xref py py-class docutils literal"><span class="pre">LargestFragmentChooser</span></code> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyPretreatMol.StandardizeMol.normalize">
+<code class="descname">normalize</code><a class="headerlink" href="#PyPretreatMol.StandardizeMol.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A callable <code class="xref py py-class docutils literal"><span class="pre">Normalizer</span></code> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyPretreatMol.StandardizeMol.reionize">
+<code class="descname">reionize</code><a class="headerlink" href="#PyPretreatMol.StandardizeMol.reionize" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A callable <code class="xref py py-class docutils literal"><span class="pre">Reionizer</span></code> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyPretreatMol.StandardizeMol.rmhs">
+<code class="descname">rmhs</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyPretreatMol.html#StandardizeMol.rmhs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyPretreatMol.StandardizeMol.rmhs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="PyPretreatMol.StandardizeMol.uncharge">
+<code class="descname">uncharge</code><a class="headerlink" href="#PyPretreatMol.StandardizeMol.uncharge" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A callable <code class="xref py py-class docutils literal"><span class="pre">Uncharger</span></code> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="PyPretreatMol.ValidatorMol">
+<code class="descclassname">PyPretreatMol.</code><code class="descname">ValidatorMol</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyPretreatMol.html#ValidatorMol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyPretreatMol.ValidatorMol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return log messages for a given SMILES string using the default validations.</p>
+<p>Note: This is a convenience function for quickly validating a single SMILES string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>smiles</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The SMILES for the molecule.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of log messages.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of strings.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyPretreatMol.ValidatorSmi">
+<code class="descclassname">PyPretreatMol.</code><code class="descname">ValidatorSmi</code><span class="sig-paren">(</span><em>smi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyPretreatMol.html#ValidatorSmi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyPretreatMol.ValidatorSmi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return log messages for a given SMILES string using the default validations.</p>
+<p>Note: This is a convenience function for quickly validating a single SMILES string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>smiles</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The SMILES for the molecule.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of log messages.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of strings.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PyPretreatPro.html" title="PyPretreatPro module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PyPretreatDNA.html" title="PyPretreatDNA module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyPretreat.html" >PyPretreat</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

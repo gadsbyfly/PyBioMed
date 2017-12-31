@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cats2d module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="charge module" href="charge.html" />
+    <link rel="prev" title="bcut module" href="bcut.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="charge.html" title="charge module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bcut.html" title="bcut module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bcut.html"
+                        title="previous chapter">bcut module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="charge.html"
+                        title="next chapter">charge module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/cats2d.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-cats2d">
+<span id="cats2d-module"></span><h1>cats2d module<a class="headerlink" href="#module-cats2d" title="Permalink to this headline">¶</a></h1>
+<p># CATS2D  Potential Pharmacophore Point (PPP) definitions as describes in
+# Pharmacophores and Pharmacophore Searches 2006 (Eds. T. Langer and R.D. Hoffmann), Chapter 3:
+# Alignment-free Pharmacophore Patterns - A Correlattion-vector Approach.
+# The last lipophilic pattern on page 55 of the book is realized as a graph search and not
+# as a SMARTS search. Therefore, the list contains only two lipophilic SMARTS patterns.
+# The format is tab separated and contains in the first column the PPP type (D = H-bond donor,
+# A = H-bond acceptor, P = positive, N = negative, L = lipophilic). The second column of each entry
+# contains the SMARTS pattern(s). The last entry is a description of the molecular feature</p>
+<p>D       [OH]    Oxygen atom of an OH group
+D       [#7H,#7H2]      Nitrogen atom of an NH or NH2 group
+A       [O]     Oxygen atom
+A       [#7H0]  Nitrogen atom not adjacent to a hydrogen atom
+P       [<em>+]    atom with a positive charge
+P       [#7H2]  Nitrogen atom of an NH2 group
+N       [</em>-]    Atom with a negative charge
+N       [C&amp;D2&amp;$(C(=O)O),P&amp;D2&amp;$(P(=O)O),S&amp;D2&amp;$(S(=O)O)]  Carbon, sulfur or phosphorus atom of a COOH, SOOH or POOH group. This pattern is realized by an graph algorithm
+L       [Cl,Br,I]       Chlorine, bromine, or iodine atom
+L       [S;D2;$(S(C)(C))]       Sulfur atom adjacent to exactly two carbon atoms</p>
+<p>Created on Thu Sep  1 20:13:38 2016</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<dl class="function">
+<dt id="cats2d.AssignAtomType">
+<code class="descclassname">cats2d.</code><code class="descname">AssignAtomType</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cats2d.html#AssignAtomType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cats2d.AssignAtomType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign the atoms in the mol object into each of the PPP type</p>
+<p>according to PPP list definition.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cats2d.CATS2D">
+<code class="descclassname">cats2d.</code><code class="descname">CATS2D</code><span class="sig-paren">(</span><em>mol</em>, <em>PathLength=10</em>, <em>scale=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cats2d.html#CATS2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cats2d.CATS2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main program for calculating the CATS descriptors.</p>
+<p>CATS: chemically advanced template serach</p>
+<p>&#8212;-&gt; CATS_DA0 ....</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CATS2D(mol,PathLength = 10,scale = 1)</p>
+<p>Input: mol is a molecule object.</p>
+<blockquote>
+<div><p>PathLength is the max topological distance between two atoms.</p>
+<p>scale is the normalization method (descriptor scaling method)</p>
+<p>scale = 1 indicates that no normalization. That is to say: the</p>
+<p>values of the vector represent raw counts (&#8220;counts&#8221;).</p>
+<p>scale = 2 indicates that division by the number of non-hydrogen</p>
+<p>atoms (heavy atoms) in the molecule.</p>
+<p>scale = 3 indicates that division of each of 15 possible PPP pairs</p>
+<p>by the added occurrences of the two respective PPPs.</p>
+</div></blockquote>
+<p>Output: result is a dict format with the definitions of each descritor.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cats2d.ContructLFromGraphSearch">
+<code class="descclassname">cats2d.</code><code class="descname">ContructLFromGraphSearch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cats2d.html#ContructLFromGraphSearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cats2d.ContructLFromGraphSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>The last lipophilic pattern on page 55 of the book is realized as a graph 
+search and not as a SMARTS search.</p>
+<p>&#8220;L&#8221; carbon atom adjacent only to carbon atoms.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cats2d.FormCATSDict">
+<code class="descclassname">cats2d.</code><code class="descname">FormCATSDict</code><span class="sig-paren">(</span><em>AtomDict</em>, <em>CATSLabel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cats2d.html#FormCATSDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cats2d.FormCATSDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construt the CATS dict.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cats2d.FormCATSLabel">
+<code class="descclassname">cats2d.</code><code class="descname">FormCATSLabel</code><span class="sig-paren">(</span><em>PathLength=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cats2d.html#FormCATSLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cats2d.FormCATSLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct the CATS label such as AA0, AA1,....AP3,.......</p>
+<p>The result is a list format.</p>
+<p>A   acceptor;
+P   positive;
+N   negative;
+L   lipophilic;
+D   donor;
+#################################################################</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cats2d.MatchAtomType">
+<code class="descclassname">cats2d.</code><code class="descname">MatchAtomType</code><span class="sig-paren">(</span><em>IndexList</em>, <em>AtomTypeDict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cats2d.html#MatchAtomType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cats2d.MatchAtomType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping two atoms with a certain distance into their atom types</p>
+<p>such as AA,AL, DP,LD etc.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="charge.html" title="charge module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bcut.html" title="bcut module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

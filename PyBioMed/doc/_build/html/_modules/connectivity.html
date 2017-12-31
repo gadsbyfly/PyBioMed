@@ -1,0 +1,1299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>connectivity &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for connectivity</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">The calculation of molecular connectivity indices based on its topological</span>
+
+<span class="sd">structure. You can get 44 molecular connectivity descriptors. You can freely</span>
+
+<span class="sd">use and distribute it. If you hava  any problem, you could contact with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">rdchem</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+
+<span class="n">periodicTable</span> <span class="o">=</span> <span class="n">rdchem</span><span class="o">.</span><span class="n">GetPeriodicTable</span><span class="p">()</span>
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="c1">################################################################</span>
+
+<div class="viewcode-block" id="CalculateChi0"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi0">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi0</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 0</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi0</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi0(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">deltas</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateChi1"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi1">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 1 </span>
+<span class="sd">    </span>
+<span class="sd">    (i.e.,Radich)</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi1</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi1(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()]</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">cc</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">cc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateMeanRandic"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateMeanRandic">[docs]</a><span class="k">def</span> <span class="nf">CalculateMeanRandic</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of mean chi1 (Randic) connectivity index.</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;mchi1</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMeanRandic(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()]</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">cc</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">cc</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 2</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">Chem</span><span class="o">.</span><span class="n">FindAllPathsOfLengthN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">useBonds</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">cAccum</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">cAccum</span> <span class="o">*=</span> <span class="n">deltas</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cAccum</span><span class="p">:</span>
+            <span class="n">accum</span> <span class="o">+=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cAccum</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">accum</span>
+    
+
+<div class="viewcode-block" id="CalculateChi2"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi2">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 2</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi2(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="CalculateChi3p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi3p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi3p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 3</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi3</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi3p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChi4p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi4p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi4p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 4</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi4</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi4p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChi5p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi5p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi5p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 5</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi5</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi5p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChi6p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi6p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi6p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 6</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi6</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi6p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChi7p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi7p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi7p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 7</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi7</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi7p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChi8p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi8p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi8p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 8</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi8</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi8p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChi9p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi9p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi9p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 9</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi9</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi9p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChi10p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi10p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi10p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path order 10</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi10</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi10p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateChi3c"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi3c">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi3c</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for cluster</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi3c</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi3c(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">patt</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="s1">&#39;*~*(~*)~*&#39;</span><span class="p">)</span>
+    <span class="n">HPatt</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">HPatt</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cluster</span><span class="p">]</span>
+        <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+            <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">deltas</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="n">deltas1</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="n">accum</span><span class="o">=</span><span class="n">accum</span><span class="o">+</span><span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">deltas1</span><span class="o">.</span><span class="n">prod</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">accum</span></div>
+
+<div class="viewcode-block" id="CalculateChi4c"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi4c">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi4c</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for cluster</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi4c</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi4c(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">patt</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="s1">&#39;*~*(~*)(~*)~*&#39;</span><span class="p">)</span>
+    <span class="n">HPatt</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">HPatt</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cluster</span><span class="p">]</span>
+        <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+            <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">deltas</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="n">deltas1</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="n">accum</span><span class="o">=</span><span class="n">accum</span><span class="o">+</span><span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">deltas1</span><span class="o">.</span><span class="n">prod</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">accum</span></div>
+    
+
+<div class="viewcode-block" id="CalculateChi4pc"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi4pc">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi4pc</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for path/cluster</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi4pc</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi4pc(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">patt</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="s1">&#39;*~*(~*)~*~*&#39;</span><span class="p">)</span>
+    <span class="n">HPatt</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">)</span>
+    <span class="c1">#print HPatt</span>
+    <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">HPatt</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cluster</span><span class="p">]</span>
+        <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+            <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">deltas</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="n">deltas1</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="n">accum</span><span class="o">=</span><span class="n">accum</span><span class="o">+</span><span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">deltas1</span><span class="o">.</span><span class="n">prod</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">accum</span></div>
+
+
+<div class="viewcode-block" id="CalculateDeltaChi3c4pc"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateDeltaChi3c4pc">[docs]</a><span class="k">def</span> <span class="nf">CalculateDeltaChi3c4pc</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the difference between chi3c and chi4pc</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;knotp</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDeltaChi3c4pc(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">CalculateChi3c</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">-</span><span class="n">CalculateChi4pc</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span></div>
+
+<span class="k">def</span> <span class="nf">_CalculateChinch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCycle</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of molecular connectivity chi index for cycles of n</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetRingInfo</span><span class="p">()</span><span class="o">.</span><span class="n">AtomRings</span><span class="p">():</span>
+        <span class="n">cAccum</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span><span class="o">==</span><span class="n">NumCycle</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">tup</span><span class="p">:</span>
+                <span class="n">cAccum</span> <span class="o">*=</span> <span class="n">deltas</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">cAccum</span><span class="p">:</span>
+                <span class="n">accum</span> <span class="o">+=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cAccum</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">accum</span>    
+
+<div class="viewcode-block" id="CalculateChi3ch"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi3ch">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi3ch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for cycles of 3</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi3ch</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi3ch(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChinch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCycle</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
+                
+
+<div class="viewcode-block" id="CalculateChi4ch"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi4ch">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi4ch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for cycles of 4</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi4ch</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi4ch(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCycle</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateChi5ch"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi5ch">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi5ch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for cycles of 5</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi5ch</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi5ch(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChinch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCycle</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateChi6ch"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChi6ch">[docs]</a><span class="k">def</span> <span class="nf">CalculateChi6ch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of molecular connectivity chi index for cycles of 6</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chi6ch</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChi6ch(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChinch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCycle</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+    
+
+<span class="k">def</span> <span class="nf">_HKDeltas</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">skipHs</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    *Internal Use Only*</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of modified delta value for a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    res----&gt;list type</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">periodicTable</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">n</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">nV</span><span class="o">=</span><span class="n">periodicTable</span><span class="o">.</span><span class="n">GetNOuterElecs</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">nHs</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">GetTotalNumHs</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">n</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">nV</span><span class="o">-</span><span class="n">nHs</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">nV</span><span class="o">-</span><span class="n">nHs</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">nV</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">skipHs</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+    
+
+<div class="viewcode-block" id="CalculateChiv0"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv0">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv0</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for</span>
+<span class="sd">    </span>
+<span class="sd">    path order 0</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv0</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv0(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">_HKDeltas</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">skipHs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">deltas</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="k">def</span> <span class="nf">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;#################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for path order 1</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">_HKDeltas</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">skipHs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">Chem</span><span class="o">.</span><span class="n">FindAllPathsOfLengthN</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">useBonds</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">cAccum</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">cAccum</span> <span class="o">*=</span> <span class="n">deltas</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cAccum</span><span class="p">:</span>
+            <span class="n">accum</span> <span class="o">+=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cAccum</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">accum</span>
+
+
+<div class="viewcode-block" id="CalculateChiv1"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv1">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for</span>
+<span class="sd">    </span>
+<span class="sd">    path order 1</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv1</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv1(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+    
+
+
+<div class="viewcode-block" id="CalculateChiv2"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv2">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for </span>
+<span class="sd">    </span>
+<span class="sd">    path order 2</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv2(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateChiv3p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv3p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv3p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for </span>
+<span class="sd">    </span>
+<span class="sd">    path order 3</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv3</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv3p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChiv4p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv4p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv4p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for</span>
+<span class="sd">    </span>
+<span class="sd">    path order 4</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv4</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv4p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChiv5p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv5p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv5p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for</span>
+<span class="sd">    </span>
+<span class="sd">    path order 5</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv5</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv5p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChiv6p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv6p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv6p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for</span>
+<span class="sd">    </span>
+<span class="sd">    path order 6</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv6</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv6p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateChiv7p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv7p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv7p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for</span>
+<span class="sd">    </span>
+<span class="sd">    path order 7</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv7</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv7p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChiv8p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv8p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv8p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for </span>
+<span class="sd">    </span>
+<span class="sd">    path order 8</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv8</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv8p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChiv9p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv9p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv9p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for </span>
+<span class="sd">    </span>
+<span class="sd">    path order 9</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv9</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv9p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateChiv10p"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv10p">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv10p</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for </span>
+<span class="sd">    </span>
+<span class="sd">    path order 10</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv10</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv10p(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></div>
+ 
+
+<div class="viewcode-block" id="CalculateDeltaChi0"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateDeltaChi0">[docs]</a><span class="k">def</span> <span class="nf">CalculateDeltaChi0</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the difference between chi0v and chi0</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;dchi0</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDeltaChi0(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">CalculateChiv0</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">-</span><span class="n">CalculateChi0</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span></div>
+   
+    
+<div class="viewcode-block" id="CalculateDeltaChi1"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateDeltaChi1">[docs]</a><span class="k">def</span> <span class="nf">CalculateDeltaChi1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the difference between chi1v and chi1</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;dchi1</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDeltaChi1(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">CalculateChiv1</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">-</span><span class="n">CalculateChi1</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="CalculateDeltaChi2"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateDeltaChi2">[docs]</a><span class="k">def</span> <span class="nf">CalculateDeltaChi2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the difference between chi2v and chi2</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;dchi2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDeltaChi2(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="CalculateDeltaChi3"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateDeltaChi3">[docs]</a><span class="k">def</span> <span class="nf">CalculateDeltaChi3</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the difference between chi3v and chi3</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;dchi3</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDeltaChi3(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="CalculateDeltaChi4"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateDeltaChi4">[docs]</a><span class="k">def</span> <span class="nf">CalculateDeltaChi4</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the difference between chi4v and chi4</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;dchi4</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDeltaChi4(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">_CalculateChivnp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="o">-</span><span class="n">_CalculateChinp</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumPath</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_AtomHKDeltas</span><span class="p">(</span><span class="n">atom</span><span class="p">,</span><span class="n">skipHs</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    *Internal Use Only*</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of modified delta value for a molecule</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">periodicTable</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">nV</span><span class="o">=</span><span class="n">periodicTable</span><span class="o">.</span><span class="n">GetNOuterElecs</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">nHs</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">GetTotalNumHs</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">n</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">nV</span><span class="o">-</span><span class="n">nHs</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">nV</span><span class="o">-</span><span class="n">nHs</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">nV</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">skipHs</span><span class="p">:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<div class="viewcode-block" id="CalculateChiv3c"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv3c">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv3c</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for cluster</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv3c</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv3c(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">patt</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="s1">&#39;*~*(~*)~*&#39;</span><span class="p">)</span>
+    <span class="n">HPatt</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">)</span>
+    <span class="c1">#print HPatt</span>
+    <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">HPatt</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">_AtomHKDeltas</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cluster</span><span class="p">]</span>
+        <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+            <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">deltas</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="n">deltas1</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="n">accum</span><span class="o">=</span><span class="n">accum</span><span class="o">+</span><span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">deltas1</span><span class="o">.</span><span class="n">prod</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">accum</span></div>
+
+<div class="viewcode-block" id="CalculateChiv4c"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv4c">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv4c</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for cluster</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv4c</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv4c(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">patt</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="s1">&#39;*~*(~*)(~*)~*&#39;</span><span class="p">)</span>
+    <span class="n">HPatt</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">)</span>
+    <span class="c1">#print HPatt</span>
+    <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">HPatt</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">_AtomHKDeltas</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cluster</span><span class="p">]</span>
+        <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+            <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">deltas</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="n">deltas1</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="n">accum</span><span class="o">=</span><span class="n">accum</span><span class="o">+</span><span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">deltas1</span><span class="o">.</span><span class="n">prod</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">accum</span></div>
+
+<div class="viewcode-block" id="CalculateChiv4pc"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv4pc">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv4pc</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for </span>
+<span class="sd">    </span>
+<span class="sd">    path/cluster</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv4pc</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv4pc(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">patt</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="s1">&#39;*~*(~*)~*~*&#39;</span><span class="p">)</span>
+    <span class="n">HPatt</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">patt</span><span class="p">)</span>
+    <span class="c1">#print HPatt</span>
+    <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">HPatt</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">_AtomHKDeltas</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cluster</span><span class="p">]</span>
+        <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+            <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">deltas</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="n">deltas1</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="n">accum</span><span class="o">=</span><span class="n">accum</span><span class="o">+</span><span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">deltas1</span><span class="o">.</span><span class="n">prod</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">accum</span></div>
+
+<div class="viewcode-block" id="CalculateDeltaChiv3c4pc"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateDeltaChiv3c4pc">[docs]</a><span class="k">def</span> <span class="nf">CalculateDeltaChiv3c4pc</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the difference between chiv3c and chiv4pc</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;knotpv</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDeltaChiv3c4pc(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">CalculateChiv3c</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">-</span><span class="n">CalculateChiv4pc</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span></div>
+
+<span class="k">def</span> <span class="nf">_CalculateChivnch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCyc</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for cycles of n</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">accum</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">_HKDeltas</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">skipHs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetRingInfo</span><span class="p">()</span><span class="o">.</span><span class="n">AtomRings</span><span class="p">():</span>
+        <span class="n">cAccum</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span><span class="o">==</span><span class="n">NumCyc</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">tup</span><span class="p">:</span>
+                <span class="n">cAccum</span> <span class="o">*=</span> <span class="n">deltas</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">cAccum</span><span class="p">:</span>
+                <span class="n">accum</span> <span class="o">+=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cAccum</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">accum</span>
+
+<div class="viewcode-block" id="CalculateChiv3ch"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv3ch">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv3ch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index </span>
+<span class="sd">    </span>
+<span class="sd">    for cycles of 3</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv3ch</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv3ch(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChivnch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCyc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateChiv4ch"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv4ch">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv4ch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for </span>
+<span class="sd">    </span>
+<span class="sd">    cycles of 4</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv4ch</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv4ch(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChivnch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCyc</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateChiv5ch"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv5ch">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv5ch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for </span>
+<span class="sd">    </span>
+<span class="sd">    cycles of 5</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv5ch</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv5ch(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChivnch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCyc</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateChiv6ch"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.CalculateChiv6ch">[docs]</a><span class="k">def</span> <span class="nf">CalculateChiv6ch</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of valence molecular connectivity chi index for</span>
+<span class="sd">    </span>
+<span class="sd">    cycles of 6</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Chiv6ch</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateChiv6ch(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateChivnch</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">NumCyc</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+
+
+
+
+
+<span class="n">_connectivity</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Chi0&#39;</span><span class="p">:</span><span class="n">CalculateChi0</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi1&#39;</span><span class="p">:</span><span class="n">CalculateChi1</span><span class="p">,</span>
+                       <span class="s1">&#39;mChi1&#39;</span><span class="p">:</span><span class="n">CalculateMeanRandic</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi2&#39;</span><span class="p">:</span><span class="n">CalculateChi2</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi3&#39;</span><span class="p">:</span><span class="n">CalculateChi3p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi4&#39;</span><span class="p">:</span><span class="n">CalculateChi4p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi5&#39;</span><span class="p">:</span><span class="n">CalculateChi5p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi6&#39;</span><span class="p">:</span><span class="n">CalculateChi6p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi7&#39;</span><span class="p">:</span><span class="n">CalculateChi7p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi8&#39;</span><span class="p">:</span><span class="n">CalculateChi8p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi9&#39;</span><span class="p">:</span><span class="n">CalculateChi9p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi10&#39;</span><span class="p">:</span><span class="n">CalculateChi10p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi3c&#39;</span><span class="p">:</span><span class="n">CalculateChi3c</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi4c&#39;</span><span class="p">:</span><span class="n">CalculateChi4c</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi4pc&#39;</span><span class="p">:</span><span class="n">CalculateChi4pc</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi3ch&#39;</span><span class="p">:</span><span class="n">CalculateChi3ch</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi4ch&#39;</span><span class="p">:</span><span class="n">CalculateChi4ch</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi5ch&#39;</span><span class="p">:</span><span class="n">CalculateChi5ch</span><span class="p">,</span>
+                       <span class="s1">&#39;Chi6ch&#39;</span><span class="p">:</span><span class="n">CalculateChi6ch</span><span class="p">,</span>
+                       <span class="s1">&#39;knotp&#39;</span><span class="p">:</span><span class="n">CalculateDeltaChi3c4pc</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv0&#39;</span><span class="p">:</span><span class="n">CalculateChiv0</span><span class="p">,</span>
+                      <span class="s1">&#39;Chiv1&#39;</span><span class="p">:</span><span class="n">CalculateChiv1</span><span class="p">,</span>
+                      <span class="s1">&#39;Chiv2&#39;</span><span class="p">:</span><span class="n">CalculateChiv2</span><span class="p">,</span>
+                      <span class="s1">&#39;Chiv3&#39;</span><span class="p">:</span><span class="n">CalculateChiv3p</span><span class="p">,</span>
+                      <span class="s1">&#39;Chiv4&#39;</span><span class="p">:</span><span class="n">CalculateChiv4p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv5&#39;</span><span class="p">:</span><span class="n">CalculateChiv5p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv6&#39;</span><span class="p">:</span><span class="n">CalculateChiv6p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv7&#39;</span><span class="p">:</span><span class="n">CalculateChiv7p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv8&#39;</span><span class="p">:</span><span class="n">CalculateChiv8p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv9&#39;</span><span class="p">:</span><span class="n">CalculateChiv9p</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv10&#39;</span><span class="p">:</span><span class="n">CalculateChiv10p</span><span class="p">,</span>
+                       <span class="s1">&#39;dchi0&#39;</span><span class="p">:</span><span class="n">CalculateDeltaChi0</span><span class="p">,</span>
+                       <span class="s1">&#39;dchi1&#39;</span><span class="p">:</span><span class="n">CalculateDeltaChi1</span><span class="p">,</span>
+                       <span class="s1">&#39;dchi2&#39;</span><span class="p">:</span><span class="n">CalculateDeltaChi2</span><span class="p">,</span>
+                       <span class="s1">&#39;dchi3&#39;</span><span class="p">:</span><span class="n">CalculateDeltaChi3</span><span class="p">,</span>
+                       <span class="s1">&#39;dchi4&#39;</span><span class="p">:</span><span class="n">CalculateDeltaChi4</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv3c&#39;</span><span class="p">:</span><span class="n">CalculateChiv3c</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv4c&#39;</span><span class="p">:</span><span class="n">CalculateChiv4c</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv4pc&#39;</span><span class="p">:</span><span class="n">CalculateChiv4pc</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv3ch&#39;</span><span class="p">:</span><span class="n">CalculateChiv3ch</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv4ch&#39;</span><span class="p">:</span><span class="n">CalculateChiv4ch</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv5ch&#39;</span><span class="p">:</span><span class="n">CalculateChiv5ch</span><span class="p">,</span>
+                       <span class="s1">&#39;Chiv6ch&#39;</span><span class="p">:</span><span class="n">CalculateChiv6ch</span><span class="p">,</span>
+                       <span class="s1">&#39;knotpv&#39;</span><span class="p">:</span><span class="n">CalculateDeltaChiv3c4pc</span>
+    <span class="p">}</span>
+
+
+
+
+
+<div class="viewcode-block" id="GetConnectivity"><a class="viewcode-back" href="../reference/connectivity.html#connectivity.GetConnectivity">[docs]</a><span class="k">def</span> <span class="nf">GetConnectivity</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Get the dictionary of connectivity descriptors for given moelcule mol</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=GetConnectivity(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing all connectivity indices</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">DesLabel</span> <span class="ow">in</span> <span class="n">_connectivity</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">_connectivity</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">](</span><span class="n">mol</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<span class="c1">###############################################################################</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+   
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetConnectivity</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">GetConnectivity</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

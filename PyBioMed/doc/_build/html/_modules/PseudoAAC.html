@@ -1,0 +1,750 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PseudoAAC &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PseudoAAC</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">#########################################################################################</span>
+
+<span class="sd">Instead of using the conventional 20-D amino acid composition to represent the sample</span>
+
+<span class="sd">of a protein, Prof. Kuo-Chen Chou proposed the pseudo amino acid (PseAA) composition </span>
+
+<span class="sd">in order for inluding the sequence-order information. Based on the concept of Chou&#39;s </span>
+<span class="sd"> </span>
+<span class="sd">pseudo amino acid composition, the server PseAA was designed in a flexible way, allowing </span>
+<span class="sd"> </span>
+<span class="sd">users to generate various kinds of pseudo amino acid composition for a given protein</span>
+<span class="sd"> </span>
+<span class="sd">sequence by selecting different parameters and their combinations. This module aims at </span>
+<span class="sd"> </span>
+<span class="sd">computing two types of PseAA descriptors: Type I and Type II. </span>
+<span class="sd"> </span>
+<span class="sd">You can freely use and distribute it. If you have any problem, you could contact </span>
+<span class="sd"> </span>
+<span class="sd">with us timely.</span>
+
+<span class="sd">References:</span>
+
+<span class="sd">[1]: Kuo-Chen Chou. Prediction of Protein Cellular Attributes Using Pseudo-Amino Acid </span>
+
+<span class="sd">Composition. PROTEINS: Structure, Function, and Genetics, 2001, 43: 246-255.</span>
+
+<span class="sd">[2]: http://www.csbio.sjtu.edu.cn/bioinf/PseAAC/</span>
+
+<span class="sd">[3]: http://www.csbio.sjtu.edu.cn/bioinf/PseAAC/type2.htm</span>
+
+<span class="sd">[4]: Kuo-Chen Chou. Using amphiphilic pseudo amino acid composition to predict enzyme </span>
+
+<span class="sd">subfamily classes. Bioinformatics, 2005,21,10-19.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com</span>
+
+<span class="sd">#########################################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="c1"># import scipy</span>
+
+
+<span class="n">AALetter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">]</span>
+
+<span class="n">_Hydrophobicity</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">0.62</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.53</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.78</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.90</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">0.29</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.85</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.74</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">0.48</span><span class="p">,</span>
+                   <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.40</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">1.38</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">1.06</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.50</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">0.64</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">1.19</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">0.12</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.18</span><span class="p">,</span>
+                   <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">0.81</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">0.26</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">1.08</span><span class="p">}</span>
+
+<span class="n">_hydrophilicity</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span>
+                   <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.3</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.4</span><span class="p">,</span>
+                   <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.3</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">}</span>
+
+<span class="n">_residuemass</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">15.0</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">101.0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">58.0</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">59.0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">47.0</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">72.0</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">73.0</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">1.000</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">82.0</span><span class="p">,</span>
+                <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">57.0</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">57.0</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">73.0</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">75.0</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">91.0</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">42.0</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">31.0</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">45.0</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">130.0</span><span class="p">,</span>
+                <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">107.0</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">43.0</span><span class="p">}</span>
+
+<span class="n">_pK1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">2.35</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">1.71</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">1.88</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">2.19</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">2.58</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">2.34</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">1.78</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">2.32</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">2.20</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">2.36</span><span class="p">,</span>
+        <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">2.28</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">2.18</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">1.99</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">2.17</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">2.18</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">2.21</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">2.15</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">2.29</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">2.38</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">2.20</span><span class="p">}</span>
+
+<span class="n">_pK2</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">9.87</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">10.78</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">9.60</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">9.67</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">9.24</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">9.60</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">8.97</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">9.76</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">8.90</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">9.60</span><span class="p">,</span>
+        <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">9.21</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">9.09</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">10.6</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">9.13</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">9.09</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">9.15</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">9.12</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">9.74</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">9.39</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">9.11</span><span class="p">}</span>
+
+<span class="n">_pI</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">6.11</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">5.02</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">2.98</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">3.08</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">5.91</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">6.06</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">7.64</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">6.04</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">9.47</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">6.04</span><span class="p">,</span>
+       <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">5.74</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">10.76</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">6.30</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">5.65</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">10.76</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">5.68</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">5.60</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">6.02</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">5.88</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">5.63</span><span class="p">}</span>
+
+
+<span class="c1">#############################################################################################</span>
+
+<span class="k">def</span> <span class="nf">_mean</span><span class="p">(</span><span class="n">listvalue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    The mean value of the list data.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=_mean(listvalue)</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">listvalue</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">listvalue</span><span class="p">)</span>
+
+
+<span class="c1">##############################################################################################</span>
+<span class="k">def</span> <span class="nf">_std</span><span class="p">(</span><span class="n">listvalue</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    The standard deviation of the list data.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=_std(listvalue)</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">_mean</span><span class="p">(</span><span class="n">listvalue</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">[</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">mean</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">listvalue</span><span class="p">]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listvalue</span><span class="p">)</span> <span class="o">-</span> <span class="n">ddof</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="c1">##############################################################################################</span>
+<div class="viewcode-block" id="NormalizeEachAAP"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.NormalizeEachAAP">[docs]</a><span class="k">def</span> <span class="nf">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    All of the amino acid indices are centralized and</span>
+
+<span class="sd">    standardized before the calculation.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=NormalizeEachAAP(AAP)</span>
+
+<span class="sd">    Input: AAP is a dict form containing the properties of 20 amino acids.</span>
+
+<span class="sd">    Output: result is the a dict form containing the normalized properties</span>
+
+<span class="sd">    of 20 amino acids.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">AAP</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s1">&#39;You can not input the correct number of properities of Amino acids!&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">AAP</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">_mean</span><span class="p">(</span><span class="n">AAP</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">/</span> <span class="n">_std</span><span class="p">(</span><span class="n">AAP</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<span class="c1">#############################################################################################</span>
+<span class="c1">##################################Type I descriptors#########################################</span>
+<span class="c1">####################### Pseudo-Amino Acid Composition descriptors############################</span>
+<span class="c1">#############################################################################################</span>
+<span class="c1">#############################################################################################</span>
+<span class="k">def</span> <span class="nf">_GetCorrelationFunction</span><span class="p">(</span><span class="n">Ri</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="n">Rj</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[</span><span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="n">_hydrophilicity</span><span class="p">,</span> <span class="n">_residuemass</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Computing the correlation between two given amino acids using the above three</span>
+
+<span class="sd">    properties.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=_GetCorrelationFunction(Ri,Rj)</span>
+
+<span class="sd">    Input: Ri and Rj are the amino acids, respectively.</span>
+
+<span class="sd">    Output: result is the correlation value between two amino acids.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hydrophobicity</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">hydrophilicity</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">residuemass</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">theta1</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">Hydrophobicity</span><span class="p">[</span><span class="n">Ri</span><span class="p">]</span> <span class="o">-</span> <span class="n">Hydrophobicity</span><span class="p">[</span><span class="n">Rj</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">theta2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">hydrophilicity</span><span class="p">[</span><span class="n">Ri</span><span class="p">]</span> <span class="o">-</span> <span class="n">hydrophilicity</span><span class="p">[</span><span class="n">Rj</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">theta3</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">residuemass</span><span class="p">[</span><span class="n">Ri</span><span class="p">]</span> <span class="o">-</span> <span class="n">residuemass</span><span class="p">[</span><span class="n">Rj</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span class="n">theta1</span> <span class="o">+</span> <span class="n">theta2</span> <span class="o">+</span> <span class="n">theta3</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">theta</span>
+
+
+<span class="c1">#############################################################################################</span>
+
+<span class="k">def</span> <span class="nf">_GetSequenceOrderCorrelationFactor</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Computing the Sequence order correlation factor with gap equal to k based on</span>
+
+<span class="sd">    [_Hydrophobicity,_hydrophilicity,_residuemass].</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=_GetSequenceOrderCorrelationFactor(protein,k)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    k is the gap.</span>
+
+<span class="sd">    Output: result is the correlation factor value with the gap equal to k.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">LengthSequence</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">LengthSequence</span> <span class="o">-</span> <span class="n">k</span><span class="p">):</span>
+        <span class="n">AA1</span> <span class="o">=</span> <span class="n">ProteinSequence</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">AA2</span> <span class="o">=</span> <span class="n">ProteinSequence</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_GetCorrelationFunction</span><span class="p">(</span><span class="n">AA1</span><span class="p">,</span> <span class="n">AA2</span><span class="p">))</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">LengthSequence</span> <span class="o">-</span> <span class="n">k</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="c1">#############################################################################################</span>
+
+<div class="viewcode-block" id="GetAAComposition"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetAAComposition">[docs]</a><span class="k">def</span> <span class="nf">GetAAComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Calculate the composition of Amino acids</span>
+
+<span class="sd">    for a given protein sequence.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateAAComposition(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing the composition of</span>
+
+<span class="sd">    20 amino acids.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">LengthSequence</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">AALetter</span><span class="p">:</span>
+        <span class="n">Result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">/</span> <span class="n">LengthSequence</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<span class="k">def</span> <span class="nf">_GetPseudoAAC1</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    Computing the first 20 of type I pseudo-amino acid compostion descriptors based on</span>
+
+<span class="sd">    [_Hydrophobicity,_hydrophilicity,_residuemass].</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rightpart</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lamda</span><span class="p">):</span>
+        <span class="n">rightpart</span> <span class="o">=</span> <span class="n">rightpart</span> <span class="o">+</span> <span class="n">_GetSequenceOrderCorrelationFactor</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">AAC</span> <span class="o">=</span> <span class="n">GetAAComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">rightpart</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">AALetter</span><span class="p">):</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;PAAC&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">AAC</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">temp</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="c1">#############################################################################################</span>
+<span class="k">def</span> <span class="nf">_GetPseudoAAC2</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Computing the last lamda of type I pseudo-amino acid compostion descriptors based on</span>
+
+<span class="sd">    [_Hydrophobicity,_hydrophilicity,_residuemass].</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rightpart</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lamda</span><span class="p">):</span>
+        <span class="n">rightpart</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_GetSequenceOrderCorrelationFactor</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rightpart</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span> <span class="o">+</span> <span class="n">lamda</span><span class="p">):</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;PAAC&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">weight</span> <span class="o">*</span> <span class="n">rightpart</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">20</span><span class="p">]</span> <span class="o">/</span> <span class="n">temp</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="c1">#############################################################################################</span>
+
+<span class="k">def</span> <span class="nf">_GetPseudoAAC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    Computing all of type I pseudo-amino acid compostion descriptors based on three given</span>
+
+<span class="sd">    properties. Note that the number of PAAC strongly depends on the lamda value. if lamda</span>
+
+<span class="sd">    = 20, we can obtain 20+20=40 PAAC descriptors. The size of these values depends on the</span>
+
+<span class="sd">    choice of lamda and weight simultaneously.</span>
+
+<span class="sd">    AAP=[_Hydrophobicity,_hydrophilicity,_residuemass]</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=_GetAPseudoAAC(protein,lamda,weight)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    lamda factor reflects the rank of correlation and is a non-Negative integer, such as 15.</span>
+
+<span class="sd">    Note that (1)lamda should NOT be larger than the length of input protein sequence;</span>
+
+<span class="sd">    (2) lamda must be non-Negative integer, such as 0, 1, 2, ...; (3) when lamda =0, the</span>
+
+<span class="sd">    output of PseAA server is the 20-D amino acid composition.</span>
+
+<span class="sd">    weight factor is designed for the users to put weight on the additional PseAA components</span>
+
+<span class="sd">    with respect to the conventional AA components. The user can select any value within the</span>
+
+<span class="sd">    region from 0.05 to 0.7 for the weight factor.</span>
+
+<span class="sd">    Output: result is a dict form containing calculated 20+lamda PAAC descriptors.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_GetPseudoAAC1</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_GetPseudoAAC2</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="c1">#############################################################################################</span>
+<span class="c1">##################################Type II descriptors########################################</span>
+<span class="c1">###############Amphiphilic Pseudo-Amino Acid Composition descriptors#########################</span>
+<span class="c1">#############################################################################################</span>
+<span class="c1">#############################################################################################</span>
+<span class="k">def</span> <span class="nf">_GetCorrelationFunctionForAPAAC</span><span class="p">(</span><span class="n">Ri</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="n">Rj</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[</span><span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="n">_hydrophilicity</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Computing the correlation between two given amino acids using the above two</span>
+
+<span class="sd">    properties for APAAC (type II PseAAC).</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=_GetCorrelationFunctionForAPAAC(Ri,Rj)</span>
+
+<span class="sd">    Input: Ri and Rj are the amino acids, respectively.</span>
+
+<span class="sd">    Output: result is the correlation value between two amino acids.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hydrophobicity</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">hydrophilicity</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">theta1</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Hydrophobicity</span><span class="p">[</span><span class="n">Ri</span><span class="p">]</span> <span class="o">*</span> <span class="n">Hydrophobicity</span><span class="p">[</span><span class="n">Rj</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">theta2</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">hydrophilicity</span><span class="p">[</span><span class="n">Ri</span><span class="p">]</span> <span class="o">*</span> <span class="n">hydrophilicity</span><span class="p">[</span><span class="n">Rj</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span>
+
+
+<span class="c1">#############################################################################################</span>
+<div class="viewcode-block" id="GetSequenceOrderCorrelationFactorForAPAAC"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetSequenceOrderCorrelationFactorForAPAAC">[docs]</a><span class="k">def</span> <span class="nf">GetSequenceOrderCorrelationFactorForAPAAC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Computing the Sequence order correlation factor with gap equal to k based on</span>
+
+<span class="sd">    [_Hydrophobicity,_hydrophilicity] for APAAC (type II PseAAC) .</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=GetSequenceOrderCorrelationFactorForAPAAC(protein,k)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    k is the gap.</span>
+
+<span class="sd">    Output: result is the correlation factor value with the gap equal to k.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">LengthSequence</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    <span class="n">resHydrophobicity</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">reshydrophilicity</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">LengthSequence</span> <span class="o">-</span> <span class="n">k</span><span class="p">):</span>
+        <span class="n">AA1</span> <span class="o">=</span> <span class="n">ProteinSequence</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">AA2</span> <span class="o">=</span> <span class="n">ProteinSequence</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">_GetCorrelationFunctionForAPAAC</span><span class="p">(</span><span class="n">AA1</span><span class="p">,</span> <span class="n">AA2</span><span class="p">)</span>
+        <span class="n">resHydrophobicity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">reshydrophilicity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">resHydrophobicity</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">LengthSequence</span> <span class="o">-</span> <span class="n">k</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">reshydrophilicity</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">LengthSequence</span> <span class="o">-</span> <span class="n">k</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<div class="viewcode-block" id="GetAPseudoAAC1"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetAPseudoAAC1">[docs]</a><span class="k">def</span> <span class="nf">GetAPseudoAAC1</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Computing the first 20 of type II pseudo-amino acid compostion descriptors based on</span>
+
+<span class="sd">    [_Hydrophobicity,_hydrophilicity].</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rightpart</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lamda</span><span class="p">):</span>
+        <span class="n">rightpart</span> <span class="o">=</span> <span class="n">rightpart</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">GetSequenceOrderCorrelationFactorForAPAAC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">AAC</span> <span class="o">=</span> <span class="n">GetAAComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">rightpart</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">AALetter</span><span class="p">):</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;APAAC&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">AAC</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">temp</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<div class="viewcode-block" id="GetAPseudoAAC2"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetAPseudoAAC2">[docs]</a><span class="k">def</span> <span class="nf">GetAPseudoAAC2</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    Computing the last lamda of type II pseudo-amino acid compostion descriptors based on</span>
+
+<span class="sd">    [_Hydrophobicity,_hydrophilicity].</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rightpart</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lamda</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">GetSequenceOrderCorrelationFactorForAPAAC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">rightpart</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">rightpart</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rightpart</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">lamda</span><span class="p">):</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;PAAC&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">weight</span> <span class="o">*</span> <span class="n">rightpart</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">20</span><span class="p">]</span> <span class="o">/</span> <span class="n">temp</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<div class="viewcode-block" id="GetAPseudoAAC"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetAPseudoAAC">[docs]</a><span class="k">def</span> <span class="nf">GetAPseudoAAC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    Computing all of type II pseudo-amino acid compostion descriptors based on the given</span>
+
+<span class="sd">    properties. Note that the number of PAAC strongly depends on the lamda value. if lamda</span>
+
+<span class="sd">    = 20, we can obtain 20+20=40 PAAC descriptors. The size of these values depends on the</span>
+
+<span class="sd">    choice of lamda and weight simultaneously.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=GetAPseudoAAC(protein,lamda,weight)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    lamda factor reflects the rank of correlation and is a non-Negative integer, such as 15.</span>
+
+<span class="sd">    Note that (1)lamda should NOT be larger than the length of input protein sequence;</span>
+
+<span class="sd">    (2) lamda must be non-Negative integer, such as 0, 1, 2, ...; (3) when lamda =0, the</span>
+
+<span class="sd">    output of PseAA server is the 20-D amino acid composition.</span>
+
+<span class="sd">    weight factor is designed for the users to put weight on the additional PseAA components</span>
+
+<span class="sd">    with respect to the conventional AA components. The user can select any value within the</span>
+
+<span class="sd">    region from 0.05 to 0.7 for the weight factor.</span>
+
+<span class="sd">    Output: result is a dict form containing calculated 20+lamda PAAC descriptors.</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">GetAPseudoAAC1</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">GetAPseudoAAC2</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<span class="c1">#############################################################################################</span>
+<span class="c1">##################################Type I descriptors#########################################</span>
+<span class="c1">####################### Pseudo-Amino Acid Composition descriptors############################</span>
+<span class="c1">#############################based on different properties###################################</span>
+<span class="c1">#############################################################################################</span>
+<span class="c1">#############################################################################################</span>
+<div class="viewcode-block" id="GetCorrelationFunction"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetCorrelationFunction">[docs]</a><span class="k">def</span> <span class="nf">GetCorrelationFunction</span><span class="p">(</span><span class="n">Ri</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="n">Rj</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Computing the correlation between two given amino acids using the given</span>
+
+<span class="sd">    properties.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=GetCorrelationFunction(Ri,Rj,AAP)</span>
+
+<span class="sd">    Input: Ri and Rj are the amino acids, respectively.</span>
+
+<span class="sd">    AAP is a list form containing the properties, each of which is a dict form.</span>
+
+<span class="sd">    Output: result is the correlation value between two amino acids.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">NumAAP</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">AAP</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NumAAP</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">Ri</span><span class="p">]</span> <span class="o">-</span> <span class="n">temp</span><span class="p">[</span><span class="n">Rj</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="n">NumAAP</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<div class="viewcode-block" id="GetSequenceOrderCorrelationFactor"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetSequenceOrderCorrelationFactor">[docs]</a><span class="k">def</span> <span class="nf">GetSequenceOrderCorrelationFactor</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    Computing the Sequence order correlation factor with gap equal to k based on</span>
+
+<span class="sd">    the given properities.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=GetSequenceOrderCorrelationFactor(protein,k,AAP)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    k is the gap.</span>
+
+<span class="sd">    AAP is a list form containing the properties, each of which is a dict form.</span>
+
+<span class="sd">    Output: result is the correlation factor value with the gap equal to k.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">LengthSequence</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">LengthSequence</span> <span class="o">-</span> <span class="n">k</span><span class="p">):</span>
+        <span class="n">AA1</span> <span class="o">=</span> <span class="n">ProteinSequence</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">AA2</span> <span class="o">=</span> <span class="n">ProteinSequence</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GetCorrelationFunction</span><span class="p">(</span><span class="n">AA1</span><span class="p">,</span> <span class="n">AA2</span><span class="p">,</span> <span class="n">AAP</span><span class="p">))</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">LengthSequence</span> <span class="o">-</span> <span class="n">k</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<div class="viewcode-block" id="GetPseudoAAC1"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetPseudoAAC1">[docs]</a><span class="k">def</span> <span class="nf">GetPseudoAAC1</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    Computing the first 20 of type I pseudo-amino acid compostion descriptors based on the given</span>
+
+<span class="sd">    properties.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rightpart</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lamda</span><span class="p">):</span>
+        <span class="n">rightpart</span> <span class="o">=</span> <span class="n">rightpart</span> <span class="o">+</span> <span class="n">GetSequenceOrderCorrelationFactor</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">AAP</span><span class="p">)</span>
+    <span class="n">AAC</span> <span class="o">=</span> <span class="n">GetAAComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">rightpart</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">AALetter</span><span class="p">):</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;PAAC&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">AAC</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">temp</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+<div class="viewcode-block" id="GetPseudoAAC2"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetPseudoAAC2">[docs]</a><span class="k">def</span> <span class="nf">GetPseudoAAC2</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    Computing the last lamda of type I pseudo-amino acid compostion descriptors based on the given</span>
+
+<span class="sd">    properties.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rightpart</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lamda</span><span class="p">):</span>
+        <span class="n">rightpart</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GetSequenceOrderCorrelationFactor</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">AAP</span><span class="p">))</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rightpart</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span> <span class="o">+</span> <span class="n">lamda</span><span class="p">):</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;PAAC&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">weight</span> <span class="o">*</span> <span class="n">rightpart</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">20</span><span class="p">]</span> <span class="o">/</span> <span class="n">temp</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+
+<div class="viewcode-block" id="GetPseudoAAC"><a class="viewcode-back" href="../reference/PseudoAAC.html#PseudoAAC.GetPseudoAAC">[docs]</a><span class="k">def</span> <span class="nf">GetPseudoAAC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #######################################################################################</span>
+<span class="sd">    Computing all of type I pseudo-amino acid compostion descriptors based on the given</span>
+
+<span class="sd">    properties. Note that the number of PAAC strongly depends on the lamda value. if lamda</span>
+
+<span class="sd">    = 20, we can obtain 20+20=40 PAAC descriptors. The size of these values depends on the</span>
+
+<span class="sd">    choice of lamda and weight simultaneously. You must specify some properties into AAP.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=GetPseudoAAC(protein,lamda,weight)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    lamda factor reflects the rank of correlation and is a non-Negative integer, such as 15.</span>
+
+<span class="sd">    Note that (1)lamda should NOT be larger than the length of input protein sequence;</span>
+
+<span class="sd">    (2) lamda must be non-Negative integer, such as 0, 1, 2, ...; (3) when lamda =0, the</span>
+
+<span class="sd">    output of PseAA server is the 20-D amino acid composition.</span>
+
+<span class="sd">    weight factor is designed for the users to put weight on the additional PseAA components</span>
+
+<span class="sd">    with respect to the conventional AA components. The user can select any value within the</span>
+
+<span class="sd">    region from 0.05 to 0.7 for the weight factor.</span>
+
+<span class="sd">    AAP is a list form containing the properties, each of which is a dict form.</span>
+
+<span class="sd">    Output: result is a dict form containing calculated 20+lamda PAAC descriptors.</span>
+<span class="sd">    ########################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">GetPseudoAAC1</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">AAP</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">GetPseudoAAC2</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">AAP</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="c1">#############################################################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">string</span>
+
+    <span class="n">protein</span> <span class="o">=</span> <span class="s2">&quot;MTDRARLRLHDTAAGVVRDFVPLRPGHVSIYLCGATVQGLPHIGHVRSGVAFDILRRWLL</span><span class="se">\</span>
+<span class="s2">ARGYDVAFIRNVTDIEDKILAKAAAAGRPWWEWAATHERAFTAAYDALDVLPPSAEPRAT</span><span class="se">\</span>
+<span class="s2">GHITQMIEMIERLIQAGHAYTGGGDVYFDVLSYPEYGQLSGHKIDDVHQGEGVAAGKRDQ</span><span class="se">\</span>
+<span class="s2">RDFTLWKGEKPGEPSWPTPWGRGRPGWHLECSAMARSYLGPEFDIHCGGMDLVFPHHENE</span><span class="se">\</span>
+<span class="s2">IAQSRAAGDGFARYWLHNGWVTMGGEKMSKSLGNVLSMPAMLQRVRPAELRYYLGSAHYR</span><span class="se">\</span>
+<span class="s2">SMLEFSETAMQDAVKAYVGLEDFLHRVRTRVGAVCPGDPTPRFAEALDDDLSVPIALAEI</span><span class="se">\</span>
+<span class="s2">HHVRAEGNRALDAGDHDGALRSASAIRAMMGILGCDPLDQRWESRDETSAALAAVDVLVQ</span><span class="se">\</span>
+<span class="s2">AELQNREKAREQRNWALADEIRGRLKRAGIEVTDTADGPQWSLLGGDTK&quot;</span>
+    <span class="n">protein</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+    <span class="c1">#	temp=_GetCorrelationFunction(&#39;S&#39;,&#39;D&#39;)</span>
+    <span class="c1">#	print temp</span>
+    <span class="c1">#</span>
+    <span class="c1">#	print _GetSequenceOrderCorrelationFactor(protein,k=4)</span>
+    <span class="c1">#</span>
+    <span class="c1">#	PAAC1=_GetPseudoAAC1(protein,lamda=4)</span>
+    <span class="c1">#	for i in PAAC1:</span>
+    <span class="c1">#		print i, PAAC1[i]</span>
+    <span class="c1">#	PAAC2=_GetPseudoAAC2(protein,lamda=4)</span>
+    <span class="c1">#	for i in PAAC2:</span>
+    <span class="c1">#		print i, PAAC2[i]</span>
+    <span class="c1">#	print len(PAAC1)</span>
+    <span class="c1">#	print _GetSequenceOrderCorrelationFactorForAPAAC(protein,k=1)</span>
+    <span class="c1">#	APAAC1=_GetAPseudoAAC1(protein,lamda=4)</span>
+    <span class="c1">#	for i in APAAC1:</span>
+    <span class="c1">#		print i, APAAC1[i]</span>
+
+    <span class="c1">#	APAAC2=GetAPseudoAAC2(protein,lamda=4)</span>
+    <span class="c1">#	for i in APAAC2:</span>
+    <span class="c1">#		print i, APAAC2[i]</span>
+    <span class="c1">#	APAAC=GetAPseudoAAC(protein,lamda=4)</span>
+    <span class="c1">#</span>
+    <span class="c1">#	for i in APAAC:</span>
+    <span class="c1">#		print i, APAAC[i]</span>
+
+    <span class="n">PAAC</span> <span class="o">=</span> <span class="n">GetPseudoAAC</span><span class="p">(</span><span class="n">protein</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[</span><span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="n">_hydrophilicity</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">PAAC</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="n">i</span><span class="p">,</span> <span class="n">PAAC</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

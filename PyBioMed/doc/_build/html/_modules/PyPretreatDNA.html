@@ -1,0 +1,536 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyPretreatDNA &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyPretreatDNA</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Wed May 18 14:06:37 2016</span>
+
+<span class="sd">@author: yzj</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">ALPHABET</span> <span class="o">=</span> <span class="s1">&#39;ACGT&#39;</span>
+
+
+<span class="sd">&quot;&quot;&quot;Used for process original data.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Seq"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.Seq">[docs]</a><span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">no</span> <span class="o">=</span> <span class="n">no</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Output seq when &#39;print&#39; method is called.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="s2">No:</span><span class="si">%s</span><span class="se">\t</span><span class="s2">length:</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IsUnderAlphabet"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.IsUnderAlphabet">[docs]</a><span class="k">def</span> <span class="nf">IsUnderAlphabet</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Judge the string is within the scope of the alphabet or not.</span>
+
+<span class="sd">    :param s: The string.</span>
+<span class="sd">    :param alphabet: alphabet.</span>
+
+<span class="sd">    Return True or the error character.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">alphabet</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">e</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="IsFasta"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.IsFasta">[docs]</a><span class="k">def</span> <span class="nf">IsFasta</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Judge the Seq object is in FASTA format.</span>
+<span class="sd">    Two situation:</span>
+<span class="sd">    1. No seq name.</span>
+<span class="sd">    2. Seq name is illegal.</span>
+<span class="sd">    3. No sequence.</span>
+
+<span class="sd">    :param seq: Seq object.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">seq</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+        <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Error, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">no</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has no sequence name.&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="o">-</span><span class="mi">1</span> <span class="o">!=</span> <span class="n">seq</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">):</span>
+        <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Error, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">no</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; name has &gt; character.&#39;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">seq</span><span class="o">.</span><span class="n">length</span><span class="p">:</span>
+        <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Error, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">no</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; is null.&#39;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="ReadFasta"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.ReadFasta">[docs]</a><span class="k">def</span> <span class="nf">ReadFasta</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Read a fasta file.</span>
+
+<span class="sd">    :param f: HANDLE to input. e.g. sys.stdin, or open(&lt;file&gt;)</span>
+
+<span class="sd">    Return Seq obj list.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">seq_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="k">if</span> <span class="s1">&#39;&gt;&#39;</span> <span class="o">==</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">!=</span> <span class="n">count</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">count</span> <span class="ow">and</span> <span class="n">seq</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">IsFasta</span><span class="p">(</span><span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">)):</span>
+                    <span class="n">seq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seq</span> <span class="o">+=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">IsFasta</span><span class="p">(</span><span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">)):</span>
+        <span class="n">seq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">seq_list</span></div>
+
+
+<div class="viewcode-block" id="ReadFastaYield"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.ReadFastaYield">[docs]</a><span class="k">def</span> <span class="nf">ReadFastaYield</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Yields a Seq object.</span>
+
+<span class="sd">    :param f: HANDLE to input. e.g. sys.stdin, or open(&lt;file&gt;)</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="k">if</span> <span class="s1">&#39;&gt;&#39;</span> <span class="o">==</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">!=</span> <span class="n">count</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">count</span> <span class="ow">and</span> <span class="n">seq</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">IsFasta</span><span class="p">(</span><span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">)):</span>
+                    <span class="k">yield</span> <span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seq</span> <span class="o">+=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">IsFasta</span><span class="p">(</span><span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">)):</span>
+        <span class="k">yield</span> <span class="n">Seq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ReadFastaCheckDna"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.ReadFastaCheckDna">[docs]</a><span class="k">def</span> <span class="nf">ReadFastaCheckDna</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Read the fasta file, and check its legality.</span>
+
+<span class="sd">    :param f: HANDLE to input. e.g. sys.stdin, or open(&lt;file&gt;)</span>
+
+<span class="sd">    Return the seq list.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">seq_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ReadFastaYield</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="c1"># print e</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">IsUnderAlphabet</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">ALPHABET</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="p">:</span>
+            <span class="n">seq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Sorry, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">no</span><span class="p">)</span> \
+                         <span class="o">+</span> <span class="s1">&#39; has character &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.(The character must be A or C or G or T)&#39;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">seq_list</span></div>
+
+
+<div class="viewcode-block" id="GetSequenceCheckDna"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.GetSequenceCheckDna">[docs]</a><span class="k">def</span> <span class="nf">GetSequenceCheckDna</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Read the fasta file.</span>
+
+<span class="sd">    Input: f: HANDLE to input. e.g. sys.stdin, or open(&lt;file&gt;)</span>
+
+<span class="sd">    Return the sequence list.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sequence_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ReadFastaYield</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="c1"># print e</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">IsUnderAlphabet</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">ALPHABET</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Sorry, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">no</span><span class="p">)</span> \
+                         <span class="o">+</span> <span class="s1">&#39; has character &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.(The character must be A, C, G or T)&#39;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sequence_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sequence_list</span></div>
+
+
+<div class="viewcode-block" id="IsSequenceList"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.IsSequenceList">[docs]</a><span class="k">def</span> <span class="nf">IsSequenceList</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Judge the sequence list is within the scope of alphabet and </span>
+<span class="sd">    change the lowercase to capital.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">new_sequence_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">sequence_list</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">IsUnderAlphabet</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">ALPHABET</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Sorry, sequence &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> \
+                         <span class="o">+</span> <span class="s1">&#39; has illegal character &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.(The character must be A, C, G or T)&#39;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_sequence_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_sequence_list</span></div>
+
+
+<div class="viewcode-block" id="GetData"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.GetData">[docs]</a><span class="k">def</span> <span class="nf">GetData</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Get sequence data from file or list with check.</span>
+
+<span class="sd">    :param input_data: type file or list</span>
+<span class="sd">    :param desc: with this option, the return value will be a Seq object list(it only works in file object).</span>
+<span class="sd">    :return: sequence data or shutdown.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">desc</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">GetSequenceCheckDna</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ReadFastaCheckDna</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">input_data</span> <span class="o">=</span> <span class="n">IsSequenceList</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">input_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">input_data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Sorry, the parameter in get_data method must be list or file type.&#39;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<span class="sd">&quot;&quot;&quot;Some basic function for generate feature vector.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Frequency"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.Frequency">[docs]</a><span class="k">def</span> <span class="nf">Frequency</span><span class="p">(</span><span class="n">tol_str</span><span class="p">,</span> <span class="n">tar_str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Generate the frequency of tar_str in tol_str.</span>
+
+<span class="sd">    :param tol_str: mother string.</span>
+<span class="sd">    :param tar_str: substring.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">tar_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="n">len_tol_str</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tol_str</span><span class="p">)</span>
+    <span class="n">len_tar_str</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tar_str</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len_tol_str</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">len_tar_str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tol_str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">tar_str</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">len_tar_str</span><span class="p">:</span>
+                <span class="n">tar_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">tar_count</span></div>
+
+
+<div class="viewcode-block" id="WriteLibsvm"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.WriteLibsvm">[docs]</a><span class="k">def</span> <span class="nf">WriteLibsvm</span><span class="p">(</span><span class="n">vector_list</span><span class="p">,</span> <span class="n">label_list</span><span class="p">,</span> <span class="n">write_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Write the vector into disk in libSVM format.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">len_vector_list</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vector_list</span><span class="p">)</span>
+    <span class="n">len_label_list</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_list</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">len_vector_list</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;The vector is none.&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">len_label_list</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;The label is none.&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">len_vector_list</span> <span class="o">!=</span> <span class="n">len_label_list</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;The length of vector and label is different.&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">write_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">len_vector</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vector_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_vector_list</span><span class="p">):</span>
+            <span class="n">temp_write</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">len_vector</span><span class="p">):</span>
+                <span class="n">temp_write</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">vector_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">temp_write</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GeneratePhycheValue"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.GeneratePhycheValue">[docs]</a><span class="k">def</span> <span class="nf">GeneratePhycheValue</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">all_property</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extra_phyche_index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Combine the user selected phyche_list, is_all_property and </span>
+<span class="sd">    extra_phyche_index to a new standard phyche_value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">phyche_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">extra_phyche_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">extra_phyche_index</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">diphyche_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Base stacking&#39;</span><span class="p">,</span> <span class="s1">&#39;Protein induced deformability&#39;</span><span class="p">,</span> <span class="s1">&#39;B-DNA twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Dinucleotide GC Content&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;A-philicity&#39;</span><span class="p">,</span> <span class="s1">&#39;Propeller twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Duplex stability:(freeenergy)&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Duplex tability(disruptenergy)&#39;</span><span class="p">,</span> <span class="s1">&#39;DNA denaturation&#39;</span><span class="p">,</span> <span class="s1">&#39;Bending stiffness&#39;</span><span class="p">,</span> <span class="s1">&#39;Protein DNA twist&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Stabilising energy of Z-DNA&#39;</span><span class="p">,</span> <span class="s1">&#39;Aida_BA_transition&#39;</span><span class="p">,</span> <span class="s1">&#39;Breslauer_dG&#39;</span><span class="p">,</span> <span class="s1">&#39;Breslauer_dH&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Breslauer_dS&#39;</span><span class="p">,</span> <span class="s1">&#39;Electron_interaction&#39;</span><span class="p">,</span> <span class="s1">&#39;Hartman_trans_free_energy&#39;</span><span class="p">,</span> <span class="s1">&#39;Helix-Coil_transition&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Ivanov_BA_transition&#39;</span><span class="p">,</span> <span class="s1">&#39;Lisser_BZ_transition&#39;</span><span class="p">,</span> <span class="s1">&#39;Polar_interaction&#39;</span><span class="p">,</span> <span class="s1">&#39;SantaLucia_dG&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;SantaLucia_dH&#39;</span><span class="p">,</span> <span class="s1">&#39;SantaLucia_dS&#39;</span><span class="p">,</span> <span class="s1">&#39;Sarai_flexibility&#39;</span><span class="p">,</span> <span class="s1">&#39;Stability&#39;</span><span class="p">,</span> <span class="s1">&#39;Stacking_energy&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Sugimoto_dG&#39;</span><span class="p">,</span> <span class="s1">&#39;Sugimoto_dH&#39;</span><span class="p">,</span> <span class="s1">&#39;Sugimoto_dS&#39;</span><span class="p">,</span> <span class="s1">&#39;Watson-Crick_interaction&#39;</span><span class="p">,</span> <span class="s1">&#39;Twist&#39;</span><span class="p">,</span> <span class="s1">&#39;Tilt&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Roll&#39;</span><span class="p">,</span> <span class="s1">&#39;Shift&#39;</span><span class="p">,</span> <span class="s1">&#39;Slide&#39;</span><span class="p">,</span> <span class="s1">&#39;Rise&#39;</span><span class="p">]</span>
+    <span class="n">triphyche_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Bendability (DNAse)&#39;</span><span class="p">,</span> <span class="s1">&#39;Bendability (consensus)&#39;</span><span class="p">,</span> <span class="s1">&#39;Trinucleotide GC Content&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;Nucleosome positioning&#39;</span><span class="p">,</span> <span class="s1">&#39;Consensus_roll&#39;</span><span class="p">,</span> <span class="s1">&#39;Consensus-Rigid&#39;</span><span class="p">,</span> <span class="s1">&#39;Dnase I-Rigid&#39;</span><span class="p">,</span> <span class="s1">&#39;MW-Daltons&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;MW-kg&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome-Rigid&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Set and check physicochemical properties.</span>
+    <span class="k">if</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">all_property</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">diphyche_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">phyche_index</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">diphyche_list</span><span class="p">:</span>
+                    <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Sorry, the physicochemical properties &#39;</span> <span class="o">+</span> <span class="n">e</span> <span class="o">+</span> <span class="s1">&#39; is not exit.&#39;</span>
+                    <span class="kn">import</span> <span class="nn">sys</span>
+
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="mi">3</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">all_property</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">phyche_index</span> <span class="o">=</span> <span class="n">triphyche_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">phyche_index</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">triphyche_list</span><span class="p">:</span>
+                    <span class="n">error_info</span> <span class="o">=</span> <span class="s1">&#39;Sorry, the physicochemical properties &#39;</span> <span class="o">+</span> <span class="n">e</span> <span class="o">+</span> <span class="s1">&#39; is not exit.&#39;</span>
+                    <span class="kn">import</span> <span class="nn">sys</span>
+
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_info</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Generate phyche_value.</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenacutil</span> <span class="k">import</span> <span class="n">GetPhycheIndex</span><span class="p">,</span> <span class="n">ExtendPhycheIndex</span>
+
+    <span class="k">return</span> <span class="n">ExtendPhycheIndex</span><span class="p">(</span><span class="n">GetPhycheIndex</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">phyche_index</span><span class="p">),</span> <span class="n">extra_phyche_index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConvertPhycheIndexToDict"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.ConvertPhycheIndexToDict">[docs]</a><span class="k">def</span> <span class="nf">ConvertPhycheIndexToDict</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Convert phyche index from list to dict.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># for e in phyche_index:</span>
+    <span class="c1">#     print e</span>
+    <span class="n">len_index_value</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">len_index_value</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">**</span><span class="n">i</span><span class="p">:</span>
+            <span class="n">error_infor</span> <span class="o">=</span> <span class="s1">&#39;Sorry, the number of each index value is must be 4^k.&#39;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">error_infor</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">len_index_value</span> <span class="o">==</span> <span class="mi">4</span><span class="o">**</span><span class="n">i</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">break</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAnacutil</span> <span class="k">import</span> <span class="n">MakeKmerList</span>
+    <span class="n">kmer_list</span> <span class="o">=</span> <span class="n">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">ALPHABET</span><span class="p">)</span>
+    <span class="c1"># print kmer_list</span>
+    <span class="n">len_kmer</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">)</span>
+    <span class="n">phyche_index_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">kmer</span> <span class="ow">in</span> <span class="n">kmer_list</span><span class="p">:</span>
+        <span class="n">phyche_index_dict</span><span class="p">[</span><span class="n">kmer</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># print phyche_index_dict</span>
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">phyche_index</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_kmer</span><span class="p">):</span>
+        <span class="n">phyche_index_dict</span><span class="p">[</span><span class="n">kmer_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">phyche_index_dict</span></div>
+
+
+<div class="viewcode-block" id="StandardDeviation"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.StandardDeviation">[docs]</a><span class="k">def</span> <span class="nf">StandardDeviation</span><span class="p">(</span><span class="n">value_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Return standard deviation.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="nb">pow</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">value_list</span><span class="p">)</span>
+    <span class="n">average_value</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">value_list</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">e</span> <span class="o">-</span> <span class="n">average_value</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">value_list</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="NormalizeIndex"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.NormalizeIndex">[docs]</a><span class="k">def</span> <span class="nf">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span> <span class="n">is_convert_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Normalize the physicochemical index.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">normalize_phyche_value</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">phyche_value</span> <span class="ow">in</span> <span class="n">phyche_index</span><span class="p">:</span>
+        <span class="n">average_phyche_value</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">phyche_value</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">phyche_value</span><span class="p">)</span>
+        <span class="n">sd_phyche</span> <span class="o">=</span> <span class="n">StandardDeviation</span><span class="p">(</span><span class="n">phyche_value</span><span class="p">)</span>
+        <span class="n">normalize_phyche_value</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">round</span><span class="p">((</span><span class="n">e</span> <span class="o">-</span> <span class="n">average_phyche_value</span><span class="p">)</span> <span class="o">/</span> <span class="n">sd_phyche</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">phyche_value</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">is_convert_dict</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ConvertPhycheIndexToDict</span><span class="p">(</span><span class="n">normalize_phyche_value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">normalize_phyche_value</span></div>
+
+
+<div class="viewcode-block" id="DNAChecks"><a class="viewcode-back" href="../reference/PyPretreatDNA.html#PyPretreatDNA.DNAChecks">[docs]</a><span class="k">def</span> <span class="nf">DNAChecks</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ALPHABET</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">e</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+    
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">re</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">]</span>
+
+
+    <span class="n">phyche_index</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.019</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.918</span><span class="p">,</span> <span class="mf">0.488</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.070</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.579</span><span class="p">,</span> <span class="mf">0.488</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.654</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.455</span><span class="p">,</span><span class="o">-</span><span class="mf">0.070</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.918</span><span class="p">,</span> <span class="mf">1.603</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.654</span><span class="p">,</span> <span class="mf">0.567</span><span class="p">,</span> <span class="mf">1.019</span><span class="p">]]</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">NormalizeIndex</span><span class="p">(</span><span class="n">phyche_index</span><span class="p">,</span><span class="n">is_convert_dict</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

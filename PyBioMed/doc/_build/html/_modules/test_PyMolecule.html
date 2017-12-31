@@ -1,0 +1,400 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>test_PyMolecule &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for test_PyMolecule</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The script is used for testing.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.14</span>
+
+<span class="sd">Email: gadsby@163.com </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="test_pymolecule"><a class="viewcode-back" href="../reference/test_PyMolecule.html#test_PyMolecule.test_pymolecule">[docs]</a><span class="k">def</span> <span class="nf">test_pymolecule</span><span class="p">():</span>
+    
+    <span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+    <span class="kn">import</span> <span class="nn">pybel</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.AtomProperty</span> <span class="k">import</span> <span class="n">AtomProperty</span><span class="p">,</span> <span class="n">GetAbsoluteAtomicProperty</span><span class="p">,</span> <span class="n">GetRelativeAtomicProperty</span>
+    
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.estate</span> <span class="k">import</span> <span class="n">GetEstate</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.constitution</span> <span class="k">import</span> <span class="n">GetConstitutional</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.fingerprint</span> <span class="k">import</span> <span class="n">CalculateECFP4Fingerprint</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.connectivity</span> <span class="k">import</span> <span class="n">GetConnectivity</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.charge</span> <span class="k">import</span> <span class="n">GetCharge</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.bcut</span> <span class="k">import</span> <span class="n">GetBurden</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.basak</span> <span class="k">import</span> <span class="n">Getbasak</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.geary</span> <span class="k">import</span> <span class="n">GetGearyAuto</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.kappa</span> <span class="k">import</span> <span class="n">GetKappa</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.moe</span> <span class="k">import</span> <span class="n">GetMOE</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.molproperty</span> <span class="k">import</span> <span class="n">GetMolecularProperty</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.moran</span> <span class="k">import</span> <span class="n">GetMoranAuto</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.moreaubroto</span> <span class="k">import</span> <span class="n">GetMoreauBrotoAuto</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.topology</span> <span class="k">import</span> <span class="n">GetTopology</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.ghosecrippen</span> <span class="k">import</span> <span class="n">GhoseCrippenFingerprint</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.cats2d</span> <span class="k">import</span> <span class="n">CATS2D</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the AtomProperty module&#39;</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="n">AtomProperty</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span> <span class="n">j</span>
+    <span class="nb">print</span> <span class="n">GetAbsoluteAtomicProperty</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">,</span><span class="n">propertyname</span><span class="o">=</span><span class="s1">&#39;En&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">GetRelativeAtomicProperty</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">,</span><span class="n">propertyname</span><span class="o">=</span><span class="s1">&#39;En&#39;</span><span class="p">)</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># Getbasak</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the Getbasak module&#39;</span>
+    
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smi5</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">Getbasak</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">Getbasak</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># GetBurden, bcut model</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the bcut module&#39;</span>    
+        
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCOCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">,</span><span class="s1">&#39;C&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smi5</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>   
+        <span class="nb">print</span> <span class="n">GetBurden</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetBurden</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># GetCharge</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetCharge module&#39;</span>        
+        
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetCharge</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetCharge</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># GetConnectivity</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetConnectivity module&#39;</span>       
+        
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetConnectivity</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">GetConnectivity</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># GetConstitutional</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetConstitutional module&#39;</span>   
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetConstitutional</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetConstitutional</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># GetEstate</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetEstate module&#39;</span>   
+    
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;COCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCOCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+    <span class="c1">#        print &#39;\t&#39;,CalculateEstateFingerprint(m)</span>
+    <span class="c1">#        print &#39;\t&#39;,CalculateEstateValue(m)</span>
+    <span class="c1">#        print &#39;\t&#39;,CalculateMaxAtomTypeEState(m)</span>
+    <span class="c1">#        print &#39;\t&#39;, CalculateMinAtomTypeEState(m)</span>
+        
+        <span class="nb">print</span> <span class="n">GetEstate</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s2">&quot;fingerprint......&quot;</span>
+    
+    <span class="n">ms</span> <span class="o">=</span> <span class="p">[</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;CCOC=N&#39;</span><span class="p">),</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;NC1=NC(=CC=N1)N1C=CC2=C1C=C(O)C=C2&#39;</span><span class="p">)]</span>
+    <span class="n">m2</span> <span class="o">=</span> <span class="p">[</span><span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">&quot;smi&quot;</span><span class="p">,</span><span class="s1">&#39;CCOC=N&#39;</span><span class="p">),</span><span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">&quot;smi&quot;</span><span class="p">,</span><span class="s1">&#39;CCO&#39;</span><span class="p">)]</span>
+    <span class="n">res1</span><span class="o">=</span><span class="n">CalculateECFP4Fingerprint</span><span class="p">(</span><span class="n">ms</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span> <span class="n">res1</span>
+    <span class="n">res2</span><span class="o">=</span><span class="n">CalculateECFP4Fingerprint</span><span class="p">(</span><span class="n">ms</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span> <span class="n">res2</span>
+    <span class="c1">#    print CalculateSimilarityRdkit(res1[2],res2[2])</span>
+    <span class="c1">#    print CalculateSimilarityPybel(res1,res2)</span>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetGearyAuto module&#39;</span> 
+    
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;COCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCOCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+    <span class="c1">##        print &#39;\t&#39;,CalculateEstateFingerprint(m)</span>
+    <span class="c1">##        print &#39;\t&#39;,CalculateEstateValue(m)</span>
+    <span class="c1">##        print &#39;\t&#39;,CalculateMaxAtomTypeEState(m)</span>
+    <span class="c1">##        print &#39;\t&#39;, CalculateMinAtomTypeEState(m)</span>
+        
+        <span class="nb">print</span> <span class="n">GetGearyAuto</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetKappa module&#39;</span> 
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetKappa</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">GetKappa</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetMOE module&#39;</span> 
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetMOE</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetMOE</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetMolecularProperty module&#39;</span> 
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetMolecularProperty</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetMoranAuto module&#39;</span> 
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+    <span class="c1">##        print &#39;\t&#39;,CalculateEstateFingerprint(m)</span>
+    <span class="c1">##        print &#39;\t&#39;,CalculateEstateValue(m)</span>
+    <span class="c1">##        print &#39;\t&#39;,CalculateMaxAtomTypeEState(m)</span>
+    <span class="c1">##        print &#39;\t&#39;, CalculateMinAtomTypeEState(m)</span>
+        
+        <span class="nb">print</span> <span class="n">GetMoranAuto</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetMoreauBrotoAuto module&#39;</span> 
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+    <span class="c1">##        print &#39;\t&#39;,CalculateEstateFingerprint(m)</span>
+    <span class="c1">##        print &#39;\t&#39;,CalculateEstateValue(m)</span>
+    <span class="c1">##        print &#39;\t&#39;,CalculateMaxAtomTypeEState(m)</span>
+    <span class="c1">##        print &#39;\t&#39;, CalculateMinAtomTypeEState(m)</span>
+        
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetMoreauBrotoAuto</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the GetTopology module&#39;</span> 
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetTopology</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">GetTopology</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the CATS2D module&#39;</span> 
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-]&#39;</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">smis</span><span class="p">:</span> 
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cats</span> <span class="o">=</span> <span class="n">CATS2D</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">PathLength</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span><span class="n">scale</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">cats</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cats</span><span class="p">)</span>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the ghoseFP module&#39;</span> 
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-]&#39;</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">smis</span><span class="p">:</span> 
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">ghoseFP</span> <span class="o">=</span> <span class="n">GhoseCrippenFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ghoseFP</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ghoseFP</span><span class="p">)</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;testing the ghose_count module&#39;</span> 
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">smis</span><span class="p">:</span> 
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">ghose_count</span> <span class="o">=</span> <span class="n">GhoseCrippenFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ghose_count</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ghose_count</span><span class="p">)</span></div>
+    
+    <span class="c1">#==============================================================================</span>
+    <span class="c1"># </span>
+    <span class="c1">#==============================================================================</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_pymolecule</span><span class="p">()</span>
+
+
+
+
+
+
+
+
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

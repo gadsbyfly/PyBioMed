@@ -1,0 +1,509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyProtein &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyProtein</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A class used for computing different types of protein descriptors! </span>
+
+<span class="sd">You can freely use and distribute it. If you have any problem, </span>
+
+<span class="sd">you could contact with us timely.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">AAComposition</span> <span class="k">import</span> <span class="n">CalculateAAComposition</span><span class="p">,</span> <span class="n">CalculateDipeptideComposition</span><span class="p">,</span> <span class="n">GetSpectrumDict</span>
+
+<span class="kn">from</span> <span class="nn">Autocorrelation</span> <span class="k">import</span> <span class="n">CalculateNormalizedMoreauBrotoAutoTotal</span><span class="p">,</span> <span class="n">CalculateMoranAutoTotal</span><span class="p">,</span> <span class="n">CalculateGearyAutoTotal</span>
+
+<span class="kn">from</span> <span class="nn">Autocorrelation</span> <span class="k">import</span> <span class="n">CalculateEachGearyAuto</span><span class="p">,</span> <span class="n">CalculateEachMoranAuto</span><span class="p">,</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span>
+
+<span class="kn">from</span> <span class="nn">CTD</span> <span class="k">import</span> <span class="n">CalculateCTD</span>
+
+<span class="kn">from</span> <span class="nn">QuasiSequenceOrder</span> <span class="k">import</span> <span class="n">GetSequenceOrderCouplingNumberTotal</span><span class="p">,</span> <span class="n">GetQuasiSequenceOrder</span><span class="p">,</span> \
+    <span class="n">GetSequenceOrderCouplingNumberp</span><span class="p">,</span> <span class="n">GetQuasiSequenceOrderp</span>
+
+<span class="kn">from</span> <span class="nn">PseudoAAC</span> <span class="k">import</span> <span class="n">_GetPseudoAAC</span><span class="p">,</span> <span class="n">GetAPseudoAAC</span><span class="p">,</span> <span class="n">GetPseudoAAC</span>
+
+<span class="kn">from</span> <span class="nn">GetSubSeq</span> <span class="k">import</span> <span class="n">GetSubSequence</span>
+
+<span class="kn">from</span> <span class="nn">AAIndex</span> <span class="k">import</span> <span class="n">GetAAIndex1</span><span class="p">,</span> <span class="n">GetAAIndex23</span>
+
+<span class="kn">from</span> <span class="nn">ConjointTriad</span> <span class="k">import</span> <span class="n">CalculateConjointTriad</span>
+
+
+<div class="viewcode-block" id="PyProtein"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein">[docs]</a><span class="k">class</span> <span class="nc">PyProtein</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This GetProDes class aims at collecting all descriptor calcualtion modules into a simple class.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">AALetter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">]</span>
+
+    <span class="n">Version</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ProteinSequence</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        input a protein sequence</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s2">&quot;You must input a protein sequence when constructing a object. It is a string!&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span> <span class="o">=</span> <span class="n">ProteinSequence</span>
+
+<div class="viewcode-block" id="PyProtein.GetAAComp"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetAAComp">[docs]</a>    <span class="k">def</span> <span class="nf">GetAAComp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        amino acid compositon descriptors (20)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetAAComp()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateAAComposition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetDPComp"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetDPComp">[docs]</a>    <span class="k">def</span> <span class="nf">GetDPComp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        dipeptide composition descriptors (400)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetDPComp()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateDipeptideComposition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetTPComp"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetTPComp">[docs]</a>    <span class="k">def</span> <span class="nf">GetTPComp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        tri-peptide composition descriptors (8000)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetTPComp()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">GetSpectrumDict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetMoreauBrotoAuto"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetMoreauBrotoAuto">[docs]</a>    <span class="k">def</span> <span class="nf">GetMoreauBrotoAuto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Normalized Moreau-Broto autocorrelation descriptors (240)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetMoreauBrotoAuto()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateNormalizedMoreauBrotoAutoTotal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetMoranAuto"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetMoranAuto">[docs]</a>    <span class="k">def</span> <span class="nf">GetMoranAuto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moran autocorrelation descriptors (240)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetMoranAuto()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateMoranAutoTotal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetGearyAuto"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetGearyAuto">[docs]</a>    <span class="k">def</span> <span class="nf">GetGearyAuto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Geary autocorrelation descriptors (240)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetGearyAuto()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateGearyAutoTotal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetCTD"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetCTD">[docs]</a>    <span class="k">def</span> <span class="nf">GetCTD</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Composition Transition Distribution descriptors (147)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetCTD()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateCTD</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetPAAC"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetPAAC">[docs]</a>    <span class="k">def</span> <span class="nf">GetPAAC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Type I Pseudo amino acid composition descriptors (default is 30)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetPAAC(lamda=10,weight=0.05)</span>
+
+<span class="sd">        lamda factor reflects the rank of correlation and is a non-Negative integer, such as 15.</span>
+
+<span class="sd">        Note that (1)lamda should NOT be larger than the length of input protein sequence;</span>
+
+<span class="sd">        (2) lamda must be non-Negative integer, such as 0, 1, 2, ...; (3) when lamda =0, the</span>
+
+<span class="sd">        output of PseAA server is the 20-D amino acid composition.</span>
+
+<span class="sd">        weight factor is designed for the users to put weight on the additional PseAA components</span>
+
+<span class="sd">        with respect to the conventional AA components. The user can select any value within the</span>
+
+<span class="sd">        region from 0.05 to 0.7 for the weight factor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">_GetPseudoAAC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetPAACp"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetPAACp">[docs]</a>    <span class="k">def</span> <span class="nf">GetPAACp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Type I Pseudo amino acid composition descriptors for the given properties (default is 30)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetPAACp(lamda=10,weight=0.05,AAP=[])</span>
+
+<span class="sd">        lamda factor reflects the rank of correlation and is a non-Negative integer, such as 15.</span>
+
+<span class="sd">        Note that (1)lamda should NOT be larger than the length of input protein sequence;</span>
+
+<span class="sd">        (2) lamda must be non-Negative integer, such as 0, 1, 2, ...; (3) when lamda =0, the</span>
+
+<span class="sd">        output of PseAA server is the 20-D amino acid composition.</span>
+
+<span class="sd">        weight factor is designed for the users to put weight on the additional PseAA components</span>
+
+<span class="sd">        with respect to the conventional AA components. The user can select any value within the</span>
+
+<span class="sd">        region from 0.05 to 0.7 for the weight factor.</span>
+
+<span class="sd">        AAP is a list form containing the properties, each of which is a dict form.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">GetPseudoAAC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="n">AAP</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetAPAAC"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetAPAAC">[docs]</a>    <span class="k">def</span> <span class="nf">GetAPAAC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Amphiphilic (Type II) Pseudo amino acid composition descriptors</span>
+
+<span class="sd">        default is 30</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetAPAAC(lamda=10,weight=0.5)</span>
+
+<span class="sd">        lamda factor reflects the rank of correlation and is a non-Negative integer, such as 15.</span>
+
+<span class="sd">        Note that (1)lamda should NOT be larger than the length of input protein sequence;</span>
+
+<span class="sd">        (2) lamda must be non-Negative integer, such as 0, 1, 2, ...; (3) when lamda =0, the</span>
+
+<span class="sd">        output of PseAA server is the 20-D amino acid composition.</span>
+
+<span class="sd">        weight factor is designed for the users to put weight on the additional PseAA components</span>
+
+<span class="sd">        with respect to the conventional AA components. The user can select any value within the</span>
+
+<span class="sd">        region from 0.05 to 0.7 for the weight factor.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">GetAPseudoAAC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">lamda</span><span class="o">=</span><span class="n">lamda</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetSOCN"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetSOCN">[docs]</a>    <span class="k">def</span> <span class="nf">GetSOCN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="mi">45</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sequence order coupling numbers  default is 45</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetSOCN(maxlag=45)</span>
+
+<span class="sd">        maxlag is the maximum lag and the length of the protein should be larger</span>
+
+<span class="sd">        than maxlag. default is 45.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">GetSequenceOrderCouplingNumberTotal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="n">maxlag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetSOCNp"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetSOCNp">[docs]</a>    <span class="k">def</span> <span class="nf">GetSOCNp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">distancematrix</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sequence order coupling numbers  default is 45</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetSOCN(maxlag=45)</span>
+
+<span class="sd">        maxlag is the maximum lag and the length of the protein should be larger</span>
+
+<span class="sd">        than maxlag. default is 45.</span>
+
+<span class="sd">        distancematrix is a dict form containing 400 distance values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">GetSequenceOrderCouplingNumberp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="n">maxlag</span><span class="p">,</span> <span class="n">distancematrix</span><span class="o">=</span><span class="n">distancematrix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetQSO"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetQSO">[docs]</a>    <span class="k">def</span> <span class="nf">GetQSO</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Quasi sequence order descriptors  default is 50</span>
+
+<span class="sd">        result = GetQSO(maxlag=30, weight=0.1)</span>
+
+<span class="sd">        maxlag is the maximum lag and the length of the protein should be larger</span>
+
+<span class="sd">        than maxlag. default is 45.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">GetQuasiSequenceOrder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="n">maxlag</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetQSOp"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetQSOp">[docs]</a>    <span class="k">def</span> <span class="nf">GetQSOp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">distancematrix</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Quasi sequence order descriptors  default is 50</span>
+
+<span class="sd">        result = GetQSO(maxlag=30, weight=0.1)</span>
+
+<span class="sd">        maxlag is the maximum lag and the length of the protein should be larger</span>
+
+<span class="sd">        than maxlag. default is 45.</span>
+
+<span class="sd">        distancematrix is a dict form containing 400 distance values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">GetQuasiSequenceOrderp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="n">maxlag</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">distancematrix</span><span class="o">=</span><span class="n">distancematrix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetMoreauBrotoAutop"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetMoreauBrotoAutop">[docs]</a>    <span class="k">def</span> <span class="nf">GetMoreauBrotoAutop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">{},</span> <span class="n">AAPName</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Normalized Moreau-Broto autocorrelation descriptors for the given property (30)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetMoreauBrotoAutop(AAP={},AAPName=&#39;p&#39;)</span>
+
+<span class="sd">        AAP is a dict containing physicochemical properities of 20 amino acids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="n">AAP</span><span class="p">,</span> <span class="n">AAPName</span><span class="o">=</span><span class="n">AAPName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetMoranAutop"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetMoranAutop">[docs]</a>    <span class="k">def</span> <span class="nf">GetMoranAutop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">{},</span> <span class="n">AAPName</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moran autocorrelation descriptors for the given property (30)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetMoranAutop(AAP={},AAPName=&#39;p&#39;)</span>
+
+<span class="sd">        AAP is a dict containing physicochemical properities of 20 amino acids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="n">AAP</span><span class="p">,</span> <span class="n">AAPName</span><span class="o">=</span><span class="n">AAPName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetGearyAutop"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetGearyAutop">[docs]</a>    <span class="k">def</span> <span class="nf">GetGearyAutop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">{},</span> <span class="n">AAPName</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Geary autocorrelation descriptors for the given property (30)</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetGearyAutop(AAP={},AAPName=&#39;p&#39;)</span>
+
+<span class="sd">        AAP is a dict containing physicochemical properities of 20 amino acids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="n">AAP</span><span class="p">,</span> <span class="n">AAPName</span><span class="o">=</span><span class="n">AAPName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetSubSeq"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetSubSeq">[docs]</a>    <span class="k">def</span> <span class="nf">GetSubSeq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ToAA</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        obtain the sub sequences wit length 2*window+1, whose central point is ToAA</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result = GetSubSeq(ToAA=&#39;S&#39;,window=3)</span>
+
+<span class="sd">        ToAA is the central (query point) amino acid in the sub-sequence.</span>
+
+<span class="sd">        window is the span.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">GetSubSequence</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">ToAA</span><span class="o">=</span><span class="n">ToAA</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetTriad"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetTriad">[docs]</a>    <span class="k">def</span> <span class="nf">GetTriad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the conjoint triad features from protein sequence.</span>
+
+<span class="sd">        Useage:</span>
+
+<span class="sd">        res = GetTriad()</span>
+
+<span class="sd">        Output is a dict form containing all 343 conjoint triad features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CalculateConjointTriad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ProteinSequence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetALL"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetALL">[docs]</a>    <span class="k">def</span> <span class="nf">GetALL</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calcualte all descriptors except tri-peptide descriptors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetAAComp</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetDPComp</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetTPComp</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetMoreauBrotoAuto</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetMoranAuto</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetGearyAuto</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetCTD</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetPAAC</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetAPAAC</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetSOCN</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetQSO</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetTriad</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetAAindex1"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetAAindex1">[docs]</a>    <span class="k">def</span> <span class="nf">GetAAindex1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the amino acid property values from aaindex1</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result=GetAAIndex1(name)</span>
+
+<span class="sd">        Input: name is the name of amino acid property (e.g., KRIW790103)</span>
+
+<span class="sd">        Output: result is a dict form containing the properties of 20 amino acids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">GetAAIndex1</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PyProtein.GetAAindex23"><a class="viewcode-back" href="../reference/PyProteinclass.html#PyProtein.PyProtein.GetAAindex23">[docs]</a>    <span class="k">def</span> <span class="nf">GetAAindex23</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the amino acid property values from aaindex2 and aaindex3</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        result=GetAAIndex23(name)</span>
+
+<span class="sd">        Input: name is the name of amino acid property (e.g.,TANS760101,GRAR740104)</span>
+
+<span class="sd">        Output: result is a dict form containing the properties of 400 amino acid pairs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GetAAIndex23</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span></div></div>
+
+
+<span class="c1">#####################################################################################################</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">from</span> <span class="nn">Autocorrelation</span> <span class="k">import</span> <span class="n">_Steric</span>
+    <span class="kn">from</span> <span class="nn">PseudoAAC</span> <span class="k">import</span> <span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="n">_hydrophilicity</span><span class="p">,</span> <span class="n">_residuemass</span>
+
+    <span class="n">protein</span> <span class="o">=</span> <span class="s2">&quot;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS&quot;</span>
+    <span class="n">cds</span> <span class="o">=</span> <span class="n">PyProtein</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetAAComp</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetDPComp</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetTPComp</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetCTD</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetPAAC</span><span class="p">(</span><span class="n">lamda</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetALL</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetMoreauBrotoAutop</span><span class="p">(</span><span class="n">AAP</span><span class="o">=</span><span class="n">_Steric</span><span class="p">,</span> <span class="n">AAPName</span><span class="o">=</span><span class="s1">&#39;Steric&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetMoranAutop</span><span class="p">(</span><span class="n">AAP</span><span class="o">=</span><span class="n">_Steric</span><span class="p">,</span> <span class="n">AAPName</span><span class="o">=</span><span class="s1">&#39;Steric&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetGearyAutop</span><span class="p">(</span><span class="n">AAP</span><span class="o">=</span><span class="n">_Steric</span><span class="p">,</span> <span class="n">AAPName</span><span class="o">=</span><span class="s1">&#39;Steric&#39;</span><span class="p">)</span>
+
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetPAACp</span><span class="p">(</span><span class="n">lamda</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">AAP</span><span class="o">=</span><span class="p">[</span><span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="n">_hydrophilicity</span><span class="p">])</span>
+
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetSubSeq</span><span class="p">(</span><span class="n">ToAA</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetTriad</span><span class="p">()</span>
+    <span class="n">proper</span> <span class="o">=</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetAAindex23</span><span class="p">(</span><span class="s1">&#39;GRAR740104&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetAAindex1</span><span class="p">(</span><span class="s1">&#39;KRIW790103&#39;</span><span class="p">)</span>
+
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetQSOp</span><span class="p">(</span><span class="n">maxlag</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">distancematrix</span><span class="o">=</span><span class="n">proper</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">cds</span><span class="o">.</span><span class="n">GetSOCNp</span><span class="p">(</span><span class="n">maxlag</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">distancematrix</span><span class="o">=</span><span class="n">proper</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

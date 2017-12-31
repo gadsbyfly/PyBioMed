@@ -1,0 +1,880 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Application &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="index.html" />
+    <link rel="next" title="PyBioMed API" href="modules.html" />
+    <link rel="prev" title="Getting Started with PyBioMed" href="User_guide.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="PyBioMed API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="User_guide.html" title="Getting Started with PyBioMed"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBioMed 1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Application</a><ul>
+<li><a class="reference internal" href="#application-1-prediction-of-caco-2-cell-permeability">Application 1 Prediction of Caco-2 Cell Permeability</a></li>
+<li><a class="reference internal" href="#application-2-prediction-of-aqueous-solubility">Application 2 Prediction of aqueous solubility</a></li>
+<li><a class="reference internal" href="#application-3-prediction-of-drugtarget-interaction-from-the-integration-of-chemical-and-protein-spaces">Application 3 Prediction of drug–target interaction from the integration of chemical and protein spaces</a></li>
+<li><a class="reference internal" href="#application-4-prediction-of-protein-subcellular-location">Application 4 Prediction of protein subcellular location</a></li>
+<li><a class="reference internal" href="#application-5-predicting-nucleosome-positioning-in-genomes-with-dinucleotide-based-auto-covariance">Application 5 Predicting nucleosome positioning in genomes with dinucleotide-based auto covariance</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="User_guide.html"
+                        title="previous chapter">Getting Started with PyBioMed</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">PyBioMed API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/application.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="application">
+<h1>Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h1>
+<p>The PyBioMed Python package can generate various feature vectors for molecular structure, protein sequences and DNA sequences. The PyBioMed package would be applied to solve many tasks in the field of cheminformatics, bioinformatics and systems biology. We will introduce five examples of its applications including Caco-2 cell permeability, aqueous solubility, drug–target interaction data, protein subcellular location, and nucleosome positioning in genomes. All datasets and Python scripts used in the next five examples can be download on <a class="reference external" href="https://github.com/gadsbyfly/PyBioMed/blob/master/doc/download">https://github.com/gadsbyfly/PyBioMed/blob/master/doc/download</a>.</p>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="_images/brief.png"><img alt="_images/brief.png" src="_images/brief.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The overview of PyBioMed python package. PyBioMed could calculate various molecular descriptors from chemicals, proteins, DNAs/RNAs and their interactions. PyBioMed can also pretreat molecules, protein sequences and DNA sequences.</span></p>
+</div>
+<div class="section" id="application-1-prediction-of-caco-2-cell-permeability">
+<h2>Application 1 Prediction of Caco-2 Cell Permeability<a class="headerlink" href="#application-1-prediction-of-caco-2-cell-permeability" title="Permalink to this headline">¶</a></h2>
+<p>Caco-2 cell monolayer model is a popular surrogate in predicting the in vitro human intestinal permeability of a drug due to its morphological and functional similarity with human enterocytes. Oral administration of drugs is the preferred route and a major goal in the development of new drugs because of its ease and patient compliance. Before an oral drug reaches the systemic circulation, it must pass through intestinal cell membranes via passive diffusion, carrier-mediated uptake or active transport processes. Bioavailability, reflecting the drug proportion in the circulatory system, is a significant index of drug efficacy. Screening for absorption ability is one of the most important parts of assessing oral bioavailability. Caco-2 cell line is a popular surrogate for the human intestinal epithelium to estimate in vivo drug permeability due to their morphological and functional similarities with human enterocytes. To build a Caco-2 cell permeability prediction model, we use the PyBioMed package to calculate molecular features and then the Random Forest (RF) method was applied to build Caco-2 cell permeability classification model. The benchmark data set for building the Caco-2 cell permeability predictor was taken from (NN Wang et al. 2016). The dataset contains 1272 compounds.</p>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="_images/caco2.png"><img alt="_images/caco2.png" src="_images/caco2.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The receiver operating characteristic curve of Caco-2 classification.</span></p>
+</div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="kn">import</span> <span class="n">Pymolecule</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># load the data</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">train_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;D:/PyBioMed/PyBioMed-1.0/PyBioMed/example/caco2/caco2.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#change the path to the real path</span>
+<span class="n">test_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;D:/PyBioMed/PyBioMed-1.0/PyBioMed/example/caco2/caco2.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#change the path to the real path</span>
+
+<span class="n">train_set_smi</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;smi&#39;</span><span class="p">]</span>
+<span class="n">test_set_smi</span> <span class="o">=</span> <span class="n">test_set</span><span class="p">[</span><span class="s1">&#39;smi&#39;</span><span class="p">]</span>
+
+<span class="n">train_set_label</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[[</span><span class="s1">&#39;label&#39;</span><span class="p">]]</span>
+<span class="n">test_set_label</span> <span class="o">=</span> <span class="n">test_set</span><span class="p">[[</span><span class="s1">&#39;label&#39;</span><span class="p">]]</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># calculating molecular descriptors to a descriptors dataframe</span>
+<span class="c1">#==============================================================================</span>
+<span class="k">def</span> <span class="nf">calculate_des</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
+        <span class="n">des</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">drugclass</span><span class="o">=</span><span class="n">Pymolecule</span><span class="o">.</span><span class="n">PyMolecule</span><span class="p">()</span>
+        <span class="n">drugclass</span><span class="o">.</span><span class="n">ReadMolFromSmile</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="n">des</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">drugclass</span><span class="o">.</span><span class="n">GetMoran</span><span class="p">())</span>
+        <span class="n">des</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">drugclass</span><span class="o">.</span><span class="n">GetMOE</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">smi</span><span class="p">:(</span><span class="n">des</span><span class="p">)})</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">train_set_des</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">calculate_des</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="n">train_set_smi</span><span class="p">)))</span>
+<span class="n">test_set_des</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">calculate_des</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="n">test_set_smi</span><span class="p">)))</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># building the model and predicting the test set</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span><span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_set_des</span><span class="p">,</span><span class="n">train_set_label</span><span class="p">)</span>
+
+<span class="n">proba</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">test_set_des</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">predict_label</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_set_des</span><span class="p">)</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># Calculating auc score</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">AUC_score</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">test_set_label</span><span class="p">,</span> <span class="n">proba</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">TPR</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">(</span><span class="n">test_set_label</span><span class="p">,</span> <span class="n">predict_label</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">test_set_label</span><span class="p">,</span> <span class="n">predict_label</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">P</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">test_set_label</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">test_set_label</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span>
+<span class="n">SPE</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span class="n">P</span><span class="o">/</span><span class="n">N</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">ACC</span><span class="o">-</span><span class="n">TPR</span><span class="o">*</span><span class="n">P</span><span class="o">/</span><span class="n">N</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">matthews_corrcoef</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">test_set_label</span><span class="p">,</span> <span class="n">predict_label</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">f1_score</span> <span class="o">=</span>  <span class="nb">round</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">f1_score</span><span class="p">(</span><span class="n">test_set_label</span><span class="p">,</span> <span class="n">predict_label</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">fpr_cv</span><span class="p">,</span> <span class="n">tpr_cv</span><span class="p">,</span> <span class="n">thresholds_cv</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">(</span><span class="n">test_set_label</span><span class="p">,</span> <span class="n">proba</span><span class="p">)</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># plotting the auc plot</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr_cv</span><span class="p">,</span> <span class="n">tpr_cv</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;auc = </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span> <span class="n">AUC_score</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False positive rate&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True positive rate&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;ROC of Caco-2 Classification&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">25</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span><span class="n">numpoints</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="s1">&#39;sensitivity:&#39;</span><span class="p">,</span><span class="n">TPR</span><span class="p">,</span> <span class="s1">&#39;specificity:&#39;</span><span class="p">,</span> <span class="n">SPE</span><span class="p">,</span> <span class="s1">&#39;accuracy:&#39;</span><span class="p">,</span> <span class="n">ACC</span><span class="p">,</span> <span class="s1">&#39;AUC:&#39;</span><span class="p">,</span> <span class="n">AUC_score</span><span class="p">,</span> <span class="s1">&#39;MACCS:&#39;</span><span class="p">,</span> <span class="n">matthews_corrcoef</span><span class="p">,</span> <span class="s1">&#39;F1:&#39;</span><span class="p">,</span> <span class="n">f1_score</span>
+<span class="go">sensitivity: 0.91 specificity: 0.8 accuracy: 0.86 AUC: 0.93 MACCS: 0.72 F1: 0.88</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="application-2-prediction-of-aqueous-solubility">
+<h2>Application 2 Prediction of aqueous solubility<a class="headerlink" href="#application-2-prediction-of-aqueous-solubility" title="Permalink to this headline">¶</a></h2>
+<p>Aqueous solubility is one of the major drug properties to be optimized in drug discovery. Aqueous solubility and membrane permeability are the two key factors that affect a drug’s oral bioavailability. Generally, a drug with high solubility and membrane permeability is considered to have bioavailability problems. Otherwise, it is a problematic candidate or needs careful formulation work. To build an aqueous solubility prediction model, we use the PyBioMed package to calculate molecular features and then the random forest (RF) method was applied to build aqueous solubility regression model. The benchmark data set for building the aqueous solubility regression model was taken from (Junmei Wang et al.). The dataset contains 3637 compounds.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/solubility.png"><img alt="_images/solubility.png" src="_images/solubility.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The aqueous solubility prediction. The X-axis represents experimental values and the Y-axis represents predicted values.</span></p>
+</div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="kn">import</span> <span class="n">Pymolecule</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cross_validation</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># loading the data</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">solubility_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;./PyBioMed/example/solubility/Solubility-total.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">#change the path to the real path</span>
+<span class="n">smis</span> <span class="o">=</span> <span class="n">solubility_set</span><span class="p">[</span><span class="s1">&#39;SMI&#39;</span><span class="p">]</span>
+<span class="n">logS</span> <span class="o">=</span> <span class="n">solubility_set</span><span class="p">[</span><span class="s1">&#39;logS&#39;</span><span class="p">]</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># #calculating molecular descriptors</span>
+<span class="c1">#==============================================================================</span>
+<span class="k">def</span> <span class="nf">calculate_des</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
+        <span class="n">des</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">drugclass</span><span class="o">=</span><span class="n">Pymolecule</span><span class="o">.</span><span class="n">PyMolecule</span><span class="p">()</span>
+        <span class="n">drugclass</span><span class="o">.</span><span class="n">ReadMolFromSmile</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="n">des</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">drugclass</span><span class="o">.</span><span class="n">GetEstate</span><span class="p">())</span>
+        <span class="n">des</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">drugclass</span><span class="o">.</span><span class="n">GetMOE</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">smi</span><span class="p">:(</span><span class="n">des</span><span class="p">)})</span><span class="o">.</span><span class="n">T</span>
+<span class="n">solubility_set_des</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">calculate_des</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="n">smis</span><span class="p">)))</span>
+<span class="n">solubility_set_des</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">solubility_set_des</span><span class="p">)</span>
+<span class="n">logS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">logS</span><span class="p">)</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># building the model and predict</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">train_set_des</span><span class="p">,</span> <span class="n">test_set_des</span><span class="p">,</span> <span class="n">train_logS</span><span class="p">,</span> <span class="n">test_logS</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">solubility_set_des</span><span class="p">,</span>
+                                                                                                <span class="n">logS</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+
+<span class="n">kf</span> <span class="o">=</span> <span class="n">cross_validation</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">train_set_des</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">n_jobs</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">CV_pred_logS</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">validation_index</span> <span class="ow">in</span> <span class="n">kf</span><span class="p">:</span>
+        <span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="n">VALIDATION_index</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">validation_index</span><span class="p">)</span>
+        <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_set_des</span><span class="p">[</span><span class="n">train_index</span> <span class="p">,:],</span><span class="n">train_logS</span><span class="p">[</span><span class="n">train_index</span><span class="p">])</span>
+        <span class="n">pred_logS</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_set_des</span><span class="p">[</span><span class="n">validation_index</span><span class="p">,:])</span>
+        <span class="n">CV_pred_logS</span> <span class="o">=</span> <span class="n">CV_pred_logS</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">pred_logS</span><span class="p">)</span>
+<span class="n">CV_true_logS</span> <span class="o">=</span> <span class="n">train_logS</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">]</span>
+<span class="n">r2_CV</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">r2_score</span><span class="p">(</span><span class="n">CV_true_logS</span><span class="p">,</span> <span class="n">CV_pred_logS</span><span class="p">)</span>
+
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_set_des</span><span class="p">,</span><span class="n">train_logS</span><span class="p">)</span>
+<span class="n">pred_logS_test</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_set_des</span><span class="p">)</span>
+<span class="n">r2_test</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">r2_score</span><span class="p">(</span><span class="n">test_logS</span><span class="p">,</span> <span class="n">pred_logS_test</span><span class="p">)</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># plotting the figure</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">CV_true_logS</span><span class="p">,</span><span class="n">CV_pred_logS</span><span class="p">,</span><span class="s1">&#39;b.&#39;</span><span class="p">,</span><span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;cross validation&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_logS</span><span class="p">,</span><span class="n">pred_logS_test</span><span class="p">,</span><span class="s1">&#39;r.&#39;</span><span class="p">,</span><span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;test set&#39;</span><span class="p">,</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Aqueous Solubility Prediction&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">25</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span><span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="s1">&#39;CV_R^2:&#39;</span><span class="p">,</span><span class="s1">&#39;r2_cv&#39;</span><span class="p">,</span><span class="s1">&#39;Test_R^2:&#39;</span><span class="p">,</span><span class="s1">&#39;r2_test&#39;</span>
+<span class="go">CV_R^2: 0.86 Test_R^2: 0.84</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="application-3-prediction-of-drugtarget-interaction-from-the-integration-of-chemical-and-protein-spaces">
+<h2>Application 3 Prediction of drug–target interaction from the integration of chemical and protein spaces<a class="headerlink" href="#application-3-prediction-of-drugtarget-interaction-from-the-integration-of-chemical-and-protein-spaces" title="Permalink to this headline">¶</a></h2>
+<p>Drug-target interactions (DTIs) are central to current drug discovery processes and public health fields. The rapidly increasing amount of publicly available data in biology and chemistry enables researchers to revisit drug-target interaction problems by systematic integration and analysis of heterogeneous data. To identify the interactions between drugs and targets is of important in drug discovery today. Interaction with ligands can modulate the function of many targets in the processes of signal transport, catalytic reaction and so on. With the enrichment of data repository, automatically prediction of target-protein interactions is an alternative method to facilitate drug discovery. Our previous work (Cao et al, 2014) proved that the calculated features perform well in the prediction of chemical-protein interaction. The benchmark data set for building the drug-target interaction predictor was taken from (Yamanishi, Araki et al. 2008). The dataset contains 6888 samples, among them 2922 drug-protein pairs have interactions which are defined as positive dataset and 3966 drug-protein pairs do not have interactions which are defined as negative dataset. To represent each drug-protein pairs, 150 CATS molecular fingerprints and 147 CTD composition, transition and distribution features of protein, a total number of 297 features were used. The random forest (RF) classifier was employed to build model.</p>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="_images/DPI.png"><img alt="_images/DPI.png" src="_images/DPI.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The receiver operating characteristic curve of drug-target interaction classification.</span></p>
+</div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="kn">import</span> <span class="n">Pymolecule</span>
+<span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="kn">import</span> <span class="n">Pyprotein</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span> <span class="k">as</span> <span class="n">RF</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cross_validation</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># loading the data</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;input PyBioMed path in your computer&#39;</span>  <span class="c1">#input the real path in your own path</span>
+<span class="n">smis</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;example/dpi/DPI_SMIs.xlsx&#39;</span><span class="p">)</span>
+<span class="n">smis</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">smis</span><span class="p">[</span><span class="s1">&#39;Drug&#39;</span><span class="p">]</span>
+<span class="n">protein_seq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;example/dpi/hsa_seqs_all.tsv&#39;</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">protein_seq</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span>  <span class="n">protein_seq</span><span class="p">[</span><span class="s1">&#39;Protein&#39;</span><span class="p">]</span>
+
+<span class="n">positive_pairs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;example/dpi/Enzyme.xls&#39;</span><span class="p">)</span>
+<span class="n">positive_pairs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">positive_pairs</span><span class="p">[</span><span class="s1">&#39;Protein&#39;</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="n">positive_pairs</span><span class="p">[</span><span class="s1">&#39;Drug&#39;</span><span class="p">]))</span>
+
+<span class="n">negative_pairs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;example/dpi/Enzymedecoy.xls&#39;</span><span class="p">)</span>
+<span class="n">negative_pairs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">negative_pairs</span><span class="p">[</span><span class="s1">&#39;Protein&#39;</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="n">negative_pairs</span><span class="p">[</span><span class="s1">&#39;Drug&#39;</span><span class="p">]))</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># calculating descriptors</span>
+<span class="c1">#==============================================================================</span>
+<span class="k">def</span> <span class="nf">calculate_pair_des</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">seq</span><span class="p">):</span>
+        <span class="n">pair_des</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">drugclass</span> <span class="o">=</span> <span class="n">Pymolecule</span><span class="o">.</span><span class="n">PyMolecule</span><span class="p">()</span>
+        <span class="n">drugclass</span><span class="o">.</span><span class="n">ReadMolFromSmile</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="n">pair_des</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">drugclass</span><span class="o">.</span><span class="n">GetCATS2D</span><span class="p">())</span>
+        <span class="n">proclass</span> <span class="o">=</span> <span class="n">Pyprotein</span><span class="o">.</span><span class="n">PyProtein</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+        <span class="n">pair_des</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">proclass</span><span class="o">.</span><span class="n">GetCTD</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">pair_des</span>
+<span class="n">positive_pairs_des</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">positive_pair</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">positive_pairs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+                <span class="n">pair_des</span> <span class="o">=</span> <span class="n">calculate_pair_des</span><span class="p">(</span><span class="n">smis</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">positive_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">],</span><span class="n">protein_seq</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">positive_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">positive_pairs_des</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pair_des</span>
+        <span class="k">except</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+<span class="n">negative_pairs_des</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">negative_pair</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">negative_pairs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+                <span class="n">pair_des</span> <span class="o">=</span> <span class="n">calculate_pair_des</span><span class="p">(</span><span class="n">smis</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">negative_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">],</span><span class="n">protein_seq</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">negative_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">negative_pairs_des</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pair_des</span>
+        <span class="k">except</span><span class="p">:</span>
+                <span class="k">continue</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># cross-validation</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">positive_pairs_des</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">negative_pairs_des</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">],</span>
+                                                <span class="n">join_axes</span><span class="o">=</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">positive_pairs_des</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+
+<span class="n">positive_count</span><span class="p">,</span> <span class="n">negative_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">positive_pairs_des</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">negative_pairs_des</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">positive_count</span><span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">negative_count</span><span class="p">)</span>
+
+<span class="c1"># ROC curve of CV</span>
+<span class="n">kf</span> <span class="o">=</span> <span class="n">cross_validation</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">RF</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">oob_score</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">CV_pred_prob</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">CV_pred_label</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">validation_index</span> <span class="ow">in</span> <span class="n">kf</span><span class="p">:</span>
+                <span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="n">VALIDATION_index</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">validation_index</span><span class="p">)</span>
+                <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">train_index</span> <span class="p">,:],</span><span class="n">y</span><span class="p">[</span><span class="n">train_index</span><span class="p">])</span>
+                <span class="n">pred_prob</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">validation_index</span><span class="p">,:])</span>
+                <span class="n">pred_label</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">validation_index</span><span class="p">,:])</span>
+                <span class="n">CV_pred_prob</span> <span class="o">=</span> <span class="n">CV_pred_prob</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">pred_prob</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">CV_pred_label</span> <span class="o">=</span> <span class="n">CV_pred_label</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">pred_label</span><span class="p">)</span>
+<span class="n">fpr_cv</span><span class="p">,</span> <span class="n">tpr_cv</span><span class="p">,</span> <span class="n">thresholds_cv</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">],</span> <span class="n">CV_pred_prob</span><span class="p">)</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">]</span>
+<span class="n">AUC_score</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">],</span> <span class="n">CV_pred_prob</span><span class="p">)</span>
+<span class="n">TPR</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">SPE</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">positive_count</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">negative_count</span><span class="p">)</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">ACC</span><span class="o">-</span><span class="n">TPR</span><span class="o">*</span><span class="nb">float</span><span class="p">(</span><span class="n">positive_count</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">negative_count</span><span class="p">)</span>
+<span class="n">matthews_corrcoef</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">f1_score</span> <span class="o">=</span>  <span class="n">metrics</span><span class="o">.</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># plotting the figure</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr_cv</span><span class="p">,</span> <span class="n">tpr_cv</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;auc = </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span> <span class="n">AUC_score</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False positive rate&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True positive rate&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;ROC of Drug-target Interaction Classification&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">25</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span><span class="n">numpoints</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="s1">&#39;sensitivity:&#39;</span><span class="p">,</span><span class="n">TPR</span><span class="p">,</span> <span class="s1">&#39;specificity:&#39;</span><span class="p">,</span> <span class="n">SPE</span><span class="p">,</span> <span class="s1">&#39;accuracy:&#39;</span><span class="p">,</span> <span class="n">ACC</span><span class="p">,</span> <span class="s1">&#39;AUC:&#39;</span><span class="p">,</span> <span class="n">AUC_score</span><span class="p">,</span> <span class="s1">&#39;MCC:&#39;</span><span class="p">,</span> <span class="n">matthews_corrcoef</span><span class="p">,</span> <span class="s1">&#39;F1:&#39;</span><span class="p">,</span> <span class="n">f1_score</span>
+<span class="go">sensitivity: 0.84 specificity: 0.93 accuracy: 0.89 AUC: 0.95 MCC: 0.78 F1: 0.87</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="application-4-prediction-of-protein-subcellular-location">
+<h2>Application 4 Prediction of protein subcellular location<a class="headerlink" href="#application-4-prediction-of-protein-subcellular-location" title="Permalink to this headline">¶</a></h2>
+<p>To identify the functions of proteins in organism is one of the fundamental goals in cell biology and proteomics. The function of a protein in organism is closely linked to its location in a cell. Determination of protein subcellular location (PSL) by experimental methods is expensive and time-consuming. With the enrichment of data repository, automatically prediction of PSL is an alternative method to facilitate the determination of PSL. To build a PSL prediction model, we use PyProtein in PyBioMed to calculate protein features and then the random forest (RF) method was applied to build PSL classification model. The benchmark data set for building the protein subcellular location predictor was taken from (Jia, Qian et al. 2007). The dataset contains 2568 samples, among them 849 proteins were located at Cytoplasm which is defined as positive dataset and 1619 proteins were located at Nucleus which is defined as negative dataset. For each protein, 20 amino acid composition (AAC), 147 CTD composition, transition and distribution and 30 pseudo amino acid composition (PAAC), a total number of 197 features were calculate through the PyBioMed tool.</p>
+<p>To build the classification model, the CSV file containing the calculated descriptors was then converted to sample matrix (x_train) and a sample label vector (y_train) is also provided. Then, the python script randomforests.py based on sklearn package was employed to build the classification model (the number of trees is 500, the maximum number of features in each tree is square root of the number of features). The performance of this model was evaluated by using 10-fold cross-validation. The AUC score, accuracy, sensitivity and specificity are 0.90, 0.85, 0.94 and 0.69 respectively</p>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="_images/subcell.png"><img alt="_images/subcell.png" src="_images/subcell.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The receiver operating characteristic curve of protein subcellular location classification.</span></p>
+</div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.CTD</span> <span class="kn">import</span> <span class="n">CalculateCTD</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span> <span class="k">as</span> <span class="n">RF</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cross_validation</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># loading the data</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;input PyBioMed path in your computer&#39;</span>  <span class="c1">#input the PyBioMed path in your own computer</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;example/subcell/Cytoplasm_seq.txt&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">cytoplasm</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;example/subcell/Nuclear_seq.txt&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">nuclear</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># calculating the descriptors</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">cytoplasm_des</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cytoplasm</span><span class="p">)),</span><span class="nb">map</span><span class="p">(</span><span class="n">CalculateCTD</span><span class="p">,</span><span class="n">cytoplasm</span><span class="p">)))</span>
+<span class="n">nuclear_des</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nuclear</span><span class="p">)),</span><span class="nb">map</span><span class="p">(</span><span class="n">CalculateCTD</span><span class="p">,</span><span class="n">nuclear</span><span class="p">)))</span>
+<span class="n">cytoplasm_des_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cytoplasm_des</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">nuclear_des_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">nuclear_des</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># cross-validation</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">cytoplasm_des_df</span><span class="p">,</span> <span class="n">nuclear_des_df</span><span class="p">]))</span>
+<span class="n">positive_count</span><span class="p">,</span> <span class="n">negative_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cytoplasm_des</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">nuclear_des</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">positive_count</span><span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">negative_count</span><span class="p">)</span>
+<span class="n">kf</span> <span class="o">=</span> <span class="n">cross_validation</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">shuffle</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">RF</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">oob_score</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">CV_pred_prob</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">CV_pred_label</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">kf</span> <span class="o">=</span> <span class="n">cross_validation</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">RF</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">oob_score</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">CV_pred_prob</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">CV_pred_label</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">validation_index</span> <span class="ow">in</span> <span class="n">kf</span><span class="p">:</span>
+                <span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="n">VALIDATION_index</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">validation_index</span><span class="p">)</span>
+                <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">train_index</span> <span class="p">,:],</span><span class="n">y</span><span class="p">[</span><span class="n">train_index</span><span class="p">])</span>
+                <span class="n">pred_prob</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">validation_index</span><span class="p">,:])</span>
+                <span class="n">pred_label</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">validation_index</span><span class="p">,:])</span>
+                <span class="n">CV_pred_prob</span> <span class="o">=</span> <span class="n">CV_pred_prob</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">pred_prob</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">CV_pred_label</span> <span class="o">=</span> <span class="n">CV_pred_label</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">pred_label</span><span class="p">)</span>
+<span class="n">fpr_cv</span><span class="p">,</span> <span class="n">tpr_cv</span><span class="p">,</span> <span class="n">thresholds_cv</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">],</span> <span class="n">CV_pred_prob</span><span class="p">)</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">]</span>
+<span class="n">AUC_score</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">],</span> <span class="n">CV_pred_prob</span><span class="p">)</span>
+<span class="n">TPR</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">SPE</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">positive_count</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">negative_count</span><span class="p">)</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">ACC</span><span class="o">-</span><span class="n">TPR</span><span class="o">*</span><span class="nb">float</span><span class="p">(</span><span class="n">positive_count</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">negative_count</span><span class="p">)</span>
+<span class="n">matthews_corrcoef</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">f1_score</span> <span class="o">=</span>  <span class="n">metrics</span><span class="o">.</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># plotting the figure</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr_cv</span><span class="p">,</span> <span class="n">tpr_cv</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;auc = </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span> <span class="n">AUC_score</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False positive rate&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True positive rate&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;ROC of protein subcellular location Classification&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">25</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span><span class="n">numpoints</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="s1">&#39;sensitivity:&#39;</span><span class="p">,</span><span class="n">TPR</span><span class="p">,</span> <span class="s1">&#39;specificity:&#39;</span><span class="p">,</span> <span class="n">SPE</span><span class="p">,</span> <span class="s1">&#39;accuracy:&#39;</span><span class="p">,</span> <span class="n">ACC</span><span class="p">,</span> <span class="s1">&#39;AUC:&#39;</span><span class="p">,</span> <span class="n">AUC_score</span><span class="p">,</span> <span class="s1">&#39;MACCS:&#39;</span><span class="p">,</span> <span class="n">matthews_corrcoef</span><span class="p">,</span> <span class="s1">&#39;F1:&#39;</span><span class="p">,</span> <span class="n">f1_score</span>
+<span class="go">sensitivity: 0.67 specificity: 0.92 accuracy: 0.84 AUC: 0.89 MACCS: 0.62 F1: 0.74</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="application-5-predicting-nucleosome-positioning-in-genomes-with-dinucleotide-based-auto-covariance">
+<h2>Application 5 Predicting nucleosome positioning in genomes with dinucleotide-based auto covariance<a class="headerlink" href="#application-5-predicting-nucleosome-positioning-in-genomes-with-dinucleotide-based-auto-covariance" title="Permalink to this headline">¶</a></h2>
+<p>Nucleosome positioning participates in many cellular activities and plays significant roles in regulating cellular processes (Guo, et al., 2014). Computational methods that can predict nucleosome positioning based on the DNA sequences is highly desired. Here, a computational predictor was constructed by using dinucleotide-based auto covariance and SVMs, and its performance was evaluated by 10-fold cross-validation. The benchmark data set for the H. sapiens was taken from (Schones, et al., 2008). Since the H. sapiens genome and its nucleosome map contain a huge amount of data, according to Liu’s strategy (Liu, et al., 2011) the nucleosome-forming sequence samples (positive data) and the linkers or nucleosome-inhibiting sequence samples (negative data) were extracted from chromosome (Guo, et al., 2014). A file named &#8220;H_sapiens_pos.fasta&#8221; containing 2,273 nucleosome-forming DNA segments is used as the positive dataset, and a file named &#8220;H_sapiens_neg.fasta&#8221; containing 2,300 nucleosome-inhibiting DNA segments is used as the negative dataset.</p>
+<div class="figure align-center" id="id6">
+<a class="reference internal image-reference" href="_images/DNA.png"><img alt="_images/DNA.png" src="_images/DNA.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The receiver operating characteristic curve of nucleosome positioning in genomes classification.</span></p>
+</div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="kn">import</span> <span class="n">Pydna</span>
+<span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol</span> <span class="kn">import</span> <span class="n">GetDNA</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span> <span class="k">as</span> <span class="n">RF</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cross_validation</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># loading data</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;PyBioMed package real path in your computer&#39;</span>   <span class="c1"># input the real path in your own computer</span>
+<span class="n">seqs_pos</span> <span class="o">=</span> <span class="n">GetDNA</span><span class="o">.</span><span class="n">ReadFasta</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/example/dna/H_sapiens_pos.fasta&#39;</span><span class="p">))</span>
+<span class="n">seqs_neg</span> <span class="o">=</span> <span class="n">GetDNA</span><span class="o">.</span><span class="n">ReadFasta</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/example/dna/H_sapiens_neg.fasta&#39;</span><span class="p">))</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># calculating descriptors</span>
+<span class="c1">#==============================================================================</span>
+<span class="k">def</span> <span class="nf">calculate_des</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+        <span class="n">des</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dnaclass</span> <span class="o">=</span> <span class="n">Pydna</span><span class="o">.</span><span class="n">PyDNA</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+        <span class="n">des</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dnaclass</span><span class="o">.</span><span class="n">GetDAC</span><span class="p">(</span><span class="n">all_property</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">des</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dnaclass</span><span class="o">.</span><span class="n">GetPseDNC</span><span class="p">(</span><span class="n">all_property</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">des</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dnaclass</span><span class="o">.</span><span class="n">GetPseKNC</span><span class="p">(</span><span class="n">all_property</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">des</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dnaclass</span><span class="o">.</span><span class="n">GetSCPseDNC</span><span class="p">(</span><span class="n">all_property</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">des</span>
+<span class="n">pos_des</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">seq_pos</span> <span class="ow">in</span> <span class="n">seqs_pos</span><span class="p">:</span>
+        <span class="n">pos_des</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculate_des</span><span class="p">(</span><span class="n">seq_pos</span><span class="p">))</span>
+<span class="n">neg_des</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">seq_neg</span> <span class="ow">in</span> <span class="n">seqs_neg</span><span class="p">:</span>
+        <span class="n">neg_des</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculate_des</span><span class="p">(</span><span class="n">seq_neg</span><span class="p">))</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># cross validation</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pos_des</span><span class="o">+</span><span class="n">neg_des</span><span class="p">)</span>
+<span class="n">positive_count</span><span class="p">,</span> <span class="n">negative_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos_des</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">neg_des</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">positive_count</span><span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">negative_count</span><span class="p">)</span>
+<span class="n">kf</span> <span class="o">=</span> <span class="n">cross_validation</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">RF</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">oob_score</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">CV_pred_prob</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">CV_pred_label</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">validation_index</span> <span class="ow">in</span> <span class="n">kf</span><span class="p">:</span>
+                <span class="n">VALIDATION_index</span> <span class="o">=</span> <span class="n">VALIDATION_index</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">validation_index</span><span class="p">)</span>
+                <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">train_index</span> <span class="p">,:],</span><span class="n">y</span><span class="p">[</span><span class="n">train_index</span><span class="p">])</span>
+                <span class="n">pred_prob</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">validation_index</span><span class="p">,:])</span>
+                <span class="n">pred_label</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">validation_index</span><span class="p">,:])</span>
+                <span class="n">CV_pred_prob</span> <span class="o">=</span> <span class="n">CV_pred_prob</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">pred_prob</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">CV_pred_label</span> <span class="o">=</span> <span class="n">CV_pred_label</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">pred_label</span><span class="p">)</span>
+<span class="n">fpr_cv</span><span class="p">,</span> <span class="n">tpr_cv</span><span class="p">,</span> <span class="n">thresholds_cv</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">],</span> <span class="n">CV_pred_prob</span><span class="p">)</span>
+<span class="c1"># Calculate auc score of cv</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">]</span>
+<span class="n">AUC_score</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">VALIDATION_index</span><span class="p">],</span> <span class="n">CV_pred_prob</span><span class="p">)</span>
+<span class="n">TPR</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">SPE</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">positive_count</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">negative_count</span><span class="p">)</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">ACC</span><span class="o">-</span><span class="n">TPR</span><span class="o">*</span><span class="nb">float</span><span class="p">(</span><span class="n">positive_count</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">negative_count</span><span class="p">)</span>
+<span class="n">matthews_corrcoef</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="n">f1_score</span> <span class="o">=</span>  <span class="n">metrics</span><span class="o">.</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">CV_pred_label</span><span class="p">)</span>
+<span class="c1">#==============================================================================</span>
+<span class="c1"># plotting the figure</span>
+<span class="c1">#==============================================================================</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr_cv</span><span class="p">,</span> <span class="n">tpr_cv</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;auc = </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span> <span class="n">AUC_score</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False positive rate&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True positive rate&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;ROC of Nucleosome Positioning in Genomes Classification&#39;</span><span class="p">,{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">25</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span><span class="n">numpoints</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="s1">&#39;sensitivity:&#39;</span><span class="p">,</span><span class="n">TPR</span><span class="p">,</span> <span class="s1">&#39;specificity:&#39;</span><span class="p">,</span> <span class="n">SPE</span><span class="p">,</span> <span class="s1">&#39;accuracy:&#39;</span><span class="p">,</span> <span class="n">ACC</span><span class="p">,</span> <span class="s1">&#39;AUC:&#39;</span><span class="p">,</span> <span class="n">AUC_score</span><span class="p">,</span> <span class="s1">&#39;MACCS:&#39;</span><span class="p">,</span> <span class="n">matthews_corrcoef</span><span class="p">,</span> <span class="s1">&#39;F1:&#39;</span><span class="p">,</span> <span class="n">f1_score</span>
+<span class="go">sensitivity: 0.82 specificity: 0.80 accuracy: 0.81 AUC: 0.88 MACCS: 0.62 F1: 0.81</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="PyBioMed API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="User_guide.html" title="Getting Started with PyBioMed"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBioMed 1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

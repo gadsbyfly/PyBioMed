@@ -1,0 +1,432 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>CTD module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyProtein" href="PyProtein.html" />
+    <link rel="next" title="ConjointTriad module" href="ConjointTriad.html" />
+    <link rel="prev" title="Autocorrelation module" href="Autocorrelation.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ConjointTriad.html" title="ConjointTriad module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Autocorrelation.html" title="Autocorrelation module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyProtein.html" accesskey="U">PyProtein</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Autocorrelation.html"
+                        title="previous chapter">Autocorrelation module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ConjointTriad.html"
+                        title="next chapter">ConjointTriad module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/CTD.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-CTD">
+<span id="ctd-module"></span><h1>CTD module<a class="headerlink" href="#module-CTD" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<p>This module is used for computing the composition, transition and distribution</p>
+<p>descriptors based on the different properties of AADs. The AADs with the same</p>
+<p>properties is marked as the same number. You can get 147 descriptors for a given</p>
+<p>protein sequence. You can freely use and distribute it. If you hava  any problem,</p>
+<p>you could contact with us timely!</p>
+<p>References:</p>
+<p>[1]: Inna Dubchak, Ilya Muchink, Stephen R.Holbrook and Sung-Hou Kim. Prediction</p>
+<p>of protein folding class using global description of amino acid sequence. Proc.Natl.</p>
+<p>Acad.Sci.USA, 1995, 92, 8700-8704.</p>
+<p>[2]:Inna Dubchak, Ilya Muchink, Christopher Mayor, Igor Dralyuk and Sung-Hou Kim.</p>
+<p>Recognition of a Protein Fold in the Context of the SCOP classification. Proteins:</p>
+<p>Structure, Function and Genetics,1999,35,401-407.</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="CTD.CalculateC">
+<code class="descclassname">CTD.</code><code class="descname">CalculateC</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate all composition descriptors based seven different properties of AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateC(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateCTD">
+<code class="descclassname">CTD.</code><code class="descname">CalculateCTD</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateCTD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateCTD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate all CTD descriptors based seven different properties of AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateCTD(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateComposition">
+<code class="descclassname">CTD.</code><code class="descname">CalculateComposition</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAProperty</em>, <em>AAPName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateComposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateComposition" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing composition descriptors.</p>
+<p>Usage:</p>
+<p>result=CalculateComposition(protein,AAProperty,AAPName)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.</p>
+<p>AAPName is a string used for indicating a AAP name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateCompositionCharge">
+<code class="descclassname">CTD.</code><code class="descname">CalculateCompositionCharge</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateCompositionCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateCompositionCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating composition descriptors based on Charge of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateCompositionCharge(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateCompositionHydrophobicity">
+<code class="descclassname">CTD.</code><code class="descname">CalculateCompositionHydrophobicity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateCompositionHydrophobicity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateCompositionHydrophobicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating composition descriptors based on Hydrophobicity of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateCompositionHydrophobicity(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateCompositionNormalizedVDWV">
+<code class="descclassname">CTD.</code><code class="descname">CalculateCompositionNormalizedVDWV</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateCompositionNormalizedVDWV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateCompositionNormalizedVDWV" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating composition descriptors based on NormalizedVDWV of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateCompositionNormalizedVDWV(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateCompositionPolarity">
+<code class="descclassname">CTD.</code><code class="descname">CalculateCompositionPolarity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateCompositionPolarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateCompositionPolarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating composition descriptors based on Polarity of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateCompositionPolarity(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateCompositionPolarizability">
+<code class="descclassname">CTD.</code><code class="descname">CalculateCompositionPolarizability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateCompositionPolarizability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateCompositionPolarizability" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating composition descriptors based on Polarizability of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateCompositionPolarizability(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateCompositionSecondaryStr">
+<code class="descclassname">CTD.</code><code class="descname">CalculateCompositionSecondaryStr</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateCompositionSecondaryStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateCompositionSecondaryStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating composition descriptors based on SecondaryStr of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateCompositionSecondaryStr(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateCompositionSolventAccessibility">
+<code class="descclassname">CTD.</code><code class="descname">CalculateCompositionSolventAccessibility</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateCompositionSolventAccessibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateCompositionSolventAccessibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating composition descriptors based on SolventAccessibility</p>
+<p>of  AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateCompositionSolventAccessibility(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateD">
+<code class="descclassname">CTD.</code><code class="descname">CalculateD</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate all distribution descriptors based seven different properties of AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateD(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateDistribution">
+<code class="descclassname">CTD.</code><code class="descname">CalculateDistribution</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAProperty</em>, <em>AAPName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateDistribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateDistribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing distribution descriptors.</p>
+<p>Usage:</p>
+<p>result=CalculateDistribution(protein,AAProperty,AAPName)</p>
+<p>Input:protein is a pure protein sequence.</p>
+<p>AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.</p>
+<p>AAPName is a string used for indicating a AAP name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateDistributionCharge">
+<code class="descclassname">CTD.</code><code class="descname">CalculateDistributionCharge</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateDistributionCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateDistributionCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Distribution descriptors based on Charge of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateDistributionCharge(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateDistributionHydrophobicity">
+<code class="descclassname">CTD.</code><code class="descname">CalculateDistributionHydrophobicity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateDistributionHydrophobicity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateDistributionHydrophobicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Distribution descriptors based on Hydrophobicity of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateDistributionHydrophobicity(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateDistributionNormalizedVDWV">
+<code class="descclassname">CTD.</code><code class="descname">CalculateDistributionNormalizedVDWV</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateDistributionNormalizedVDWV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateDistributionNormalizedVDWV" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Distribution descriptors based on NormalizedVDWV of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateDistributionNormalizedVDWV(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateDistributionPolarity">
+<code class="descclassname">CTD.</code><code class="descname">CalculateDistributionPolarity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateDistributionPolarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateDistributionPolarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Distribution descriptors based on Polarity of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateDistributionPolarity(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateDistributionPolarizability">
+<code class="descclassname">CTD.</code><code class="descname">CalculateDistributionPolarizability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateDistributionPolarizability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateDistributionPolarizability" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Distribution descriptors based on Polarizability of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateDistributionPolarizability(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateDistributionSecondaryStr">
+<code class="descclassname">CTD.</code><code class="descname">CalculateDistributionSecondaryStr</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateDistributionSecondaryStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateDistributionSecondaryStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Distribution descriptors based on SecondaryStr of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateDistributionSecondaryStr(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateDistributionSolventAccessibility">
+<code class="descclassname">CTD.</code><code class="descname">CalculateDistributionSolventAccessibility</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateDistributionSolventAccessibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateDistributionSolventAccessibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Distribution descriptors based on SolventAccessibility</p>
+<p>of  AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateDistributionSolventAccessibility(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateT">
+<code class="descclassname">CTD.</code><code class="descname">CalculateT</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate all transition descriptors based seven different properties of AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateT(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateTransition">
+<code class="descclassname">CTD.</code><code class="descname">CalculateTransition</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAProperty</em>, <em>AAPName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateTransition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateTransition" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for computing transition descriptors</p>
+<p>Usage:</p>
+<p>result=CalculateTransition(protein,AAProperty,AAPName)</p>
+<p>Input:protein is a pure protein sequence.</p>
+<p>AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.</p>
+<p>AAPName is a string used for indicating a AAP name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateTransitionCharge">
+<code class="descclassname">CTD.</code><code class="descname">CalculateTransitionCharge</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateTransitionCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateTransitionCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Transition descriptors based on Charge of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateTransitionCharge(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateTransitionHydrophobicity">
+<code class="descclassname">CTD.</code><code class="descname">CalculateTransitionHydrophobicity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateTransitionHydrophobicity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateTransitionHydrophobicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Transition descriptors based on Hydrophobicity of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateTransitionHydrophobicity(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateTransitionNormalizedVDWV">
+<code class="descclassname">CTD.</code><code class="descname">CalculateTransitionNormalizedVDWV</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateTransitionNormalizedVDWV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateTransitionNormalizedVDWV" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Transition descriptors based on NormalizedVDWV of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateTransitionNormalizedVDWV(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateTransitionPolarity">
+<code class="descclassname">CTD.</code><code class="descname">CalculateTransitionPolarity</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateTransitionPolarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateTransitionPolarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Transition descriptors based on Polarity of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateTransitionPolarity(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateTransitionPolarizability">
+<code class="descclassname">CTD.</code><code class="descname">CalculateTransitionPolarizability</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateTransitionPolarizability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateTransitionPolarizability" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Transition descriptors based on Polarizability of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateTransitionPolarizability(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateTransitionSecondaryStr">
+<code class="descclassname">CTD.</code><code class="descname">CalculateTransitionSecondaryStr</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateTransitionSecondaryStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateTransitionSecondaryStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Transition descriptors based on SecondaryStr of</p>
+<p>AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateTransitionSecondaryStr(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.CalculateTransitionSolventAccessibility">
+<code class="descclassname">CTD.</code><code class="descname">CalculateTransitionSolventAccessibility</code><span class="sig-paren">(</span><em>ProteinSequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#CalculateTransitionSolventAccessibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.CalculateTransitionSolventAccessibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used for calculating Transition descriptors based on SolventAccessibility</p>
+<p>of  AADs.</p>
+<p>Usage:</p>
+<p>result=CalculateTransitionSolventAccessibility(protein)</p>
+<p>Input:protein is a pure protein sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="CTD.StringtoNum">
+<code class="descclassname">CTD.</code><code class="descname">StringtoNum</code><span class="sig-paren">(</span><em>ProteinSequence</em>, <em>AAProperty</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CTD.html#StringtoNum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CTD.StringtoNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tranform the protein sequence into the string form such as 32123223132121123.</p>
+<p>Usage:</p>
+<p>result=StringtoNum(protein,AAProperty)</p>
+<p>Input: protein is a pure protein sequence.</p>
+<p>AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ConjointTriad.html" title="ConjointTriad module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Autocorrelation.html" title="Autocorrelation module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyProtein.html" >PyProtein</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

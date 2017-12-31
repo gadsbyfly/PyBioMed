@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moe module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="molproperty module" href="molproperty.html" />
+    <link rel="prev" title="kappa module" href="kappa.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="molproperty.html" title="molproperty module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="kappa.html" title="kappa module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="kappa.html"
+                        title="previous chapter">kappa module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="molproperty.html"
+                        title="next chapter">molproperty module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/moe.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-moe">
+<span id="moe-module"></span><h1>moe module<a class="headerlink" href="#module-moe" title="Permalink to this headline">¶</a></h1>
+<p>include LabuteASA, TPSA, slogPVSA, MRVSA, PEOEVSA, EstateVSA and VSAEstate,</p>
+<p>respectively (60).</p>
+<p>If you have any question about these indices please contact me via email.</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="moe.CalculateEstateVSA">
+<code class="descclassname">moe.</code><code class="descname">CalculateEstateVSA</code><span class="sig-paren">(</span><em>mol</em>, <em>bins=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moe.html#CalculateEstateVSA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moe.CalculateEstateVSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>MOE-type descriptors using Estate indices and surface area</p>
+<p>contributions.</p>
+<p>estateBins=[-0.390,0.290,0.717,1.165,1.540,1.807,2.05,4.69,9.17,15.0]</p>
+<p>You can specify your own bins to compute some descriptors</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateEstateVSA(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="moe.CalculateLabuteASA">
+<code class="descclassname">moe.</code><code class="descname">CalculateLabuteASA</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moe.html#CalculateLabuteASA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moe.CalculateLabuteASA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Labute&#8217;s Approximate Surface Area (ASA from MOE)</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateLabuteASA(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="moe.CalculatePEOEVSA">
+<code class="descclassname">moe.</code><code class="descname">CalculatePEOEVSA</code><span class="sig-paren">(</span><em>mol</em>, <em>bins=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moe.html#CalculatePEOEVSA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moe.CalculatePEOEVSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>MOE-type descriptors using partial charges and surface</p>
+<p>area contributions.</p>
+<p>chgBins=[-.3,-.25,-.20,-.15,-.10,-.05,0,.05,.10,.15,.20,.25,.30]</p>
+<p>You can specify your own bins to compute some descriptors</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculatePEOEVSA(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="moe.CalculateSLOGPVSA">
+<code class="descclassname">moe.</code><code class="descname">CalculateSLOGPVSA</code><span class="sig-paren">(</span><em>mol</em>, <em>bins=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moe.html#CalculateSLOGPVSA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moe.CalculateSLOGPVSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>MOE-type descriptors using LogP contributions and surface</p>
+<p>area contributions.</p>
+<p>logpBins=[-0.4,-0.2,0,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.6]</p>
+<p>You can specify your own bins to compute some descriptors.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSLOGPVSA(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="moe.CalculateSMRVSA">
+<code class="descclassname">moe.</code><code class="descname">CalculateSMRVSA</code><span class="sig-paren">(</span><em>mol</em>, <em>bins=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moe.html#CalculateSMRVSA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moe.CalculateSMRVSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>MOE-type descriptors using MR contributions and surface</p>
+<p>area contributions.</p>
+<p>mrBins=[1.29, 1.82, 2.24, 2.45, 2.75, 3.05, 3.63,3.8,4.0]</p>
+<p>You can specify your own bins to compute some descriptors.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSMRVSA(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="moe.CalculateTPSA">
+<code class="descclassname">moe.</code><code class="descname">CalculateTPSA</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moe.html#CalculateTPSA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moe.CalculateTPSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of topological polar surface area based on fragments.</p>
+<p>Implementation based on the Daylight contrib program tpsa.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateTPSA(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="moe.CalculateVSAEstate">
+<code class="descclassname">moe.</code><code class="descname">CalculateVSAEstate</code><span class="sig-paren">(</span><em>mol</em>, <em>bins=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moe.html#CalculateVSAEstate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moe.CalculateVSAEstate" title="Permalink to this definition">¶</a></dt>
+<dd><p>MOE-type descriptors using Estate indices and surface</p>
+<p>area contributions.</p>
+<p>vsaBins=[4.78,5.00,5.410,5.740,6.00,6.07,6.45,7.00,11.0]</p>
+<p>You can specify your own bins to compute some descriptors</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateVSAEstate(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="moe.GetMOE">
+<code class="descclassname">moe.</code><code class="descname">GetMOE</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moe.html#GetMOE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moe.GetMOE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The calculation of MOE-type descriptors (ALL).</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=GetMOE(mol)</p>
+<p>Input: mol is a molecule object</p>
+<p>Output: result is a dict form</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="molproperty.html" title="molproperty module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="kappa.html" title="kappa module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moe &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for moe</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">This module mainly implements the calculation of MOE-type descriptors, which </span>
+
+<span class="sd">include LabuteASA, TPSA, slogPVSA, MRVSA, PEOEVSA, EstateVSA and VSAEstate, </span>
+
+<span class="sd">respectively (60).</span>
+
+<span class="sd">If you have any question about these indices please contact me via email.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">MolSurf</span> <span class="k">as</span> <span class="n">MOE</span> 
+<span class="kn">from</span> <span class="nn">rdkit.Chem.EState</span> <span class="k">import</span> <span class="n">EState_VSA</span> <span class="k">as</span> <span class="n">EVSA</span>
+
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="c1">################################################################</span>
+
+<div class="viewcode-block" id="CalculateLabuteASA"><a class="viewcode-back" href="../reference/moe.html#moe.CalculateLabuteASA">[docs]</a><span class="k">def</span> <span class="nf">CalculateLabuteASA</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Labute&#39;s Approximate Surface Area (ASA from MOE)</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateLabuteASA(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">MOE</span><span class="o">.</span><span class="n">pyLabuteASA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">includeHs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">[</span><span class="s1">&#39;LabuteASA&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateTPSA"><a class="viewcode-back" href="../reference/moe.html#moe.CalculateTPSA">[docs]</a><span class="k">def</span> <span class="nf">CalculateTPSA</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of topological polar surface area based on fragments.</span>
+<span class="sd">    </span>
+<span class="sd">    Implementation based on the Daylight contrib program tpsa.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateTPSA(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">MOE</span><span class="o">.</span><span class="n">TPSA</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">[</span><span class="s1">&#39;MTPSA&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateSLOGPVSA"><a class="viewcode-back" href="../reference/moe.html#moe.CalculateSLOGPVSA">[docs]</a><span class="k">def</span> <span class="nf">CalculateSLOGPVSA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    MOE-type descriptors using LogP contributions and surface </span>
+<span class="sd">    </span>
+<span class="sd">    area contributions.</span>
+<span class="sd">    </span>
+<span class="sd">    logpBins=[-0.4,-0.2,0,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.6]</span>
+<span class="sd">    </span>
+<span class="sd">    You can specify your own bins to compute some descriptors.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateSLOGPVSA(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form </span>
+<span class="sd">    #################################################################   </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">MOE</span><span class="o">.</span><span class="n">SlogP_VSA_</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;slogPVSA&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculateSMRVSA"><a class="viewcode-back" href="../reference/moe.html#moe.CalculateSMRVSA">[docs]</a><span class="k">def</span> <span class="nf">CalculateSMRVSA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    MOE-type descriptors using MR contributions and surface </span>
+<span class="sd">    </span>
+<span class="sd">    area contributions.</span>
+<span class="sd">    </span>
+<span class="sd">    mrBins=[1.29, 1.82, 2.24, 2.45, 2.75, 3.05, 3.63,3.8,4.0]</span>
+<span class="sd">    </span>
+<span class="sd">    You can specify your own bins to compute some descriptors.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateSMRVSA(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">MOE</span><span class="o">.</span><span class="n">SMR_VSA_</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;MRVSA&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculatePEOEVSA"><a class="viewcode-back" href="../reference/moe.html#moe.CalculatePEOEVSA">[docs]</a><span class="k">def</span> <span class="nf">CalculatePEOEVSA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    MOE-type descriptors using partial charges and surface </span>
+<span class="sd">    </span>
+<span class="sd">    area contributions.</span>
+<span class="sd">    </span>
+<span class="sd">    chgBins=[-.3,-.25,-.20,-.15,-.10,-.05,0,.05,.10,.15,.20,.25,.30]</span>
+<span class="sd">    </span>
+<span class="sd">    You can specify your own bins to compute some descriptors</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculatePEOEVSA(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">MOE</span><span class="o">.</span><span class="n">PEOE_VSA_</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;PEOEVSA&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>    </div>
+
+
+<div class="viewcode-block" id="CalculateEstateVSA"><a class="viewcode-back" href="../reference/moe.html#moe.CalculateEstateVSA">[docs]</a><span class="k">def</span> <span class="nf">CalculateEstateVSA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    MOE-type descriptors using Estate indices and surface area </span>
+<span class="sd">    </span>
+<span class="sd">    contributions.</span>
+<span class="sd">    </span>
+<span class="sd">    estateBins=[-0.390,0.290,0.717,1.165,1.540,1.807,2.05,4.69,9.17,15.0] </span>
+<span class="sd">    </span>
+<span class="sd">    You can specify your own bins to compute some descriptors</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateEstateVSA(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">EVSA</span><span class="o">.</span><span class="n">EState_VSA_</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;EstateVSA&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculateVSAEstate"><a class="viewcode-back" href="../reference/moe.html#moe.CalculateVSAEstate">[docs]</a><span class="k">def</span> <span class="nf">CalculateVSAEstate</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    MOE-type descriptors using Estate indices and surface </span>
+<span class="sd">    </span>
+<span class="sd">    area contributions.</span>
+<span class="sd">    </span>
+<span class="sd">    vsaBins=[4.78,5.00,5.410,5.740,6.00,6.07,6.45,7.00,11.0] </span>
+<span class="sd">    </span>
+<span class="sd">    You can specify your own bins to compute some descriptors</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateVSAEstate(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">EVSA</span><span class="o">.</span><span class="n">VSA_EState_</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;VSAEstate&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+    
+    
+    
+<div class="viewcode-block" id="GetMOE"><a class="viewcode-back" href="../reference/moe.html#moe.GetMOE">[docs]</a><span class="k">def</span> <span class="nf">GetMOE</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The calculation of MOE-type descriptors (ALL).</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        </span>
+<span class="sd">        result=GetMOE(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateLabuteASA</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTPSA</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateSLOGPVSA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateSMRVSA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculatePEOEVSA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateEstateVSA</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateVSAEstate</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<span class="c1">#########################################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    
+    
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;COCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCOCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetMOE</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetMOE</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+        
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

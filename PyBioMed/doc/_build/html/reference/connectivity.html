@@ -1,0 +1,733 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>connectivity module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="constitution module" href="constitution.html" />
+    <link rel="prev" title="charge module" href="charge.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="constitution.html" title="constitution module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="charge.html" title="charge module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="charge.html"
+                        title="previous chapter">charge module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="constitution.html"
+                        title="next chapter">constitution module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/connectivity.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-connectivity">
+<span id="connectivity-module"></span><h1>connectivity module<a class="headerlink" href="#module-connectivity" title="Permalink to this headline">¶</a></h1>
+<p>structure. You can get 44 molecular connectivity descriptors. You can freely</p>
+<p>use and distribute it. If you hava  any problem, you could contact with us timely!</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="connectivity.CalculateChi0">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi0</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 0</p>
+<p>&#8212;-&gt;Chi0</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi0(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi1">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi1</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 1</p>
+<p>(i.e.,Radich)</p>
+<p>&#8212;-&gt;Chi1</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi1(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi10p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi10p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi10p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi10p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 10</p>
+<p>&#8212;-&gt;Chi10</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi10p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi2">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 2</p>
+<p>&#8212;-&gt;Chi2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi2(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi3c">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi3c</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi3c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi3c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for cluster</p>
+<p>&#8212;-&gt;Chi3c</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi3c(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi3ch">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi3ch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi3ch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi3ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for cycles of 3</p>
+<p>&#8212;-&gt;Chi3ch</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi3ch(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi3p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi3p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi3p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi3p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 3</p>
+<p>&#8212;-&gt;Chi3</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi3p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi4c">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi4c</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi4c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi4c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for cluster</p>
+<p>&#8212;-&gt;Chi4c</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi4c(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi4ch">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi4ch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi4ch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi4ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for cycles of 4</p>
+<p>&#8212;-&gt;Chi4ch</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi4ch(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi4p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi4p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi4p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi4p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 4</p>
+<p>&#8212;-&gt;Chi4</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi4p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi4pc">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi4pc</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi4pc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi4pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path/cluster</p>
+<p>&#8212;-&gt;Chi4pc</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi4pc(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi5ch">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi5ch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi5ch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi5ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for cycles of 5</p>
+<p>&#8212;-&gt;Chi5ch</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi5ch(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi5p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi5p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi5p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi5p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 5</p>
+<p>&#8212;-&gt;Chi5</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi5p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi6ch">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi6ch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi6ch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi6ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for cycles of 6</p>
+<p>&#8212;-&gt;Chi6ch</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi6ch(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi6p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi6p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi6p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi6p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 6</p>
+<p>&#8212;-&gt;Chi6</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi6p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi7p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi7p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi7p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi7p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 7</p>
+<p>&#8212;-&gt;Chi7</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi7p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi8p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi8p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi8p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi8p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 8</p>
+<p>&#8212;-&gt;Chi8</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi8p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChi9p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChi9p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChi9p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChi9p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of molecular connectivity chi index for path order 9</p>
+<p>&#8212;-&gt;Chi9</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChi9p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv0">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv0</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 0</p>
+<p>&#8212;-&gt;Chiv0</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv0(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv1">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv1</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 1</p>
+<p>&#8212;-&gt;Chiv1</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv1(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv10p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv10p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv10p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv10p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 10</p>
+<p>&#8212;-&gt;Chiv10</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv10p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv2">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 2</p>
+<p>&#8212;-&gt;Chiv2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv2(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv3c">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv3c</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv3c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv3c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for cluster</p>
+<p>&#8212;-&gt;Chiv3c</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv3c(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv3ch">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv3ch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv3ch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv3ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index</p>
+<p>for cycles of 3</p>
+<p>&#8212;-&gt;Chiv3ch</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv3ch(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv3p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv3p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv3p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv3p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 3</p>
+<p>&#8212;-&gt;Chiv3</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv3p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv4c">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv4c</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv4c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv4c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for cluster</p>
+<p>&#8212;-&gt;Chiv4c</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv4c(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv4ch">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv4ch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv4ch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv4ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>cycles of 4</p>
+<p>&#8212;-&gt;Chiv4ch</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv4ch(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv4p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv4p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv4p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv4p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 4</p>
+<p>&#8212;-&gt;Chiv4</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv4p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv4pc">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv4pc</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv4pc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv4pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path/cluster</p>
+<p>&#8212;-&gt;Chiv4pc</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv4pc(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv5ch">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv5ch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv5ch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv5ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>cycles of 5</p>
+<p>&#8212;-&gt;Chiv5ch</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv5ch(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv5p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv5p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv5p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv5p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 5</p>
+<p>&#8212;-&gt;Chiv5</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv5p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv6ch">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv6ch</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv6ch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv6ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>cycles of 6</p>
+<p>&#8212;-&gt;Chiv6ch</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv6ch(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv6p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv6p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv6p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv6p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 6</p>
+<p>&#8212;-&gt;Chiv6</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv6p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv7p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv7p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv7p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv7p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 7</p>
+<p>&#8212;-&gt;Chiv7</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv7p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv8p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv8p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv8p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv8p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 8</p>
+<p>&#8212;-&gt;Chiv8</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv8p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateChiv9p">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateChiv9p</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateChiv9p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateChiv9p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of valence molecular connectivity chi index for</p>
+<p>path order 9</p>
+<p>&#8212;-&gt;Chiv9</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateChiv9p(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateDeltaChi0">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateDeltaChi0</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateDeltaChi0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateDeltaChi0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the difference between chi0v and chi0</p>
+<p>&#8212;-&gt;dchi0</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDeltaChi0(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateDeltaChi1">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateDeltaChi1</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateDeltaChi1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateDeltaChi1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the difference between chi1v and chi1</p>
+<p>&#8212;-&gt;dchi1</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDeltaChi1(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateDeltaChi2">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateDeltaChi2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateDeltaChi2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateDeltaChi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the difference between chi2v and chi2</p>
+<p>&#8212;-&gt;dchi2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDeltaChi2(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateDeltaChi3">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateDeltaChi3</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateDeltaChi3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateDeltaChi3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the difference between chi3v and chi3</p>
+<p>&#8212;-&gt;dchi3</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDeltaChi3(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateDeltaChi3c4pc">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateDeltaChi3c4pc</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateDeltaChi3c4pc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateDeltaChi3c4pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the difference between chi3c and chi4pc</p>
+<p>&#8212;-&gt;knotp</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDeltaChi3c4pc(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateDeltaChi4">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateDeltaChi4</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateDeltaChi4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateDeltaChi4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the difference between chi4v and chi4</p>
+<p>&#8212;-&gt;dchi4</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDeltaChi4(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateDeltaChiv3c4pc">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateDeltaChiv3c4pc</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateDeltaChiv3c4pc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateDeltaChiv3c4pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the difference between chiv3c and chiv4pc</p>
+<p>&#8212;-&gt;knotpv</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateDeltaChiv3c4pc(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.CalculateMeanRandic">
+<code class="descclassname">connectivity.</code><code class="descname">CalculateMeanRandic</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#CalculateMeanRandic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.CalculateMeanRandic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of mean chi1 (Randic) connectivity index.</p>
+<p>&#8212;-&gt;mchi1</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMeanRandic(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivity.GetConnectivity">
+<code class="descclassname">connectivity.</code><code class="descname">GetConnectivity</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connectivity.html#GetConnectivity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connectivity.GetConnectivity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the dictionary of connectivity descriptors for given moelcule mol</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=GetConnectivity(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing all connectivity indices</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="constitution.html" title="constitution module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="charge.html" title="charge module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

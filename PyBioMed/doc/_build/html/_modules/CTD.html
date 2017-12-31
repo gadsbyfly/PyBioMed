@@ -1,0 +1,869 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>CTD &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for CTD</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">#####################################################################################</span>
+
+<span class="sd">This module is used for computing the composition, transition and distribution </span>
+
+<span class="sd">descriptors based on the different properties of AADs. The AADs with the same </span>
+
+<span class="sd">properties is marked as the same number. You can get 147 descriptors for a given</span>
+
+<span class="sd">protein sequence. You can freely use and distribute it. If you hava  any problem, </span>
+
+<span class="sd">you could contact with us timely!</span>
+
+<span class="sd">References:</span>
+
+<span class="sd">[1]: Inna Dubchak, Ilya Muchink, Stephen R.Holbrook and Sung-Hou Kim. Prediction </span>
+
+<span class="sd">of protein folding class using global description of amino acid sequence. Proc.Natl.</span>
+
+<span class="sd">Acad.Sci.USA, 1995, 92, 8700-8704.</span>
+
+<span class="sd">[2]:Inna Dubchak, Ilya Muchink, Christopher Mayor, Igor Dralyuk and Sung-Hou Kim. </span>
+
+<span class="sd">Recognition of a Protein Fold in the Context of the SCOP classification. Proteins: </span>
+
+<span class="sd">Structure, Function and Genetics,1999,35,401-407.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com</span>
+
+<span class="sd">#####################################################################################</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">string</span><span class="o">,</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">copy</span>
+
+<span class="n">AALetter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">]</span>
+
+<span class="n">_Hydrophobicity</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;RKEDQN&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="s1">&#39;GASTPHY&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s1">&#39;CLVIMFW&#39;</span><span class="p">}</span>
+<span class="c1"># &#39;1&#39;stand for Polar; &#39;2&#39;stand for Neutral, &#39;3&#39; stand for Hydrophobicity</span>
+
+<span class="n">_NormalizedVDWV</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;GASTPD&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="s1">&#39;NVEQIL&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s1">&#39;MHKFRYW&#39;</span><span class="p">}</span>
+<span class="c1"># &#39;1&#39;stand for (0-2.78); &#39;2&#39;stand for (2.95-4.0), &#39;3&#39; stand for (4.03-8.08)</span>
+
+<span class="n">_Polarity</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;LIFWCMVY&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="s1">&#39;CPNVEQIL&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s1">&#39;KMHFRYW&#39;</span><span class="p">}</span>
+<span class="c1"># &#39;1&#39;stand for (4.9-6.2); &#39;2&#39;stand for (8.0-9.2), &#39;3&#39; stand for (10.4-13.0)</span>
+
+<span class="n">_Charge</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;KR&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="s1">&#39;ANCQGHILMFPSTWYV&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s1">&#39;DE&#39;</span><span class="p">}</span>
+<span class="c1"># &#39;1&#39;stand for Positive; &#39;2&#39;stand for Neutral, &#39;3&#39; stand for Negative</span>
+
+<span class="n">_SecondaryStr</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;EALMQKRH&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="s1">&#39;VIYCWFT&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s1">&#39;GNPSD&#39;</span><span class="p">}</span>
+<span class="c1"># &#39;1&#39;stand for Helix; &#39;2&#39;stand for Strand, &#39;3&#39; stand for coil</span>
+
+<span class="n">_SolventAccessibility</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;ALFCGIVW&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="s1">&#39;RKQEND&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s1">&#39;MPSTHY&#39;</span><span class="p">}</span>
+<span class="c1"># &#39;1&#39;stand for Buried; &#39;2&#39;stand for Exposed, &#39;3&#39; stand for Intermediate</span>
+
+<span class="n">_Polarizability</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;GASDT&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="s1">&#39;CPNVEQIL&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s1">&#39;KMHFRYW&#39;</span><span class="p">}</span>
+<span class="c1"># &#39;1&#39;stand for (0-0.108); &#39;2&#39;stand for (0.128-0.186), &#39;3&#39; stand for (0.219-0.409)</span>
+
+
+<span class="c1">##You can continuely add other properties of AADs to compute descriptors of protein sequence.</span>
+
+<span class="n">_AATProperty</span> <span class="o">=</span> <span class="p">(</span>
+<span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="n">_NormalizedVDWV</span><span class="p">,</span> <span class="n">_Polarity</span><span class="p">,</span> <span class="n">_Charge</span><span class="p">,</span> <span class="n">_SecondaryStr</span><span class="p">,</span> <span class="n">_SolventAccessibility</span><span class="p">,</span> <span class="n">_Polarizability</span><span class="p">)</span>
+
+<span class="n">_AATPropertyName</span> <span class="o">=</span> <span class="p">(</span>
+<span class="s1">&#39;_Hydrophobicity&#39;</span><span class="p">,</span> <span class="s1">&#39;_NormalizedVDWV&#39;</span><span class="p">,</span> <span class="s1">&#39;_Polarity&#39;</span><span class="p">,</span> <span class="s1">&#39;_Charge&#39;</span><span class="p">,</span> <span class="s1">&#39;_SecondaryStr&#39;</span><span class="p">,</span> <span class="s1">&#39;_SolventAccessibility&#39;</span><span class="p">,</span>
+<span class="s1">&#39;_Polarizability&#39;</span><span class="p">)</span>
+
+
+<span class="c1">##################################################################################################</span>
+
+<div class="viewcode-block" id="StringtoNum"><a class="viewcode-back" href="../reference/CTD.html#CTD.StringtoNum">[docs]</a><span class="k">def</span> <span class="nf">StringtoNum</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    Tranform the protein sequence into the string form such as 32123223132121123.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=StringtoNum(protein,AAProperty)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.</span>
+
+<span class="sd">    Output: result is a string such as 123321222132111123222</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">hardProteinSequence</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">AAProperty</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">hardProteinSequence</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hardProteinSequence</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">TProteinSequence</span> <span class="o">=</span> <span class="n">hardProteinSequence</span>
+
+    <span class="k">return</span> <span class="n">TProteinSequence</span></div>
+
+
+<div class="viewcode-block" id="CalculateComposition"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateComposition">[docs]</a><span class="k">def</span> <span class="nf">CalculateComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">,</span> <span class="n">AAPName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for computing composition descriptors.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateComposition(protein,AAProperty,AAPName)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.</span>
+
+<span class="sd">    AAPName is a string used for indicating a AAP name.</span>
+
+<span class="sd">    Output: result is a dict form containing composition descriptors based on the given property.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">TProteinSequence</span> <span class="o">=</span> <span class="n">StringtoNum</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">)</span>
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">Num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">TProteinSequence</span><span class="p">)</span>
+    <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;C&#39;</span> <span class="o">+</span> <span class="s1">&#39;1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">TProteinSequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="n">Num</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;C&#39;</span> <span class="o">+</span> <span class="s1">&#39;2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">TProteinSequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="n">Num</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;C&#39;</span> <span class="o">+</span> <span class="s1">&#39;3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">TProteinSequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="n">Num</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<div class="viewcode-block" id="CalculateTransition"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateTransition">[docs]</a><span class="k">def</span> <span class="nf">CalculateTransition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">,</span> <span class="n">AAPName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for computing transition descriptors</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateTransition(protein,AAProperty,AAPName)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.</span>
+
+<span class="sd">    AAPName is a string used for indicating a AAP name.</span>
+
+<span class="sd">    Output:result is a dict form containing transition descriptors based on the given property.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TProteinSequence</span> <span class="o">=</span> <span class="n">StringtoNum</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">)</span>
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">Num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">TProteinSequence</span><span class="p">)</span>
+    <span class="n">CTD</span> <span class="o">=</span> <span class="n">TProteinSequence</span>
+    <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;T&#39;</span> <span class="o">+</span> <span class="s1">&#39;12&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">CTD</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;12&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">CTD</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;21&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">Num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;T&#39;</span> <span class="o">+</span> <span class="s1">&#39;13&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">CTD</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;13&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">CTD</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;31&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">Num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;T&#39;</span> <span class="o">+</span> <span class="s1">&#39;23&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">CTD</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;23&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">CTD</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;32&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">Num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<div class="viewcode-block" id="CalculateDistribution"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateDistribution">[docs]</a><span class="k">def</span> <span class="nf">CalculateDistribution</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">,</span> <span class="n">AAPName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for computing distribution descriptors.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateDistribution(protein,AAProperty,AAPName)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.</span>
+
+<span class="sd">    AAPName is a string used for indicating a AAP name.</span>
+
+<span class="sd">    Output:result is a dict form containing Distribution descriptors based on the given property.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">TProteinSequence</span> <span class="o">=</span> <span class="n">StringtoNum</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">)</span>
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">Num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">TProteinSequence</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">TProteinSequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">ink</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">indexk</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">cds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="n">ink</span> <span class="o">&lt;=</span> <span class="n">num</span><span class="p">:</span>
+            <span class="n">indexk</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">TProteinSequence</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">indexk</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">cds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indexk</span><span class="p">)</span>
+            <span class="n">ink</span> <span class="o">=</span> <span class="n">ink</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">cds</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;001&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;025&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;050&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;075&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;100&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;001&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">Num</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;025&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cds</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">num</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">Num</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;050&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cds</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">num</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">Num</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;075&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cds</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">num</span> <span class="o">*</span> <span class="mf">0.75</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">Num</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">AAPName</span> <span class="o">+</span> <span class="s1">&#39;D&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;100&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">Num</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+<div class="viewcode-block" id="CalculateCompositionHydrophobicity"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateCompositionHydrophobicity">[docs]</a><span class="k">def</span> <span class="nf">CalculateCompositionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating composition descriptors based on Hydrophobicity of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateCompositionHydrophobicity(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Composition descriptors based on Hydrophobicity.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="s1">&#39;_Hydrophobicity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateCompositionNormalizedVDWV"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateCompositionNormalizedVDWV">[docs]</a><span class="k">def</span> <span class="nf">CalculateCompositionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating composition descriptors based on NormalizedVDWV of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateCompositionNormalizedVDWV(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Composition descriptors based on NormalizedVDWV.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_NormalizedVDWV</span><span class="p">,</span> <span class="s1">&#39;_NormalizedVDWV&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateCompositionPolarity"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateCompositionPolarity">[docs]</a><span class="k">def</span> <span class="nf">CalculateCompositionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating composition descriptors based on Polarity of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateCompositionPolarity(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Composition descriptors based on Polarity.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarity</span><span class="p">,</span> <span class="s1">&#39;_Polarity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateCompositionCharge"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateCompositionCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateCompositionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating composition descriptors based on Charge of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateCompositionCharge(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Composition descriptors based on Charge.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Charge</span><span class="p">,</span> <span class="s1">&#39;_Charge&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateCompositionSecondaryStr"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateCompositionSecondaryStr">[docs]</a><span class="k">def</span> <span class="nf">CalculateCompositionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating composition descriptors based on SecondaryStr of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateCompositionSecondaryStr(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Composition descriptors based on SecondaryStr.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_SecondaryStr</span><span class="p">,</span> <span class="s1">&#39;_SecondaryStr&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateCompositionSolventAccessibility"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateCompositionSolventAccessibility">[docs]</a><span class="k">def</span> <span class="nf">CalculateCompositionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating composition descriptors based on SolventAccessibility</span>
+
+<span class="sd">    of  AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateCompositionSolventAccessibility(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Composition descriptors based on SolventAccessibility.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_SolventAccessibility</span><span class="p">,</span> <span class="s1">&#39;_SolventAccessibility&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateCompositionPolarizability"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateCompositionPolarizability">[docs]</a><span class="k">def</span> <span class="nf">CalculateCompositionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating composition descriptors based on Polarizability of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateCompositionPolarizability(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Composition descriptors based on Polarizability.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateComposition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarizability</span><span class="p">,</span> <span class="s1">&#39;_Polarizability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+
+
+<span class="c1">##################################################################################################</span>
+<div class="viewcode-block" id="CalculateTransitionHydrophobicity"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateTransitionHydrophobicity">[docs]</a><span class="k">def</span> <span class="nf">CalculateTransitionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Transition descriptors based on Hydrophobicity of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateTransitionHydrophobicity(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Transition descriptors based on Hydrophobicity.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateTransition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="s1">&#39;_Hydrophobicity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateTransitionNormalizedVDWV"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateTransitionNormalizedVDWV">[docs]</a><span class="k">def</span> <span class="nf">CalculateTransitionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Transition descriptors based on NormalizedVDWV of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateTransitionNormalizedVDWV(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Transition descriptors based on NormalizedVDWV.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateTransition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_NormalizedVDWV</span><span class="p">,</span> <span class="s1">&#39;_NormalizedVDWV&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateTransitionPolarity"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateTransitionPolarity">[docs]</a><span class="k">def</span> <span class="nf">CalculateTransitionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Transition descriptors based on Polarity of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateTransitionPolarity(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Transition descriptors based on Polarity.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateTransition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarity</span><span class="p">,</span> <span class="s1">&#39;_Polarity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateTransitionCharge"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateTransitionCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateTransitionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Transition descriptors based on Charge of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateTransitionCharge(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Transition descriptors based on Charge.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateTransition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Charge</span><span class="p">,</span> <span class="s1">&#39;_Charge&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateTransitionSecondaryStr"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateTransitionSecondaryStr">[docs]</a><span class="k">def</span> <span class="nf">CalculateTransitionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Transition descriptors based on SecondaryStr of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateTransitionSecondaryStr(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Transition descriptors based on SecondaryStr.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateTransition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_SecondaryStr</span><span class="p">,</span> <span class="s1">&#39;_SecondaryStr&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateTransitionSolventAccessibility"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateTransitionSolventAccessibility">[docs]</a><span class="k">def</span> <span class="nf">CalculateTransitionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Transition descriptors based on SolventAccessibility</span>
+
+<span class="sd">    of  AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateTransitionSolventAccessibility(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Transition descriptors based on SolventAccessibility.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateTransition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_SolventAccessibility</span><span class="p">,</span> <span class="s1">&#39;_SolventAccessibility&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateTransitionPolarizability"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateTransitionPolarizability">[docs]</a><span class="k">def</span> <span class="nf">CalculateTransitionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Transition descriptors based on Polarizability of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateTransitionPolarizability(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Transition descriptors based on Polarizability.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateTransition</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarizability</span><span class="p">,</span> <span class="s1">&#39;_Polarizability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+<span class="c1">##################################################################################################</span>
+<div class="viewcode-block" id="CalculateDistributionHydrophobicity"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateDistributionHydrophobicity">[docs]</a><span class="k">def</span> <span class="nf">CalculateDistributionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Distribution descriptors based on Hydrophobicity of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateDistributionHydrophobicity(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Distribution descriptors based on Hydrophobicity.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateDistribution</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="s1">&#39;_Hydrophobicity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateDistributionNormalizedVDWV"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateDistributionNormalizedVDWV">[docs]</a><span class="k">def</span> <span class="nf">CalculateDistributionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Distribution descriptors based on NormalizedVDWV of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateDistributionNormalizedVDWV(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Distribution descriptors based on NormalizedVDWV.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateDistribution</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_NormalizedVDWV</span><span class="p">,</span> <span class="s1">&#39;_NormalizedVDWV&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateDistributionPolarity"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateDistributionPolarity">[docs]</a><span class="k">def</span> <span class="nf">CalculateDistributionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Distribution descriptors based on Polarity of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateDistributionPolarity(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Distribution descriptors based on Polarity.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateDistribution</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarity</span><span class="p">,</span> <span class="s1">&#39;_Polarity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateDistributionCharge"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateDistributionCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateDistributionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Distribution descriptors based on Charge of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateDistributionCharge(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Distribution descriptors based on Charge.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateDistribution</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Charge</span><span class="p">,</span> <span class="s1">&#39;_Charge&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateDistributionSecondaryStr"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateDistributionSecondaryStr">[docs]</a><span class="k">def</span> <span class="nf">CalculateDistributionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Distribution descriptors based on SecondaryStr of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateDistributionSecondaryStr(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Distribution descriptors based on SecondaryStr.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateDistribution</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_SecondaryStr</span><span class="p">,</span> <span class="s1">&#39;_SecondaryStr&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateDistributionSolventAccessibility"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateDistributionSolventAccessibility">[docs]</a><span class="k">def</span> <span class="nf">CalculateDistributionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Distribution descriptors based on SolventAccessibility</span>
+
+<span class="sd">    of  AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateDistributionSolventAccessibility(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Distribution descriptors based on SolventAccessibility.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateDistribution</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_SolventAccessibility</span><span class="p">,</span> <span class="s1">&#39;_SolventAccessibility&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateDistributionPolarizability"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateDistributionPolarizability">[docs]</a><span class="k">def</span> <span class="nf">CalculateDistributionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    A method used for calculating Distribution descriptors based on Polarizability of</span>
+
+<span class="sd">    AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateDistributionPolarizability(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing Distribution descriptors based on Polarizability.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateDistribution</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarizability</span><span class="p">,</span> <span class="s1">&#39;_Polarizability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+
+<div class="viewcode-block" id="CalculateC"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateC">[docs]</a><span class="k">def</span> <span class="nf">CalculateC</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    Calculate all composition descriptors based seven different properties of AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateC(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing all composition descriptors.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateT"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateT">[docs]</a><span class="k">def</span> <span class="nf">CalculateT</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    Calculate all transition descriptors based seven different properties of AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateT(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing all transition descriptors.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateD"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateD">[docs]</a><span class="k">def</span> <span class="nf">CalculateD</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    Calculate all distribution descriptors based seven different properties of AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateD(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing all distribution descriptors.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateCTD"><a class="viewcode-back" href="../reference/CTD.html#CTD.CalculateCTD">[docs]</a><span class="k">def</span> <span class="nf">CalculateCTD</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    Calculate all CTD descriptors based seven different properties of AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateCTD(protein)</span>
+
+<span class="sd">    Input:protein is a pure protein sequence.</span>
+
+<span class="sd">    Output:result is a dict form containing all CTD descriptors.</span>
+<span class="sd">    ###############################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateCompositionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateTransitionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionSolventAccessibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionSecondaryStr</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionCharge</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionPolarity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionNormalizedVDWV</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateDistributionHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">protein</span> <span class="o">=</span> <span class="s2">&quot;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS&quot;</span>
+    <span class="nb">print</span> <span class="n">CalculateCTD</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

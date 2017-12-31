@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyDNApsenac module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyDNA" href="PyDNA.html" />
+    <link rel="next" title="PyDNApsenacutil module" href="PyDNApsenacutil.html" />
+    <link rel="prev" title="PyDNAnacutil module" href="PyDNAnacutil.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PyDNApsenacutil.html" title="PyDNApsenacutil module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PyDNAnacutil.html" title="PyDNAnacutil module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyDNA.html" accesskey="U">PyDNA</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="PyDNAnacutil.html"
+                        title="previous chapter">PyDNAnacutil module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="PyDNApsenacutil.html"
+                        title="next chapter">PyDNApsenacutil module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/PyDNApsenac.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-PyDNApsenac">
+<span id="pydnapsenac-module"></span><h1>PyDNApsenac module<a class="headerlink" href="#module-PyDNApsenac" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<p>A class used for computing different types of DNA descriptors!</p>
+<p>You can freely use and distribute it. If you have any problem,</p>
+<p>you could contact with us timely.</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.14</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyDNApsenac.CheckPsenac">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">CheckPsenac</code><span class="sig-paren">(</span><em>lamada</em>, <em>w</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#CheckPsenac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.CheckPsenac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the validation of parameter lamada, w and k.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetPCPseDNC">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetPCPseDNC</code><span class="sig-paren">(</span><em>input_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetPCPseDNC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetPCPseDNC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a PCPseDNC dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file object or sequence list.</li>
+<li><strong>phyche_index</strong> &#8211; physicochemical properties list.</li>
+<li><strong>all_property</strong> &#8211; choose all physicochemical properties or not.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetPCPseTNC">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetPCPseTNC</code><span class="sig-paren">(</span><em>input_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetPCPseTNC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetPCPseTNC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a PCPseDNC dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file object or sequence list.</li>
+<li><strong>phyche_index</strong> &#8211; physicochemical properties list.</li>
+<li><strong>all_property</strong> &#8211; choose all physicochemical properties or not.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetPseDNC">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetPseDNC</code><span class="sig-paren">(</span><em>input_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetPseDNC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetPseDNC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make PseDNC dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file type or handle.</li>
+<li><strong>k</strong> &#8211; k-tuple.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetPseKNC">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetPseKNC</code><span class="sig-paren">(</span><em>input_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetPseKNC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetPseKNC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make PseKNC dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file type or handle.</li>
+<li><strong>k</strong> &#8211; k-tuple.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetSCPseDNC">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetSCPseDNC</code><span class="sig-paren">(</span><em>input_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetSCPseDNC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetSCPseDNC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a SCPseDNC dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file object or sequence list.</li>
+<li><strong>phyche_index</strong> &#8211; physicochemical properties list.</li>
+<li><strong>all_property</strong> &#8211; choose all physicochemical properties or not.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetSCPseTNC">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetSCPseTNC</code><span class="sig-paren">(</span><em>input_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetSCPseTNC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetSCPseTNC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a SCPseTNC dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file object or sequence list.</li>
+<li><strong>phyche_index</strong> &#8211; physicochemical properties list.</li>
+<li><strong>all_property</strong> &#8211; choose all physicochemical properties or not.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetSequenceListAndPhycheValue">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetSequenceListAndPhycheValue</code><span class="sig-paren">(</span><em>input_data</em>, <em>k</em>, <em>phyche_index</em>, <em>extra_phyche_index</em>, <em>all_property</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetSequenceListAndPhycheValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetSequenceListAndPhycheValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>For PseKNC-general make sequence_list and phyche_value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file type or handle.</li>
+<li><strong>k</strong> &#8211; int, the value of k-tuple.</li>
+<li><strong>k</strong> &#8211; physicochemical properties list.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+<li><strong>all_property</strong> &#8211; bool, choose all physicochemical properties or not.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetSequenceListAndPhycheValuePsednc">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetSequenceListAndPhycheValuePsednc</code><span class="sig-paren">(</span><em>input_data</em>, <em>extra_phyche_index=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetSequenceListAndPhycheValuePsednc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetSequenceListAndPhycheValuePsednc" title="Permalink to this definition">¶</a></dt>
+<dd><p>For PseDNC, PseKNC, make sequence_list and phyche_value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file type or handle.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDNApsenac.GetSequenceListAndPhycheValuePseknc">
+<code class="descclassname">PyDNApsenac.</code><code class="descname">GetSequenceListAndPhycheValuePseknc</code><span class="sig-paren">(</span><em>input_data</em>, <em>extra_phyche_index=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyDNApsenac.html#GetSequenceListAndPhycheValuePseknc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyDNApsenac.GetSequenceListAndPhycheValuePseknc" title="Permalink to this definition">¶</a></dt>
+<dd><p>For PseDNC, PseKNC, make sequence_list and phyche_value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_data</strong> &#8211; file type or handle.</li>
+<li><strong>extra_phyche_index</strong> &#8211; <dl class="docutils">
+<dt>dict, the key is the dinucleotide (string),</dt>
+<dd>the value is its physicochemical property value (list).</dd>
+</dl>
+<p>It means the user-defined physicochemical indices.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PyDNApsenacutil.html" title="PyDNApsenacutil module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PyDNAnacutil.html" title="PyDNAnacutil module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyDNA.html" >PyDNA</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

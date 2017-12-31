@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>molproperty module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="moran module" href="moran.html" />
+    <link rel="prev" title="moe module" href="moe.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="moran.html" title="moran module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="moe.html" title="moe module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="moe.html"
+                        title="previous chapter">moe module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="moran.html"
+                        title="next chapter">moran module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/molproperty.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-molproperty">
+<span id="molproperty-module"></span><h1>molproperty module<a class="headerlink" href="#module-molproperty" title="Permalink to this headline">¶</a></h1>
+<p>type of approaches(6), including: LogP; LogP2; MR; TPSA, UI and Hy.You can</p>
+<p>freely use and distribute it. If you hava  any problem, you could contact</p>
+<p>with us timely!</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="molproperty.CalculateHydrophilicityFactor">
+<code class="descclassname">molproperty.</code><code class="descname">CalculateHydrophilicityFactor</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#CalculateHydrophilicityFactor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.CalculateHydrophilicityFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of hydrophilicity factor. The hydrophilicity</p>
+<p>index is described in more detail on page 225 of the</p>
+<p>Handbook of Molecular Descriptors (Todeschini and Consonni 2000).</p>
+<p>&#8212;-&gt;Hy</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHydrophilicityFactor(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="molproperty.CalculateMolLogP">
+<code class="descclassname">molproperty.</code><code class="descname">CalculateMolLogP</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#CalculateMolLogP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.CalculateMolLogP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cacluation of LogP value based on Crippen method</p>
+<p>&#8212;-&gt;LogP</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMolLogP(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="molproperty.CalculateMolLogP2">
+<code class="descclassname">molproperty.</code><code class="descname">CalculateMolLogP2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#CalculateMolLogP2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.CalculateMolLogP2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cacluation of LogP^2 value based on Crippen method</p>
+<p>&#8212;-&gt;LogP2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMolLogP2(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="molproperty.CalculateMolMR">
+<code class="descclassname">molproperty.</code><code class="descname">CalculateMolMR</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#CalculateMolMR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.CalculateMolMR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cacluation of molecular refraction value based on Crippen method</p>
+<p>&#8212;-&gt;MR</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMolMR(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="molproperty.CalculateTPSA">
+<code class="descclassname">molproperty.</code><code class="descname">CalculateTPSA</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#CalculateTPSA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.CalculateTPSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the polar surface area of a molecule based upon fragments</p>
+<p>Algorithm in:</p>
+<ol class="upperalpha simple" start="16">
+<li>Ertl, B. Rohde, P. Selzer</li>
+</ol>
+<p>Fast Calculation of Molecular Polar Surface Area as a Sum of</p>
+<p>Fragment-based Contributions and Its Application to the Prediction</p>
+<p>of Drug Transport Properties, J.Med.Chem. 43, 3714-3717, 2000</p>
+<p>Implementation based on the Daylight contrib program tpsa.</p>
+<p>&#8212;-&gt;TPSA</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateTPSA(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="molproperty.CalculateUnsaturationIndex">
+<code class="descclassname">molproperty.</code><code class="descname">CalculateUnsaturationIndex</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#CalculateUnsaturationIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.CalculateUnsaturationIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of unsaturation index.</p>
+<p>&#8212;-&gt;UI</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateUnsaturationIndex(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="molproperty.CalculateXlogP">
+<code class="descclassname">molproperty.</code><code class="descname">CalculateXlogP</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#CalculateXlogP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.CalculateXlogP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Wang octanol water partition coefficient.</p>
+<p>&#8212;-&gt;XLogP</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateXlogP(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="molproperty.CalculateXlogP2">
+<code class="descclassname">molproperty.</code><code class="descname">CalculateXlogP2</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#CalculateXlogP2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.CalculateXlogP2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Wang octanol water partition coefficient (XLogP^2).</p>
+<p>&#8212;-&gt;XLogP2</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMolLogP(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="molproperty.GetMolecularProperty">
+<code class="descclassname">molproperty.</code><code class="descname">GetMolecularProperty</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/molproperty.html#GetMolecularProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#molproperty.GetMolecularProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the dictionary of constitutional descriptors for</p>
+<p>given moelcule mol</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=GetMolecularProperty(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing 6 molecular properties.</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="moran.html" title="moran module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="moe.html" title="moe module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

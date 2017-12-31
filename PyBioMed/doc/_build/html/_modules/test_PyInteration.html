@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>test_PyInteration &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for test_PyInteration</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The script is used for testing.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.14</span>
+
+<span class="sd">Email: gadsby@163.com </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+    
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="test_pyinteration"><a class="viewcode-back" href="../reference/test_PyInteration.html#test_PyInteration.test_pyinteration">[docs]</a><span class="k">def</span> <span class="nf">test_pyinteration</span><span class="p">():</span>
+    
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyInteraction.PyInteraction</span> <span class="k">import</span> <span class="n">CalculateInteraction1</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyInteraction.PyInteraction</span> <span class="k">import</span> <span class="n">CalculateInteraction2</span>
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyInteraction.PyInteraction</span> <span class="k">import</span> <span class="n">CalculateInteraction3</span>
+    
+        
+    
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyDNA</span> <span class="k">import</span> <span class="n">PyDNAac</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the DNA descriptors&#39;</span>
+    
+    
+    <span class="n">DNA_des</span> <span class="o">=</span> <span class="n">PyDNAac</span><span class="o">.</span><span class="n">GetTCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">,</span><span class="s1">&#39;MW-kg&#39;</span><span class="p">])</span>
+    
+    <span class="nb">print</span> <span class="n">DNA_des</span>
+    
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the protein descriptors&#39;</span>
+    
+    
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyProtein</span> <span class="k">import</span> <span class="n">CTD</span>
+    <span class="n">protein</span><span class="o">=</span><span class="s2">&quot;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS&quot;</span>
+    <span class="n">protein_des</span> <span class="o">=</span> <span class="n">CTD</span><span class="o">.</span><span class="n">CalculateCTD</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the molecular descriptors&#39;</span>
+    
+    <span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule</span> <span class="k">import</span> <span class="n">moe</span>
+    <span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smis</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">mol_des</span> <span class="o">=</span> <span class="n">moe</span><span class="o">.</span><span class="n">GetMOE</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the Interaction type 1 module&#39;</span>
+    
+    <span class="n">mol_mol_interaction1</span> <span class="o">=</span> <span class="n">CalculateInteraction1</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">mol_des</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">mol_mol_interaction1</span>
+    
+    <span class="n">pro_mol_interaction1</span> <span class="o">=</span> <span class="n">CalculateInteraction1</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">protein_des</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">pro_mol_interaction1</span>
+    
+    <span class="n">DNA_mol_interaction1</span> <span class="o">=</span> <span class="n">CalculateInteraction1</span><span class="p">(</span><span class="n">DNA_des</span><span class="p">,</span><span class="n">mol_des</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">DNA_mol_interaction1</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the Interaction type 2 module&#39;</span>
+    
+    <span class="n">mol_mol_interaction2</span> <span class="o">=</span> <span class="n">CalculateInteraction2</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">mol_des</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">mol_mol_interaction2</span>
+    
+    <span class="n">pro_mol_interaction2</span> <span class="o">=</span> <span class="n">CalculateInteraction2</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">protein_des</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">pro_mol_interaction2</span>
+    
+    <span class="n">DNA_mol_interaction2</span> <span class="o">=</span> <span class="n">CalculateInteraction2</span><span class="p">(</span><span class="n">DNA_des</span><span class="p">,</span><span class="n">mol_des</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">DNA_mol_interaction2</span>
+    
+    <span class="nb">print</span> <span class="s1">&#39;...............................................................&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;testing the Interaction type 3 module&#39;</span>
+    
+    <span class="n">mol_mol_interaction3</span> <span class="o">=</span> <span class="n">CalculateInteraction3</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">mol_des</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">mol_mol_interaction3</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_pyinteration</span><span class="p">()</span>
+
+
+
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

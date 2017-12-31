@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Overview &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="index.html" />
+    <link rel="next" title="Getting Started with PyBioMed" href="User_guide.html" />
+    <link rel="prev" title="The PyBioMed Documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="User_guide.html" title="Getting Started with PyBioMed"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="The PyBioMed Documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBioMed 1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Overview</a><ul>
+<li><a class="reference internal" href="#who-uses-pybiomed">Who uses PyBioMed?</a></li>
+<li><a class="reference internal" href="#motivation">Motivation</a></li>
+<li><a class="reference internal" href="#feature-overview">Feature overview</a></li>
+<li><a class="reference internal" href="#the-python-programming-language">The Python programming language</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">The PyBioMed Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="User_guide.html"
+                        title="next chapter">Getting Started with PyBioMed</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/overview.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>To develop a powerful model for prediction tasks by machine learning algorithms such as sckit-learn, one of the most important things to consider is how to effectively represent the molecules under investigation such as small molecules, proteins, DNA and even complex interactions, by a descriptor. PyBioMed is a feature-rich package used for the characterization of various complex biological molecules and interaction samples, such as chemicals, proteins, DNA, and their interactions. PyBioMed calculates nine types of features including chemical descriptors or molecular fingerprints, structural and physicochemical features of proteins and peptides from amino acid sequence, composition and physicochemical features of DNA from their primary sequences, chemical-chemical interaction features, chemical-protein interaction features, chemical-DNA interaction features, protein-protein interaction features, protein-DNA interaction features, and DNA-DNA interaction features. We hope that the package can be used for exploring questions concerning structures, functions and interactions of various molecular data in the context of chemoinformatics, bioinformatics, and systems biology.  The python package PyBioMed is designed by CBDD Group (Computational Biology &amp; Drug Design Group), Xiangya School of Pharmaceutical Sciences, Central South University.</p>
+<div class="section" id="who-uses-pybiomed">
+<h2>Who uses PyBioMed?<a class="headerlink" href="#who-uses-pybiomed" title="Permalink to this headline">¶</a></h2>
+<p>For those researchers from different biomedical fields, the PyBioMed package can be used to analyze and represent various complex molecular data under investigation. PyBioMed will be helpful when exploring questions concerning structures, functions and interactions of various molecular data in the context of chemoinformatics, bioinformatics, and systems biology.</p>
+</div>
+<div class="section" id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
+<p>PyBioMed is intended to provide</p>
+<ul class="simple">
+<li>Tools for pretreating molecules, proteins sequence and DNA sequence</li>
+<li>Calculating chemical descriptors or molecular fingerprints from
+molecules&#8217; structures</li>
+<li>Calculating structural and physicochemical features of proteins and peptides
+from amino acid sequence</li>
+<li>Calculating composition and physicochemical features of DNA
+from their primary sequences</li>
+<li>Calculating interaction features including chemical-chemical interaction features,
+chemical-protein interaction features, chemical-DNA interaction features,
+protein-protein interaction features, protein-DNA interaction features
+and DNA-DNA interaction features.</li>
+<li>Getting molecular structures, protein sequence and DNA sequence from Internet through
+the molecular ID, protein ID and DNA ID.</li>
+</ul>
+</div>
+<div class="section" id="feature-overview">
+<h2>Feature overview<a class="headerlink" href="#feature-overview" title="Permalink to this headline">¶</a></h2>
+<p>The table below shows the descriptors and the number of the descriptor that PyBioMed can calculate in four modules including PyMolecule, PyProtein, PyDNA and PyInteraction. PyMolecule module can calculate 14 different types of molecular descriptors and 18 different types of molecular fingerprints. PyProtein module can calculate 14 types of protein descriptors. PyDNA module can calculate 14 types of DNA descriptors and the number in the table appears when parameters are &#8216;all_property = True, lamada=2, w=0.05&#8217;. PyInteraction module can calculate three types of descriptors.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="63%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Types</th>
+<th class="head">Features</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="2">PyMolecule</td>
+<td><ul class="first last simple">
+<li>Constitution (30)</li>
+<li>Connectivity descriptors (44)</li>
+<li>Topology descriptors (35)</li>
+<li>Basak descriptors (21)</li>
+<li>Burden descriptors (64)</li>
+<li>Kappa descriptors (7)</li>
+<li>E-state descriptors (237)</li>
+<li>Moran autocorrelation descriptors (32)</li>
+<li>Geary autocorrelation descriptors (32)</li>
+<li>Molecular property descriptors (6)</li>
+<li>Moreau-Broto autocorrelation descriptors (32)</li>
+<li>Charge descriptors (25)</li>
+<li>MOE-type descriptors (60)</li>
+<li>CATS2D descriptors (150)</li>
+</ul>
+</td>
+<td rowspan="2"><a class="reference external" href="https://raw.githubusercontent.com/gadsbyfly/PyBioMed/master/PyBioMed/download/PyBioMed%20Chem.pdf">PyMolecule</a></td>
+</tr>
+<tr class="row-odd"><td><ul class="first last simple">
+<li>Daylight-type fingerprints (2048)</li>
+<li>MACCS fingerprints (166)</li>
+<li>Atom pairs fingerprints (1024)</li>
+<li>TopologicalTorsion fingerprints (1024)</li>
+<li>E-state fingerprints (79)</li>
+<li>FP2 fingerprints (1024)</li>
+<li>FP3 fingerprints (210)</li>
+<li>FP4 fingerprints (307)</li>
+<li>ECFP2 fingerprints (1024)</li>
+<li>ECFP4 fingerprints (1024)</li>
+<li>ECFP6 fingerprints  (1024)</li>
+<li>Morgan fingerprints (1024)</li>
+<li>Ghosecrippen fingerprints (110)</li>
+<li>FCFP2 fingerprints (1024)</li>
+<li>FCFP4 fingerprints (1024)</li>
+<li>FCFP6 fingerprints (1024)</li>
+<li>Pharm2D2point fingerprints (135)</li>
+<li>Pharm2D3point fingerprints (2135)</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td>PyProtein</td>
+<td><ul class="first last simple">
+<li>Amino acid composition (20)</li>
+<li>Dipeptide composition (400)</li>
+<li>Tripeptide composition (8000)</li>
+<li>CTD composition (21)</li>
+<li>CTD transition (21)</li>
+<li>CTD distribution (105)</li>
+<li>M-B autocorrelation (240)</li>
+<li>Moran autocorrelation (240)</li>
+<li>Geary autocorrelation (240)</li>
+<li>Conjoint triad features (343)</li>
+<li>Quasi-sequence order descriptors (100)</li>
+<li>Sequence order coupling number (60)</li>
+<li>Pseudo amino acid composition 1 (50)</li>
+<li>Pseudo amino acid composition 2 (50)</li>
+</ul>
+</td>
+<td><a class="reference external" href="https://github.com/gadsbyfly/PyBioMed/blob/master/PyBioMed/download/PyBioMed%20Protein.pdf">PyProtein</a></td>
+</tr>
+<tr class="row-odd"><td>PyDNA</td>
+<td><ul class="first last simple">
+<li>Basic kmer (16) (k=2)</li>
+<li>Reverse compliment kmer (10) (k=2)</li>
+<li>DAC (76) (all_property=True)</li>
+<li>DCC (2812) (all_property=True)</li>
+<li>DACC (2888) (all_property=True)</li>
+<li>TAC (24) (all_property=True)</li>
+<li>TCC (264) (all_property=True)</li>
+<li>TACC (288) (all_property=True)</li>
+<li>PseDNC (18) (all_property=True,lamada=2,w=0.05)</li>
+<li>PseKNC (66) (all_property=True,lamada=2,w=0.05)</li>
+<li>PC-PseDNC (18) (all_property=True,lamada=2,w=0.05)</li>
+<li>PC-PseTNC (66) (all_property=True,lamada=2,w=0.05)</li>
+<li>SC-PseDNC (92) (all_property=True,lamada=2,w=0.05)</li>
+<li>SC-PseTNC (88) (all_property=True,lamada=2,w=0.05)</li>
+</ul>
+</td>
+<td><a class="reference external" href="https://github.com/gadsbyfly/PyBioMed/blob/master/PyBioMed/download/PyBioMed%20DNA.pdf">PyDNA</a></td>
+</tr>
+<tr class="row-even"><td>PyInteraction</td>
+<td><ul class="first last simple">
+<li>Feature type 1</li>
+<li>Feature type 2</li>
+<li>Feature type 3</li>
+</ul>
+</td>
+<td><a class="reference external" href="https://github.com/gadsbyfly/PyBioMed/blob/master/PyBioMed/download/PyBioMed%20Interaction.pdf">PyInter</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="the-python-programming-language">
+<h2>The Python programming language<a class="headerlink" href="#the-python-programming-language" title="Permalink to this headline">¶</a></h2>
+<p>Python is a powerful programming language that allows simple and flexible representations of biochemical molecules, and clear and concise expressions of bioinformatics algorithms. Python has a vibrant and growing ecosystem of packages that PyBioMed uses to provide more features such as RDkit and Pybel. In addition, Python is also an excellent “glue” language for putting together pieces of software from other languages which allows reuse of legacy code and engineering of high-performance algorithms. Equally important, Python is free, well-supported, and a joy to use. In order to make full use of PyBioMed, you will want to know how to write basic programs in Python. Among the many guides to Python, we recommend the documentation at <a class="reference external" href="http://www.python.org">http://www.python.org</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="User_guide.html" title="Getting Started with PyBioMed"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="The PyBioMed Documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBioMed 1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

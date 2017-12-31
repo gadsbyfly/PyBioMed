@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getmol module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyGetMol" href="PyGetMol.html" />
+    <link rel="next" title="test module" href="test.html" />
+    <link rel="prev" title="GetDNA module" href="GetDNA.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="test module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="GetDNA.html" title="GetDNA module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyGetMol.html" accesskey="U">PyGetMol</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="GetDNA.html"
+                        title="previous chapter">GetDNA module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="test.html"
+                        title="next chapter">test module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/Getmol.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Getmol">
+<span id="getmol-module"></span><h1>Getmol module<a class="headerlink" href="#module-Getmol" title="Permalink to this headline">¶</a></h1>
+<p>This module is to get different formats of molecules from file and web. If you</p>
+<p>have any question please contact me via email.</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<dl class="function">
+<dt id="Getmol.GetMolFromCAS">
+<code class="descclassname">Getmol.</code><code class="descname">GetMolFromCAS</code><span class="sig-paren">(</span><em>casid=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#GetMolFromCAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.GetMolFromCAS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloading the molecules from <a class="reference external" href="http://www.chemnet.com/cas/">http://www.chemnet.com/cas/</a> by CAS ID (casid).
+if you want to use this function, you must be install pybel.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Getmol.GetMolFromDrugbank">
+<code class="descclassname">Getmol.</code><code class="descname">GetMolFromDrugbank</code><span class="sig-paren">(</span><em>dbid=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#GetMolFromDrugbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.GetMolFromDrugbank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloading the molecules from <a class="reference external" href="http://www.drugbank.ca/">http://www.drugbank.ca/</a> by dbid (dbid).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Getmol.GetMolFromEBI">
+<code class="descclassname">Getmol.</code><code class="descname">GetMolFromEBI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#GetMolFromEBI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.GetMolFromEBI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Getmol.GetMolFromKegg">
+<code class="descclassname">Getmol.</code><code class="descname">GetMolFromKegg</code><span class="sig-paren">(</span><em>kid=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#GetMolFromKegg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.GetMolFromKegg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloading the molecules from <a class="reference external" href="http://www.genome.jp/">http://www.genome.jp/</a> by kegg id (kid).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Getmol.GetMolFromNCBI">
+<code class="descclassname">Getmol.</code><code class="descname">GetMolFromNCBI</code><span class="sig-paren">(</span><em>cid=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#GetMolFromNCBI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.GetMolFromNCBI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloading the molecules from <a class="reference external" href="http://pubchem.ncbi.nlm.nih.gov/">http://pubchem.ncbi.nlm.nih.gov/</a> by cid (cid).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Getmol.ReadMolFromInchi">
+<code class="descclassname">Getmol.</code><code class="descname">ReadMolFromInchi</code><span class="sig-paren">(</span><em>inchi=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#ReadMolFromInchi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.ReadMolFromInchi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a molecule by Inchi string.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>res=ReadMolFromInchi(inchi)</p>
+<p>Input: inchi is a InChi string.</p>
+<p>Output: res is a molecule object.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="Getmol.ReadMolFromMOL">
+<code class="descclassname">Getmol.</code><code class="descname">ReadMolFromMOL</code><span class="sig-paren">(</span><em>filename=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#ReadMolFromMOL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.ReadMolFromMOL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a  molecule by mol file format.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>res=ReadMolFromMOL(filename)</p>
+<p>Input: filename is a file name with path.</p>
+<p>Output: res is a  molecular object.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="Getmol.ReadMolFromMol">
+<code class="descclassname">Getmol.</code><code class="descname">ReadMolFromMol</code><span class="sig-paren">(</span><em>filename=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#ReadMolFromMol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.ReadMolFromMol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a molecule with mol file format.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>res=ReadMolFromMol(filename)</p>
+<p>Input: filename is a file name.</p>
+<p>Output: res is a molecule object.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="Getmol.ReadMolFromSDF">
+<code class="descclassname">Getmol.</code><code class="descname">ReadMolFromSDF</code><span class="sig-paren">(</span><em>filename=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#ReadMolFromSDF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.ReadMolFromSDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a set of molecules by SDF file format.</p>
+<p>Note: the output of this function is a set of molecular objects.</p>
+<p>You need to use for statement to call each object.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>res=ReadMolFromSDF(filename)</p>
+<p>Input: filename is a file name with path.</p>
+<p>Output: res is a set of molecular object.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="Getmol.ReadMolFromSmile">
+<code class="descclassname">Getmol.</code><code class="descname">ReadMolFromSmile</code><span class="sig-paren">(</span><em>smi=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Getmol.html#ReadMolFromSmile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Getmol.ReadMolFromSmile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a molecule by SMILES string.</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>res=ReadMolFromSmile(smi)</p>
+<p>Input: smi is a SMILES string.</p>
+<p>Output: res is a molecule object.</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="test module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="GetDNA.html" title="GetDNA module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyGetMol.html" >PyGetMol</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

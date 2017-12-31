@@ -1,0 +1,833 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>charge &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for charge</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+
+<span class="sd">The calculation of Charge descriptors based on Gasteiger/Marseli partial </span>
+
+<span class="sd">charges(25). You can freely use and distribute it. If you hava  any problem, </span>
+
+<span class="sd">you could contact with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">rdPartialCharges</span> <span class="k">as</span> <span class="n">GMCharge</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="c1">##############################################################################</span>
+<span class="n">iter_step</span><span class="o">=</span><span class="mi">12</span>
+
+<span class="k">def</span> <span class="nf">_CalculateElementMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Most positive charge on atom with atomic number equal to n</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="n">AtomicNum</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">res</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_CalculateElementMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Most negative charge on atom with atomic number equal to n</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="n">AtomicNum</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">res</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CalculateHMaxPCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateHMaxPCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateHMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most positive charge on H atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QHmax</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateHMaxPCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateCMaxPCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateCMaxPCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateCMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most positive charge on C atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QCmax</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateCMaxPCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateNMaxPCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateNMaxPCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateNMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most positive charge on N atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QNmax</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateNMaxPCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateOMaxPCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateOMaxPCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateOMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most positive charge on O atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QOmax</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateOMaxPCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateHMaxNCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateHMaxNCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateHMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most negative charge on H atoms</span>
+<span class="sd">  </span>
+<span class="sd">    --&gt;QHmin</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateHMaxNCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateCMaxNCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateCMaxNCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateCMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most negative charge on C atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QCmin</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateCMaxNCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateNMaxNCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateNMaxNCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateNMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most negative charge on N atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QNmin</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateNMaxNCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateOMaxNCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateOMaxNCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateOMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most negative charge on O atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QOmin</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateOMaxNCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateAllMaxPCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateAllMaxPCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateAllMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most positive charge on ALL atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Qmax</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateAllMaxPCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">res</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateAllMaxNCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateAllMaxNCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateAllMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Most negative charge on all atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Qmin</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateAllMaxNCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">res</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_CalculateElementSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    **Internal used only**</span>
+<span class="sd">    </span>
+<span class="sd">    Ths sum of square Charges on all atoms with atomicnumber equal to n</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span><span class="o">==</span><span class="n">AtomicNum</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">res</span><span class="p">)),</span><span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CalculateHSumSquareCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateHSumSquareCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateHSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The sum of square charges on all H atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QHss</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateHSumSquareCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateCSumSquareCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateCSumSquareCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateCSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The sum of square charges on all C atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QCss</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateCSumSquareCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateNSumSquareCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateNSumSquareCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateNSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The sum of square charges on all N atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QNss</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateNSumSquareCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateOSumSquareCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateOSumSquareCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateOSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The sum of square charges on all O atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;QOss</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateOSumSquareCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_CalculateElementSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">AtomicNum</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateAllSumSquareCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateAllSumSquareCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateAllSumSquareCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The sum of square charges on all atoms</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Qass</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateAllSumSquareCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">res</span><span class="p">)),</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateTotalPCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateTotalPCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateTotalPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The total postive charge</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Tpc</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateTotalPCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">cc</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]),</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateMeanPCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateMeanPCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateMeanPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The average postive charge</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Mpc</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateMeanPCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">cc</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]),</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateTotalNCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateTotalNCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateTotalNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The total negative charge</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Tnc</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateTotalNCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">cc</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]),</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateMeanNCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateMeanNCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateMeanNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The average negative charge</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Mnc</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateMeanNCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">cc</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]),</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateTotalAbsoulteCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateTotalAbsoulteCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateTotalAbsoulteCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The total absolute charge</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Tac</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateTotalAbsoulteCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">cc</span><span class="p">)),</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateMeanAbsoulteCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateMeanAbsoulteCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateMeanAbsoulteCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The average absolute charge</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Mac</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateMeanAbsoulteCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">cc</span><span class="p">)),</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateRelativePCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateRelativePCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateRelativePCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The partial charge of the most positive atom divided by</span>
+<span class="sd">    </span>
+<span class="sd">    the total positive charge.</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Rpc</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateRelativePCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">cc</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">cc</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]),</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateRelativeNCharge"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateRelativeNCharge">[docs]</a><span class="k">def</span> <span class="nf">CalculateRelativeNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    The partial charge of the most negative atom divided</span>
+<span class="sd">    </span>
+<span class="sd">    by the total negative charge.</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;Rnc</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateRelativeNCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hmol</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">Hmol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">Hmol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+            
+    <span class="k">if</span> <span class="n">res</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">cc</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">cc</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]),</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateLocalDipoleIndex"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateLocalDipoleIndex">[docs]</a><span class="k">def</span> <span class="nf">CalculateLocalDipoleIndex</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of local dipole index (D)</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;LDI</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateLocalDipoleIndex(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">GMCharge</span><span class="o">.</span><span class="n">ComputeGasteigerCharges</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">iter_step</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_GasteigerCharge&#39;</span><span class="p">)))</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()]</span><span class="o">-</span><span class="n">res</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()]</span>
+    <span class="n">B</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">())</span>
+    
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">B</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="CalculateSubmolPolarityPara"><a class="viewcode-back" href="../reference/charge.html#charge.CalculateSubmolPolarityPara">[docs]</a><span class="k">def</span> <span class="nf">CalculateSubmolPolarityPara</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of submolecular polarity parameter(SPP)</span>
+<span class="sd">    </span>
+<span class="sd">    --&gt;SPP</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=CalculateSubmolPolarityPara(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a numeric value.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">CalculateAllMaxPCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">-</span><span class="n">CalculateAllMaxNCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<span class="n">_Charge</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;SPP&#39;</span><span class="p">:</span><span class="n">CalculateSubmolPolarityPara</span><span class="p">,</span>
+        <span class="s1">&#39;LDI&#39;</span><span class="p">:</span><span class="n">CalculateLocalDipoleIndex</span><span class="p">,</span>
+        <span class="s1">&#39;Rnc&#39;</span><span class="p">:</span><span class="n">CalculateRelativeNCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Rpc&#39;</span><span class="p">:</span><span class="n">CalculateRelativePCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Mac&#39;</span><span class="p">:</span><span class="n">CalculateMeanAbsoulteCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Tac&#39;</span><span class="p">:</span><span class="n">CalculateTotalAbsoulteCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Mnc&#39;</span><span class="p">:</span><span class="n">CalculateMeanNCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Tnc&#39;</span><span class="p">:</span><span class="n">CalculateTotalNCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Mpc&#39;</span><span class="p">:</span><span class="n">CalculateMeanPCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Tpc&#39;</span><span class="p">:</span><span class="n">CalculateTotalPCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Qass&#39;</span><span class="p">:</span><span class="n">CalculateAllSumSquareCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QOss&#39;</span><span class="p">:</span><span class="n">CalculateOSumSquareCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QNss&#39;</span><span class="p">:</span><span class="n">CalculateNSumSquareCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QCss&#39;</span><span class="p">:</span><span class="n">CalculateCSumSquareCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QHss&#39;</span><span class="p">:</span><span class="n">CalculateHSumSquareCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Qmin&#39;</span><span class="p">:</span><span class="n">CalculateAllMaxNCharge</span><span class="p">,</span>
+        <span class="s1">&#39;Qmax&#39;</span><span class="p">:</span><span class="n">CalculateAllMaxPCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QOmin&#39;</span><span class="p">:</span><span class="n">CalculateOMaxNCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QNmin&#39;</span><span class="p">:</span><span class="n">CalculateNMaxNCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QCmin&#39;</span><span class="p">:</span><span class="n">CalculateCMaxNCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QHmin&#39;</span><span class="p">:</span><span class="n">CalculateHMaxNCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QOmax&#39;</span><span class="p">:</span><span class="n">CalculateOMaxPCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QNmax&#39;</span><span class="p">:</span><span class="n">CalculateNMaxPCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QCmax&#39;</span><span class="p">:</span><span class="n">CalculateCMaxPCharge</span><span class="p">,</span>
+        <span class="s1">&#39;QHmax&#39;</span><span class="p">:</span><span class="n">CalculateHMaxPCharge</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="GetCharge"><a class="viewcode-back" href="../reference/charge.html#charge.GetCharge">[docs]</a><span class="k">def</span> <span class="nf">GetCharge</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Get the dictionary of constitutional descriptors for given moelcule mol</span>
+<span class="sd">    </span>
+<span class="sd">    Usage:</span>
+<span class="sd">    </span>
+<span class="sd">        result=GetCharge(mol)</span>
+<span class="sd">    </span>
+<span class="sd">        Input: mol is a molecule object.</span>
+<span class="sd">    </span>
+<span class="sd">        Output: result is a dict form containing all charge descriptors.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">DesLabel</span> <span class="ow">in</span> <span class="n">_Charge</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">]</span><span class="o">=</span><span class="n">_Charge</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">](</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<span class="c1">##############################################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+    <span class="n">smi5</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCC(C)CC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)CCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(C)C(C)C&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCN&#39;</span><span class="p">,</span><span class="s1">&#39;c1ccccc1N&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetCharge</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">GetCharge</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started with PyBioMed &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="index.html" />
+    <link rel="next" title="Application" href="application.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="application.html" title="Application"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBioMed 1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Started with PyBioMed</a><ul>
+<li><a class="reference internal" href="#installing-the-pybiomed-package">Installing the PyBioMed package</a></li>
+<li><a class="reference internal" href="#getting-molecules">Getting molecules</a><ul>
+<li><a class="reference internal" href="#getting-molecular-structure">Getting molecular structure</a></li>
+<li><a class="reference internal" href="#reading-molecules">Reading molecules</a></li>
+<li><a class="reference internal" href="#getting-protein-sequence">Getting protein sequence</a></li>
+<li><a class="reference internal" href="#reading-protein-sequence">Reading protein sequence</a></li>
+<li><a class="reference internal" href="#getting-dna-sequence">Getting DNA sequence</a></li>
+<li><a class="reference internal" href="#reading-dna-sequence">Reading DNA sequence</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pretreating-structure">Pretreating structure</a><ul>
+<li><a class="reference internal" href="#pretreating-molecules">Pretreating molecules</a></li>
+<li><a class="reference internal" href="#pretreating-protein-sequence">Pretreating protein sequence</a></li>
+<li><a class="reference internal" href="#pretreating-dna-sequence">Pretreating DNA sequence</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculating-molecular-descriptors">Calculating molecular descriptors</a><ul>
+<li><a class="reference internal" href="#calculating-descriptors">Calculating descriptors</a><ul>
+<li><a class="reference internal" href="#calculating-molecular-descriptors-via-functions">Calculating molecular descriptors via functions</a></li>
+<li><a class="reference internal" href="#calculating-molecular-descriptors-via-pymolecule-object">Calculating molecular descriptors via PyMolecule object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculating-molecular-fingerprints">Calculating molecular fingerprints</a><ul>
+<li><a class="reference internal" href="#calculating-fingerprint-via-functions">Calculating fingerprint via functions</a></li>
+<li><a class="reference internal" href="#calculating-fingerprint-via-object">Calculating fingerprint via object</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculating-protein-descriptors">Calculating protein descriptors</a><ul>
+<li><a class="reference internal" href="#calculating-protein-descriptors-via-functions">Calculating protein descriptors via functions</a></li>
+<li><a class="reference internal" href="#calculate-protein-descriptors-via-object">Calculate protein descriptors via object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculating-dna-descriptors">Calculating DNA descriptors</a><ul>
+<li><a class="reference internal" href="#calculating-dna-descriptors-via-functions">Calculating DNA descriptors via functions</a></li>
+<li><a class="reference internal" href="#calculating-dna-descriptors-via-object">Calculating DNA descriptors via object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculating-interaction-descriptors">Calculating Interaction descriptors</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="overview.html"
+                        title="previous chapter">Overview</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="application.html"
+                        title="next chapter">Application</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/User_guide.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started-with-pybiomed">
+<h1>Getting Started with PyBioMed<a class="headerlink" href="#getting-started-with-pybiomed" title="Permalink to this headline">¶</a></h1>
+<p>This document is intended to provide an overview of how one can use the PyBioMed functionality from Python. If you find mistakes, or have suggestions for improvements, please either fix them yourselves in the source document (the .py file) or send them to the mailing list: <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a>.</p>
+<div class="section" id="installing-the-pybiomed-package">
+<h2>Installing the PyBioMed package<a class="headerlink" href="#installing-the-pybiomed-package" title="Permalink to this headline">¶</a></h2>
+<p>PyBioMed has been successfully tested on Linux and Windows systems. The user could download the
+PyBioMed package via: <a class="reference external" href="https://raw.githubusercontent.com/gadsbyfly/PyBioMed/master/PyBioMed/download/PyBioMed-1.0.zip">https://raw.githubusercontent.com/gadsbyfly/PyBioMed/master/PyBioMed/download/PyBioMed-1.0.zip</a>. The installation process of PyBioMed is very easy:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You first need to install RDKit and pybel successfully.</p>
+</div>
+<p>On Windows:</p>
+<p>(1): download the PyBioMed-1.0.zip</p>
+<p>(2): extract the PyBioMed-1.0.zip file</p>
+<p>(3): open cmd.exe and change dictionary to PyBioMed-1.0 (write the command &#8220;cd PyBioMed-1.0&#8221; in cmd shell)</p>
+<p>(4): write the command &#8220;python setup.py install&#8221; in cmd shell</p>
+<p>On Linux:</p>
+<p>(1): download the PyBioMed package (.zip)</p>
+<p>(2): extract PyBioMed-1.0.zip</p>
+<p>(3): open shell and change dictionary to PyBioMed-1.0 (write the command &#8220;cd PyBioMed-1.0&#8221; in shell)</p>
+<p>(4): write the command &#8220;python setup.py install&#8221; in shell</p>
+</div>
+<div class="section" id="getting-molecules">
+<h2>Getting molecules<a class="headerlink" href="#getting-molecules" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="xref py py-mod docutils literal"><span class="pre">PyGetMol</span></code> provide different formats to get molecular structures, protein sequence and DNA sequence.</p>
+<div class="section" id="getting-molecular-structure">
+<h3>Getting molecular structure<a class="headerlink" href="#getting-molecular-structure" title="Permalink to this headline">¶</a></h3>
+<p>In order to be convenient to users, the <a class="reference internal" href="reference/Getmol.html#module-Getmol" title="Getmol"><code class="xref py py-mod docutils literal"><span class="pre">Getmol</span></code></a> module provides the tool to get molecular structures by the molecular ID from website including NCBI, EBI, CAS, Kegg and Drugbank.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol</span> <span class="k">import</span> <span class="n">Getmol</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DrugBankID</span> <span class="o">=</span> <span class="s1">&#39;DB01014&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="n">Getmol</span><span class="o">.</span><span class="n">GetMolFromDrugbank</span><span class="p">(</span><span class="n">DrugBankID</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">smi</span>
+<span class="go">N[C@@H](CO)C(=O)O</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span><span class="o">=</span><span class="n">Getmol</span><span class="o">.</span><span class="n">GetMolFromCAS</span><span class="p">(</span><span class="n">casid</span><span class="o">=</span><span class="s2">&quot;50-12-4&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">smi</span>
+<span class="go">CCC1(c2ccccc2)C(=O)N(C)C(=N1)O</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span><span class="o">=</span><span class="n">Getmol</span><span class="o">.</span><span class="n">GetMolFromNCBI</span><span class="p">(</span><span class="n">cid</span><span class="o">=</span><span class="s2">&quot;2244&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">smi</span>
+<span class="go">CC(=O)Oc1ccccc1C(=O)O</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span><span class="o">=</span><span class="n">Getmol</span><span class="o">.</span><span class="n">GetMolFromKegg</span><span class="p">(</span><span class="n">kid</span><span class="o">=</span><span class="s2">&quot;D02176&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">smi</span>
+<span class="go">C[N+](C)(C)C[C@H](O)CC(=O)[O-]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reading-molecules">
+<h3>Reading molecules<a class="headerlink" href="#reading-molecules" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="reference/Getmol.html#module-Getmol" title="Getmol"><code class="xref py py-mod docutils literal"><span class="pre">Getmol</span></code></a> module also provides the tool to read molecules in different formats including SDF, Mol, InChi and Smiles.</p>
+<p>Users can read a molecule from string.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol.Getmol</span> <span class="k">import</span> <span class="n">ReadMolFromSmile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">ReadMolFromSmile</span><span class="p">(</span><span class="s1">&#39;N[C@@H](CO)C(=O)O&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">mol</span>
+<span class="go">&lt;rdkit.Chem.rdchem.Mol object at 0x0D8D3688&gt;</span>
+</pre></div>
+</div>
+<p>Users can also read a molecule from a file.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol.Getmol</span> <span class="k">import</span> <span class="n">ReadMolFromSDF</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">ReadMolFromSDF</span><span class="p">(</span><span class="s1">&#39;./PyBioMed/test/test_data/test.sdf&#39;</span><span class="p">)</span>  <span class="c1">#You should change the path to your own real path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">mol</span>
+<span class="go">&lt;rdkit.Chem.rdmolfiles.SDMolSupplier at 0xd8d03f0&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-protein-sequence">
+<h3>Getting protein sequence<a class="headerlink" href="#getting-protein-sequence" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="reference/GetProtein.html#module-GetProtein" title="GetProtein"><code class="xref py py-mod docutils literal"><span class="pre">GetProtein</span></code></a> module provides the tool to get protein sequence by the pdb ID and uniprot ID from website.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol</span> <span class="k">import</span> <span class="n">GetProtein</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GetProtein</span><span class="o">.</span><span class="n">GetPDB</span><span class="p">([</span><span class="s1">&#39;1atp&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">GetProtein</span><span class="o">.</span><span class="n">GetSeqFromPDB</span><span class="p">(</span><span class="s1">&#39;1atp.pdb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">seq</span>
+<span class="go">GNAAAAKKGSEQESVKEFLAKAKEDFLKKWETPSQNTAQLDQFDRIKTLGTGSFGRVMLVKHKESGNHYAMKILDKQKVVKLKQ</span>
+<span class="go">IEHTLNEKRILQAVNFPFLVKLEFSFKDNSNLYMVMEYVAGGEMFSHLRRIGRFSEPHARFYAAQIVLTFEYLHSLDLIYRDLK</span>
+<span class="go">PENLLIDQQGYIQVTDFGFAKRVKGRTWXLCGTPEYLAPEIILSKGYNKAVDWWALGVLIYEMAAGYPPFFADQPIQIYEKIVS</span>
+<span class="go">GKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFATTDWIAIYQRKVEAPFIPKFKGPGDTSNFDDYEEEEIR</span>
+<span class="go">VXINEKCGKEFTEFTTYADFIASGRTGRRNAIHD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">GetProtein</span><span class="o">.</span><span class="n">GetProteinSequence</span><span class="p">(</span><span class="s1">&#39;O00560&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">seq</span>
+<span class="go">MSLYPSLEDLKVDKVIQAQTAFSANPANPAILSEASAPIPHDGNLYPRLYPELSQYMGLSLNEEEIRANVAVVSGAPLQGQLVA</span>
+<span class="go">RPSSINYMVAPVTGNDVGIRRAEIKQGIREVILCKDQDGKIGLRLKSIDNGIFVQLVQANSPASLVGLRFGDQVLQINGENCAG</span>
+<span class="go">WSSDKAHKVLKQAFGEKITMTIRDRPFERTITMHKDSTGHVGFIFKNGKITSIVKDSSAARNGLLTEHNICEINGQNVIGLKDS</span>
+<span class="go">QIADILSTSGTVVTITIMPAFIFEHIIKRMAPSIMKSLMDHTIPEV</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reading-protein-sequence">
+<h3>Reading protein sequence<a class="headerlink" href="#reading-protein-sequence" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol.GetProtein</span> <span class="k">import</span> <span class="n">ReadFasta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./PyBioMed/test/test_data/protein.fasta&#39;</span><span class="p">)</span>  <span class="c1">#You should change the path to your own real path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein_seq</span> <span class="o">=</span> <span class="n">ReadFasta</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">protein</span>
+<span class="go">[&#39;MLIHQYDHATAQYIASHLADPDPLNDGRWLIPAFATATPLPERPARTWPFFLDGAWVLRPDHRGQRLYRTDTGEAAEIVAAG</span>
+<span class="go">IAPEAAGLTPTPRPSDEHRWIDGAWQIDPQIVAQRARDAAMREFDLRMASARQANAGRADAYAAGLLSDAEIAVFKAWAIYQMD</span>
+<span class="go">LVRVVSAASFPDDVQWPAEPDEAAVIEQADGKASAGDAAAA&#39;,</span>
+<span class="go">&#39;MLIHQYDHATAQYIASHLADPDPLNDGRWLIPAFATATPLPERPARTWPFFLDGAWVLRPDHRGQRLYRTDTGEAAEIVAAGI</span>
+<span class="go">APEAAGLTPTPRPSDEHRWIDGAWQIDPQIVAQRARDAAMREFDLRMASARQANAGRADAYAAGLLSDAEIAVFKAWAIYQMDL</span>
+<span class="go">VRVVSAASFPDDVQWPAEPDEAAVIEQADGKASAGDAAAA&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-dna-sequence">
+<h3>Getting DNA sequence<a class="headerlink" href="#getting-dna-sequence" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="reference/GetDNA.html#module-GetDNA" title="GetDNA"><code class="xref py py-mod docutils literal"><span class="pre">GetDNA</span></code></a> module provides the tool to get DNA sequence by the Gene ID from website.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol</span> <span class="k">import</span> <span class="n">GetDNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">GetDNA</span><span class="o">.</span><span class="n">GetDNAFromUniGene</span><span class="p">(</span><span class="s1">&#39;AA954964&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">seq</span>
+<span class="go">&gt;ENA|AA954964|AA954964.1 op24b10.s1 Soares_NFL_T_GBC_S1 Homo sapiens cDNA clone IMAGE:1577755 3&amp;apos;, mRNA sequence.</span>
+<span class="go">TTTTAAAATATAAAAGGATAACTTTATTGAATATACAAATTCAAGAGCATTCAATTTTTT</span>
+<span class="go">TTTAAGATTATGGCATAAGACAGATCAATGGTAATGGTTTATATATCCTATACTTACCAA</span>
+<span class="go">ACAGATTAGGTAGATATACTGACCTATCAATGCTCAAAATAACAAAATGAATACATGTCC</span>
+<span class="go">CTAAACTATTTCTGTATTCTATGACTACTAAATGGGAAATCTGTCAGCTGACCACCCACC</span>
+<span class="go">AGACTTTTTCCCATAGGAAGTTTGATATGCTGTCATTGATATATACCATTTCTGAATATA</span>
+<span class="go">AACCTCTATCTTGGGTCCTTTTCTCTTTGCCTACTTCATTATCTGTCTTCCCAACCCACC</span>
+<span class="go">TAAGACTTAGTCAAAACAGGATACAGAGATCTGGATGGCTCTACGCAGAG</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reading-dna-sequence">
+<h3>Reading DNA sequence<a class="headerlink" href="#reading-dna-sequence" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol.GetDNA</span> <span class="k">import</span> <span class="n">ReadFasta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./PyBioMed/test/test_data/example.fasta&#39;</span><span class="p">)</span>  <span class="c1">#You should change the path to your own real path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dna_seq</span> <span class="o">=</span> <span class="n">ReadFasta</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">dna</span>
+<span class="go">[&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pretreating-structure">
+<h2>Pretreating structure<a class="headerlink" href="#pretreating-structure" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="xref py py-mod docutils literal"><span class="pre">PyPretreat</span></code> can pretreat the molecular structure, the protein sequence and the DNA sequence.</p>
+<div class="section" id="pretreating-molecules">
+<h3>Pretreating molecules<a class="headerlink" href="#pretreating-molecules" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="reference/PyPretreatMol.html#module-PyPretreatMol" title="PyPretreatMol"><code class="xref py py-mod docutils literal"><span class="pre">PyPretreatMol</span></code></a> can pretreat the molecular structure. The <a class="reference internal" href="reference/PyPretreatMol.html#module-PyPretreatMol" title="PyPretreatMol"><code class="xref py py-mod docutils literal"><span class="pre">PyPretreatMol</span></code></a> proivdes the following functions:</p>
+<ul class="simple">
+<li>Normalization of functional groups to a consistent format.</li>
+<li>Recombination of separated charges.</li>
+<li>Breaking of bonds to metal atoms.</li>
+<li>Competitive reionization to ensure strongest acids ionize first in partially ionize molecules.</li>
+<li>Tautomer enumeration and canonicalization.</li>
+<li>Neutralization of charges.</li>
+<li>Standardization or removal of stereochemistry information.</li>
+<li>Filtering of salt and solvent fragments.</li>
+<li>Generation of fragment, isotope, charge, tautomer or stereochemistry insensitive parent structures.</li>
+<li>Validations to identify molecules with unusual and potentially troublesome characteristics.</li>
+</ul>
+<p>The user can diconnect metal ion.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyPretreat.PyPretreatMol</span> <span class="k">import</span> <span class="n">StandardizeMol</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;[Na]OC(=O)c1ccc(C[S+2]([O-])([O-]))cc1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdm</span> <span class="o">=</span> <span class="n">StandardizeMol</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">sdm</span><span class="o">.</span><span class="n">disconnect_metals</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">O=C([O-])c1ccc(C[S+2]([O-])[O-])cc1.[Na+]</span>
+</pre></div>
+</div>
+<p>Pretreat the molecular structure using all functions.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyPretreat</span> <span class="k">import</span> <span class="n">PyPretreatMol</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stdsmi</span> <span class="o">=</span> <span class="n">PyPretreatMol</span><span class="o">.</span><span class="n">StandardSmi</span><span class="p">(</span><span class="s1">&#39;[Na]OC(=O)c1ccc(C[S+2]([O-])([O-]))cc1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">stdsmi</span>
+<span class="go">O=C([O-])c1ccc(C[S](=O)=O)cc1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pretreating-protein-sequence">
+<h3>Pretreating protein sequence<a class="headerlink" href="#pretreating-protein-sequence" title="Permalink to this headline">¶</a></h3>
+<p>The user can check the protein sequence using the <a class="reference internal" href="reference/PyPretreatPro.html#module-PyPretreatPro" title="PyPretreatPro"><code class="xref py py-mod docutils literal"><span class="pre">PyPretreatPro</span></code></a>. If the sequence is right, the result is the number of amino acids. If the sequence is wrong, the result is 0.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyPretreat</span> <span class="k">import</span> <span class="n">PyPretreatPro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein</span><span class="o">=</span><span class="s2">&quot;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDASU&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">PyPretreatPro</span><span class="o">.</span><span class="n">ProteinCheck</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyPretreat</span> <span class="k">import</span> <span class="n">PyPretreatPro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein</span><span class="o">=</span><span class="s2">&quot;ADGCRN&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">PyPretreatPro</span><span class="o">.</span><span class="n">ProteinCheck</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pretreating-dna-sequence">
+<h3>Pretreating DNA sequence<a class="headerlink" href="#pretreating-dna-sequence" title="Permalink to this headline">¶</a></h3>
+<p>The user can check the DNA sequence using the <a class="reference internal" href="reference/PyPretreatDNA.html#module-PyPretreatDNA" title="PyPretreatDNA"><code class="xref py py-mod docutils literal"><span class="pre">PyPretreatDNA</span></code></a>. If the sequence is right, the result is True. If the sequence is wrong, the result is the wrong word.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyPretreat</span> <span class="k">import</span> <span class="n">PyPretreatDNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DNA</span><span class="o">=</span><span class="s2">&quot;ATTTAC&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">PyPretreatDNA</span><span class="o">.</span><span class="n">DNAChecks</span><span class="p">(</span><span class="n">DNA</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DNA</span><span class="o">=</span> <span class="s2">&quot;ATCGUA&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">PyPretreatDNA</span><span class="o">.</span><span class="n">DNAChecks</span><span class="p">(</span><span class="n">DNA</span><span class="p">)</span>
+<span class="go">U</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="calculating-molecular-descriptors">
+<h2>Calculating molecular descriptors<a class="headerlink" href="#calculating-molecular-descriptors" title="Permalink to this headline">¶</a></h2>
+<p>The PyBioMed package could calculate a large number of molecular descriptors. These descriptors capture and magnify distinct aspects of chemical structures. Generally speaking, all descriptors could be divided into two classes: descriptors and fingerprints. Descriptors only used the property of molecular topology, including constitutional descriptors, topological descriptors, connectivity indices, E-state indices, Basak information indices, Burden descriptors, autocorrelation descriptors, charge descriptors, molecular properties, kappa shape indices, MOE-type descriptors. Molecular fingerprints contain FP2, FP3, FP4,topological fingerprints, Estate, atompairs, torsions, morgan and MACCS.</p>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="_images/single_features.png"><img alt="_images/single_features.png" src="_images/single_features.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The descriptors could be calculated through PyBioMed package</span></p>
+</div>
+<div class="section" id="calculating-descriptors">
+<h3>Calculating descriptors<a class="headerlink" href="#calculating-descriptors" title="Permalink to this headline">¶</a></h3>
+<p>We could import the corresponding module to calculate the molecular descriptors as need. There is 14 modules to compute descriptors. Moreover, a easier way to compute these descriptors is construct a PyMolecule object, which encapsulates all methods for the calculation of descriptors.</p>
+<div class="section" id="calculating-molecular-descriptors-via-functions">
+<h4>Calculating molecular descriptors via functions<a class="headerlink" href="#calculating-molecular-descriptors-via-functions" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="xref py py-func docutils literal"><span class="pre">GetConnectivity()</span></code> function in the <a class="reference internal" href="reference/connectivity.html#module-connectivity" title="connectivity"><code class="xref py py-mod docutils literal"><span class="pre">connectivity</span></code></a> module can calculate the connectivity descriptors. The result is given in the form of dictionary.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule</span> <span class="k">import</span> <span class="n">connectivity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CCC1(c2ccccc2)C(=O)N(C)C(=N1)O&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molecular_descriptor</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">GetConnectivity</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">molecular_descriptor</span>
+<span class="go">{&#39;Chi3ch&#39;: 0.0, &#39;knotp&#39;: 2.708, &#39;dchi3&#39;: 3.359, &#39;dchi2&#39;: 2.895, &#39;dchi1&#39;: 2.374, &#39;dchi0&#39;: 2.415, &#39;Chi5ch&#39;: 0.068, &#39;Chiv4&#39;: 1.998, &#39;Chiv7&#39;: 0.259, &#39;Chiv6&#39;: 0.591, &#39;Chiv1&#39;: 5.241, &#39;Chiv0&#39;: 9.344, &#39;Chiv3&#39;: 3.012, &#39;Chiv2&#39;: 3.856, &#39;Chi4c&#39;: 0.083, &#39;dchi4&#39;: 2.96, &#39;Chiv4pc&#39;: 1.472, &#39;Chiv3c&#39;: 0.588, &#39;Chiv8&#39;: 0.118, &#39;Chi3c&#39;: 1.264, &#39;Chi8&#39;: 0.636, &#39;Chi9&#39;: 0.322, &#39;Chi2&#39;: 6.751, &#39;Chi3&#39;: 6.372, &#39;Chi0&#39;: 11.759, &#39;Chi1&#39;: 7.615, &#39;Chi6&#39;: 2.118, &#39;Chi7&#39;: 1.122, &#39;Chi4&#39;: 4.959, &#39;Chi5&#39;: 3.649, &#39;Chiv5&#39;: 1.244, &#39;Chiv4c&#39;: 0.04, &#39;Chiv9&#39;: 0.046, &#39;Chi4pc&#39;: 3.971, &#39;knotpv&#39;: 0.884, &#39;Chiv5ch&#39;: 0.025, &#39;Chiv3ch&#39;: 0.0, &#39;Chiv10&#39;: 0.015, &#39;Chiv6ch&#39;: 0.032, &#39;Chi10&#39;: 0.135, &#39;Chi4ch&#39;: 0.0, &#39;Chiv4ch&#39;: 0.0, &#39;mChi1&#39;: 0.448, &#39;Chi6ch&#39;: 0.102}</span>
+</pre></div>
+</div>
+<p>The function <code class="xref py py-func docutils literal"><span class="pre">GetTopology()</span></code> in the <a class="reference internal" href="reference/topology.html#module-topology" title="topology"><code class="xref py py-mod docutils literal"><span class="pre">topology</span></code></a> module can calculate all topological descriptors.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule</span> <span class="k">import</span> <span class="n">topology</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CCC1(c2ccccc2)C(=O)N(C)C(=N1)O&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molecular_descriptor</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">GetTopology</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">molecular_descriptor</span><span class="p">)</span>
+<span class="go">25</span>
+</pre></div>
+</div>
+<p>The function <code class="xref py py-func docutils literal"><span class="pre">CATS2D()</span></code> in the <a class="reference internal" href="reference/cats2d.html#module-cats2d" title="cats2d"><code class="xref py py-mod docutils literal"><span class="pre">cats2d</span></code></a> module can calculate all CATS2D descriptors.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.cats2d</span> <span class="k">import</span> <span class="n">CATS2D</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CC(N)C(=O)[O-]&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cats</span> <span class="o">=</span> <span class="n">CATS2D</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span><span class="n">PathLength</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span><span class="n">scale</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">cats</span>
+<span class="go">{&#39;CATS_AP4&#39;: 0.0, &#39;CATS_AP3&#39;: 1.0, &#39;CATS_AP6&#39;: 0.0, &#39;CATS_AA8&#39;: 0.0, &#39;CATS_AA9&#39;: 0.0, &#39;CATS_AP1&#39;: 0.0, ......, &#39;CATS_AP5&#39;: 0.0}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">cats</span><span class="p">)</span>
+<span class="go">150</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculating-molecular-descriptors-via-pymolecule-object">
+<h4>Calculating molecular descriptors via PyMolecule object<a class="headerlink" href="#calculating-molecular-descriptors-via-pymolecule-object" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="xref py py-class docutils literal"><span class="pre">PyMolecule</span></code> class can read molecules in different format including MOL, SMI, InChi and CAS. For example, the user can read a molecule in the format of SMI and calculate the E-state descriptors (316).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pymolecule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CCC1(c2ccccc2)C(=O)N(C)C(=N1)O&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Pymolecule</span><span class="o">.</span><span class="n">PyMolecule</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span><span class="o">.</span><span class="n">ReadMolFromSmile</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molecular_descriptor</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetEstate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">molecular_descriptor</span><span class="p">)</span>
+<span class="go">237</span>
+</pre></div>
+</div>
+<p>The object can also read molecules in the format of MOL file and calculate charge descriptors (25).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pymolecule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Pymolecule</span><span class="o">.</span><span class="n">PyMolecule</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span><span class="o">.</span><span class="n">ReadMolFromMol</span><span class="p">(</span><span class="s1">&#39;test/test_data/test.mol&#39;</span><span class="p">)</span>   <span class="c1">#change path to the real path in your own computer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molecular_descriptor</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetCharge</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">molecular_descriptor</span>
+<span class="go">{&#39;QNmin&#39;: 0, &#39;QOss&#39;: 0.534, &#39;Mpc&#39;: 0.122, &#39;QHss&#39;: 0.108, &#39;SPP&#39;: 0.817, &#39;LDI&#39;: 0.322, &#39;QCmin&#39;: -0.061, &#39;Mac&#39;: 0.151, &#39;Qass&#39;: 0.893, &#39;QNss&#39;: 0, &#39;QCmax&#39;: 0.339, &#39;QOmax&#39;: -0.246, &#39;Tpc&#39;: 1.584, &#39;Qmax&#39;: 0.339, &#39;QOmin&#39;: -0.478, &#39;Tnc&#39;: -1.584, &#39;QHmin&#39;: 0.035, &#39;QCss&#39;: 0.252, &#39;QHmax&#39;: 0.297, &#39;QNmax&#39;: 0, &#39;Rnc&#39;: 0.302, &#39;Rpc&#39;: 0.214, &#39;Qmin&#39;: -0.478, &#39;Tac&#39;: 3.167, &#39;Mnc&#39;: -0.198}</span>
+</pre></div>
+</div>
+<p>In order to be convenient to users, the object also provides the tool to get molecular structures by the molecular ID from website including NCBI, EBI, CAS, Kegg and Drugbank.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pymolecule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DrugBankID</span> <span class="o">=</span> <span class="s1">&#39;DB01014&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Pymolecule</span><span class="o">.</span><span class="n">PyMolecule</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetMolFromDrugbank</span><span class="p">(</span><span class="n">DrugBankID</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span><span class="o">.</span><span class="n">ReadMolFromSmile</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molecular_descriptor</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetKappa</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">molecular_descriptor</span>
+<span class="go">{&#39;phi&#39;: 5.989303307692309, &#39;kappa1&#39;: 22.291, &#39;kappa3&#39;: 7.51, &#39;kappa2&#39;: 11.111, &#39;kappam1&#39;: 18.587, &#39;kappam3&#39;: 5.395, &#39;kappam2&#39;: 8.378}</span>
+</pre></div>
+</div>
+<p>The code below can calculate all molecular descriptors except fingerprints.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pymolecule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CCOC=N&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Pymolecule</span><span class="o">.</span><span class="n">PyMolecule</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span><span class="o">.</span><span class="n">ReadMolFromSmile</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alldes</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAllDescriptor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">alldes</span><span class="p">)</span>
+<span class="go">765</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="calculating-molecular-fingerprints">
+<h3>Calculating molecular fingerprints<a class="headerlink" href="#calculating-molecular-fingerprints" title="Permalink to this headline">¶</a></h3>
+<p>In the <a class="reference internal" href="reference/fingerprint.html#module-fingerprint" title="fingerprint"><code class="xref py py-mod docutils literal"><span class="pre">fingerprint</span></code></a> module, there are eighteen types of molecular fingerprints which are defined by abstracting and magnifying different aspects of molecular topology.</p>
+<div class="section" id="calculating-fingerprint-via-functions">
+<h4>Calculating fingerprint via functions<a class="headerlink" href="#calculating-fingerprint-via-functions" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="xref py py-func docutils literal"><span class="pre">CalculateFP2Fingerprint()</span></code> function calculates the FP2 fingerprint.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.fingerprint</span> <span class="k">import</span> <span class="n">CalculateFP2Fingerprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pybel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CCC1(c2ccccc2)C(=O)N(C)C(=N1)O&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">&quot;smi&quot;</span><span class="p">,</span> <span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_fingerprint</span> <span class="o">=</span> <span class="n">CalculateFP2Fingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">mol_fingerprint</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">103</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-func docutils literal"><span class="pre">CalculateEstateFingerprint()</span></code> function calculates the Estate fingerprint.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.fingerprint</span> <span class="k">import</span> <span class="n">CalculateEstateFingerprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CCC1(c2ccccc2)C(=O)N(C)C(=N1)O&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_fingerprint</span> <span class="o">=</span> <span class="n">CalculateEstateFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">mol_fingerprint</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">79</span>
+</pre></div>
+</div>
+<p>The function <code class="xref py py-func docutils literal"><span class="pre">GhoseCrippenFingerprint()</span></code> in the <a class="reference internal" href="reference/ghosecrippen.html#module-ghosecrippen" title="ghosecrippen"><code class="xref py py-mod docutils literal"><span class="pre">ghosecrippen</span></code></a> module can calculate all ghosecrippen descriptors.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule.ghosecrippen</span> <span class="k">import</span> <span class="n">GhoseCrippenFingerprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CC(N)C(=O)O&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ghoseFP</span> <span class="o">=</span> <span class="n">GhoseCrippenFingerprint</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">ghoseFP</span>
+<span class="go">{&#39;S3&#39;: 0, &#39;S2&#39;: 0, &#39;S1&#39;: 0, &#39;S4&#39;: 0, ......, &#39;N9&#39;: 0, &#39;Hal2&#39;: 0}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">ghoseFP</span><span class="p">)</span>
+<span class="go">110</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculating-fingerprint-via-object">
+<h4>Calculating fingerprint via object<a class="headerlink" href="#calculating-fingerprint-via-object" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="xref py py-class docutils literal"><span class="pre">PyMolecule</span></code> class can calculate eleven kinds of fingerprints. For example, the user can read a molecule in the format of SMI and calculate the ECFP4 fingerprint (1024).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pymolecule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smi</span> <span class="o">=</span> <span class="s1">&#39;CCOC=N&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">Pymolecule</span><span class="o">.</span><span class="n">PyMolecule</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span><span class="o">.</span><span class="n">ReadMolFromSmile</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetFingerprint</span><span class="p">(</span><span class="n">FPName</span><span class="o">=</span><span class="s1">&#39;ECFP4&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">res</span>
+<span class="go">(4294967295L, {3994088662L: 1, 2246728737L: 1, 3542456614L: 1, 2072128742: 1, 2222711142L: 1, 2669064385L: 1, 3540009223L: 1, 849275503: 1, 2245384272L: 1, 2246703798L: 1, 864674487: 1, 4212523324L: 1, 3340482365L: 1}, &lt;rdkit.DataStructs.cDataStructs.UIntSparseIntVect object at 0x0CA010D8&gt;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="calculating-protein-descriptors">
+<h2>Calculating protein descriptors<a class="headerlink" href="#calculating-protein-descriptors" title="Permalink to this headline">¶</a></h2>
+<p>PyProtein is a tool used for protein feature calculation. PyProtein calculates structural and physicochemical features of proteins and peptides from amino acid sequence. These sequence-derived structural and physicochemical features have been widely used in the development of machine learning models for predicting protein structural and functional classes, post-translational modification, subcellular locations and peptides of specific properties. There are two ways to calculate protein descriptors in the PyProtein module. One is to directly use the corresponding methods, the other one is firstly to construct a <a class="reference internal" href="reference/PyProteinclass.html#module-PyProtein" title="PyProtein"><code class="xref py py-class docutils literal"><span class="pre">PyProtein</span></code></a> class and then run their methods to obtain the protein descriptors. It should be noted that the output is a dictionary form, whose keys and values represent the descriptor name and the descriptor value, respectively. The user could clearly understand the meaning of each descriptor.</p>
+<div class="section" id="calculating-protein-descriptors-via-functions">
+<h3>Calculating protein descriptors via functions<a class="headerlink" href="#calculating-protein-descriptors-via-functions" title="Permalink to this headline">¶</a></h3>
+<p>The user can input the protein sequence and calculate the protein descriptors using function.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyProtein</span> <span class="k">import</span> <span class="n">AAComposition</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein</span><span class="o">=</span><span class="s2">&quot;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AAC</span><span class="o">=</span><span class="n">AAComposition</span><span class="o">.</span><span class="n">CalculateAAComposition</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">AAC</span>
+<span class="go">{&#39;A&#39;: 11.94, &#39;C&#39;: 7.463, &#39;E&#39;: 8.955, &#39;D&#39;: 14.925, &#39;G&#39;: 8.955, &#39;F&#39;: 5.97, &#39;I&#39;: 0.0, &#39;H&#39;: 0.0, &#39;K&#39;: 1.493, &#39;M&#39;: 4.478, &#39;L&#39;: 2.985, &#39;N&#39;: 2.985, &#39;Q&#39;: 2.985, &#39;P&#39;: 2.985, &#39;S&#39;: 11.94, &#39;R&#39;: 1.493, &#39;T&#39;: 1.493, &#39;W&#39;: 2.985, &#39;V&#39;: 4.478, &#39;Y&#39;: 1.493}</span>
+</pre></div>
+</div>
+<p>PyBioMed also provides <code class="xref py py-mod docutils literal"><span class="pre">getpdb</span></code> to get sequence from <a class="reference external" href="http://www.rcsb.org/pdb/home/home.do">PDB</a> website to calculate protein descriptors.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyGetMol</span> <span class="k">import</span> <span class="n">GetProtein</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GetProtein</span><span class="o">.</span><span class="n">GetPDB</span><span class="p">([</span><span class="s1">&#39;1atp&#39;</span><span class="p">,</span><span class="s1">&#39;1efz&#39;</span><span class="p">,</span><span class="s1">&#39;1f88&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">GetProtein</span><span class="o">.</span><span class="n">GetSeqFromPDB</span><span class="p">(</span><span class="s1">&#39;1atp.pdb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">seq</span>
+<span class="go">GNAAAAKKGSEQESVKEFLAKAKEDFLKKWETPSQNTAQLDQFDRIKTLGTGSFGRVMLVKHKESGNHYAMKILDKQKVVKLKQ</span>
+<span class="go">IEHTLNEKRILQAVNFPFLVKLEFSFKDNSNLYMVMEYVAGGEMFSHLRRIGRFSEPHARFYAAQIVLTFEYLHSLDLIYRDLK</span>
+<span class="go">PENLLIDQQGYIQVTDFGFAKRVKGRTWXLCGTPEYLAPEIILSKGYNKAVDWWALGVLIYEMAAGYPPFFADQPIQIYEKIVS</span>
+<span class="go">GKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFATTDWIAIYQRKVEAPFIPKFKGPGDTSNFDDYEEEEIR</span>
+<span class="go">VXINEKCGKEFTEFTTYADFIASGRTGRRNAIHD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyProtein</span> <span class="k">import</span> <span class="n">CTD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein_descriptor</span> <span class="o">=</span> <span class="n">CTD</span><span class="o">.</span><span class="n">CalculateC</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">protein_descriptor</span>
+<span class="go">{&#39;_NormalizedVDWVC2&#39;: 0.224, &#39;_PolarizabilityC2&#39;: 0.328, &#39;_PolarizabilityC3&#39;: 0.179, &#39;_ChargeC1&#39;: 0.03, &#39;_PolarizabilityC1&#39;: 0.493, &#39;_SecondaryStrC2&#39;: 0.239, &#39;_SecondaryStrC3&#39;: 0.418, &#39;_NormalizedVDWVC3&#39;: 0.179, &#39;_SecondaryStrC1&#39;: 0.343, &#39;_SolventAccessibilityC1&#39;: 0.448, &#39;_SolventAccessibilityC2&#39;: 0.328, &#39;_SolventAccessibilityC3&#39;: 0.224, &#39;_NormalizedVDWVC1&#39;: 0.522, &#39;_HydrophobicityC3&#39;: 0.284, &#39;_HydrophobicityC1&#39;: 0.328, &#39;_ChargeC3&#39;: 0.239, &#39;_PolarityC2&#39;: 0.179, &#39;_PolarityC1&#39;: 0.299, &#39;_HydrophobicityC2&#39;: 0.388, &#39;_PolarityC3&#39;: 0.03, &#39;_ChargeC2&#39;: 0.731}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculate-protein-descriptors-via-object">
+<h3>Calculate protein descriptors via object<a class="headerlink" href="#calculate-protein-descriptors-via-object" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="reference/PyProteinclass.html#module-PyProtein" title="PyProtein"><code class="xref py py-mod docutils literal"><span class="pre">PyProtein</span></code></a> can calculate all kinds of protein descriptors in the PyBioMed.
+For example, the <a class="reference internal" href="reference/PyProteinclass.html#module-PyProtein" title="PyProtein"><code class="xref py py-class docutils literal"><span class="pre">PyProtein</span></code></a> can calculate DPC.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pyprotein</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein</span><span class="o">=</span><span class="s2">&quot;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein_class</span> <span class="o">=</span> <span class="n">Pyprotein</span><span class="o">.</span><span class="n">PyProtein</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">protein_class</span><span class="o">.</span><span class="n">GetDPComp</span><span class="p">())</span>
+<span class="go">400</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="reference/PyProteinclass.html#module-PyProtein" title="PyProtein"><code class="xref py py-mod docutils literal"><span class="pre">PyProtein</span></code></a> also provide the tool to get sequence from <a class="reference external" href="http://www.uniprot.org/">Uniprot</a> through the Uniprot ID.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pyprotein</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyProtein.GetProteinFromUniprot</span> <span class="k">import</span> <span class="n">GetProteinSequence</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uniprotID</span> <span class="o">=</span> <span class="s1">&#39;P48039&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein_sequence</span> <span class="o">=</span> <span class="n">GetProteinSequence</span><span class="p">(</span><span class="n">uniprotID</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">protein_sequence</span>
+<span class="go">MEDINFASLAPRHGSRPFMGTWNEIGTSQLNGGAFSWSSLWSGIKNFGSSIKSFGNKAWNSNTGQMLRDKLKDQNFQQKVVDGL</span>
+<span class="go">ASGINGVVDIANQALQNQINQRLENSRQPPVALQQRPPPKVEEVEVEEKLPPLEVAPPLPSKGEKRPRPDLEETLVVESREPPS</span>
+<span class="go">YEQALKEGASPYPMTKPIGSMARPVYGKESKPVTLELPPPVPTVPPMPAPTLGTAVSRPTAPTVAVATPARRPRGANWQSTLNS</span>
+<span class="go">IVGLGVKSLKRRRCY</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein_class</span> <span class="o">=</span> <span class="n">Pyprotein</span><span class="o">.</span><span class="n">PyProtein</span><span class="p">(</span><span class="n">protein_sequence</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CTD</span> <span class="o">=</span> <span class="n">protein_class</span><span class="o">.</span><span class="n">GetCTD</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">CTD</span><span class="p">)</span>
+<span class="go">147</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="reference/PyProteinclass.html#module-PyProtein" title="PyProtein"><code class="xref py py-class docutils literal"><span class="pre">PyProtein</span></code></a> can calculate all protein descriptors except the tri-peptide composition descriptors.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pyprotein</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein</span><span class="o">=</span><span class="s2">&quot;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein_class</span> <span class="o">=</span> <span class="n">Pyprotein</span><span class="o">.</span><span class="n">PyProtein</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">protein_class</span><span class="o">.</span><span class="n">GetALL</span><span class="p">())</span>
+<span class="go">10049</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="calculating-dna-descriptors">
+<h2>Calculating DNA descriptors<a class="headerlink" href="#calculating-dna-descriptors" title="Permalink to this headline">¶</a></h2>
+<p>The PyDNA module can generate various feature vectors for DNA sequences, this module could:</p>
+<ul class="simple">
+<li>Calculating three nucleic acid composition features describing the local sequence information by means of kmers (subsequences of DNA sequences);</li>
+<li>Calculating six autocorrelation features describing the level of correlation between two oligonucleotides along a DNA sequence in terms of their specific physicochemical properties;</li>
+<li>Calculating six pseudo nucleotide composition features, which can be used to represent a DNA sequence with a discrete model or vector yet still keep considerable sequence order information, particularly the global or long-range sequence order information, via the physicochemical properties of its constituent oligonucleotides.</li>
+</ul>
+<div class="section" id="calculating-dna-descriptors-via-functions">
+<h3>Calculating DNA descriptors via functions<a class="headerlink" href="#calculating-dna-descriptors-via-functions" title="Permalink to this headline">¶</a></h3>
+<p>The user can input a DNA sequence and calculate the DNA descriptors using functions.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNAac</span> <span class="k">import</span> <span class="n">GetDAC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dac</span> <span class="o">=</span> <span class="n">GetDAC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Twist&#39;</span><span class="p">,</span><span class="s1">&#39;Tilt&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dac</span><span class="p">)</span>
+<span class="go">{&#39;DAC_4&#39;: -0.004, &#39;DAC_1&#39;: -0.175, &#39;DAC_2&#39;: -0.185, &#39;DAC_3&#39;: -0.173}</span>
+</pre></div>
+</div>
+<p>The user can check the parameters and calculate the descriptors.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyDNA</span> <span class="k">import</span> <span class="n">PyDNApsenac</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenac</span> <span class="k">import</span> <span class="n">GetPseDNC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dnaseq</span> <span class="o">=</span> <span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PyDNApsenac</span><span class="o">.</span><span class="n">CheckPsenac</span><span class="p">(</span><span class="n">lamada</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">psednc</span> <span class="o">=</span> <span class="n">GetPseDNC</span><span class="p">(</span><span class="s1">&#39;ACCCCA&#39;</span><span class="p">,</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">psednc</span><span class="p">)</span>
+<span class="go">{&#39;PseDNC_18&#39;: 0.0521, &#39;PseDNC_16&#39;: 0.0, &#39;PseDNC_17&#39;: 0.0391, &#39;PseDNC_14&#39;: 0.0, &#39;PseDNC_15&#39;: 0.0, &#39;PseDNC_12&#39;: 0.0, &#39;PseDNC_13&#39;: 0.0, &#39;PseDNC_10&#39;: 0.0, &#39;PseDNC_11&#39;: 0.0, &#39;PseDNC_4&#39;: 0.0, &#39;PseDNC_5&#39;: 0.182, &#39;PseDNC_6&#39;: 0.545, &#39;PseDNC_7&#39;: 0.0, &#39;PseDNC_1&#39;: 0.0, &#39;PseDNC_2&#39;: 0.182, &#39;PseDNC_3&#39;: 0.0, &#39;PseDNC_8&#39;: 0.0, &#39;PseDNC_9&#39;: 0.0}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculating-dna-descriptors-via-object">
+<h3>Calculating DNA descriptors via object<a class="headerlink" href="#calculating-dna-descriptors-via-object" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="xref py py-mod docutils literal"><span class="pre">PyDNA</span></code> can calculate all kinds of protein descriptors in the PyBioMed.
+For example, the <code class="xref py py-class docutils literal"><span class="pre">PyDNA</span></code> can calculate SCPseDNC.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="k">import</span> <span class="n">Pydna</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dna</span> <span class="o">=</span> <span class="n">Pydna</span><span class="o">.</span><span class="n">PyDNA</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scpsednc</span> <span class="o">=</span> <span class="n">dna</span><span class="o">.</span><span class="n">GetSCPseDNC</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">scpsednc</span><span class="p">)</span>
+<span class="go">16</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="calculating-interaction-descriptors">
+<h2>Calculating Interaction descriptors<a class="headerlink" href="#calculating-interaction-descriptors" title="Permalink to this headline">¶</a></h2>
+<p>The PyInteraction module can generate six types of interaction descriptors indcluding chemical-chemical interaction features, chemical-protein interaction features, chemical-DNA interaction features, protein-protein interaction features, protein-DNA interaction features, and DNA-DNA interaction features by integrating two groups of features.</p>
+<p>The user can choose three different types of methods to calculate interaction descriptors. The function <code class="xref py py-func docutils literal"><span class="pre">CalculateInteraction1()</span></code> can calculate two interaction features by combining two features.</p>
+<div class="math">
+\[F_{ab} = \bigl(F_a, F_b\bigr)\]</div>
+<p>The function <code class="xref py py-func docutils literal"><span class="pre">CalculateInteraction2()</span></code> can calculate two interaction features by two multiplied features.</p>
+<div class="math">
+\[F = \{F(k)= F_a(i) ×F_b(j), i = 1, 2, …, p, j = 1, 2 ,… , p, k = (i-1) ×p+j\}\]</div>
+<p>The function <code class="xref py py-func docutils literal"><span class="pre">CalculateInteraction3()</span></code> can calculate two interaction features by</p>
+<div class="math">
+\[F=[F_a(i)+F_b(i)),F_a(i)*F_b(i)]\]</div>
+<p>The function <code class="xref py py-func docutils literal"><span class="pre">CalculateInteraction3()</span></code> is only used in the same type of descriptors including chemical-chemical interaction, protein-protein interaction and DNA-DNA interaction.</p>
+<p>The user can calculate chemical-chemical features using three methods .</p>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="_images/CCI.png"><img alt="_images/CCI.png" src="_images/CCI.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The calculation process for chemical-chemical interaction descriptors.</span></p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyInteraction</span> <span class="k">import</span> <span class="n">PyInteraction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule</span> <span class="k">import</span> <span class="n">moe</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smis</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_des</span> <span class="o">=</span> <span class="n">moe</span><span class="o">.</span><span class="n">GetMOE</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_mol_interaction1</span> <span class="o">=</span> <span class="n">PyInteraction</span><span class="o">.</span><span class="n">CalculateInteraction1</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">mol_des</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">mol_mol_interaction1</span>
+<span class="go">{&#39;slogPVSA6ex&#39;: 0.0, &#39;PEOEVSA10ex&#39;: 0.0,......, &#39;EstateVSA9ex&#39;: 4.795, &#39;slogPVSA2&#39;: 4.795, &#39;slogPVSA3&#39;: 0.0, &#39;slogPVSA0&#39;: 5.734, &#39;slogPVSA1&#39;: 17.118, &#39;slogPVSA6&#39;: 0.0, &#39;slogPVSA7&#39;: 0.0, &#39;slogPVSA4&#39;: 6.924, &#39;slogPVSA5&#39;: 0.0, &#39;slogPVSA8&#39;: 0.0, &#39;slogPVSA9&#39;: 0.0}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">mol_mol_interaction1</span><span class="p">)</span>
+<span class="go">120</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_mol_interaction2</span> <span class="o">=</span> <span class="n">PyInteraction</span><span class="o">.</span><span class="n">CalculateInteraction2</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">mol_des</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">mol_mol_interaction2</span><span class="p">)</span>
+<span class="go">3600</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_mol_interaction3</span> <span class="o">=</span> <span class="n">PyInteraction</span><span class="o">.</span><span class="n">CalculateInteraction3</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">mol_des</span><span class="p">)</span>
+<span class="go">{&#39;EstateVSA9*EstateVSA9&#39;: 22.992, &#39;EstateVSA9+EstateVSA9&#39;: 9.59, &#39;PEOEVSA1+PEOEVSA1&#39;: 9.59, &#39;VSAEstate10*VSAEstate10&#39;: 0.0, &#39;PEOEVSA3*PEOEVSA3&#39;: 0.0, &#39;PEOEVSA11*PEOEVSA11&#39;: 0.0, &#39;PEOEVSA4*PEOEVSA4&#39;: 0.0, &#39;VSAEstate2+VSAEstate2&#39;: 0.0, &#39;MRVSA0+MRVSA0&#39;: 19.802, &#39;MRVSA6+MRVSA6&#39;: 0.0......}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">mol_mol_interaction3</span><span class="p">)</span>
+<span class="go">120</span>
+</pre></div>
+</div>
+<p>The user can calculate chemical-protein feature using two methods.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/CPI.png"><img alt="_images/CPI.png" src="_images/CPI.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">The calculation process for chemical-protein interaction descriptors.</span></p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyMolecule</span> <span class="k">import</span> <span class="n">moe</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyInteraction.PyInteraction</span> <span class="k">import</span> <span class="n">CalculateInteraction2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smis</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_des</span> <span class="o">=</span> <span class="n">moe</span><span class="o">.</span><span class="n">GetMOE</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyDNA.PyDNApsenac</span> <span class="k">import</span> <span class="n">GetPseDNC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protein_des</span> <span class="o">=</span> <span class="n">GetPseDNC</span><span class="p">(</span><span class="s1">&#39;ACCCCA&#39;</span><span class="p">,</span><span class="n">lamada</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pro_mol_interaction1</span> <span class="o">=</span> <span class="n">PyInteraction</span><span class="o">.</span><span class="n">CalculateInteraction1</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">protein_des</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">pro_mol_interaction1</span><span class="p">)</span>
+<span class="go">78</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pro_mol_interaction2</span> <span class="o">=</span> <span class="n">CalculateInteraction2</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">protein_des</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">pro_mol_interaction2</span><span class="p">)</span>
+<span class="go">1080</span>
+</pre></div>
+</div>
+<p>The user can calculate chemical-DNA feature using two methods.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PyBioMed.PyDNA</span> <span class="k">import</span> <span class="n">PyDNAac</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DNA_des</span> <span class="o">=</span> <span class="n">PyDNAac</span><span class="o">.</span><span class="n">GetTCC</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span> <span class="n">phyche_index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dnase I&#39;</span><span class="p">,</span> <span class="s1">&#39;Nucleosome&#39;</span><span class="p">,</span><span class="s1">&#39;MW-kg&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-].[Na+]&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smis</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_des</span> <span class="o">=</span> <span class="n">moe</span><span class="o">.</span><span class="n">GetMOE</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_DNA_interaction1</span> <span class="o">=</span> <span class="n">PyInteraction</span><span class="o">.</span><span class="n">CalculateInteraction1</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">DNA_des</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">mol_DNA_interaction1</span><span class="p">)</span>
+<span class="go">72</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_DNA_interaction2</span> <span class="o">=</span> <span class="n">PyInteraction</span><span class="o">.</span><span class="n">CalculateInteraction2</span><span class="p">(</span><span class="n">mol_des</span><span class="p">,</span><span class="n">DNA_des</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">mol_DNA_interaction2</span><span class="p">)</span>
+<span class="go">720</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="application.html" title="Application"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBioMed 1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

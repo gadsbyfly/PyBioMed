@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyProteinAAIndex module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyProtein" href="PyProtein.html" />
+    <link rel="next" title="QuasiSequenceOrder module" href="QuasiSequenceOrder.html" />
+    <link rel="prev" title="PyProteinAAComposition module" href="PyProteinAAComposition.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="QuasiSequenceOrder.html" title="QuasiSequenceOrder module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PyProteinAAComposition.html" title="PyProteinAAComposition module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyProtein.html" accesskey="U">PyProtein</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="PyProteinAAComposition.html"
+                        title="previous chapter">PyProteinAAComposition module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="QuasiSequenceOrder.html"
+                        title="next chapter">QuasiSequenceOrder module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/PyProteinAAIndex.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-PyProteinAAIndex">
+<span id="pyproteinaaindex-module"></span><h1>PyProteinAAIndex module<a class="headerlink" href="#module-PyProteinAAIndex" title="Permalink to this headline">¶</a></h1>
+<p>This module is used for obtaining the properties of amino acids or their pairs</p>
+<p>from the aaindex database. You can freely use and distribute it. If you hava</p>
+<p>any problem, you could contact with us timely!</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<dl class="function">
+<dt id="PyProteinAAIndex.GetAAIndex1">
+<code class="descclassname">PyProteinAAIndex.</code><code class="descname">GetAAIndex1</code><span class="sig-paren">(</span><em>name</em>, <em>path='.'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#GetAAIndex1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.GetAAIndex1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the amino acid property values from aaindex1</p>
+<p>Usage:</p>
+<p>result=GetAAIndex1(name)</p>
+<p>Input: name is the name of amino acid property (e.g., KRIW790103)</p>
+<p>Output: result is a dict form containing the properties of 20 amino acids</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyProteinAAIndex.GetAAIndex23">
+<code class="descclassname">PyProteinAAIndex.</code><code class="descname">GetAAIndex23</code><span class="sig-paren">(</span><em>name</em>, <em>path='.'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#GetAAIndex23"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.GetAAIndex23" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the amino acid property values from aaindex2 and aaindex3</p>
+<p>Usage:</p>
+<p>result=GetAAIndex23(name)</p>
+<p>Input: name is the name of amino acid property (e.g.,TANS760101,GRAR740104)</p>
+<p>Output: result is a dict form containing the properties of 400 amino acid pairs</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="PyProteinAAIndex.MatrixRecord">
+<em class="property">class </em><code class="descclassname">PyProteinAAIndex.</code><code class="descname">MatrixRecord</code><a class="reference internal" href="../_modules/PyProteinAAIndex.html#MatrixRecord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.MatrixRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyProteinAAIndex.Record" title="PyProteinAAIndex.Record"><code class="xref py py-class docutils literal"><span class="pre">PyProteinAAIndex.Record</span></code></a></p>
+<p>Matrix record for mutation matrices or pair-wise contact potentials</p>
+<dl class="method">
+<dt id="PyProteinAAIndex.MatrixRecord.extend">
+<code class="descname">extend</code><span class="sig-paren">(</span><em>row</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#MatrixRecord.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.MatrixRecord.extend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyProteinAAIndex.MatrixRecord.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>aai</em>, <em>aaj</em>, <em>d=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#MatrixRecord.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.MatrixRecord.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyProteinAAIndex.MatrixRecord.median">
+<code class="descname">median</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#MatrixRecord.median"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.MatrixRecord.median" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="PyProteinAAIndex.Record">
+<em class="property">class </em><code class="descclassname">PyProteinAAIndex.</code><code class="descname">Record</code><a class="reference internal" href="../_modules/PyProteinAAIndex.html#Record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.Record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Amino acid index (AAindex) Record</p>
+<dl class="attribute">
+<dt id="PyProteinAAIndex.Record.aakeys">
+<code class="descname">aakeys</code><em class="property"> = 'ARNDCQEGHILKMFPSTWYV'</em><a class="headerlink" href="#PyProteinAAIndex.Record.aakeys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyProteinAAIndex.Record.extend">
+<code class="descname">extend</code><span class="sig-paren">(</span><em>row</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#Record.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.Record.extend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyProteinAAIndex.Record.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>aai</em>, <em>aaj=None</em>, <em>d=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#Record.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.Record.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyProteinAAIndex.Record.median">
+<code class="descname">median</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#Record.median"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.Record.median" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="PyProteinAAIndex.get">
+<code class="descclassname">PyProteinAAIndex.</code><code class="descname">get</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get record for key</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyProteinAAIndex.grep">
+<code class="descclassname">PyProteinAAIndex.</code><code class="descname">grep</code><span class="sig-paren">(</span><em>pattern</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#grep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.grep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for pattern in title and description of all records (case
+insensitive) and print results on standard output.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyProteinAAIndex.init">
+<code class="descclassname">PyProteinAAIndex.</code><code class="descname">init</code><span class="sig-paren">(</span><em>path=None</em>, <em>index='123'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in the aaindex files. You need to run this (once) before you can
+access any records. If the files are not within the current directory,
+you need to specify the correct directory path. By default all three
+aaindex files are read in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyProteinAAIndex.init_from_file">
+<code class="descclassname">PyProteinAAIndex.</code><code class="descname">init_from_file</code><span class="sig-paren">(</span><em>filename</em>, <em>type=&lt;class PyProteinAAIndex.Record at 0x03C50D50&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#init_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.init_from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="PyProteinAAIndex.search">
+<code class="descclassname">PyProteinAAIndex.</code><code class="descname">search</code><span class="sig-paren">(</span><em>pattern</em>, <em>searchtitle=True</em>, <em>casesensitive=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyProteinAAIndex.html#search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyProteinAAIndex.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for pattern in description and title (optional) of all records and
+return matched records as list. By default search case insensitive.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="QuasiSequenceOrder.html" title="QuasiSequenceOrder module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PyProteinAAComposition.html" title="PyProteinAAComposition module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyProtein.html" >PyProtein</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

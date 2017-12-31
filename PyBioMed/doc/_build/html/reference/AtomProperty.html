@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AtomProperty module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="AtomTypes module" href="AtomTypes.html" />
+    <link rel="prev" title="PyMolecule" href="PyMolecule.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="AtomTypes.html" title="AtomTypes module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PyMolecule.html" title="PyMolecule"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="PyMolecule.html"
+                        title="previous chapter">PyMolecule</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="AtomTypes.html"
+                        title="next chapter">AtomTypes module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/AtomProperty.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-AtomProperty">
+<span id="atomproperty-module"></span><h1>AtomProperty module<a class="headerlink" href="#module-AtomProperty" title="Permalink to this headline">¶</a></h1>
+<p>You can freely use and distribute it. If you hava</p>
+<p>any problem, you could contact with us timely!</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<p>Z: atomic number
+L: principal quantum number
+Zv: number of valence electrons
+Rv: van der Waals atomic radius
+Rc: covalent radius
+m: atomic mass
+V: van der Waals vloume
+En: Sanderson electronegativity
+alapha: atomic polarizability (10e-24 cm3)
+IP: ionization potential (eV)
+EA: electron affinity (eV)</p>
+<dl class="function">
+<dt id="AtomProperty.GetAbsoluteAtomicProperty">
+<code class="descclassname">AtomProperty.</code><code class="descname">GetAbsoluteAtomicProperty</code><span class="sig-paren">(</span><em>element='C'</em>, <em>propertyname='m'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AtomProperty.html#GetAbsoluteAtomicProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AtomProperty.GetAbsoluteAtomicProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute property value with propertyname for the given atom.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="AtomProperty.GetRelativeAtomicProperty">
+<code class="descclassname">AtomProperty.</code><code class="descname">GetRelativeAtomicProperty</code><span class="sig-paren">(</span><em>element='C'</em>, <em>propertyname='m'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AtomProperty.html#GetRelativeAtomicProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AtomProperty.GetRelativeAtomicProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute property value with propertyname for the given atom.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="AtomTypes.html" title="AtomTypes module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PyMolecule.html" title="PyMolecule"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

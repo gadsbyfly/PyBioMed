@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moreaubroto module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="topology module" href="topology.html" />
+    <link rel="prev" title="moran module" href="moran.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="topology.html" title="topology module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="moran.html" title="moran module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="moran.html"
+                        title="previous chapter">moran module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="topology.html"
+                        title="next chapter">topology module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/moreaubroto.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-moreaubroto">
+<span id="moreaubroto-module"></span><h1>moreaubroto module<a class="headerlink" href="#module-moreaubroto" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<p>The calculation of Moreau-Broto autocorrelation descriptors. You can get 32</p>
+<p>molecular decriptors. You can freely use and distribute it. If you hava</p>
+<p>any problem, you could contact with us timely!</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a> and <a class="reference external" href="mailto:oriental-cds&#37;&#52;&#48;163&#46;com">oriental-cds<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="moreaubroto.CalculateMoreauBrotoAutoElectronegativity">
+<code class="descclassname">moreaubroto.</code><code class="descname">CalculateMoreauBrotoAutoElectronegativity</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moreaubroto.html#CalculateMoreauBrotoAutoElectronegativity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moreaubroto.CalculateMoreauBrotoAutoElectronegativity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Moreau-Broto autocorrelation descriptors based on</p>
+<p>carbon-scaled atomic Sanderson electronegativity.</p>
+<p>Usage:</p>
+<p>res=CalculateMoreauBrotoAutoElectronegativity(mol)</p>
+<p>Input: mol is a molcule object.</p>
+<p>Output: res is a dict form containing eight moreau broto autocorrealtion</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moreaubroto.CalculateMoreauBrotoAutoMass">
+<code class="descclassname">moreaubroto.</code><code class="descname">CalculateMoreauBrotoAutoMass</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moreaubroto.html#CalculateMoreauBrotoAutoMass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moreaubroto.CalculateMoreauBrotoAutoMass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Moreau-Broto autocorrelation descriptors based on</p>
+<p>carbon-scaled atomic mass.</p>
+<p>Usage:</p>
+<p>res=CalculateMoreauBrotoAutoMass(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: res is a dict form containing eight moreau broto autocorrealtion</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moreaubroto.CalculateMoreauBrotoAutoPolarizability">
+<code class="descclassname">moreaubroto.</code><code class="descname">CalculateMoreauBrotoAutoPolarizability</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moreaubroto.html#CalculateMoreauBrotoAutoPolarizability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moreaubroto.CalculateMoreauBrotoAutoPolarizability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Moreau-Broto autocorrelation descriptors based on</p>
+<p>carbon-scaled atomic polarizability.</p>
+<p>res=CalculateMoreauBrotoAutoPolarizability(mol)</p>
+<p>Input: mol is a molcule object.</p>
+<p>Output: res is a dict form containing eight moreau broto autocorrealtion</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moreaubroto.CalculateMoreauBrotoAutoVolume">
+<code class="descclassname">moreaubroto.</code><code class="descname">CalculateMoreauBrotoAutoVolume</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moreaubroto.html#CalculateMoreauBrotoAutoVolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moreaubroto.CalculateMoreauBrotoAutoVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of Moreau-Broto autocorrelation descriptors based on</p>
+<p>carbon-scaled atomic van der Waals volume.</p>
+<p>Usage:</p>
+<p>res=CalculateMoreauBrotoAutoVolume(mol)</p>
+<p>Input: mol is a molcule object.</p>
+<p>Output: res is a dict form containing eight moreau broto autocorrealtion</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moreaubroto.GetMoreauBrotoAuto">
+<code class="descclassname">moreaubroto.</code><code class="descname">GetMoreauBrotoAuto</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/moreaubroto.html#GetMoreauBrotoAuto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moreaubroto.GetMoreauBrotoAuto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcualate all Moreau-Broto autocorrelation descriptors.</p>
+<p>(carbon-scaled atomic mass, carbon-scaled atomic van der Waals volume,</p>
+<p>carbon-scaled atomic Sanderson electronegativity,</p>
+<p>carbon-scaled atomic polarizability)</p>
+<p>Usage:</p>
+<p>res=GetMoreauBrotoAuto(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: res is a dict form containing all moreau broto autocorrelation</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="topology.html" title="topology module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="moran.html" title="moran module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

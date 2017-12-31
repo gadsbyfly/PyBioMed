@@ -1,0 +1,473 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>charge module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyMolecule" href="PyMolecule.html" />
+    <link rel="next" title="connectivity module" href="connectivity.html" />
+    <link rel="prev" title="cats2d module" href="cats2d.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="connectivity.html" title="connectivity module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cats2d.html" title="cats2d module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" accesskey="U">PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cats2d.html"
+                        title="previous chapter">cats2d module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="connectivity.html"
+                        title="next chapter">connectivity module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/charge.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-charge">
+<span id="charge-module"></span><h1>charge module<a class="headerlink" href="#module-charge" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<p>The calculation of Charge descriptors based on Gasteiger/Marseli partial</p>
+<p>charges(25). You can freely use and distribute it. If you hava  any problem,</p>
+<p>you could contact with us timely!</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="charge.CalculateAllMaxNCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateAllMaxNCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateAllMaxNCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateAllMaxNCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most negative charge on all atoms</p>
+<p>&#8211;&gt;Qmin</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateAllMaxNCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateAllMaxPCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateAllMaxPCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateAllMaxPCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateAllMaxPCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most positive charge on ALL atoms</p>
+<p>&#8211;&gt;Qmax</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateAllMaxPCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateAllSumSquareCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateAllSumSquareCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateAllSumSquareCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateAllSumSquareCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sum of square charges on all atoms</p>
+<p>&#8211;&gt;Qass</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateAllSumSquareCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateCMaxNCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateCMaxNCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateCMaxNCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateCMaxNCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most negative charge on C atoms</p>
+<p>&#8211;&gt;QCmin</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateCMaxNCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateCMaxPCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateCMaxPCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateCMaxPCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateCMaxPCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most positive charge on C atoms</p>
+<p>&#8211;&gt;QCmax</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateCMaxPCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateCSumSquareCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateCSumSquareCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateCSumSquareCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateCSumSquareCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sum of square charges on all C atoms</p>
+<p>&#8211;&gt;QCss</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateCSumSquareCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateHMaxNCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateHMaxNCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateHMaxNCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateHMaxNCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most negative charge on H atoms</p>
+<p>&#8211;&gt;QHmin</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHMaxNCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateHMaxPCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateHMaxPCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateHMaxPCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateHMaxPCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most positive charge on H atoms</p>
+<p>&#8211;&gt;QHmax</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHMaxPCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateHSumSquareCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateHSumSquareCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateHSumSquareCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateHSumSquareCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sum of square charges on all H atoms</p>
+<p>&#8211;&gt;QHss</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateHSumSquareCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateLocalDipoleIndex">
+<code class="descclassname">charge.</code><code class="descname">CalculateLocalDipoleIndex</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateLocalDipoleIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateLocalDipoleIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of local dipole index (D)</p>
+<p>&#8211;&gt;LDI</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateLocalDipoleIndex(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateMeanAbsoulteCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateMeanAbsoulteCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateMeanAbsoulteCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateMeanAbsoulteCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The average absolute charge</p>
+<p>&#8211;&gt;Mac</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMeanAbsoulteCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateMeanNCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateMeanNCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateMeanNCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateMeanNCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The average negative charge</p>
+<p>&#8211;&gt;Mnc</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMeanNCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateMeanPCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateMeanPCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateMeanPCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateMeanPCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The average postive charge</p>
+<p>&#8211;&gt;Mpc</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateMeanPCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateNMaxNCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateNMaxNCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateNMaxNCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateNMaxNCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most negative charge on N atoms</p>
+<p>&#8211;&gt;QNmin</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateNMaxNCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateNMaxPCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateNMaxPCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateNMaxPCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateNMaxPCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most positive charge on N atoms</p>
+<p>&#8211;&gt;QNmax</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateNMaxPCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateNSumSquareCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateNSumSquareCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateNSumSquareCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateNSumSquareCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sum of square charges on all N atoms</p>
+<p>&#8211;&gt;QNss</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateNSumSquareCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateOMaxNCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateOMaxNCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateOMaxNCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateOMaxNCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most negative charge on O atoms</p>
+<p>&#8211;&gt;QOmin</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateOMaxNCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateOMaxPCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateOMaxPCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateOMaxPCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateOMaxPCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most positive charge on O atoms</p>
+<p>&#8211;&gt;QOmax</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateOMaxPCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateOSumSquareCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateOSumSquareCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateOSumSquareCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateOSumSquareCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sum of square charges on all O atoms</p>
+<p>&#8211;&gt;QOss</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateOSumSquareCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateRelativeNCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateRelativeNCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateRelativeNCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateRelativeNCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The partial charge of the most negative atom divided</p>
+<p>by the total negative charge.</p>
+<p>&#8211;&gt;Rnc</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateRelativeNCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateRelativePCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateRelativePCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateRelativePCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateRelativePCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The partial charge of the most positive atom divided by</p>
+<p>the total positive charge.</p>
+<p>&#8211;&gt;Rpc</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateRelativePCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateSubmolPolarityPara">
+<code class="descclassname">charge.</code><code class="descname">CalculateSubmolPolarityPara</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateSubmolPolarityPara"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateSubmolPolarityPara" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of submolecular polarity parameter(SPP)</p>
+<p>&#8211;&gt;SPP</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateSubmolPolarityPara(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateTotalAbsoulteCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateTotalAbsoulteCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateTotalAbsoulteCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateTotalAbsoulteCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total absolute charge</p>
+<p>&#8211;&gt;Tac</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateTotalAbsoulteCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateTotalNCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateTotalNCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateTotalNCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateTotalNCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total negative charge</p>
+<p>&#8211;&gt;Tnc</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateTotalNCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.CalculateTotalPCharge">
+<code class="descclassname">charge.</code><code class="descname">CalculateTotalPCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#CalculateTotalPCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.CalculateTotalPCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total postive charge</p>
+<p>&#8211;&gt;Tpc</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=CalculateTotalPCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a numeric value.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="charge.GetCharge">
+<code class="descclassname">charge.</code><code class="descname">GetCharge</code><span class="sig-paren">(</span><em>mol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/charge.html#GetCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#charge.GetCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the dictionary of constitutional descriptors for given moelcule mol</p>
+<p>Usage:</p>
+<blockquote>
+<div><p>result=GetCharge(mol)</p>
+<p>Input: mol is a molecule object.</p>
+<p>Output: result is a dict form containing all charge descriptors.</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="connectivity.html" title="connectivity module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cats2d.html" title="cats2d module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyMolecule.html" >PyMolecule</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

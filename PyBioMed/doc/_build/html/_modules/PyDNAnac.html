@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyDNAnac &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyDNAnac</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+
+<span class="sd">A class used for computing different types of DNA descriptors! </span>
+
+<span class="sd">You can freely use and distribute it. If you have any problem, </span>
+
+<span class="sd">you could contact with us timely.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.10.11</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+
+<span class="kn">from</span> <span class="nn">PyDNAnacutil</span> <span class="k">import</span> <span class="n">MakeUptoKmerList</span><span class="p">,</span> <span class="n">MakeRevcompKmerList</span><span class="p">,</span> <span class="n">MakeKmerVector</span>
+<span class="kn">from</span> <span class="nn">PyDNAutil</span> <span class="k">import</span> <span class="n">GetData</span>
+
+
+<div class="viewcode-block" id="CheckNacPara"><a class="viewcode-back" href="../reference/PyDNAnac.html#PyDNAnac.CheckNacPara">[docs]</a><span class="k">def</span> <span class="nf">CheckNacPara</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">upto</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alphabet</span><span class="o">=</span><span class="s1">&#39;ACGT&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Check the nac parameter&#39;s validation.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, parameter k must be an integer and larger than 0.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">normalize</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, parameter normalize must be bool type.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">upto</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, parameter upto must be bool type.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">alphabet</span> <span class="o">!=</span> <span class="s1">&#39;ACGT&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, parameter alphabet must be &#39;ACGT&#39;.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="GetKmerList"><a class="viewcode-back" href="../reference/PyDNAnac.html#PyDNAnac.GetKmerList">[docs]</a><span class="k">def</span> <span class="nf">GetKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Get the kmer list.</span>
+
+<span class="sd">    :param k: int, the k value of kmer, it should be larger than 0.</span>
+<span class="sd">    :param upto: bool, whether to generate 1-kmer, 2-kmer, ..., k-mer.</span>
+<span class="sd">    :param alphabet: string.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">upto</span><span class="p">:</span>
+        <span class="n">k_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">kmer_list</span> <span class="o">=</span> <span class="n">MakeUptoKmerList</span><span class="p">(</span><span class="n">k_list</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">kmer_list</span></div>
+
+
+<div class="viewcode-block" id="GetKmer"><a class="viewcode-back" href="../reference/PyDNAnac.html#PyDNAnac.GetKmer">[docs]</a><span class="k">def</span> <span class="nf">GetKmer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Make a kmer dictionary with options k, upto, revcomp, normalize.</span>
+<span class="sd">    </span>
+<span class="sd">    :param k: int, the k value of kmer, it should be larger than 0.</span>
+<span class="sd">    :param normalize: bool, normalize the result vector or not.</span>
+<span class="sd">    :param upto: bool, whether to generate 1-kmer, 2-kmer, ..., k-mer.</span>
+<span class="sd">    :param alphabet: string.</span>
+<span class="sd">    :param data: file object or sequence list.</span>
+<span class="sd">    :return: kmer vector.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>            
+    <span class="k">if</span> <span class="s1">&#39;normalize&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">normalize</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">normalize</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;upto&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">upto</span> <span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;upto&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">upto</span> <span class="o">=</span> <span class="kc">False</span>        
+    <span class="k">if</span> <span class="s1">&#39;alphabet&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alphabet&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="s2">&quot;ACGT&quot;</span>
+    
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>    
+    <span class="n">sequence_list</span> <span class="o">=</span> <span class="n">GetData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">kmer_list</span> <span class="o">=</span> <span class="n">GetKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">)</span>
+
+    <span class="n">rev_kmer_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">revcomp</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">MakeKmerVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">kmer_list</span><span class="p">,</span> <span class="n">rev_kmer_list</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">revcomp</span><span class="p">,</span> <span class="n">normalize</span><span class="p">)</span>
+    
+    <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Kmer_</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_keys</span><span class="p">,</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="GetRevcKmer"><a class="viewcode-back" href="../reference/PyDNAnac.html#PyDNAnac.GetRevcKmer">[docs]</a><span class="k">def</span> <span class="nf">GetRevcKmer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Make a reverse compliment kmer dictionary with options k, upto, normalize.</span>
+
+<span class="sd">    :param data: file object or sequence list.</span>
+<span class="sd">    :return: reverse compliment kmer vector.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>            
+    <span class="k">if</span> <span class="s1">&#39;normalize&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">normalize</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">normalize</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;upto&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">upto</span> <span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;upto&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">upto</span> <span class="o">=</span> <span class="kc">False</span>        
+    <span class="k">if</span> <span class="s1">&#39;alphabet&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alphabet&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="s2">&quot;ACGT&quot;</span>
+        
+    
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+    <span class="n">sequence_list</span> <span class="o">=</span> <span class="n">GetData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">kmer_list</span> <span class="o">=</span> <span class="n">GetKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">)</span>
+
+    <span class="c1"># Use lexicographically first version of {kmer, revcomp(kmer)}.</span>
+    <span class="n">rev_kmer_list</span> <span class="o">=</span> <span class="n">MakeRevcompKmerList</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">)</span>
+    <span class="n">revcomp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">MakeKmerVector</span><span class="p">(</span><span class="n">sequence_list</span><span class="p">,</span> <span class="n">kmer_list</span><span class="p">,</span> <span class="n">rev_kmer_list</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">revcomp</span><span class="p">,</span> <span class="n">normalize</span><span class="p">)</span>
+    
+    <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RevcKmer_</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_keys</span><span class="p">,</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+
+<div class="viewcode-block" id="GetIdKmer"><a class="viewcode-back" href="../reference/PyDNAnac.html#PyDNAnac.GetIdKmer">[docs]</a><span class="k">def</span> <span class="nf">GetIdKmer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">hs</span><span class="p">,</span> <span class="n">non_hs</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    Make IDKmer vector.</span>
+
+<span class="sd">    :param data: Need to processed FASTA file.</span>
+<span class="sd">    :param hs: Positive FASTA file.</span>
+<span class="sd">    :param non_hs: Negative FASTA file.</span>
+<span class="sd">    :param k: int, the k value of kmer, it should be larger than 0.</span>
+<span class="sd">    :param upto: bool, whether to generate 1-kmer, 2-kmer, ..., k-mer.</span>
+<span class="sd">    :param alphabet: string.</span>
+<span class="sd">    ###########################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">6</span>            
+    <span class="k">if</span> <span class="s1">&#39;upto&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">upto</span> <span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;upto&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">upto</span> <span class="o">=</span> <span class="kc">True</span>        
+    <span class="k">if</span> <span class="s1">&#39;alphabet&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alphabet&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="s2">&quot;ACGT&quot;</span>
+        
+    
+    <span class="kn">from</span> <span class="nn">PyDNAnacutil</span> <span class="k">import</span> <span class="n">MakeKmerList</span>
+    <span class="kn">from</span> <span class="nn">PyDNAnacutil</span> <span class="k">import</span> <span class="n">Diversity</span>
+    <span class="kn">from</span> <span class="nn">PyDNAnacutil</span> <span class="k">import</span> <span class="n">IdXS</span>
+
+    <span class="n">rev_kmer_list</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">revcomp</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="p">[],</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+
+    <span class="n">pos_s_list</span> <span class="o">=</span> <span class="n">GetData</span><span class="p">(</span><span class="n">hs</span><span class="p">)</span>
+    <span class="n">neg_s_list</span> <span class="o">=</span> <span class="n">GetData</span><span class="p">(</span><span class="n">non_hs</span><span class="p">)</span>
+    <span class="c1"># print k</span>
+    <span class="k">if</span> <span class="n">upto</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">k_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># print &#39;k_list =&#39;, k_list</span>
+
+    <span class="c1"># Get all kmer ID from 1-kmer to 6-kmer.</span>
+    <span class="c1"># Calculate standard source S vector.</span>
+    <span class="n">pos_s_vec</span><span class="p">,</span> <span class="n">neg_s_vec</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">diversity_pos_s</span><span class="p">,</span> <span class="n">diversity_neg_s</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_list</span><span class="p">:</span>
+        <span class="n">kmer_list</span> <span class="o">=</span> <span class="n">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">)</span>
+
+        <span class="n">temp_pos_s_vec</span> <span class="o">=</span> <span class="n">MakeKmerVector</span><span class="p">(</span><span class="n">pos_s_list</span><span class="p">,</span> <span class="n">kmer_list</span><span class="p">,</span> <span class="n">rev_kmer_list</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">revcomp</span><span class="p">,</span> <span class="n">normalize</span><span class="p">)</span>
+        <span class="n">temp_neg_s_vec</span> <span class="o">=</span> <span class="n">MakeKmerVector</span><span class="p">(</span><span class="n">neg_s_list</span><span class="p">,</span> <span class="n">kmer_list</span><span class="p">,</span> <span class="n">rev_kmer_list</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">revcomp</span><span class="p">,</span> <span class="n">normalize</span><span class="p">)</span>
+
+        <span class="n">temp_pos_s_vec</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">temp_pos_s_vec</span><span class="p">])]</span>
+        <span class="n">temp_neg_s_vec</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">temp_neg_s_vec</span><span class="p">])]</span>
+
+        <span class="n">pos_s_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_pos_s_vec</span><span class="p">)</span>
+        <span class="n">neg_s_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_neg_s_vec</span><span class="p">)</span>
+
+        <span class="n">diversity_pos_s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Diversity</span><span class="p">(</span><span class="n">temp_pos_s_vec</span><span class="p">))</span>
+        <span class="n">diversity_neg_s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Diversity</span><span class="p">(</span><span class="n">temp_neg_s_vec</span><span class="p">))</span>
+
+    <span class="c1"># Calculate Diversity(X) and ID(X, S).</span>
+    <span class="n">sequence_list</span> <span class="o">=</span> <span class="n">GetData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">sequence_list</span><span class="p">:</span>
+        <span class="c1"># print seq</span>
+        <span class="n">temp_vec</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_list</span><span class="p">:</span>
+            <span class="n">kmer_list</span> <span class="o">=</span> <span class="n">MakeKmerList</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">)</span>
+            <span class="n">seq_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">seq</span><span class="p">]</span>
+            <span class="n">kmer_vec</span> <span class="o">=</span> <span class="n">MakeKmerVector</span><span class="p">(</span><span class="n">seq_list</span><span class="p">,</span> <span class="n">kmer_list</span><span class="p">,</span> <span class="n">rev_kmer_list</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">upto</span><span class="p">,</span> <span class="n">revcomp</span><span class="p">,</span> <span class="n">normalize</span><span class="p">)</span>
+            <span class="c1"># print &#39;k&#39;, k</span>
+            <span class="c1"># print &#39;kmer_vec&#39;, kmer_vec</span>
+
+            <span class="c1"># print diversity_pos_s</span>
+            <span class="k">if</span> <span class="n">upto</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># print &#39;pos_vec&#39;, pos_s_vec</span>
+            <span class="c1"># print &#39;neg_vec&#39;, neg_s_vec</span>
+            <span class="c1"># print &#39;diversity_pos_s&#39;, diversity_pos_s</span>
+
+            <span class="n">temp_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">IdXS</span><span class="p">(</span><span class="n">kmer_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos_s_vec</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">diversity_pos_s</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">temp_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">IdXS</span><span class="p">(</span><span class="n">kmer_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">neg_s_vec</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">diversity_neg_s</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span>
+
+        <span class="n">vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_vec</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vec</span></div>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># kmer =Kmer(k=1)</span>
+    <span class="c1"># kmer =RevcKmer(k=1, normalize=True, alphabet=&#39;ACGT&#39;)</span>
+    <span class="c1"># kmer =IDkmer(k=1)</span>
+    
+    <span class="n">kmer</span> <span class="o">=</span> <span class="n">GetKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">kmer</span><span class="p">)</span>
+ 
+    <span class="n">kmer</span> <span class="o">=</span> <span class="n">GetKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">kmer</span><span class="p">)</span>
+
+    <span class="n">kmer</span> <span class="o">=</span> <span class="n">GetKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">upto</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">kmer</span><span class="p">)</span>
+
+
+    <span class="n">revckmer</span> <span class="o">=</span> <span class="n">GetRevcKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">upto</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">revckmer</span><span class="p">)</span>
+
+
+    <span class="n">revckmer</span> <span class="o">=</span> <span class="n">GetRevcKmer</span><span class="p">(</span><span class="s1">&#39;GACTGAACTGCACTTTGGTTTCATATTATTTGCTC&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">upto</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">revckmer</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,874 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>topology &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for topology</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##############################################################################</span>
+<span class="sd">The calculation of molecular topological indices based on its topological</span>
+
+<span class="sd">structure. You can get 25 molecular topological descriptors. You can freely</span>
+
+<span class="sd">use and distribute it. If you hava  any problem, you could contact with us timely!</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com and oriental-cds@163.com</span>
+
+<span class="sd">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">rdchem</span>
+<span class="c1">#from rdkit.Chem import pyPeriodicTable as PeriodicTable</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">GraphDescriptors</span> <span class="k">as</span> <span class="n">GD</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+
+
+<span class="n">periodicTable</span> <span class="o">=</span> <span class="n">rdchem</span><span class="o">.</span><span class="n">GetPeriodicTable</span><span class="p">()</span>
+
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="c1">################################################################</span>
+
+<span class="k">def</span> <span class="nf">_GetPrincipleQuantumNumber</span><span class="p">(</span><span class="n">atNum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    *Internal Use Only*</span>
+<span class="sd">    </span>
+<span class="sd">    Get the principle quantum number of atom with atomic</span>
+<span class="sd">    </span>
+<span class="sd">    number equal to atNum </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">18</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">3</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">36</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">4</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">54</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">5</span>
+    <span class="k">elif</span> <span class="n">atNum</span><span class="o">&lt;=</span><span class="mi">86</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">6</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">7</span>
+
+
+<div class="viewcode-block" id="CalculateWeiner"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateWeiner">[docs]</a><span class="k">def</span> <span class="nf">CalculateWeiner</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Weiner number in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;W</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateWeiner(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mf">1.0</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="CalculateMeanWeiner"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateMeanWeiner">[docs]</a><span class="k">def</span> <span class="nf">CalculateMeanWeiner</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Mean Weiner number in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;AW</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateWeiner(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">WeinerNumber</span><span class="o">=</span><span class="n">CalculateWeiner</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">WeinerNumber</span><span class="o">/</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="CalculateBalaban"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateBalaban">[docs]</a><span class="k">def</span> <span class="nf">CalculateBalaban</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Balaban index in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;J</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateBalaban(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">adjMat</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetAdjacencyMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">Distance</span><span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">Nbond</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumBonds</span><span class="p">()</span>
+    <span class="n">Natom</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">S</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Distance</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">mu</span><span class="o">=</span><span class="n">Nbond</span><span class="o">-</span><span class="n">Natom</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">sumk</span><span class="o">=</span><span class="mf">0.</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Distance</span><span class="p">)):</span>
+        <span class="n">si</span><span class="o">=</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">Distance</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">adjMat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">sumk</span> <span class="o">+=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">si</span><span class="o">*</span><span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">mu</span><span class="o">+</span><span class="mi">1</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">J</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">Nbond</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">mu</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sumk</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">J</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">return</span> <span class="n">J</span></div>
+    
+<div class="viewcode-block" id="CalculateGraphDistance"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateGraphDistance">[docs]</a><span class="k">def</span> <span class="nf">CalculateGraphDistance</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of graph distance index</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Tigdi(log value)</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateGraphDistance(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Distance</span><span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">n</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">Distance</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">res</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+       <span class="c1"># print Distance==i+1</span>
+        <span class="n">temp</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">Distance</span><span class="o">==</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1">#print temp</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">+</span><span class="n">temp</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateDiameter"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateDiameter">[docs]</a><span class="k">def</span> <span class="nf">CalculateDiameter</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of diameter, which is 	Largest value</span>
+<span class="sd">    </span>
+<span class="sd">    in the distance matrix [Petitjean 1992].</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;diametert</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateDiameter(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Distance</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Distance</span><span class="o">.</span><span class="n">max</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CalculateRadius"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateRadius">[docs]</a><span class="k">def</span> <span class="nf">CalculateRadius</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of radius based on topology.</span>
+<span class="sd">    </span>
+<span class="sd">    It is :If ri is the largest matrix entry in row i of the distance</span>
+<span class="sd">    </span>
+<span class="sd">    matrix D,then the radius is defined as the smallest of the ri </span>
+<span class="sd">    </span>
+<span class="sd">    [Petitjean 1992].</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;radiust</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateRadius(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Distance</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Distance</span><span class="p">:</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="CalculatePetitjean"><a class="viewcode-back" href="../reference/topology.html#topology.CalculatePetitjean">[docs]</a><span class="k">def</span> <span class="nf">CalculatePetitjean</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Petitjean based on topology.</span>
+<span class="sd">    </span>
+<span class="sd">    Value of (diameter - radius) / diameter as defined in [Petitjean 1992].</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;petitjeant</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculatePetitjean(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="n">CalculateDiameter</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">radius</span><span class="o">=</span><span class="n">CalculateRadius</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="o">-</span><span class="n">radius</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">diameter</span><span class="p">)</span></div>
+
+
+   
+<div class="viewcode-block" id="CalculateXuIndex"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateXuIndex">[docs]</a><span class="k">def</span> <span class="nf">CalculateXuIndex</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Xu index</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Xu</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateXuIndex(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nAT</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">Distance</span><span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Distance</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">temp1</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="n">temp2</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nAT</span><span class="p">):</span>
+        <span class="n">temp1</span><span class="o">=</span><span class="n">temp1</span><span class="o">+</span><span class="n">deltas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">sigma</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">temp2</span><span class="o">=</span><span class="n">temp2</span><span class="o">+</span><span class="n">deltas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">sigma</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">Xu</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nAT</span><span class="p">)</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">temp1</span><span class="o">/</span><span class="n">temp2</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">Xu</span></div>
+
+<div class="viewcode-block" id="CalculateGutmanTopo"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateGutmanTopo">[docs]</a><span class="k">def</span> <span class="nf">CalculateGutmanTopo</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Gutman molecular topological index based on</span>
+<span class="sd">    </span>
+<span class="sd">    simple vertex degree</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;GMTI(log value)</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateGutmanTopo(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nAT</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">Distance</span><span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nAT</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">nAT</span><span class="p">):</span>
+            <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="o">+</span><span class="n">deltas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">deltas</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">Distance</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
+
+
+    
+<div class="viewcode-block" id="CalculatePolarityNumber"><a class="viewcode-back" href="../reference/topology.html#topology.CalculatePolarityNumber">[docs]</a><span class="k">def</span> <span class="nf">CalculatePolarityNumber</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Polarity number.</span>
+<span class="sd">    </span>
+<span class="sd">    It is the number of pairs of vertexes at</span>
+<span class="sd">    </span>
+<span class="sd">    distance matrix equal to 3</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Pol</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculatePolarityNumber(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Distance</span><span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">Distance</span><span class="o">==</span><span class="mi">3</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculatePoglianiIndex"><a class="viewcode-back" href="../reference/topology.html#topology.CalculatePoglianiIndex">[docs]</a><span class="k">def</span> <span class="nf">CalculatePoglianiIndex</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Poglicani index</span>
+<span class="sd">    </span>
+<span class="sd">    The Pogliani index (Dz) is the sum over all non-hydrogen atoms</span>
+<span class="sd">    </span>
+<span class="sd">    of a modified vertex degree calculated as the ratio</span>
+<span class="sd">    </span>
+<span class="sd">    of the number of valence electrons over the principal</span>
+<span class="sd">    </span>
+<span class="sd">    quantum number of an atom [L. Pogliani, J.Phys.Chem.</span>
+<span class="sd">    </span>
+<span class="sd">    1996, 100, 18065-18077].</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;DZ</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculatePoglianiIndex(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span>
+        <span class="n">nV</span><span class="o">=</span><span class="n">periodicTable</span><span class="o">.</span><span class="n">GetNOuterElecs</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">mP</span><span class="o">=</span><span class="n">_GetPrincipleQuantumNumber</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="o">+</span><span class="p">(</span><span class="n">nV</span><span class="o">+</span><span class="mf">0.0</span><span class="p">)</span><span class="o">/</span><span class="n">mP</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateIpc"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateIpc">[docs]</a><span class="k">def</span> <span class="nf">CalculateIpc</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    This returns the information content of the coefficients of the </span>
+<span class="sd">    </span>
+<span class="sd">    characteristic polynomial of the adjacency matrix of a </span>
+<span class="sd">    </span>
+<span class="sd">    hydrogen-suppressed graph of a molecule.</span>
+
+<span class="sd">    &#39;avg = 1&#39; returns the information content divided by the total</span>
+<span class="sd">    </span>
+<span class="sd">    population.</span>
+
+<span class="sd">    From D. Bonchev &amp; N. Trinajstic, J. Chem. Phys. vol 67,</span>
+<span class="sd">    </span>
+<span class="sd">    4517-4533 (1977)</span>
+<span class="sd">    </span>
+<span class="sd">     ----&gt;Ipc(log value)</span>
+<span class="sd">     </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateIpc(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">GD</span><span class="o">.</span><span class="n">Ipc</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">temp</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;NaN&quot;</span></div>
+
+
+<div class="viewcode-block" id="CalculateBertzCT"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateBertzCT">[docs]</a><span class="k">def</span> <span class="nf">CalculateBertzCT</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    A topological index meant to quantify &quot;complexity&quot; of molecules.</span>
+
+<span class="sd">    Consists of a sum of two terms, one representing the complexity</span>
+<span class="sd">    </span>
+<span class="sd">    of the bonding, the other representing the complexity of the</span>
+<span class="sd">    </span>
+<span class="sd">    distribution of heteroatoms.</span>
+
+<span class="sd">    From S. H. Bertz, J. Am. Chem. Soc., vol 103, 3599-3601 (1981)</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;BertzCT(log value)</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateBertzCT(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">GD</span><span class="o">.</span><span class="n">BertzCT</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">temp</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;NaN&quot;</span></div>
+
+<div class="viewcode-block" id="CalculateHarary"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateHarary">[docs]</a><span class="k">def</span> <span class="nf">CalculateHarary</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Harary number</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Thara</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHarary(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">Distance</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+                
+    <span class="k">return</span> <span class="mf">1.0</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">Distance</span><span class="p">[</span><span class="n">Distance</span><span class="o">!=</span><span class="mi">0</span><span class="p">]))</span></div>
+        
+    
+<div class="viewcode-block" id="CalculateSchiultz"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateSchiultz">[docs]</a><span class="k">def</span> <span class="nf">CalculateSchiultz</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Schiultz number</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Tsch(log value)</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateSchiultz(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Distance</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetDistanceMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">Adjacent</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">GetAdjacencyMatrix</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">VertexDegree</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">Adjacent</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">Distance</span><span class="o">+</span><span class="n">Adjacent</span><span class="p">),</span><span class="n">VertexDegree</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateZagreb1"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateZagreb1">[docs]</a><span class="k">def</span> <span class="nf">CalculateZagreb1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Zagreb index with order 1 in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ZM1</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateZagreb1(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalculateZagreb2"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateZagreb2">[docs]</a><span class="k">def</span> <span class="nf">CalculateZagreb2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Zagreb index with order 2 in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;ZM2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateZagreb2(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ke</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()]</span>
+    
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ke</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CalculateMZagreb1"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateMZagreb1">[docs]</a><span class="k">def</span> <span class="nf">CalculateMZagreb1</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Modified Zagreb index with order 1 in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;MZM1</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMZagreb1(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="nb">sum</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="n">deltas</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+    
+
+<div class="viewcode-block" id="CalculateMZagreb2"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateMZagreb2">[docs]</a><span class="k">def</span> <span class="nf">CalculateMZagreb2</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Modified Zagreb index with order 2 in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;MZM2</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateMZagreb2(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()]</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">cc</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="n">cc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="CalculateQuadratic"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateQuadratic">[docs]</a><span class="k">def</span> <span class="nf">CalculateQuadratic</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Quadratic index in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Qindex</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateQuadratic(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">M</span><span class="o">=</span><span class="n">CalculateZagreb1</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">N</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="k">return</span> <span class="mi">3</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="o">+</span><span class="n">M</span><span class="o">/</span><span class="mf">2.0</span></div>
+
+<div class="viewcode-block" id="CalculatePlatt"><a class="viewcode-back" href="../reference/topology.html#topology.CalculatePlatt">[docs]</a><span class="k">def</span> <span class="nf">CalculatePlatt</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of Platt number in a molecule</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Platt</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculatePlatt(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span><span class="o">+</span><span class="n">x</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CalculateSimpleTopoIndex"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateSimpleTopoIndex">[docs]</a><span class="k">def</span> <span class="nf">CalculateSimpleTopoIndex</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of the logarithm of the simple topological index by Narumi,</span>
+<span class="sd">    </span>
+<span class="sd">    which is defined as the product of the vertex degree.</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Sito</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateSimpleTopoIndex(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    
+    <span class="n">res</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">deltas</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;NaN&quot;</span></div>
+
+<div class="viewcode-block" id="CalculateHarmonicTopoIndex"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateHarmonicTopoIndex">[docs]</a><span class="k">def</span> <span class="nf">CalculateHarmonicTopoIndex</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Calculation of harmonic topological index proposed by Narnumi.</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Hato</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateHarmonicTopoIndex(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>  
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    
+    <span class="n">res</span><span class="o">=</span><span class="n">nAtoms</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">deltas</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="CalculateGeometricTopoIndex"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateGeometricTopoIndex">[docs]</a><span class="k">def</span> <span class="nf">CalculateGeometricTopoIndex</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Geometric topological index by Narumi</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Geto</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateGeometricTopoIndex(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">while</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+        <span class="n">deltas</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">deltas</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    
+    <span class="n">temp</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">deltas</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="n">nAtoms</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span>    </div>
+
+<div class="viewcode-block" id="CalculateArithmeticTopoIndex"><a class="viewcode-back" href="../reference/topology.html#topology.CalculateArithmeticTopoIndex">[docs]</a><span class="k">def</span> <span class="nf">CalculateArithmeticTopoIndex</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Arithmetic topological index by Narumi</span>
+<span class="sd">    </span>
+<span class="sd">    ----&gt;Arto</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateArithmeticTopoIndex(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a numeric value</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nAtoms</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+    <span class="n">nBonds</span><span class="o">=</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumBonds</span><span class="p">()</span>
+    
+    <span class="n">res</span><span class="o">=</span><span class="mf">2.</span><span class="o">*</span><span class="n">nBonds</span><span class="o">/</span><span class="n">nAtoms</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<span class="n">_Topology</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;W&#39;</span><span class="p">:</span><span class="n">CalculateWeiner</span><span class="p">,</span>
+           <span class="s1">&#39;AW&#39;</span><span class="p">:</span><span class="n">CalculateMeanWeiner</span><span class="p">,</span>
+           <span class="s1">&#39;J&#39;</span><span class="p">:</span><span class="n">CalculateBalaban</span><span class="p">,</span>
+           <span class="s1">&#39;Tigdi&#39;</span><span class="p">:</span><span class="n">CalculateGraphDistance</span><span class="p">,</span>
+           <span class="s1">&#39;Xu&#39;</span><span class="p">:</span><span class="n">CalculateXuIndex</span><span class="p">,</span>
+           <span class="s1">&#39;GMTI&#39;</span><span class="p">:</span><span class="n">CalculateGutmanTopo</span><span class="p">,</span>
+           <span class="s1">&#39;Pol&#39;</span><span class="p">:</span><span class="n">CalculatePolarityNumber</span><span class="p">,</span>
+           <span class="s1">&#39;DZ&#39;</span><span class="p">:</span><span class="n">CalculatePoglianiIndex</span><span class="p">,</span>
+           <span class="s1">&#39;Ipc&#39;</span><span class="p">:</span><span class="n">CalculateIpc</span><span class="p">,</span>
+           <span class="s1">&#39;BertzCT&#39;</span><span class="p">:</span><span class="n">CalculateBertzCT</span><span class="p">,</span>
+           <span class="s1">&#39;Thara&#39;</span><span class="p">:</span><span class="n">CalculateHarary</span><span class="p">,</span>
+           <span class="s1">&#39;Tsch&#39;</span><span class="p">:</span><span class="n">CalculateSchiultz</span><span class="p">,</span>
+           <span class="s1">&#39;ZM1&#39;</span><span class="p">:</span><span class="n">CalculateZagreb1</span><span class="p">,</span>
+           <span class="s1">&#39;ZM2&#39;</span><span class="p">:</span><span class="n">CalculateZagreb2</span><span class="p">,</span>
+           <span class="s1">&#39;MZM1&#39;</span><span class="p">:</span><span class="n">CalculateMZagreb1</span><span class="p">,</span>
+           <span class="s1">&#39;MZM2&#39;</span><span class="p">:</span><span class="n">CalculateMZagreb2</span><span class="p">,</span>
+           <span class="s1">&#39;Qindex&#39;</span><span class="p">:</span><span class="n">CalculateQuadratic</span><span class="p">,</span>
+           <span class="s1">&#39;Platt&#39;</span><span class="p">:</span><span class="n">CalculatePlatt</span><span class="p">,</span>
+           <span class="s1">&#39;diametert&#39;</span><span class="p">:</span><span class="n">CalculateDiameter</span><span class="p">,</span>
+           <span class="s1">&#39;radiust&#39;</span><span class="p">:</span><span class="n">CalculateRadius</span><span class="p">,</span>
+           <span class="s1">&#39;petitjeant&#39;</span><span class="p">:</span><span class="n">CalculatePetitjean</span><span class="p">,</span>
+           <span class="s1">&#39;Sito&#39;</span><span class="p">:</span><span class="n">CalculateSimpleTopoIndex</span><span class="p">,</span>
+           <span class="s1">&#39;Hato&#39;</span><span class="p">:</span><span class="n">CalculateHarmonicTopoIndex</span><span class="p">,</span>
+           <span class="s1">&#39;Geto&#39;</span><span class="p">:</span><span class="n">CalculateGeometricTopoIndex</span><span class="p">,</span>
+           <span class="s1">&#39;Arto&#39;</span><span class="p">:</span><span class="n">CalculateArithmeticTopoIndex</span>      
+    <span class="p">}</span>
+    
+    
+    
+
+<div class="viewcode-block" id="GetTopology"><a class="viewcode-back" href="../reference/topology.html#topology.GetTopology">[docs]</a><span class="k">def</span> <span class="nf">GetTopology</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Get the dictionary of constitutional descriptors for given</span>
+<span class="sd">    </span>
+<span class="sd">    moelcule mol</span>
+<span class="sd">    </span>
+<span class="sd">    Usage: </span>
+<span class="sd">        </span>
+<span class="sd">        result=CalculateWeiner(mol)</span>
+<span class="sd">        </span>
+<span class="sd">        Input: mol is a molecule object</span>
+<span class="sd">        </span>
+<span class="sd">        Output: result is a dict form containing all topological indices.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">DesLabel</span> <span class="ow">in</span> <span class="n">_Topology</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">_Topology</span><span class="p">[</span><span class="n">DesLabel</span><span class="p">](</span><span class="n">mol</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_GetHTMLDoc</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    Write HTML documentation for this module.</span>
+<span class="sd">    #################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">pydoc</span>
+    <span class="n">pydoc</span><span class="o">.</span><span class="n">writedoc</span><span class="p">(</span><span class="s1">&#39;topology&#39;</span><span class="p">)</span>    
+<span class="c1">################################################################################</span>
+<span class="c1">#####################################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+    
+    <span class="n">smis</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CCCCCC&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)O&#39;</span><span class="p">,</span><span class="s1">&#39;CC(N)C(=O)[O-]&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">smi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">smis</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nb">print</span> <span class="n">smi</span>      
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">GetTopology</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">GetTopology</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

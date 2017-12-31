@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GetProtein module &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="PyGetMol" href="PyGetMol.html" />
+    <link rel="next" title="GetDNA module" href="GetDNA.html" />
+    <link rel="prev" title="PyGetMol" href="PyGetMol.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="GetDNA.html" title="GetDNA module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PyGetMol.html" title="PyGetMol"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyGetMol.html" accesskey="U">PyGetMol</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="PyGetMol.html"
+                        title="previous chapter">PyGetMol</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="GetDNA.html"
+                        title="next chapter">GetDNA module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/GetProtein.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getprotein-module">
+<h1>GetProtein module<a class="headerlink" href="#getprotein-module" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-GetProtein"></span><p>Created on Sat Jul 13 11:18:26 2013</p>
+<p>This module is used for downloading the PDB file from RCSB PDB web and</p>
+<p>extract its amino acid sequence. This module can also download the protein</p>
+<p>sequence from the uniprot (<a class="reference external" href="http://www.uniprot.org/">http://www.uniprot.org/</a>) website. You can only</p>
+<p>need input a protein ID or prepare a file (ID.txt) related to ID. You can</p>
+<p>obtain a .txt (ProteinSequence.txt) file saving protein sequence you need.</p>
+<p>Authors: Zhijiang Yao and Dongsheng Cao.</p>
+<p>Date: 2016.06.04</p>
+<p>Email: <a class="reference external" href="mailto:gadsby&#37;&#52;&#48;163&#46;com">gadsby<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<dl class="function">
+<dt id="GetProtein.GetPDB">
+<code class="descclassname">GetProtein.</code><code class="descname">GetPDB</code><span class="sig-paren">(</span><em>pdbidlist=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#GetPDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.GetPDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the PDB file from PDB FTP server by providing a list of pdb id.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.GetProteinSequence">
+<code class="descclassname">GetProtein.</code><code class="descname">GetProteinSequence</code><span class="sig-paren">(</span><em>ProteinID</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#GetProteinSequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.GetProteinSequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the protein sequence from the uniprot website by ID.</p>
+<p>Usage:</p>
+<p>result=GetProteinSequence(ProteinID)</p>
+<p>Input: ProteinID is a string indicating ID such as &#8220;P48039&#8221;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.GetProteinSequenceFromTxt">
+<code class="descclassname">GetProtein.</code><code class="descname">GetProteinSequenceFromTxt</code><span class="sig-paren">(</span><em>path</em>, <em>openfile</em>, <em>savefile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#GetProteinSequenceFromTxt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.GetProteinSequenceFromTxt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the protein sequence from the uniprot website by the file containing ID.</p>
+<p>Usage:</p>
+<p>result=GetProteinSequenceFromTxt(path,openfile,savefile)</p>
+<p>Input: path is a directory path containing the ID file such as &#8220;/home/orient/protein/&#8221;</p>
+<p>openfile is the ID file such as &#8220;proteinID.txt&#8221;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.GetSeqFromPDB">
+<code class="descclassname">GetProtein.</code><code class="descname">GetSeqFromPDB</code><span class="sig-paren">(</span><em>pdbfile=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#GetSeqFromPDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.GetSeqFromPDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the amino acids sequences from pdb file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.IsFasta">
+<code class="descclassname">GetProtein.</code><code class="descname">IsFasta</code><span class="sig-paren">(</span><em>seq</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#IsFasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.IsFasta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Judge the Seq object is in FASTA format.
+Two situation:
+1. No seq name.
+2. Seq name is illegal.
+3. No sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seq</strong> &#8211; Seq object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.ReadFasta">
+<code class="descclassname">GetProtein.</code><code class="descname">ReadFasta</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#ReadFasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.ReadFasta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a fasta file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; HANDLE to input. e.g. sys.stdin, or open(&lt;file&gt;)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="GetProtein.Seq">
+<em class="property">class </em><code class="descclassname">GetProtein.</code><code class="descname">Seq</code><span class="sig-paren">(</span><em>name</em>, <em>seq</em>, <em>no</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#Seq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.Seq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="GetProtein.TimeoutException">
+<em class="property">exception </em><code class="descclassname">GetProtein.</code><code class="descname">TimeoutException</code><a class="reference internal" href="../_modules/GetProtein.html#TimeoutException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.TimeoutException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/exceptions.html#exceptions.Exception" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.pdbDownload">
+<code class="descclassname">GetProtein.</code><code class="descname">pdbDownload</code><span class="sig-paren">(</span><em>file_list</em>, <em>hostname='ftp.wwpdb.org'</em>, <em>directory='/pub/pdb/data/structures/all/pdb/'</em>, <em>prefix='pdb'</em>, <em>suffix='.ent.gz'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#pdbDownload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.pdbDownload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download all pdb files in file_list and unzip them.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.pdbSeq">
+<code class="descclassname">GetProtein.</code><code class="descname">pdbSeq</code><span class="sig-paren">(</span><em>pdb</em>, <em>use_atoms=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#pdbSeq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.pdbSeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the SEQRES entries in a pdb file.  If this fails, use the ATOM
+entries.  Return dictionary of sequences keyed to chain and type of
+sequence used.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.timelimited">
+<code class="descclassname">GetProtein.</code><code class="descname">timelimited</code><span class="sig-paren">(</span><em>timeout</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#timelimited"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.timelimited" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator to limit the execution time.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GetProtein.unZip">
+<code class="descclassname">GetProtein.</code><code class="descname">unZip</code><span class="sig-paren">(</span><em>some_file</em>, <em>some_output</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GetProtein.html#unZip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GetProtein.unZip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unzip some_file using the gzip library and write to some_output.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="GetDNA.html" title="GetDNA module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PyGetMol.html" title="PyGetMol"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >PyBioMed API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="PyGetMol.html" >PyGetMol</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

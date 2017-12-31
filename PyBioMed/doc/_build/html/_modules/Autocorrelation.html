@@ -1,0 +1,1121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Autocorrelation &#8212; PyBioMed 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="PyBioMed 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for Autocorrelation</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">##########################################################################################</span>
+
+<span class="sd">This module is used for computing the Autocorrelation descriptors based different</span>
+
+<span class="sd"> properties of AADs.You can also input your properties of AADs, then it can help you</span>
+
+<span class="sd">to compute Autocorrelation descriptors based on the property of AADs. Currently, You </span>
+
+<span class="sd">can get 720 descriptors for a given protein sequence based on our provided physicochemical</span>
+
+<span class="sd">properties of AADs. You can freely use and distribute it. If you hava  any problem, </span>
+
+<span class="sd">you could contact with us timely!</span>
+
+<span class="sd">References:</span>
+
+<span class="sd">[1]: http://www.genome.ad.jp/dbget/aaindex.html</span>
+
+<span class="sd">[2]:Feng, Z.P. and Zhang, C.T. (2000) Prediction of membrane protein types based on</span>
+
+<span class="sd">the hydrophobic index of amino acids. J Protein Chem, 19, 269-275.</span>
+
+<span class="sd">[3]:Horne, D.S. (1988) Prediction of protein helix content from an autocorrelation</span>
+
+<span class="sd">analysis of sequence hydrophobicities. Biopolymers, 27, 451-477.</span>
+
+<span class="sd">[4]:Sokal, R.R. and Thomson, B.A. (2006) Population structure inferred by local</span>
+
+<span class="sd">spatial autocorrelation: an Usage from an Amerindian tribal population. Am J</span>
+
+<span class="sd">Phys Anthropol, 129, 121-131.</span>
+
+<span class="sd">Authors: Zhijiang Yao and Dongsheng Cao.</span>
+
+<span class="sd">Date: 2016.06.04</span>
+
+<span class="sd">Email: gadsby@163.com</span>
+
+<span class="sd">##########################################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">string</span>
+
+<span class="n">AALetter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">]</span>
+
+<span class="n">_Hydrophobicity</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.42</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.77</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.04</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">0.77</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.10</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.14</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.80</span><span class="p">,</span>
+                   <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.26</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">1.81</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">1.14</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.41</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">1.00</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">1.35</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.09</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.97</span><span class="p">,</span>
+                   <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.77</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">1.71</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">1.11</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">1.13</span><span class="p">}</span>
+
+<span class="n">_AvFlexibility</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">0.357</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">0.529</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">0.463</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">0.511</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">0.346</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">0.493</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">0.497</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">0.544</span><span class="p">,</span>
+                  <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.323</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">0.462</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">0.365</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">0.466</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">0.295</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">0.314</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">0.509</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">0.507</span><span class="p">,</span>
+                  <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">0.444</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">0.305</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">0.420</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">0.386</span><span class="p">}</span>
+
+<span class="n">_Polarizability</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">0.046</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">0.291</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">0.134</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">0.105</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">0.128</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">0.180</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">0.151</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">0.000</span><span class="p">,</span>
+                   <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.230</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">0.186</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">0.186</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">0.219</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">0.221</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">0.290</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">0.131</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">0.062</span><span class="p">,</span>
+                   <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">0.108</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">0.409</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">0.298</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">0.140</span><span class="p">}</span>
+
+<span class="n">_FreeEnergy</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.368</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.03</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">2.06</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">4.53</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">0.731</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">1.77</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.525</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+               <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">0.791</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">1.07</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">0.656</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">1.06</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.24</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.524</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">1.60</span><span class="p">,</span>
+               <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">4.91</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">0.401</span><span class="p">}</span>
+
+<span class="n">_ResidueASA</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">115.0</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">225.0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">160.0</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">150.0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">135.0</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">180.0</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">190.0</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">75.0</span><span class="p">,</span>
+               <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">195.0</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">175.0</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">170.0</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">200.0</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">185.0</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">210.0</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">145.0</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">115.0</span><span class="p">,</span>
+               <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">140.0</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">255.0</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">230.0</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">155.0</span><span class="p">}</span>
+
+<span class="n">_ResidueVol</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">52.6</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">109.1</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">75.7</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">68.4</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">68.3</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">89.7</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">84.7</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">36.3</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">91.9</span><span class="p">,</span>
+               <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">102.0</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">102.0</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">105.1</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">97.7</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">113.9</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">73.6</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">54.9</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">71.2</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">135.4</span><span class="p">,</span>
+               <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">116.2</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">85.1</span><span class="p">}</span>
+
+<span class="n">_Steric</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">0.52</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">0.68</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">0.76</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">0.76</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">0.62</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">0.68</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">0.68</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">0.00</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.70</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">1.02</span><span class="p">,</span>
+           <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">0.98</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">0.68</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">0.78</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">0.70</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">0.36</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">0.53</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">0.50</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">0.70</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">0.70</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">0.76</span><span class="p">}</span>
+
+<span class="n">_Mutability</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">65.0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">134.0</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">106.0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">93.0</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">102.0</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">49.0</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">66.0</span><span class="p">,</span>
+               <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">96.0</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">40.0</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">56.0</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">94.0</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">41.0</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">56.0</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">120.0</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">97.0</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">18.0</span><span class="p">,</span>
+               <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">41.0</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">74.0</span><span class="p">}</span>
+
+
+<span class="c1">###You can continuely add other properties of AADs to compute the descriptors of protein sequence.</span>
+
+
+<span class="n">_AAProperty</span> <span class="o">=</span> <span class="p">(</span>
+<span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="n">_AvFlexibility</span><span class="p">,</span> <span class="n">_Polarizability</span><span class="p">,</span> <span class="n">_FreeEnergy</span><span class="p">,</span> <span class="n">_ResidueASA</span><span class="p">,</span> <span class="n">_ResidueVol</span><span class="p">,</span> <span class="n">_Steric</span><span class="p">,</span> <span class="n">_Mutability</span><span class="p">)</span>
+
+<span class="n">_AAPropertyName</span> <span class="o">=</span> <span class="p">(</span>
+<span class="s1">&#39;_Hydrophobicity&#39;</span><span class="p">,</span> <span class="s1">&#39;_AvFlexibility&#39;</span><span class="p">,</span> <span class="s1">&#39;_Polarizability&#39;</span><span class="p">,</span> <span class="s1">&#39;_FreeEnergy&#39;</span><span class="p">,</span> <span class="s1">&#39;_ResidueASA&#39;</span><span class="p">,</span> <span class="s1">&#39;_ResidueVol&#39;</span><span class="p">,</span> <span class="s1">&#39;_Steric&#39;</span><span class="p">,</span>
+<span class="s1">&#39;_Mutability&#39;</span><span class="p">)</span>
+
+
+<span class="c1">##################################################################################################</span>
+<span class="k">def</span> <span class="nf">_mean</span><span class="p">(</span><span class="n">listvalue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The mean value of the list data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">listvalue</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">listvalue</span><span class="p">)</span>
+
+
+<span class="c1">##################################################################################################</span>
+<span class="k">def</span> <span class="nf">_std</span><span class="p">(</span><span class="n">listvalue</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The standard deviation of the list data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">_mean</span><span class="p">(</span><span class="n">listvalue</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">[</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">mean</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">listvalue</span><span class="p">]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listvalue</span><span class="p">)</span> <span class="o">-</span> <span class="n">ddof</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="c1">##################################################################################################</span>
+
+<div class="viewcode-block" id="NormalizeEachAAP"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.NormalizeEachAAP">[docs]</a><span class="k">def</span> <span class="nf">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    All of the amino acid indices are centralized and</span>
+
+<span class="sd">    standardized before the calculation.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=NormalizeEachAAP(AAP)</span>
+
+<span class="sd">    Input: AAP is a dict form containing the properties of 20 amino acids.</span>
+
+<span class="sd">    Output: result is the a dict form containing the normalized properties</span>
+
+<span class="sd">    of 20 amino acids.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">AAP</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s1">&#39;You can not input the correct number of properities of Amino acids!&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">AAP</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">Result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">_mean</span><span class="p">(</span><span class="n">AAP</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">/</span> <span class="n">_std</span><span class="p">(</span><span class="n">AAP</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<div class="viewcode-block" id="CalculateEachNormalizedMoreauBrotoAuto"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateEachNormalizedMoreauBrotoAuto">[docs]</a><span class="k">def</span> <span class="nf">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAP</span><span class="p">,</span> <span class="n">AAPName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    you can use the function to compute MoreauBrotoAuto</span>
+
+<span class="sd">    descriptors for different properties based on AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateEachNormalizedMoreauBrotoAuto(protein,AAP,AAPName)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    AAP is a dict form containing the properties of 20 amino acids (e.g., _AvFlexibility).</span>
+
+<span class="sd">    AAPName is a string used for indicating the property (e.g., &#39;_AvFlexibility&#39;).</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto autocorrelation</span>
+
+<span class="sd">    descriptors based on the given property.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AAPdic</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">)</span>
+
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">+</span> <span class="n">AAPdic</span><span class="p">[</span><span class="n">ProteinSequence</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">*</span> <span class="n">AAPdic</span><span class="p">[</span><span class="n">ProteinSequence</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Result</span><span class="p">[</span><span class="s1">&#39;MoreauBrotoAuto&#39;</span> <span class="o">+</span> <span class="n">AAPName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">temp</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)),</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Result</span><span class="p">[</span><span class="s1">&#39;MoreauBrotoAuto&#39;</span> <span class="o">+</span> <span class="n">AAPName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">temp</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<div class="viewcode-block" id="CalculateEachMoranAuto"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateEachMoranAuto">[docs]</a><span class="k">def</span> <span class="nf">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAP</span><span class="p">,</span> <span class="n">AAPName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    you can use the function to compute MoranAuto</span>
+
+<span class="sd">    descriptors for different properties based on AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateEachMoranAuto(protein,AAP,AAPName)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    AAP is a dict form containing the properties of 20 amino acids (e.g., _AvFlexibility).</span>
+
+<span class="sd">    AAPName is a string used for indicating the property (e.g., &#39;_AvFlexibility&#39;).</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran autocorrelation</span>
+
+<span class="sd">    descriptors based on the given property.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AAPdic</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">)</span>
+
+    <span class="n">cds</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">AALetter</span><span class="p">:</span>
+        <span class="n">cds</span> <span class="o">=</span> <span class="n">cds</span> <span class="o">+</span> <span class="p">(</span><span class="n">ProteinSequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">AAPdic</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">Pmean</span> <span class="o">=</span> <span class="n">cds</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span>
+
+    <span class="n">cc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ProteinSequence</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AAPdic</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="n">_std</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">+</span> <span class="p">(</span><span class="n">AAPdic</span><span class="p">[</span><span class="n">ProteinSequence</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">-</span> <span class="n">Pmean</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">AAPdic</span><span class="p">[</span><span class="n">ProteinSequence</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">i</span><span class="p">]]</span> <span class="o">-</span> <span class="n">Pmean</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Result</span><span class="p">[</span><span class="s1">&#39;MoranAuto&#39;</span> <span class="o">+</span> <span class="n">AAPName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">temp</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span> <span class="o">/</span> <span class="n">K</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Result</span><span class="p">[</span><span class="s1">&#39;MoranAuto&#39;</span> <span class="o">+</span> <span class="n">AAPName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">temp</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="n">K</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<div class="viewcode-block" id="CalculateEachGearyAuto"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateEachGearyAuto">[docs]</a><span class="k">def</span> <span class="nf">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAP</span><span class="p">,</span> <span class="n">AAPName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    you can use the function to compute GearyAuto</span>
+
+<span class="sd">    descriptors for different properties based on AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateEachGearyAuto(protein,AAP,AAPName)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    AAP is a dict form containing the properties of 20 amino acids (e.g., _AvFlexibility).</span>
+
+<span class="sd">    AAPName is a string used for indicating the property (e.g., &#39;_AvFlexibility&#39;).</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary autocorrelation</span>
+
+<span class="sd">    descriptors based on the given property.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AAPdic</span> <span class="o">=</span> <span class="n">NormalizeEachAAP</span><span class="p">(</span><span class="n">AAP</span><span class="p">)</span>
+
+    <span class="n">cc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ProteinSequence</span><span class="p">:</span>
+        <span class="n">cc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AAPdic</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="n">K</span> <span class="o">=</span> <span class="p">((</span><span class="n">_std</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">+</span> <span class="p">(</span><span class="n">AAPdic</span><span class="p">[</span><span class="n">ProteinSequence</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">-</span> <span class="n">AAPdic</span><span class="p">[</span><span class="n">ProteinSequence</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">i</span><span class="p">]])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Result</span><span class="p">[</span><span class="s1">&#39;GearyAuto&#39;</span> <span class="o">+</span> <span class="n">AAPName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">temp</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)))</span> <span class="o">/</span> <span class="n">K</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Result</span><span class="p">[</span><span class="s1">&#39;GearyAuto&#39;</span> <span class="o">+</span> <span class="n">AAPName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">temp</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">))</span> <span class="o">/</span> <span class="n">K</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAuto"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAuto">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">,</span> <span class="n">AAPropertyName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    A method used for computing MoreauBrotoAuto for all properties.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAuto(protein,AAP,AAPName)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    AAProperty is a list or tuple form containing the properties of 20 amino acids (e.g., _AAProperty).</span>
+
+<span class="sd">    AAPName is a list or tuple form used for indicating the property (e.g., &#39;_AAPropertyName&#39;).</span>
+
+<span class="sd">    Output: result is a dict form containing 30*p Normalized Moreau-Broto autocorrelation</span>
+
+<span class="sd">    descriptors based on the given properties.</span>
+<span class="sd">    ####################################################################################</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">AAProperty</span><span class="p">)):</span>
+        <span class="n">Result</span><span class="p">[</span><span class="n">AAPropertyName</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                                           <span class="n">AAPropertyName</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAuto"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAuto">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">,</span> <span class="n">AAPropertyName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    A method used for computing MoranAuto for all properties</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAuto(protein,AAP,AAPName)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    AAProperty is a list or tuple form containing the properties of 20 amino acids (e.g., _AAProperty).</span>
+
+<span class="sd">    AAPName is a list or tuple form used for indicating the property (e.g., &#39;_AAPropertyName&#39;).</span>
+
+<span class="sd">    Output: result is a dict form containing 30*p Moran autocorrelation</span>
+
+<span class="sd">    descriptors based on the given properties.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">AAProperty</span><span class="p">)):</span>
+        <span class="n">Result</span><span class="p">[</span><span class="n">AAPropertyName</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">AAPropertyName</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAuto"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAuto">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">,</span> <span class="n">AAPropertyName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    A method used for computing GearyAuto for all properties</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAuto(protein,AAP,AAPName)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    AAProperty is a list or tuple form containing the properties of 20 amino acids (e.g., _AAProperty).</span>
+
+<span class="sd">    AAPName is a list or tuple form used for indicating the property (e.g., &#39;_AAPropertyName&#39;).</span>
+
+<span class="sd">    Output: result is a dict form containing 30*p Geary autocorrelation</span>
+
+<span class="sd">    descriptors based on the given properties.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">AAProperty</span><span class="p">)):</span>
+        <span class="n">Result</span><span class="p">[</span><span class="n">AAPropertyName</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">AAProperty</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">AAPropertyName</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">Result</span></div>
+
+
+<span class="c1">########################NormalizedMoreauBorto##################################</span>
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoHydrophobicity"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoHydrophobicity">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</span>
+
+<span class="sd">    hydrophobicity.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoHydrophobicity(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</span>
+
+<span class="sd">    descriptors based on Hydrophobicity.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="s1">&#39;_Hydrophobicity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoAvFlexibility"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoAvFlexibility">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoAvFlexibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</span>
+
+<span class="sd">    AvFlexibility.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoAvFlexibility(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</span>
+
+<span class="sd">    descriptors based on AvFlexibility.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_AvFlexibility</span><span class="p">,</span> <span class="s1">&#39;_AvFlexibility&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoPolarizability"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoPolarizability">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</span>
+
+<span class="sd">    Polarizability.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoPolarizability(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</span>
+
+<span class="sd">    descriptors based on Polarizability.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarizability</span><span class="p">,</span> <span class="s1">&#39;_Polarizability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoFreeEnergy"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoFreeEnergy">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoFreeEnergy</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</span>
+
+<span class="sd">    FreeEnergy.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoFreeEnergy(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</span>
+
+<span class="sd">    descriptors based on FreeEnergy.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_FreeEnergy</span><span class="p">,</span> <span class="s1">&#39;_FreeEnergy&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoResidueASA"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoResidueASA">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoResidueASA</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</span>
+
+<span class="sd">    ResidueASA.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoResidueASA(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</span>
+
+<span class="sd">    descriptors based on ResidueASA.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_ResidueASA</span><span class="p">,</span> <span class="s1">&#39;_ResidueASA&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoResidueVol"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoResidueVol">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoResidueVol</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on</span>
+
+<span class="sd">    ResidueVol.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoResidueVol(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</span>
+
+<span class="sd">    descriptors based on ResidueVol.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_ResidueVol</span><span class="p">,</span> <span class="s1">&#39;_ResidueVol&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoSteric"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoSteric">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoSteric</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on Steric.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoSteric(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</span>
+
+<span class="sd">    descriptors based on Steric.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Steric</span><span class="p">,</span> <span class="s1">&#39;_Steric&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoMutability"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoMutability">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoMutability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the NormalizedMoreauBorto Autocorrelation descriptors based on Mutability.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoMutability(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Normalized Moreau-Broto Autocorrelation</span>
+
+<span class="sd">    descriptors based on Mutability.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Mutability</span><span class="p">,</span> <span class="s1">&#39;_Mutability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">############################################################################</span>
+
+<span class="c1">##############################MoranAuto######################################</span>
+<div class="viewcode-block" id="CalculateMoranAutoHydrophobicity"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoHydrophobicity">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the MoranAuto Autocorrelation descriptors based on hydrophobicity.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoHydrophobicity(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran Autocorrelation</span>
+
+<span class="sd">    descriptors based on hydrophobicity.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="s1">&#39;_Hydrophobicity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAutoAvFlexibility"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoAvFlexibility">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoAvFlexibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the MoranAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    AvFlexibility.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoAvFlexibility(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran Autocorrelation</span>
+
+<span class="sd">    descriptors based on AvFlexibility.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_AvFlexibility</span><span class="p">,</span> <span class="s1">&#39;_AvFlexibility&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAutoPolarizability"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoPolarizability">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the MoranAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    Polarizability.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoPolarizability(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran Autocorrelation</span>
+
+<span class="sd">    descriptors based on Polarizability.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarizability</span><span class="p">,</span> <span class="s1">&#39;_Polarizability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAutoFreeEnergy"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoFreeEnergy">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoFreeEnergy</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the MoranAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    FreeEnergy.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoFreeEnergy(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran Autocorrelation</span>
+
+<span class="sd">    descriptors based on FreeEnergy.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_FreeEnergy</span><span class="p">,</span> <span class="s1">&#39;_FreeEnergy&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAutoResidueASA"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoResidueASA">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoResidueASA</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the MoranAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    ResidueASA.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoResidueASA(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran Autocorrelation</span>
+
+<span class="sd">    descriptors based on ResidueASA.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_ResidueASA</span><span class="p">,</span> <span class="s1">&#39;_ResidueASA&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAutoResidueVol"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoResidueVol">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoResidueVol</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the MoranAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    ResidueVol.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoResidueVol(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran Autocorrelation</span>
+
+<span class="sd">    descriptors based on ResidueVol.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_ResidueVol</span><span class="p">,</span> <span class="s1">&#39;_ResidueVol&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAutoSteric"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoSteric">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoSteric</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the MoranAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    AutoSteric.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoSteric(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran Autocorrelation</span>
+
+<span class="sd">    descriptors based on AutoSteric.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Steric</span><span class="p">,</span> <span class="s1">&#39;_Steric&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAutoMutability"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoMutability">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoMutability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the MoranAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    Mutability.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoMutability(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Moran Autocorrelation</span>
+
+<span class="sd">    descriptors based on Mutability.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachMoranAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Mutability</span><span class="p">,</span> <span class="s1">&#39;_Mutability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">############################################################################</span>
+
+
+<span class="c1">################################GearyAuto#####################################</span>
+<div class="viewcode-block" id="CalculateGearyAutoHydrophobicity"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoHydrophobicity">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the GearyAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    hydrophobicity.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoHydrophobicity(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary Autocorrelation</span>
+
+<span class="sd">    descriptors based on hydrophobicity.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Hydrophobicity</span><span class="p">,</span> <span class="s1">&#39;_Hydrophobicity&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoAvFlexibility"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoAvFlexibility">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoAvFlexibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the GearyAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    AvFlexibility.</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    result=CalculateGearyAutoAvFlexibility(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary Autocorrelation</span>
+
+<span class="sd">    descriptors based on AvFlexibility.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_AvFlexibility</span><span class="p">,</span> <span class="s1">&#39;_AvFlexibility&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoPolarizability"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoPolarizability">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the GearyAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    Polarizability.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoPolarizability(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary Autocorrelation</span>
+
+<span class="sd">    descriptors based on Polarizability.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Polarizability</span><span class="p">,</span> <span class="s1">&#39;_Polarizability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoFreeEnergy"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoFreeEnergy">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoFreeEnergy</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the GearyAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    FreeEnergy.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoFreeEnergy(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary Autocorrelation</span>
+
+<span class="sd">    descriptors based on FreeEnergy.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_FreeEnergy</span><span class="p">,</span> <span class="s1">&#39;_FreeEnergy&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoResidueASA"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoResidueASA">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoResidueASA</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the GearyAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    ResidueASA.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoResidueASA(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary Autocorrelation</span>
+
+<span class="sd">    descriptors based on ResidueASA.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_ResidueASA</span><span class="p">,</span> <span class="s1">&#39;_ResidueASA&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoResidueVol"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoResidueVol">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoResidueVol</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the GearyAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    ResidueVol.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoResidueVol(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary Autocorrelation</span>
+
+<span class="sd">    descriptors based on ResidueVol.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_ResidueVol</span><span class="p">,</span> <span class="s1">&#39;_ResidueVol&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoSteric"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoSteric">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoSteric</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the GearyAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    Steric.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoSteric(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary Autocorrelation</span>
+
+<span class="sd">    descriptors based on Steric.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Steric</span><span class="p">,</span> <span class="s1">&#39;_Steric&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoMutability"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoMutability">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoMutability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    Calculte the GearyAuto Autocorrelation descriptors based on</span>
+
+<span class="sd">    Mutability.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoMutability(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30 Geary Autocorrelation</span>
+
+<span class="sd">    descriptors based on Mutability.</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">CalculateEachGearyAuto</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">,</span> <span class="n">_Mutability</span><span class="p">,</span> <span class="s1">&#39;_Mutability&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+
+<div class="viewcode-block" id="CalculateNormalizedMoreauBrotoAutoTotal"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateNormalizedMoreauBrotoAutoTotal">[docs]</a><span class="k">def</span> <span class="nf">CalculateNormalizedMoreauBrotoAutoTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    A method used for computing normalized Moreau Broto autocorrelation descriptors based</span>
+
+<span class="sd">    on 8 proterties of AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateNormalizedMoreauBrotoAutoTotal(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30*8=240 normalized Moreau Broto</span>
+
+<span class="sd">    autocorrelation descriptors based on the given properties(i.e., _AAPropert).</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoAvFlexibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoFreeEnergy</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoResidueASA</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoResidueVol</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoSteric</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoMutability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateMoranAutoTotal"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateMoranAutoTotal">[docs]</a><span class="k">def</span> <span class="nf">CalculateMoranAutoTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    A method used for computing Moran autocorrelation descriptors based on 8 properties of AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateMoranAutoTotal(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30*8=240 Moran</span>
+
+<span class="sd">    autocorrelation descriptors based on the given properties(i.e., _AAPropert).</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoAvFlexibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoFreeEnergy</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoResidueASA</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoResidueVol</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoSteric</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoMutability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="CalculateGearyAutoTotal"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateGearyAutoTotal">[docs]</a><span class="k">def</span> <span class="nf">CalculateGearyAutoTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    A method used for computing Geary autocorrelation descriptors based on 8 properties of AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoTotal(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30*8=240 Geary</span>
+
+<span class="sd">    autocorrelation descriptors based on the given properties(i.e., _AAPropert).</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoHydrophobicity</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoAvFlexibility</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoPolarizability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoFreeEnergy</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoResidueASA</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoResidueVol</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoSteric</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoMutability</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+<div class="viewcode-block" id="CalculateAutoTotal"><a class="viewcode-back" href="../reference/Autocorrelation.html#Autocorrelation.CalculateAutoTotal">[docs]</a><span class="k">def</span> <span class="nf">CalculateAutoTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    A method used for computing all autocorrelation descriptors based on 8 properties of AADs.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    result=CalculateGearyAutoTotal(protein)</span>
+
+<span class="sd">    Input: protein is a pure protein sequence.</span>
+
+<span class="sd">    Output: result is a dict form containing 30*8*3=720 normalized Moreau Broto, Moran, and Geary</span>
+
+<span class="sd">    autocorrelation descriptors based on the given properties(i.e., _AAPropert).</span>
+<span class="sd">    ####################################################################################</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateNormalizedMoreauBrotoAutoTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateMoranAutoTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CalculateGearyAutoTotal</span><span class="p">(</span><span class="n">ProteinSequence</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1">##################################################################################################</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">protein</span> <span class="o">=</span> <span class="s2">&quot;ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS&quot;</span>
+    <span class="n">temp1</span> <span class="o">=</span> <span class="n">CalculateNormalizedMoreauBrotoAuto</span><span class="p">(</span><span class="n">protein</span><span class="p">,</span> <span class="n">AAProperty</span><span class="o">=</span><span class="n">_AAProperty</span><span class="p">,</span> <span class="n">AAPropertyName</span><span class="o">=</span><span class="n">_AAPropertyName</span><span class="p">)</span>
+    <span class="c1"># print temp1</span>
+    <span class="n">temp2</span> <span class="o">=</span> <span class="n">CalculateMoranAutoMutability</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">temp2</span>
+    <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">CalculateAutoTotal</span><span class="p">(</span><span class="n">protein</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyBioMed 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright @ 2015-2016 Computational Biology &amp; Drug Design Group.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>
