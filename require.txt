@@ -1,0 +1,8 @@
+#
+####### example-requirements.txt #######
+#
+###### Requirements without Version Specifiers ######
+rdkit
+numpy
+pybel
+
