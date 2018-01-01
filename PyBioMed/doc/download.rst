@@ -5,8 +5,6 @@ Download
 Python Package
 ~~~~~~~~~~~~~~
 
-Source and binary releases: https://pypi.python.org/pypi/pybiomed/
-
 Github (latest development): https://github.com/gadsbyfly/PyBioMed/
 
 
@@ -14,7 +12,7 @@ Documentation
 ~~~~~~~~~~~~~
 *PDF*
 
-https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/download/PyBioMedDocumentation.pdf
+https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/download/PyBioMed%20Documentation.pdf
 
 The introduction of descriptors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -22,23 +20,19 @@ The introduction of descriptors
 
 Molecular descriptors introduction
 ++++++++++++++++++++++++++++++++++
-https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMedChem.pdf
+https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMed%20Chem.pdf
 
 Protein descriptors introduction
 ++++++++++++++++++++++++++++++++
-https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMedProtein.pdf
+https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMed%20Protein.pdf
 
 DNA descriptors introduction
 ++++++++++++++++++++++++++++
-https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMedDNA.pdf
+https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMed%20DNA.pdf
 
 Interaction descriptors introduction
 ++++++++++++++++++++++++++++++++++++
-https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMedInteraction.pdf
-
-*HTML in zip file*
-
-https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMedDocumentation.zip
+https://github.com/gadsbyfly/PyBioMed/blob/master/doc/DescriptorIntroduction/PyBioMed%20Interaction.pdf
 
 
 
