@@ -1,6 +1,6 @@
 Application
 ===========
-The PyBioMed Python package can generate various feature vectors for molecular structure, protein sequences and DNA sequences. The PyBioMed package would be applied to solve many tasks in the field of cheminformatics, bioinformatics and systems biology. We will introduce five examples of its applications including Caco-2 cell permeability, aqueous solubility, drug–target interaction data, protein subcellular location, and nucleosome positioning in genomes. All datasets and Python scripts used in the next five examples can be download on https://github.com/gadsbyfly/PyBioMed/blob/master/doc/download.
+The PyBioMed Python package can generate various feature vectors for molecular structure, protein sequences and DNA sequences. The PyBioMed package would be applied to solve many tasks in the field of cheminformatics, bioinformatics and systems biology. We will introduce five examples of its applications including Caco-2 cell permeability, aqueous solubility, drug–target interaction data, protein subcellular location, and nucleosome positioning in genomes. All datasets and Python scripts used in the next five examples can be download on https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/example.
 
 .. figure:: /image/brief.png
 	:width: 400px
@@ -32,8 +32,8 @@ Caco-2 cell monolayer model is a popular surrogate in predicting the in vitro hu
 	#==============================================================================
 	# load the data
 	#==============================================================================
-	train_set = pd.read_excel('D:/PyBioMed/PyBioMed-1.0/PyBioMed/example/caco2/caco2.xlsx',sheetname=0) #change the path to the real path
-	test_set = pd.read_excel('D:/PyBioMed/PyBioMed-1.0/PyBioMed/example/caco2/caco2.xlsx',sheetname=1) #change the path to the real path
+	train_set = pd.read_excel('./example/caco2/caco2.xlsx',sheetname=0) #change the path to your own path
+	test_set = pd.read_excel('./example/caco2/caco2.xlsx',sheetname=1) #change the path to your own path
 
 	train_set_smi = train_set['smi']
 	test_set_smi = test_set['smi']
@@ -114,7 +114,10 @@ Aqueous solubility is one of the major drug properties to be optimized in drug d
 	#==============================================================================
 	# loading the data
 	#==============================================================================
-	solubility_set = pd.read_excel('./PyBioMed/example/solubility/Solubility-total.xlsx',sheetname = 0) #change the path to the real path
+	#change the path to your own path
+	solubility_set = pd.read_excel('./example/solubility/Solubility-total.xlsx',sheetname = 0)
+	
+	
 	smis = solubility_set['SMI']
 	logS = solubility_set['logS']
 	#==============================================================================
@@ -134,7 +137,7 @@ Aqueous solubility is one of the major drug properties to be optimized in drug d
 	# building the model and predict
 	#==============================================================================
 	train_set_des, test_set_des, train_logS, test_logS = train_test_split(solubility_set_des, 
-													logS, test_size = 0.33, random_state = 42)
+	logS, test_size = 0.33, random_state = 42)
 
 	kf = cross_validation.KFold(train_set_des.shape[0], n_folds=10, random_state=0)
 	clf = RandomForestRegressor(n_estimators=500, max_features='auto', n_jobs = -1)

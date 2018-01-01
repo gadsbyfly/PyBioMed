@@ -99,7 +99,7 @@
             
   <div class="section" id="application">
 <h1>Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h1>
-<p>The PyBioMed Python package can generate various feature vectors for molecular structure, protein sequences and DNA sequences. The PyBioMed package would be applied to solve many tasks in the field of cheminformatics, bioinformatics and systems biology. We will introduce five examples of its applications including Caco-2 cell permeability, aqueous solubility, drug–target interaction data, protein subcellular location, and nucleosome positioning in genomes. All datasets and Python scripts used in the next five examples can be download on <a class="reference external" href="https://github.com/gadsbyfly/PyBioMed/blob/master/doc/download">https://github.com/gadsbyfly/PyBioMed/blob/master/doc/download</a>.</p>
+<p>The PyBioMed Python package can generate various feature vectors for molecular structure, protein sequences and DNA sequences. The PyBioMed package would be applied to solve many tasks in the field of cheminformatics, bioinformatics and systems biology. We will introduce five examples of its applications including Caco-2 cell permeability, aqueous solubility, drug–target interaction data, protein subcellular location, and nucleosome positioning in genomes. All datasets and Python scripts used in the next five examples can be download on <a class="reference external" href="https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/example">https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/example</a>.</p>
 <div class="figure align-center" id="id1">
 <a class="reference internal image-reference" href="_images/brief.png"><img alt="_images/brief.png" src="_images/brief.png" style="width: 400px;" /></a>
 <p class="caption"><span class="caption-text">The overview of PyBioMed python package. PyBioMed could calculate various molecular descriptors from chemicals, proteins, DNAs/RNAs and their interactions. PyBioMed can also pretreat molecules, protein sequences and DNA sequences.</span></p>
@@ -177,8 +177,8 @@
 <span class="c1">#==============================================================================</span>
 <span class="c1"># load the data</span>
 <span class="c1">#==============================================================================</span>
-<span class="n">train_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;D:/PyBioMed/PyBioMed-1.0/PyBioMed/example/caco2/caco2.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#change the path to the real path</span>
-<span class="n">test_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;D:/PyBioMed/PyBioMed-1.0/PyBioMed/example/caco2/caco2.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#change the path to the real path</span>
+<span class="n">train_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;./example/caco2/caco2.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#change the path to your own path</span>
+<span class="n">test_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;./example/caco2/caco2.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#change the path to your own path</span>
 
 <span class="n">train_set_smi</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;smi&#39;</span><span class="p">]</span>
 <span class="n">test_set_smi</span> <span class="o">=</span> <span class="n">test_set</span><span class="p">[</span><span class="s1">&#39;smi&#39;</span><span class="p">]</span>
@@ -299,7 +299,10 @@
 55
 56
 57
-58</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="kn">import</span> <span class="n">Pymolecule</span>
+58
+59
+60
+61</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyBioMed</span> <span class="kn">import</span> <span class="n">Pymolecule</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cross_validation</span>
@@ -310,7 +313,10 @@
 <span class="c1">#==============================================================================</span>
 <span class="c1"># loading the data</span>
 <span class="c1">#==============================================================================</span>
-<span class="n">solubility_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;./PyBioMed/example/solubility/Solubility-total.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">#change the path to the real path</span>
+<span class="c1">#change the path to your own path</span>
+<span class="n">solubility_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;./example/solubility/Solubility-total.xlsx&#39;</span><span class="p">,</span><span class="n">sheetname</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+
+
 <span class="n">smis</span> <span class="o">=</span> <span class="n">solubility_set</span><span class="p">[</span><span class="s1">&#39;SMI&#39;</span><span class="p">]</span>
 <span class="n">logS</span> <span class="o">=</span> <span class="n">solubility_set</span><span class="p">[</span><span class="s1">&#39;logS&#39;</span><span class="p">]</span>
 <span class="c1">#==============================================================================</span>
@@ -330,7 +336,7 @@
 <span class="c1"># building the model and predict</span>
 <span class="c1">#==============================================================================</span>
 <span class="n">train_set_des</span><span class="p">,</span> <span class="n">test_set_des</span><span class="p">,</span> <span class="n">train_logS</span><span class="p">,</span> <span class="n">test_logS</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">solubility_set_des</span><span class="p">,</span>
-                                                                                                <span class="n">logS</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">logS</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
 
 <span class="n">kf</span> <span class="o">=</span> <span class="n">cross_validation</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">train_set_des</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">n_jobs</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
