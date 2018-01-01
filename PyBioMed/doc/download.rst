@@ -35,6 +35,10 @@ Interaction descriptors introduction
 https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/download/PyBioMed%20Interaction.pdf
 
 
+*HTML in zip file*
+
+https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/download/PyBioMedDocumentationHTML.zip
+
 
 
 
