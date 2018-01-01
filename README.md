@@ -33,10 +33,13 @@ There is a simplest configuration on Ubuntu 14.04(Just click mouse to install): 
 (1) use the ubuntu software center to search for 'Synaptic Package Manager' and install it. Search 'openbabel, libopenbabel4, python-openbabel, libopenbabel-dev' and install them. Search for 'python-rdkit, librdkit1, rdkit-data' and install them. This will make sure the right installation of Pybel and RDKit.<br>
 (2) Download PyBioMed-1.0.zip, 'cd PyBioMed-1.0', 'python setup.py install or sudo python setup.py install'.
 ## Documentation
-(1)The online version of the documentation is available here:
-http://pybiomed.readthedocs.io/en/latest/<br>
-(2)Quick start examples: http://pybiomed.readthedocs.io/en/latest/User_guide.html<br>
-(3)Application examples(pipelines): http://pybiomed.readthedocs.io/en/latest/application.html
+(1)The online version of the documentation is available here:<br>
+http://projects.scbdd.com/pybiomed/index.html <br>
+or http://pybiomed.readthedocs.io/en/latest/<br>
+(2)Quick start examples: http://projects.scbdd.com/pybiomed/User_guide.html<br>
+or http://pybiomed.readthedocs.io/en/latest/User_guide.html<br>
+(3)Application examples(pipelines): http://projects.scbdd.com/pybiomed/application.html<br>
+or http://pybiomed.readthedocs.io/en/latest/application.html
 ## Contact
 If you have questions or suggestions, please contact:
 gadsby@163.com, biomed@csu.edu.cn and oriental-cds@126.com
