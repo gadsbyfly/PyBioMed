@@ -165,7 +165,7 @@ Aqueous solubility is one of the major drug properties to be optimized in drug d
 	plt.legend(loc="lower right",numpoints=1)
 	plt.plot()
 	
->>> print 'CV_R^2:','r2_cv','Test_R^2:','r2_test'
+>>> print 'CV_R^2:',r2_cv,'Test_R^2:',r2_test
 CV_R^2: 0.86 Test_R^2: 0.84
 	
 Application 3 Prediction of drug–target interaction from the integration of chemical and protein spaces
