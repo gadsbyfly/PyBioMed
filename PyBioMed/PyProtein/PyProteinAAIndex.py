@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+#  Copyright (c) 2016-2017, Zhijiang Yao, Jie Dong and Dongsheng Cao
+#  All rights reserved.
+#  This file is part of the PyBioMed.
+#  The contents are covered by the terms of the BSD license
+#  which is included in the file license.txt, found at the root
+#  of the PyBioMed source tree.
 """
 This module is used for obtaining the properties of amino acids or their pairs
 
