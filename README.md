@@ -42,7 +42,7 @@ or http://pybiomed.readthedocs.io/en/latest/User_guide.html<br>
 or http://pybiomed.readthedocs.io/en/latest/application.html
 ## Contact
 If you have questions or suggestions, please contact:
-gadsby@163.com, biomed@csu.edu.cn and oriental-cds@126.com
+gadsby@163.com, biomed@csu.edu.cn and oriental-cds@163.com
 
 Please see the file LICENSE for details about the "New BSD"
 license which covers this software and its associated data and
