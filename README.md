@@ -30,7 +30,7 @@ The install process of PyBioMed is very easy:
 (4): python setup.py install or sudo python setup.py install
 ### Recommended installation
 There is a simplest configuration on Ubuntu 14.04(Just click mouse to install): <br>
-(1) use the ubuntu software center to search for 'Synaptic Package Manager' and install it. Search 'openbabel, libopenbabel4, python-openbabel, libopenbabel-dev' and install them. Search for 'python-rdkit, librdkit1, rdkit-data' and install them. This will make sure the right installation of Pybel and RDKit.<br>
+(1) use the ubuntu software center to search for 'Synaptic Package Manager' and install it. Use 'Synaptic Package Manager' to search for 'openbabel, libopenbabel4, python-openbabel, libopenbabel-dev' and then install them. Search for 'python-rdkit, librdkit1, rdkit-data' and install them. This will make sure the right installation of Pybel and RDKit.<br>
 (2) Download PyBioMed-1.0.zip, 'cd PyBioMed-1.0', 'python setup.py install or sudo python setup.py install'.
 ## Documentation
 (1)The online version of the documentation is available here:<br>
