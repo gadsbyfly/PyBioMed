@@ -196,7 +196,7 @@ def CalculateHydrophilicityFactor(mol):
                 if i.GetAtomicNum()==1:
                     nhy=nhy+1
                 
-    res=(1+nhy)*math.log((1+nhy),2)+nc*(1.0/nheavy*math.log(1.0/nheavy,2))+math.sqrt((nhy+0.0)/(nheavy^2))
+    res=(1+nhy)*math.log((1+nhy),2)+nc*(1.0/nheavy*math.log(1.0/nheavy,2))+math.sqrt((nhy+0.0)/(nheavy**2))
     return round(res,3)
     
 
