@@ -48,4 +48,4 @@ Please see the file LICENSE for details about the "New BSD"
 license which covers this software and its associated data and
 documents.
 
-# Copyright (C) 2015-2019 CBDD Group
+# <center>Copyright (C) 2015-2019 CBDD Group</center>
