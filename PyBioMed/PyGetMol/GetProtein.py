@@ -94,12 +94,12 @@ def timelimited(timeout):
 
             if isinstance(t._error,TimeoutException):
                 t._stop()
-                print 'Network timeout, skip!!'
+                print('Network timeout, skip!!')
                 return 'Network timeout, skip!!'
 
             if t.isAlive():
                 t._stop()
-                print 'Network timeout, skip!!'
+                print('Network timeout, skip!!')
                 return 'Network timeout, skip!!'
 
             if t._error is None:
@@ -132,7 +132,7 @@ def pdbDownload(file_list, hostname=HOSTNAME, directory=DIRECTORY, prefix=PREFIX
     success = True
 
     # Log into server
-    print "Connecting..."
+    print("Connecting...")
     ftp = ftplib.FTP()
     ftp.connect(hostname)
     ftp.login()
@@ -153,10 +153,10 @@ def pdbDownload(file_list, hostname=HOSTNAME, directory=DIRECTORY, prefix=PREFIX
             ftp.retrbinary("RETR %s" % to_get[i], open(to_write[i], "wb").write)
             final_name = "%s.pdb" % to_write[i][:to_write[i].index(".")]
             unZip(to_write[i], final_name)
-            print "%s retrieved successfully." % final_name
+            print("%s retrieved successfully." % final_name)
         except ftplib.error_perm:
             os.remove(to_write[i])
-            print "ERROR!  %s could not be retrieved!" % file_list[i]
+            print("ERROR!  %s could not be retrieved!" % file_list[i])
             success = False
 
     # Log out
@@ -305,11 +305,11 @@ def GetProteinSequenceFromTxt(path, openfile, savefile):
             continue
         else:
             temp = GetProteinSequence(itrim)
-            print "--------------------------------------------------------"
-            print "The %d protein sequence has been downloaded!" % (index + 1)
-            print temp
+            print("--------------------------------------------------------")
+            print("The %d protein sequence has been downloaded!" % (index + 1))
+            print(temp)
             f1.write(temp + '\n')
-            print "--------------------------------------------------------"
+            print("--------------------------------------------------------")
         #		res.append(temp+'\n')
         #	f1.writelines(res)
     f2.close()
@@ -411,7 +411,7 @@ def ReadFasta(f):
 ####################################################################
 if __name__ == "__main__":
 
-    print '-'*10+'START'+'-'*10
+    print('-'*10+'START'+'-'*10)
     @timelimited(10)
     def run_GetPDB():
 
@@ -421,17 +421,17 @@ if __name__ == "__main__":
     def run_GetSeqFromPDB():
 
         seq = GetSeqFromPDB('1atp.pdb')
-        print seq
+        print(seq)
 
     @timelimited(10)
     def run_GetProteinSequence():
         GetProteinSequence('O00560')
 
-        print ReadFasta(open('../test/test_data/protein.fasta'))
+        print(ReadFasta(open('../test/test_data/protein.fasta')))
 
     run_GetPDB()
-    print '-'*25
+    print('-'*25)
     run_GetSeqFromPDB()
-    print '-'*25
+    print('-'*25)
     run_GetProteinSequence()
-    print '-'*10+'END'+'-'*10
+    print('-'*10+'END'+'-'*10)

@@ -545,7 +545,7 @@ if __name__ =='__main__':
     smi5=['CCCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N']
     for index, smi in enumerate(smi5):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',Getbasak(m)
-        print len(Getbasak(m))
+        print(index+1)
+        print(smi)      
+        print('\t',Getbasak(m))
+        print(len(Getbasak(m)))

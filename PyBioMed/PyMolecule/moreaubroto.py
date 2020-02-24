@@ -215,11 +215,11 @@ if __name__=='__main__':
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
+        print(index+1)
+        print(smi)      
 ##        print '\t',CalculateEstateFingerprint(m)
 ##        print '\t',CalculateEstateValue(m)
 ##        print '\t',CalculateMaxAtomTypeEState(m)
 ##        print '\t', CalculateMinAtomTypeEState(m)
         
-        print len(GetMoreauBrotoAuto(m))
+        print(len(GetMoreauBrotoAuto(m)))

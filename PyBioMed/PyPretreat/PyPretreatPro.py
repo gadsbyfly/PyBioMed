@@ -57,4 +57,4 @@ def ProteinCheck(ProteinSequence):
 if __name__ == "__main__":
     protein = "ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDASU"
     protein = "ADGC"
-    print ProteinCheck(protein)
+    print(ProteinCheck(protein))

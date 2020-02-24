@@ -28,18 +28,18 @@ def test_pyinteration():
     
     from PyBioMed.PyDNA import PyDNAac
     
-    print '...............................................................'
-    print 'testing the DNA descriptors'
+    print('...............................................................')
+    print('testing the DNA descriptors')
     
     
     DNA_des = PyDNAac.GetTCC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Dnase I', 'Nucleosome','MW-kg'])
     
-    print DNA_des
+    print(DNA_des)
     
     
     
-    print '...............................................................'
-    print 'testing the protein descriptors'
+    print('...............................................................')
+    print('testing the protein descriptors')
     
     
     from PyBioMed.PyProtein import CTD
@@ -47,8 +47,8 @@ def test_pyinteration():
     protein_des = CTD.CalculateCTD(protein)
     
     
-    print '...............................................................'
-    print 'testing the molecular descriptors'
+    print('...............................................................')
+    print('testing the molecular descriptors')
     
     from PyBioMed.PyMolecule import moe
     from rdkit import Chem
@@ -57,35 +57,35 @@ def test_pyinteration():
     mol_des = moe.GetMOE(m)
     
     
-    print '...............................................................'
-    print 'testing the Interaction type 1 module'
+    print('...............................................................')
+    print('testing the Interaction type 1 module')
     
     mol_mol_interaction1 = CalculateInteraction1(mol_des,mol_des)
-    print mol_mol_interaction1
+    print(mol_mol_interaction1)
     
     pro_mol_interaction1 = CalculateInteraction1(mol_des,protein_des)
-    print pro_mol_interaction1
+    print(pro_mol_interaction1)
     
     DNA_mol_interaction1 = CalculateInteraction1(DNA_des,mol_des)
-    print DNA_mol_interaction1
+    print(DNA_mol_interaction1)
     
-    print '...............................................................'
-    print 'testing the Interaction type 2 module'
+    print('...............................................................')
+    print('testing the Interaction type 2 module')
     
     mol_mol_interaction2 = CalculateInteraction2(mol_des,mol_des)
-    print mol_mol_interaction2
+    print(mol_mol_interaction2)
     
     pro_mol_interaction2 = CalculateInteraction2(mol_des,protein_des)
-    print pro_mol_interaction2
+    print(pro_mol_interaction2)
     
     DNA_mol_interaction2 = CalculateInteraction2(DNA_des,mol_des)
-    print DNA_mol_interaction2
+    print(DNA_mol_interaction2)
     
-    print '...............................................................'
-    print 'testing the Interaction type 3 module'
+    print('...............................................................')
+    print('testing the Interaction type 3 module')
     
     mol_mol_interaction3 = CalculateInteraction3(mol_des,mol_des)
-    print mol_mol_interaction3
+    print(mol_mol_interaction3)
 
 if __name__ == '__main__':
     test_pyinteration()

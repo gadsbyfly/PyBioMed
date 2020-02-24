@@ -41,7 +41,7 @@ class PyDNA():
         input a DNA sequence
         """
         if len(DNASequence)==0:
-            print "You must input a DNA sequence when constructing a object. It is a string!"
+            print("You must input a DNA sequence when constructing a object. It is a string!")
         else:
             self.DNASequence = DNASequence
     
@@ -273,25 +273,25 @@ if __name__ == '__main__':
     ]
     DNASequence = 'GACTGAACTGCACTTTGGTTTCATATTATTTGCTC'
     dna_obj = PyDNA(DNASequence)
-    print dna_obj.GetDAC(phyche_index=['Twist', 'Tilt'])
-    print dna_obj.GetDAC(all_property=True)    
-    print dna_obj.GetDCC(phyche_index=['Twist', 'Tilt'])
-    print dna_obj.GetDACC(all_property=True)
-    print dna_obj.GetTAC(all_property=True)
-    print dna_obj.GetTACC(phyche_index=['Dnase I', 'Nucleosome'],
-                             extra_phyche_index=NormalizeIndex(phyche_index, is_convert_dict=True))
+    print(dna_obj.GetDAC(phyche_index=['Twist', 'Tilt']))
+    print(dna_obj.GetDAC(all_property=True))    
+    print(dna_obj.GetDCC(phyche_index=['Twist', 'Tilt']))
+    print(dna_obj.GetDACC(all_property=True))
+    print(dna_obj.GetTAC(all_property=True))
+    print(dna_obj.GetTACC(phyche_index=['Dnase I', 'Nucleosome'],
+                             extra_phyche_index=NormalizeIndex(phyche_index, is_convert_dict=True)))
     
-    print dna_obj.GetTCC(phyche_index=['Dnase I', 'Nucleosome'],
-                           extra_phyche_index=NormalizeIndex(phyche_index, is_convert_dict=True)) 
+    print(dna_obj.GetTCC(phyche_index=['Dnase I', 'Nucleosome'],
+                           extra_phyche_index=NormalizeIndex(phyche_index, is_convert_dict=True))) 
 
-    print dna_obj.GetKmer(k = 2)
-    print dna_obj.GetRevcKmer(k=2,normalize=True, upto=True)
-    print dna_obj.GetPseDNC(phyche_index=['Dnase I', 'Nucleosome'],lamada=2, w=0.05)
-    print dna_obj.GetPseKNC(phyche_index=['Dnase I', 'Nucleosome'])
-    print dna_obj.GetPCPseDNC(phyche_index=['Twist', 'Tilt'])
-    print dna_obj.GetPCPseTNC(all_property=True,lamada=2, w=0.05)
-    print dna_obj.GetSCPseDNC(phyche_index=['Twist', 'Tilt'],lamada=2, w=0.05)
-    print dna_obj.GetSCPseTNC(phyche_index=['Dnase I', 'Nucleosome'],lamada=1, w=0.05)
+    print(dna_obj.GetKmer(k = 2))
+    print(dna_obj.GetRevcKmer(k=2,normalize=True, upto=True))
+    print(dna_obj.GetPseDNC(phyche_index=['Dnase I', 'Nucleosome'],lamada=2, w=0.05))
+    print(dna_obj.GetPseKNC(phyche_index=['Dnase I', 'Nucleosome']))
+    print(dna_obj.GetPCPseDNC(phyche_index=['Twist', 'Tilt']))
+    print(dna_obj.GetPCPseTNC(all_property=True,lamada=2, w=0.05))
+    print(dna_obj.GetSCPseDNC(phyche_index=['Twist', 'Tilt'],lamada=2, w=0.05))
+    print(dna_obj.GetSCPseTNC(phyche_index=['Dnase I', 'Nucleosome'],lamada=1, w=0.05))
     
 
 

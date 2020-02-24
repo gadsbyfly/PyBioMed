@@ -39,259 +39,259 @@ def test_pymolecule():
     from PyBioMed.PyMolecule.ghosecrippen import GhoseCrippenFingerprint
     from PyBioMed.PyMolecule.cats2d import CATS2D
     
-    print '...............................................................'
-    print 'testing the AtomProperty module'
+    print('...............................................................')
+    print('testing the AtomProperty module')
     
     for i,j in AtomProperty.items():
-        print j
-    print GetAbsoluteAtomicProperty(element='S',propertyname='En')
-    print GetRelativeAtomicProperty(element='S',propertyname='En')
+        print(j)
+    print(GetAbsoluteAtomicProperty(element='S',propertyname='En'))
+    print(GetRelativeAtomicProperty(element='S',propertyname='En'))
     #==============================================================================
     # Getbasak
     #==============================================================================
-    print '...............................................................'
-    print 'testing the Getbasak module'
+    print('...............................................................')
+    print('testing the Getbasak module')
     
     smi5=['CCCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N']
     for index, smi in enumerate(smi5):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',Getbasak(m)
-        print len(Getbasak(m))
+        print(index+1)
+        print(smi)      
+        print('\t',Getbasak(m))
+        print(len(Getbasak(m)))
     #==============================================================================
     # GetBurden, bcut model
     #==============================================================================
-    print '...............................................................'
-    print 'testing the bcut module'    
+    print('...............................................................')
+    print('testing the bcut module')    
         
     smi5=['CCOCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N','C']
     for index, smi in enumerate(smi5):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi, '\n'   
-        print GetBurden(m)
-        print len(GetBurden(m))
+        print(index+1)
+        print(smi, '\n')   
+        print(GetBurden(m))
+        print(len(GetBurden(m)))
     #==============================================================================
     # GetCharge
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetCharge module'        
+    print('...............................................................')
+    print('testing the GetCharge module')        
         
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     smi5=['CCCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetCharge(m)
-        print len(GetCharge(m))
+        print(index+1)
+        print(smi)      
+        print('\t',GetCharge(m))
+        print(len(GetCharge(m)))
     #==============================================================================
     # GetConnectivity
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetConnectivity module'       
+    print('...............................................................')
+    print('testing the GetConnectivity module')       
         
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     smi5=['CCCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N']
     
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetConnectivity(m)
-        print '\t',len(GetConnectivity(m))
+        print(index+1)
+        print(smi)      
+        print('\t',GetConnectivity(m))
+        print('\t',len(GetConnectivity(m)))
     
     #==============================================================================
     # GetConstitutional
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetConstitutional module'   
+    print('...............................................................')
+    print('testing the GetConstitutional module')   
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     smi5=['CCCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetConstitutional(m)
-        print len(GetConstitutional(m))
+        print(index+1)
+        print(smi)      
+        print('\t',GetConstitutional(m))
+        print(len(GetConstitutional(m)))
     #==============================================================================
     # GetEstate
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetEstate module'   
+    print('...............................................................')
+    print('testing the GetEstate module')   
     
     smi5=['COCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCOCCN','c1ccccc1N']
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
+        print(index+1)
+        print(smi)      
     #        print '\t',CalculateEstateFingerprint(m)
     #        print '\t',CalculateEstateValue(m)
     #        print '\t',CalculateMaxAtomTypeEState(m)
     #        print '\t', CalculateMinAtomTypeEState(m)
         
-        print GetEstate(m)
+        print(GetEstate(m))
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print "fingerprint......"
+    print('...............................................................')
+    print("fingerprint......")
     
     ms = [Chem.MolFromSmiles('CCOC=N'), Chem.MolFromSmiles('NC1=NC(=CC=N1)N1C=CC2=C1C=C(O)C=C2')]
     m2 = [pybel.readstring("smi",'CCOC=N'),pybel.readstring("smi",'CCO')]
     res1=CalculateECFP4Fingerprint(ms[0])
-    print res1
+    print(res1)
     res2=CalculateECFP4Fingerprint(ms[1])
-    print res2
+    print(res2)
     #    print CalculateSimilarityRdkit(res1[2],res2[2])
     #    print CalculateSimilarityPybel(res1,res2)
     
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetGearyAuto module' 
+    print('...............................................................')
+    print('testing the GetGearyAuto module') 
     
     smi5=['COCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCOCCN','c1ccccc1N']
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
+        print(index+1)
+        print(smi)      
     ##        print '\t',CalculateEstateFingerprint(m)
     ##        print '\t',CalculateEstateValue(m)
     ##        print '\t',CalculateMaxAtomTypeEState(m)
     ##        print '\t', CalculateMinAtomTypeEState(m)
         
-        print GetGearyAuto(m)
+        print(GetGearyAuto(m))
     
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetKappa module' 
+    print('...............................................................')
+    print('testing the GetKappa module') 
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetKappa(m)
-        print '\t',len(GetKappa(m))
+        print(index+1)
+        print(smi)      
+        print('\t',GetKappa(m))
+        print('\t',len(GetKappa(m)))
     
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetMOE module' 
+    print('...............................................................')
+    print('testing the GetMOE module') 
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetMOE(m)
-        print '\t', len(GetMOE(m))
+        print(index+1)
+        print(smi)      
+        print('\t',GetMOE(m))
+        print('\t', len(GetMOE(m)))
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetMolecularProperty module' 
+    print('...............................................................')
+    print('testing the GetMolecularProperty module') 
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetMolecularProperty(m)
+        print(index+1)
+        print(smi)      
+        print('\t',GetMolecularProperty(m))
     
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetMoranAuto module' 
+    print('...............................................................')
+    print('testing the GetMoranAuto module') 
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
+        print(index+1)
+        print(smi)      
     ##        print '\t',CalculateEstateFingerprint(m)
     ##        print '\t',CalculateEstateValue(m)
     ##        print '\t',CalculateMaxAtomTypeEState(m)
     ##        print '\t', CalculateMinAtomTypeEState(m)
         
-        print GetMoranAuto(m)
+        print(GetMoranAuto(m))
     
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetMoreauBrotoAuto module' 
+    print('...............................................................')
+    print('testing the GetMoreauBrotoAuto module') 
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
+        print(index+1)
+        print(smi)      
     ##        print '\t',CalculateEstateFingerprint(m)
     ##        print '\t',CalculateEstateValue(m)
     ##        print '\t',CalculateMaxAtomTypeEState(m)
     ##        print '\t', CalculateMinAtomTypeEState(m)
         
-        print len(GetMoreauBrotoAuto(m))
+        print(len(GetMoreauBrotoAuto(m)))
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetTopology module' 
+    print('...............................................................')
+    print('testing the GetTopology module') 
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetTopology(m)
-        print '\t',len(GetTopology(m))
+        print(index+1)
+        print(smi)      
+        print('\t',GetTopology(m))
+        print('\t',len(GetTopology(m)))
     
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the CATS2D module' 
+    print('...............................................................')
+    print('testing the CATS2D module') 
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-]']
     
     for i in smis: 
         mol = Chem.MolFromSmiles(i)
         cats = CATS2D(mol,PathLength = 10,scale = 3)
-        print '\t', cats
-        print '\t', len(cats)
+        print('\t', cats)
+        print('\t', len(cats))
     
     #==============================================================================
     # 
     #==============================================================================
-    print '...............................................................'
-    print 'testing the ghoseFP module' 
+    print('...............................................................')
+    print('testing the ghoseFP module') 
     
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-]']
     
     for i in smis: 
         mol = Chem.MolFromSmiles(i)
         ghoseFP = GhoseCrippenFingerprint(mol)
-        print '\t', ghoseFP
-        print '\t', len(ghoseFP)
+        print('\t', ghoseFP)
+        print('\t', len(ghoseFP))
     
-    print 'testing the ghose_count module' 
+    print('testing the ghose_count module') 
     
     for i in smis: 
         mol = Chem.MolFromSmiles(i)
         ghose_count = GhoseCrippenFingerprint(mol, count = True)
-        print '\t', ghose_count
-        print '\t', len(ghose_count)
+        print('\t', ghose_count)
+        print('\t', len(ghose_count))
     
     #==============================================================================
     # 

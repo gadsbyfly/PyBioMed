@@ -286,4 +286,4 @@ if __name__ =='__main__':
         mol = Chem.MolFromSmiles(i)
         cats = CATS2D(mol,PathLength = 10,scale = 3)
         AllDes.append(cats)
-    print AllDes
+    print(AllDes)

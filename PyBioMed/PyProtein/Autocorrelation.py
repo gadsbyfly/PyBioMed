@@ -134,7 +134,7 @@ def NormalizeEachAAP(AAP):
     ####################################################################################
     """
     if len(AAP.values()) != 20:
-        print 'You can not input the correct number of properities of Amino acids!'
+        print('You can not input the correct number of properities of Amino acids!')
     else:
         Result = {}
         for i, j in AAP.items():
@@ -1028,5 +1028,5 @@ if __name__ == "__main__":
     temp1 = CalculateNormalizedMoreauBrotoAuto(protein, AAProperty=_AAProperty, AAPropertyName=_AAPropertyName)
     # print temp1
     temp2 = CalculateMoranAutoMutability(protein)
-    print temp2
-    print len(CalculateAutoTotal(protein))
+    print(temp2)
+    print(len(CalculateAutoTotal(protein)))

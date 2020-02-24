@@ -28,8 +28,8 @@ def test_pypretreat():
     #==============================================================================
     # PyPretreatDNA
     #==============================================================================
-    print '...............................................................'
-    print 'testing the PyPretreatDNA module'
+    print('...............................................................')
+    print('testing the PyPretreatDNA module')
         
     
     phyche_index = [[1.019, -0.918, 0.488, 0.567, 0.567, -0.070, -0.579, 0.488, -0.654, -2.455,-0.070, -0.918, 1.603, -0.654, 0.567, 1.019]]
@@ -38,18 +38,18 @@ def test_pypretreat():
     #==============================================================================
     # PyPretreatPro
     #==============================================================================
-    print '...............................................................'
-    print 'testing the PyPretreatPro module'
+    print('...............................................................')
+    print('testing the PyPretreatPro module')
     
     protein="ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDASU"
     protein="ADGC"
-    print ProteinCheck(protein)
+    print(ProteinCheck(protein))
     
     #==============================================================================
     # PyPretreatMol
     #==============================================================================
-    print '...............................................................'
-    print 'testing the PyPretreatMol module'
+    print('...............................................................')
+    print('testing the PyPretreatMol module')
     
     smiles = ['O=C([O-])c1ccccc1','C[n+]1c([N-](C))cccc1','[2H]C(Cl)(Cl)Cl']
     mol = Chem.MolFromSmiles('[Na]OC(=O)c1ccc(C[S+2]([O-])([O-]))cc1')
@@ -63,7 +63,7 @@ def test_pypretreat():
     mol = sm.reionize(mol)
     mol = sm.rmhs(mol)
     mol = sm.addhs(mol)
-    print Chem.MolToSmiles(mol, isomericSmiles=True)
+    print(Chem.MolToSmiles(mol, isomericSmiles=True))
     
     #==============================================================================
     # 

@@ -102,7 +102,7 @@ if __name__ == '__main__':
     
     DNA_des = PyDNAac.GetTCC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Dnase I', 'Nucleosome','MW-kg'])
     
-    print DNA_des
+    print(DNA_des)
    
 
     from PyBioMed.PyProtein import CTD
@@ -116,25 +116,25 @@ if __name__ == '__main__':
     mol_des = moe.GetMOE(m)
 
     mol_mol_interaction1 = CalculateInteraction1(mol_des,mol_des)
-    print mol_mol_interaction1
+    print(mol_mol_interaction1)
     
     mol_mol_interaction2 = CalculateInteraction2(mol_des,mol_des)
-    print mol_mol_interaction2
+    print(mol_mol_interaction2)
     
     mol_mol_interaction3 = CalculateInteraction3(mol_des,mol_des)
-    print mol_mol_interaction3
+    print(mol_mol_interaction3)
     
     pro_mol_interaction1 = CalculateInteraction1(mol_des,protein_des)
-    print pro_mol_interaction1
+    print(pro_mol_interaction1)
     
     pro_mol_interaction2 = CalculateInteraction2(mol_des,protein_des)
-    print pro_mol_interaction2
+    print(pro_mol_interaction2)
     
     DNA_mol_interaction1 = CalculateInteraction1(DNA_des,mol_des)
-    print DNA_mol_interaction1
+    print(DNA_mol_interaction1)
     
     DNA_mol_interaction2 = CalculateInteraction2(DNA_des,mol_des)
-    print DNA_mol_interaction2
+    print(DNA_mol_interaction2)
     
     
 

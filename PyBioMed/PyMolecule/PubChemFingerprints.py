@@ -770,7 +770,7 @@ def InitKeys(keyList, keyDict):
     if patt != '?':
       sma = Chem.MolFromSmarts(patt)
       if not sma:
-        print('SMARTS parser error for key #%d: %s' % (key, patt))
+        print(('SMARTS parser error for key #%d: %s' % (key, patt)))
       else:
         keyList[key - 1] = sma, count
 
@@ -1555,12 +1555,12 @@ def calcPubChemFingerAll(mol):
 # ------------------------------------
 
 if __name__ == '__main__':
-    print '-'*10+'START'+'-'*10
+    print('-'*10+'START'+'-'*10)
     SMILES = 'C1=NC2NC3=CNCC3=CC2CC1'
     mol = Chem.MolFromSmiles(SMILES)
     mol2 = Chem.AddHs(mol)
     result = calcPubChemFingerAll(mol2)
-    print 'Molecule: %s'%SMILES
-    print '-'*25
-    print 'Results: %s'%result
-    print '-'*10+'END'+'-'*10
+    print('Molecule: %s'%SMILES)
+    print('-'*25)
+    print('Results: %s'%result)
+    print('-'*10+'END'+'-'*10)

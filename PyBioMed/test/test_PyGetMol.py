@@ -35,7 +35,7 @@ from PyBioMed.PyGetMol.GetProtein import timelimited
 
 
 def test_pygetmol():
-    print '-'*10+'START'+'-'*10
+    print('-'*10+'START'+'-'*10)
     #==============================================================================
     # GetDNA
     #==============================================================================
@@ -48,12 +48,12 @@ def test_pygetmol():
             sequence1 = GetDNAFromUniGene(seqid)
             sequence2 = GetDNAFromUniGene(seqid2)
 
-            print sequence1
-            print sequence2
+            print(sequence1)
+            print(sequence2)
         except:
-            print "Can't visit the internet"
+            print("Can't visit the internet")
     test_GetDNAFromUniGene()
-    print '-'*25
+    print('-'*25)
     #==============================================================================
     # Get protein
     #==============================================================================
@@ -63,17 +63,17 @@ def test_pygetmol():
             GetPDB(['1atp','1efz','1f88'])
 
             seq = GetSeqFromPDB('1atp.pdb')
-            print seq
+            print(seq)
 
             seq2 = GetSeqFromPDB('1efz.pdb')
-            print seq2
+            print(seq2)
 
             seq3 = GetSeqFromPDB('1f88.pdb')
-            print seq3
+            print(seq3)
         except:
-            print "Can't visit the internet"
+            print("Can't visit the internet")
     test_GetPDB()
-    print '-'*25
+    print('-'*25)
     #==============================================================================
     # Get molecule
     #==============================================================================
@@ -81,18 +81,18 @@ def test_pygetmol():
     def test_GetSmallMol():
         try:
             temp=GetMolFromCAS(casid="50-12-4")
-            print temp
+            print(temp)
             temp=GetMolFromNCBI(cid="2244")
-            print temp
+            print(temp)
             temp=GetMolFromDrugbank(dbid="DB00133")
-            print temp
+            print(temp)
             temp=GetMolFromKegg(kid="D02176")
-            print temp
+            print(temp)
         except:
-            print "Can't visit the internet"
+            print("Can't visit the internet")
     test_GetSmallMol()
 
-    print '-'*10+'END'+'-'*10
+    print('-'*10+'END'+'-'*10)
 
 if __name__ == '__main__':
     test_pygetmol()

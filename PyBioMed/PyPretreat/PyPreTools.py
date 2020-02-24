@@ -89,11 +89,11 @@ def TupleToCSV(MultiTupleList, csvOutPath,Name='Des'):
 
 
 if __name__=="__main__":
-    print 'Only PyBioMed is successfully installed the code below can be run！'
+    print('Only PyBioMed is successfully installed the code below can be run！')
 
     #  uncomment below code as an example to use if you have successfully installed PyBioMed.
 
-    print '-'*10+'START'+'-'*10
+    print('-'*10+'START'+'-'*10)
     from rdkit import Chem
     from PyBioMed.PyMolecule.charge import GetCharge
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
@@ -105,18 +105,18 @@ if __name__=="__main__":
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
         des_list2.append(CalculatePubChemFingerprint(m))
-    print des_list2
+    print(des_list2)
 
-    print ListToCSV(des_list2,'reeeee.csv','pubchem')
-    print '-'*25
+    print(ListToCSV(des_list2,'reeeee.csv','pubchem'))
+    print('-'*25)
 
     des_list = []
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
         des_list.append(GetCharge(m))
-    print des_list
+    print(des_list)
 
-    print DictToCSV(des_list,'reeee.csv')
-    print '-'*25
+    print(DictToCSV(des_list,'reeee.csv'))
+    print('-'*25)
 
-    print '-'*10+'END'+'-'*10
+    print('-'*10+'END'+'-'*10)

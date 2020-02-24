@@ -777,4 +777,4 @@ def CalculateCTD(ProteinSequence):
 
 if __name__ == "__main__":
     protein = "ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS"
-    print CalculateCTD(protein)
+    print(CalculateCTD(protein))
