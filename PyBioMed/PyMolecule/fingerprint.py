@@ -649,31 +649,31 @@ _FingerprintFuncs={'FP2':CalculateFP2Fingerprint,
 
 if __name__=="__main__":
     
-    print '-'*10+'START'+'-'*10
+    print('-'*10+'START'+'-'*10)
     
     ms = [Chem.MolFromSmiles('CCOC=N'), Chem.MolFromSmiles('NC1=NC(=CC=N1)N1C=CC2=C1C=C(O)C=C2')]
     m2 = [pybel.readstring("smi",'CCOC=N'),pybel.readstring("smi",'CCO')]
     res1=CalculateECFP4Fingerprint(ms[0])
-    print res1
-    print '-'*25
+    print(res1)
+    print('-'*25)
     res2=CalculateECFP4Fingerprint(ms[1])
-    print res2
-    print '-'*25
+    print(res2)
+    print('-'*25)
     mol = pybel.readstring("smi", 'CCOC=N') 
     res3 = CalculateFP3Fingerprint(mol)
-    print res3
-    print '-'*25
+    print(res3)
+    print('-'*25)
     
     mol = Chem.MolFromSmiles('O=C1NC(=O)NC(=O)C1(C(C)C)CC=C')
     res4 = CalculatePharm2D2pointFingerprint(mol)[0]
-    print res4
-    print '-'*25
+    print(res4)
+    print('-'*25)
     res5 = CalculatePharm2D3pointFingerprint(mol)[0]
-    print res5
-    print '-'*25
+    print(res5)
+    print('-'*25)
     res6 = CalculateGhoseCrippenFingerprint(mol)
-    print res6
-    print '-'*25
+    print(res6)
+    print('-'*25)
     res7 = CalculatePubChemFingerprint(mol)
-    print res7
-    print '-'*10+'END'+'-'*10
+    print(res7)
+    print('-'*10+'END'+'-'*10)

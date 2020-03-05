@@ -90,4 +90,4 @@ def CalculateConjointTriad(proteinsequence):
 
 if __name__ == "__main__":
     protein = "ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS"
-    print CalculateConjointTriad(protein)
+    print(CalculateConjointTriad(protein))

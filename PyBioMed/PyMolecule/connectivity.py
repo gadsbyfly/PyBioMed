@@ -1204,7 +1204,7 @@ if __name__ =='__main__':
 
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetConnectivity(m)
-        print '\t',len(GetConnectivity(m))
+        print(index+1)
+        print(smi)      
+        print('\t',GetConnectivity(m))
+        print('\t',len(GetConnectivity(m)))

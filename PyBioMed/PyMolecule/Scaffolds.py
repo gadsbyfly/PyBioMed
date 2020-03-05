@@ -99,10 +99,10 @@ def GetUniqueScaffold(mols, generic_framework = False):
 
 if __name__ == '__main__':    
     m1 = Chem.MolFromSmiles('O=C1N=C(Nc2ncc(nc12)CNc1ccc(cc1)C(=O)N[C@@H](CCC(O)=O)C(O)=O)N')
-    print GetScaffold(m1)
-    print GetScaffold(m1,generic_framework = True)
+    print(GetScaffold(m1))
+    print(GetScaffold(m1,generic_framework = True))
     mols = [m1]*3
-    print GetUniqueScaffold(mols)
+    print(GetUniqueScaffold(mols))
     
     
     

@@ -107,6 +107,6 @@ def GetRelativeAtomicProperty(element='C',propertyname='m'):
 if __name__=="__main__":
     
     for i,j in AtomProperty.items():
-        print j
-    print GetAbsoluteAtomicProperty(element='S',propertyname='En')
-    print GetRelativeAtomicProperty(element='S',propertyname='En')
+        print(j)
+    print(GetAbsoluteAtomicProperty(element='S',propertyname='En'))
+    print(GetRelativeAtomicProperty(element='S',propertyname='En'))

@@ -81,11 +81,11 @@ def GetProteinSequenceFromTxt(path, openfile, savefile):
             continue
         else:
             temp = GetProteinSequence(itrim)
-            print "--------------------------------------------------------"
-            print "The %d protein sequence has been downloaded!" % (index + 1)
-            print temp
+            print("--------------------------------------------------------")
+            print("The %d protein sequence has been downloaded!" % (index + 1))
+            print(temp)
             f1.write(temp + '\n')
-            print "--------------------------------------------------------"
+            print("--------------------------------------------------------")
         #		res.append(temp+'\n')
         #	f1.writelines(res)
     f2.close()
@@ -103,7 +103,7 @@ if __name__ == '__main__':
             continue
         else:
             temp = GetProteinSequence(itrim)
-            print "--------------------------------------------------------"
-            print "The %d protein sequence has been downloaded!" % (index + 1)
-            print temp
-            print "--------------------------------------------------------"
+            print("--------------------------------------------------------")
+            print("The %d protein sequence has been downloaded!" % (index + 1))
+            print(temp)
+            print("--------------------------------------------------------")

@@ -53,7 +53,7 @@ def _ReadPatts(fileName):
             l.append((sma,p))
             patts[cha] = l
         else:
-          print('Problems parsing smarts: %s'%(sma))
+          print(('Problems parsing smarts: %s'%(sma)))
   return order,patts
 
 
@@ -98,4 +98,4 @@ if __name__ =='__main__':
         order, patts = _ReadPatts(os.path.dirname(os.path.abspath(__file__))+"/Crippen.txt")
         temp = GhoseCrippenFingerprint(mol,count = True)
         AllDes.append(temp)
-    print AllDes
+    print(AllDes)

@@ -58,23 +58,23 @@ def test_pyprotein():
    
     
     
-    print '...............................................................'
+    print('...............................................................')
     
-    print "testing the GetSubSeq module"
+    print("testing the GetSubSeq module")
     
     ProteinSequence = 'ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS'
     
     temp=GSS.GetSubSequence(ProteinSequence,ToAA='D', window=5)
     
-    print temp
+    print(temp)
     
-    print '...............................................................'
+    print('...............................................................')
     
-    print "testing the AAComposition module"
+    print("testing the AAComposition module")
     
     temp=AAC.CalculateAAComposition(ProteinSequence)
     
-    print temp
+    print(temp)
     
     temp=AAC.CalculateDipeptideComposition(ProteinSequence)
     
@@ -82,72 +82,72 @@ def test_pyprotein():
     
     temp=AAC.CalculateAADipeptideComposition(ProteinSequence)
     
-    print '...............................................................'
+    print('...............................................................')
     
-    print "testing the Autocorrelation module"
+    print("testing the Autocorrelation module")
     
     temp=AC.CalculateNormalizedMoreauBrotoAuto(ProteinSequence,[AC._ResidueASA],['ResidueASA'])
     
-    print temp
+    print(temp)
     
     temp=AC.CalculateMoranAuto(ProteinSequence,[AC._ResidueASA],['ResidueASA'])
     
-    print temp
+    print(temp)
     
     temp=AC.CalculateGearyAuto(ProteinSequence,[AC._ResidueASA],['ResidueASA'])
     
-    print temp
+    print(temp)
     
     temp=AC.CalculateAutoTotal(ProteinSequence)
     
-    print '...............................................................'
+    print('...............................................................')
     
-    print "testing the CTD module"
+    print("testing the CTD module")
     
     temp = CTD.CalculateC(ProteinSequence)
     
-    print temp
+    print(temp)
     
     temp = CTD.CalculateT(ProteinSequence)
     
-    print temp
+    print(temp)
     
     temp = CTD.CalculateD(ProteinSequence)
     
-    print temp
+    print(temp)
     
     temp = CTD.CalculateCTD(ProteinSequence)
     
-    print temp
+    print(temp)
     
-    print '...............................................................'
+    print('...............................................................')
     
-    print "testing the QuasiSequenceOrder module"
+    print("testing the QuasiSequenceOrder module")
     
     temp=QSO.GetSequenceOrderCouplingNumberTotal(ProteinSequence,maxlag=30)
     
-    print temp
+    print(temp)
     
     temp=QSO.GetQuasiSequenceOrder(ProteinSequence,maxlag=30,weight=0.1)
     
-    print temp
+    print(temp)
     
-    print '...............................................................'
+    print('...............................................................')
     
-    print "testing the PseudoAAC module"
+    print("testing the PseudoAAC module")
     
     temp= PAAC.GetAPseudoAAC(ProteinSequence,lamda=10,weight=0.5)
     
-    print temp
+    print(temp)
     
     
     temp= PAAC._GetPseudoAAC(ProteinSequence,lamda=10,weight=0.05)
     
-    print temp
+    print(temp)
     
-    print '...............................................................'
+    print('...............................................................')
     
-    print "Tested successfully!"
+    print("Tested successfully!")
 
 
 if __name__ == '__main__':

@@ -66,8 +66,8 @@ def test_pydna():
          [7.65, 8.93, 7.08, 9.07, 6.38, 8.04, 6.23, 7.08, 8.56, 9.53, 8.04, 8.93, 6.23, 8.56, 6.38, 7.65]]
     
     
-    print '...............................................................'
-    print 'testing the GetDAC module'
+    print('...............................................................')
+    print('testing the GetDAC module')
     
     dac = GetDAC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Twist', 'Tilt'])
     print(dac)
@@ -83,8 +83,8 @@ def test_pydna():
     print(len(dac))
     print('\n')
     
-    print '...............................................................'
-    print 'testing the GetDCC module'
+    print('...............................................................')
+    print('testing the GetDCC module')
     
     dcc = GetDCC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Twist', 'Tilt'])
     print(dcc)
@@ -101,8 +101,8 @@ def test_pydna():
     print('\n')
     
     
-    print '...............................................................'
-    print 'testing the DACC module'
+    print('...............................................................')
+    print('testing the DACC module')
     
     print('DACC')
     dacc = GetDACC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Twist', 'Tilt'])
@@ -126,8 +126,8 @@ def test_pydna():
          2.955, 3.467, 2.673, 1.613, 1.447, 3.581, 3.810, 3.410, 1.447, 2.842, 6.813, 3.810, 2.955, 4.214, 3.581, 7.176]
     ]
     
-    print '...............................................................'
-    print 'testing the GetTAC module'
+    print('...............................................................')
+    print('testing the GetTAC module')
     
     tac = GetTAC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Dnase I', 'Nucleosome'])
     print(tac)
@@ -144,8 +144,8 @@ def test_pydna():
     print('\n')
     
     
-    print '...............................................................'
-    print 'testing the GetTCC module'
+    print('...............................................................')
+    print('testing the GetTCC module')
     
     tcc = GetTCC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Dnase I', 'Nucleosome'])
     print(tcc)
@@ -161,8 +161,8 @@ def test_pydna():
     print(len(tcc))
     print('\n')
     
-    print '...............................................................'
-    print 'testing the TACC module'
+    print('...............................................................')
+    print('testing the TACC module')
     tacc = GetTACC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Dnase I', 'Nucleosome'])
     print(tacc)
     print(len(tacc))
@@ -180,8 +180,8 @@ def test_pydna():
     #==============================================================================
     # PyDNAnac
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetKmer module'
+    print('...............................................................')
+    print('testing the GetKmer module')
     
     kmer = GetKmer('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC',k=2)
     print(kmer)
@@ -193,8 +193,8 @@ def test_pydna():
     print(kmer)
     
     
-    print '...............................................................'
-    print 'testing the GetRevcKmer module'
+    print('...............................................................')
+    print('testing the GetRevcKmer module')
     revckmer = GetRevcKmer('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC',k=2, normalize=False, upto=False)
     print(revckmer)
     
@@ -209,34 +209,34 @@ def test_pydna():
     #==============================================================================
     # PyDNApsenac
     #==============================================================================
-    print '...............................................................'
-    print 'testing the GetPseDNC module'
+    print('...............................................................')
+    print('testing the GetPseDNC module')
     
     psednc = GetPseDNC('ACCCCA',lamada=2, w=0.05)
     print(psednc)
     
     
-    print '...............................................................'
-    print 'testing the GetPCPseDNC module'
+    print('...............................................................')
+    print('testing the GetPCPseDNC module')
     
     PC_psednc = GetPCPseDNC('ACCCCA', phyche_index=["Tilt", 'Twist', 'Rise', 'Roll', 'Shift', 'Slide'],lamada=2, w=0.05)
     print(PC_psednc)
     
     
-    print '...............................................................'
-    print 'testing the GetPCPseTNC module'
+    print('...............................................................')
+    print('testing the GetPCPseTNC module')
     
     pc_psetnc = GetPCPseTNC('ACCCCA', phyche_index=['Dnase I', 'Nucleosome'],lamada=2, w=0.05)
     print(pc_psetnc)
     
-    print '...............................................................'
-    print 'testing the GetSCPseDNC module'
+    print('...............................................................')
+    print('testing the GetSCPseDNC module')
     
     sc_psednc = GetSCPseDNC('ACCCCCA', phyche_index=['Twist', 'Tilt'],lamada=2, w=0.05)
     print(sc_psednc)
     
-    print '...............................................................'
-    print 'testing the GetSCPseTNC module'
+    print('...............................................................')
+    print('testing the GetSCPseTNC module')
     
     sc_psetnc = GetSCPseTNC('ACCCCCA', phyche_index=['Dnase I', 'Nucleosome'],lamada=1, w=0.05)
     print(sc_psetnc)
@@ -249,30 +249,30 @@ def test_pydna():
                      -0.654, 0.567, 1.019]]
     
     
-    print '...............................................................'
-    print 'testing the GetPseDNC module'
+    print('...............................................................')
+    print('testing the GetPseDNC module')
     
     dic = GetPseDNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC')
     print(dic)
     print(len(dic))
     
-    print '...............................................................'
-    print 'testing the GetPseKNC module'
+    print('...............................................................')
+    print('testing the GetPseKNC module')
     
     dic = GetPseKNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC')
     print(dic)
     print(len(dic))
     
-    print '...............................................................'
-    print 'testing the PC-PseDNC module'
+    print('...............................................................')
+    print('testing the PC-PseDNC module')
     
     print('PC-PseDNC')
     dic = GetPCPseDNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Twist', 'Tilt'])
     print(dic)
     print(len(dic))
     
-    print '...............................................................'
-    print 'testing the GetPCPseTNC module'
+    print('...............................................................')
+    print('testing the GetPCPseTNC module')
     
     dic = GetPCPseTNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC',lamada=1, w=0.05,k=2,phyche_index=['Twist', 'Tilt'])
     print(dic)
@@ -288,8 +288,8 @@ def test_pydna():
          2.955, 3.467, 2.673, 1.613, 1.447, 3.581, 3.810, 3.410, 1.447, 2.842, 6.813, 3.810, 2.955, 4.214, 3.581, 7.176]
     ]
     
-    print '...............................................................'
-    print 'testing the GetPCPseTNC module'
+    print('...............................................................')
+    print('testing the GetPCPseTNC module')
     
     dic = GetPCPseTNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Dnase I', 'Nucleosome'],
                                       extra_phyche_index=NormalizeIndex(phyche_index, is_convert_dict=True))
@@ -297,15 +297,15 @@ def test_pydna():
     print(len(dic))
     
     
-    print '...............................................................'
-    print 'testing the GetSCPseDNC module'
+    print('...............................................................')
+    print('testing the GetSCPseDNC module')
     
     dic = GetSCPseDNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Twist', 'Tilt'])
     print(dic)
     print(len(dic))
     
-    print '...............................................................'
-    print 'testing the GetSCPseDNC module'
+    print('...............................................................')
+    print('testing the GetSCPseDNC module')
     
     dic = GetSCPseDNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', all_property=True,lamada=2, w=0.05)
     print(dic)
@@ -314,8 +314,8 @@ def test_pydna():
     phyche_index = [[1.019, -0.918, 0.488, 0.567, 0.567, -0.070, -0.579, 0.488, -0.654, -2.455, -0.070, -0.918, 1.603,
                      -0.654, 0.567, 1.019]]
     
-    print '...............................................................'
-    print 'testing the GetSCPseDNC module'
+    print('...............................................................')
+    print('testing the GetSCPseDNC module')
     
     dic = GetSCPseDNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Twist', 'Tilt'],
                                       extra_phyche_index=NormalizeIndex(phyche_index, is_convert_dict=True))
@@ -323,15 +323,15 @@ def test_pydna():
     print(len(dic))
     print()
     
-    print '...............................................................'
-    print 'testing the GetSCPseTNC module'
+    print('...............................................................')
+    print('testing the GetSCPseTNC module')
     
     dic= GetSCPseTNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', phyche_index=['Dnase I', 'Nucleosome'])
     print(dic)
     print(len(dic))
     
-    print '...............................................................'
-    print 'testing the GetSCPseTNC module'
+    print('...............................................................')
+    print('testing the GetSCPseTNC module')
     
     dic = GetSCPseTNC('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', all_property=True,lamada=2, w=0.05)
     print(dic)

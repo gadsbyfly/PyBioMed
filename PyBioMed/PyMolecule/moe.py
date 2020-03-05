@@ -242,9 +242,9 @@ if __name__=="__main__":
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetMOE(m)
-        print '\t', len(GetMOE(m))
+        print(index+1)
+        print(smi)      
+        print('\t',GetMOE(m))
+        print('\t', len(GetMOE(m)))
         
 

@@ -207,35 +207,35 @@ def GetMolFromKegg(kid=""):
 #############################################################################
 
 if __name__=="__main__":
-    print '-'*10+'START'+'-'*10
-    print 'Only PyBioMed is successfully installed the code below can be run！'
+    print('-'*10+'START'+'-'*10)
+    print('Only PyBioMed is successfully installed the code below can be run！')
     from PyBioMed.PyGetMol.GetProtein import timelimited
     @timelimited(10)
     def run_GetMolFromCAS():
         temp=GetMolFromCAS(casid="50-12-4")
-        print temp
+        print(temp)
 
     @timelimited(10)
     def run_GetMolFromNCBI():
         temp=GetMolFromNCBI(cid="2244")
-        print temp
+        print(temp)
 
     @timelimited(10)
     def run_GetMolFromDrugbank():
         temp=GetMolFromDrugbank(dbid="DB00133")
-        print temp
+        print(temp)
 
     @timelimited(10)
     def run_GetMolFromKegg():
         temp=GetMolFromKegg(kid="D02176")
-        print temp
+        print(temp)
 
     run_GetMolFromCAS()
-    print '-'*25
+    print('-'*25)
     run_GetMolFromNCBI()
-    print '-'*25
+    print('-'*25)
     run_GetMolFromDrugbank()
-    print '-'*25
+    print('-'*25)
     run_GetMolFromKegg()
-    print '-'*10+'END'+'-'*10
+    print('-'*10+'END'+'-'*10)
 

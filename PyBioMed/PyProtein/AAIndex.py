@@ -137,7 +137,7 @@ def grep(pattern):
 
     '''
     for record in search(pattern):
-        print record
+        print(record)
 
 
 #####################################################################################################
@@ -170,7 +170,7 @@ def init(path=None, index='123'):
         for path in [os.path.split(__file__)[0], '.']:
             if os.path.exists(os.path.join(path, 'aaindex' + index[0])):
                 break
-        print >> sys.stderr, 'path =', path
+        print('path =', path, file=sys.stderr)
     if '1' in index:
         _parse(path + '/aaindex1', Record)
     if '2' in index:
@@ -230,13 +230,13 @@ def _parse(filename, rec, quiet=True):
             if a[0] != 'A/L':
                 current.extend(map(_float_or_None, a))
             elif list(Record.aakeys) != [i[0] for i in a] + [i[-1] for i in a]:
-                print 'Warning: wrong amino acid sequence for', current.key
+                print('Warning: wrong amino acid sequence for', current.key)
             else:
                 try:
                     assert list(Record.aakeys[:10]) == [i[0] for i in a]
                     assert list(Record.aakeys[10:]) == [i[2] for i in a]
                 except:
-                    print 'Warning: wrong amino acid sequence for', current.key
+                    print('Warning: wrong amino acid sequence for', current.key)
         elif key == 'M ':
             a = line[2:].split()
             if a[0] == 'rows':
@@ -254,7 +254,7 @@ def _parse(filename, rec, quiet=True):
             else:
                 current.extend(map(_float_or_None, a))
         elif not quiet:
-            print 'Warning: line starts with "%s"' % (key)
+            print('Warning: line starts with "%s"' % (key))
         lastkey = key
     f.close()
 
@@ -315,9 +315,9 @@ if __name__ == "__main__":
     #	print x
     #	print x.get('W')
     temp1 = GetAAIndex1('KRIW790103')
-    print len(temp1)
+    print(len(temp1))
 
     temp2 = GetAAIndex23('TANS760101')
-    print len(temp2)
+    print(len(temp2))
     temp2 = GetAAIndex23('GRAR740104')
-    print len(temp2)
+    print(len(temp2))

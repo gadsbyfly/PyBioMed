@@ -597,32 +597,32 @@ if __name__=="__main__":
     
     drugclass=PyMolecule()
     drugclass.ReadMolFromSmile("CCC1(c2ccccc2)C(=O)N(C)C(=N1)O")
-    print drugclass.GetCharge()    
+    print(drugclass.GetCharge())    
     
-    print drugclass.GetKappa()
-    print len(drugclass.GetKappa())
-    print drugclass.GetTopology()
-    print len(drugclass.GetTopology())
-    print drugclass.GetMoreauBroto()
+    print(drugclass.GetKappa())
+    print(len(drugclass.GetKappa()))
+    print(drugclass.GetTopology())
+    print(len(drugclass.GetTopology()))
+    print(drugclass.GetMoreauBroto())
     res=drugclass.GetAllDescriptor()
-    print len(res)
+    print(len(res))
     #print drugclass.GetMolFromDrugbank(ID="DB00133")
     #res=drugclass.GetFingerprint(FPName='Estate')
-    print res
-    print len(res)
-    print drugclass.GetConnectivity()
+    print(res)
+    print(len(res))
+    print(drugclass.GetConnectivity())
     DrugBankID = 'DB01014'
     drugclass=PyMolecule()
     smi = drugclass.GetMolFromDrugbank(DrugBankID)
     drugclass.ReadMolFromSmile(smi)
-    print drugclass.GetKappa()
+    print(drugclass.GetKappa())
     
-    print drugclass.GetCATS2D()
-    print drugclass.GetFingerprint(FPName='Estate')
+    print(drugclass.GetCATS2D())
+    print(drugclass.GetFingerprint(FPName='Estate'))
     # print drugclass.GetGhoseCrippen()
     # print drugclass.GetGhoseCrippenFingerprint()
-    print len(drugclass.GetBasak())
-    print len(drugclass.GetBurden())
+    print(len(drugclass.GetBasak()))
+    print(len(drugclass.GetBurden()))
     
 
 

@@ -180,10 +180,10 @@ if __name__ == "__main__":
     protein = "ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS"
 
     AAC = CalculateAAComposition(protein)
-    print AAC
+    print(AAC)
     DIP = CalculateDipeptideComposition(protein)
-    print DIP
+    print(DIP)
     spectrum = GetSpectrumDict(protein)
-    print spectrum
+    print(spectrum)
     res = CalculateAADipeptideComposition(protein)
-    print len(res)
+    print(len(res))

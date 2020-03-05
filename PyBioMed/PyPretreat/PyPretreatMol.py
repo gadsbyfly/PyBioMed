@@ -193,4 +193,4 @@ if __name__ == '__main__':
     mol = sm.reionize(mol)
     mol = sm.rmhs(mol)
     mol = sm.addhs(mol)
-    print Chem.MolToSmiles(mol, isomericSmiles=True)
+    print(Chem.MolToSmiles(mol, isomericSmiles=True))

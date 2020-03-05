@@ -502,7 +502,7 @@ def MakeKmerVector(seq_list, kmer_list, rev_kmer_list, k, upto, revcomp, normali
                         kmer_count[kmer] = 0
                     kmer_count[kmer] += temp_count
                 sum[i] += temp_count
-        print kmer_count
+        print(kmer_count)
         # Store the kmer frequency vector.
         if revcomp:
             temp_vec = [kmer_count[kmer] for kmer in rev_kmer_list]

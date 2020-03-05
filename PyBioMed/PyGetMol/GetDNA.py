@@ -135,24 +135,24 @@ def ReadFasta(f):
 
 
 if __name__ == '__main__':
-    print '-'*10+'START'+'-'*10
-    print 'Only PyBioMed is successfully installed the code below can be run！'
+    print('-'*10+'START'+'-'*10)
+    print('Only PyBioMed is successfully installed the code below can be run！')
     from PyBioMed.PyGetMol.GetProtein import timelimited
     @timelimited(10)
     def run_GetDNAFromUniGene():
         seqid = 'AA954964'
         seqid2 = 'CB216422'
-        print GetDNAFromUniGene(seqid)
+        print(GetDNAFromUniGene(seqid))
 
     @timelimited(10)
     def run_ReadFasta():
 
         dna = ReadFasta(open('../test/test_data/example.fasta'))
-        print dna
+        print(dna)
 
     run_GetDNAFromUniGene()
-    print '-'*25
+    print('-'*25)
     run_ReadFasta()
-    print '-'*10+'END'+'-'*10
+    print('-'*10+'END'+'-'*10)
 
 
