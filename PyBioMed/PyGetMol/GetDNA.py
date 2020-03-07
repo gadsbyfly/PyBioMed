@@ -21,7 +21,12 @@ Email: gadsby@163.com
 """
 
 
-import urllib
+try:
+    # Python 3
+    from urllib.request import urlopen
+except ImportError:
+    # Python 2
+    from urllib2 import urlopen
 import sys
 
 ALPHABET = 'ACGT'
@@ -46,7 +51,7 @@ def GetDNAFromUniGene(SeqID = ''):
     
     '''
     url = 'http://www.ebi.ac.uk/ena/data/view/{0}&display=fasta'.format(SeqID)
-    temp = urllib.urlopen(url).read()    
+    temp = urlopen(url).read()    
     return temp
 
 def IsUnderAlphabet(s, alphabet):

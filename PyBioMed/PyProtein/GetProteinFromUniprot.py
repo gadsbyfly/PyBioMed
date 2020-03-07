@@ -25,7 +25,12 @@ Email: gadsby@163.com
 ################################################################################################
 """
 
-import urllib
+try:
+    # Python 3
+    from urllib.request import urlopen
+except ImportError:
+    # Python 2
+    from urllib2 import urlopen
 import string
 
 
@@ -46,7 +51,7 @@ def GetProteinSequence(ProteinID):
     """
 
     ID = str(ProteinID)
-    localfile = urllib.urlopen('http://www.uniprot.org/uniprot/' + ID + '.fasta')
+    localfile = urlopen('http://www.uniprot.org/uniprot/' + ID + '.fasta')
     temp = localfile.readlines()
     res = ''
     for i in range(1, len(temp)):
