@@ -23,7 +23,14 @@ from __future__ import division
 import copy
 import logging
 import functools
-from itertools import izip, tee
+from itertools import tee
+try:
+    # Python 2
+    from itertools import izip
+except ImportError:
+    # Python 3
+    izip = zip
+    xrange = range
 import sys
 
 from rdkit import Chem

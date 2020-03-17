@@ -17,7 +17,12 @@ Date: 2016.06.04
 Email: gadsby@163.com
 """
 
-import urllib
+try:
+    # Python 3
+    from urllib.request import urlopen
+except ImportError:
+    # Python 2
+    from urllib2 import urlopen
 import re
 import string
 import os
@@ -131,7 +136,7 @@ def GetMolFromCAS(casid=""):
     """
     import pybel
     casid=string.strip(casid)
-    localfile=urllib.urlopen('http://www.chemnet.com/cas/supplier.cgi?terms='+casid+'&l=&exact=dict')
+    localfile = urlopen('http://www.chemnet.com/cas/supplier.cgi?terms='+casid+'&l=&exact=dict')
     temp=localfile.readlines()
     for i in temp:
         if re.findall('InChI=',i)==['InChI=']:
@@ -158,7 +163,7 @@ def GetMolFromNCBI(cid=""):
     Downloading the molecules from http://pubchem.ncbi.nlm.nih.gov/ by cid (cid).
     """
     cid=string.strip(cid)
-    localfile=urllib.urlopen('http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid='+cid+'&disopt=SaveSDF')
+    localfile = urlopen('http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid='+cid+'&disopt=SaveSDF')
     temp=localfile.readlines()   
     f=file("temp.sdf",'w')
     f.writelines(temp)
@@ -176,7 +181,7 @@ def GetMolFromDrugbank(dbid=""):
     """
     dbid=string.strip(dbid)
     
-    localfile=urllib.urlopen('http://www.drugbank.ca/drugs/'+dbid+'.sdf')
+    localfile = urlopen('http://www.drugbank.ca/drugs/'+dbid+'.sdf')
     temp=localfile.readlines()   
     f=file("temp.sdf",'w')
     f.writelines(temp)
@@ -194,7 +199,7 @@ def GetMolFromKegg(kid=""):
     Downloading the molecules from http://www.genome.jp/ by kegg id (kid).
     """
     ID=str(kid)
-    localfile=urllib.urlopen('http://www.genome.jp/dbget-bin/www_bget?-f+m+drug+'+ID)
+    localfile = urlopen('http://www.genome.jp/dbget-bin/www_bget?-f+m+drug+'+ID)
     temp=localfile.readlines() 
     f=file("temp.mol",'w')
     f.writelines(temp)
