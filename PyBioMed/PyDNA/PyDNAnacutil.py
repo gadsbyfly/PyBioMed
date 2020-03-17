@@ -8,9 +8,9 @@
 """
 ##############################################################################
 
-A class used for computing different types of DNA descriptors! 
+A class used for computing different types of DNA descriptors!
 
-You can freely use and distribute it. If you have any problem, 
+You can freely use and distribute it. If you have any problem,
 
 you could contact with us timely.
 
@@ -23,9 +23,10 @@ Email: gadsby@163.com and oriental-cds@163.com
 ##############################################################################
 """
 
-import sys
-import math
+# Core Library modules
 import itertools
+import math
+import sys
 
 
 def Frequency(tol_str, tar_str):
@@ -59,7 +60,9 @@ def MakeKmerList(k, alphabet):
     try:
         return ["".join(e) for e in itertools.product(alphabet, repeat=k)]
     except TypeError:
-        print("TypeError: k must be an inter and larger than 0, alphabet must be a string.")
+        print(
+            "TypeError: k must be an inter and larger than 0, alphabet must be a string."
+        )
         raise TypeError
     except ValueError:
         print("TypeError: k must be an inter and larger than 0")
@@ -119,7 +122,7 @@ def Substitute(position, letter, string):
         return_value = return_value + string[0:position]
     return_value = return_value + letter
     if position < (len(string) - 1):
-        return_value = return_value + string[position + 1:]
+        return_value = return_value + string[position + 1 :]
 
     return return_value
 
@@ -148,18 +151,20 @@ def ComputeBinNum(num_bins, position, k, numbers):
     return i_bin
 
 
-def MakeSequenceVector(sequence,
-                         numbers,
-                         num_bins,
-                         revcomp,
-                         revcomp_dictionary,
-                         normalize_method,
-                         k_values,
-                         mismatch,
-                         alphabet,
-                         kmer_list,
-                         boundaries,
-                         pseudocount):
+def MakeSequenceVector(
+    sequence,
+    numbers,
+    num_bins,
+    revcomp,
+    revcomp_dictionary,
+    normalize_method,
+    k_values,
+    mismatch,
+    alphabet,
+    kmer_list,
+    boundaries,
+    pseudocount,
+):
     # Make an empty counts vector.
     kmer_counts = []
     for i_bin in range(0, num_bins):
@@ -174,7 +179,7 @@ def MakeSequenceVector(sequence,
             bin_num = ComputeBinNum(num_bins, i_seq, k, numbers)
 
             # Extract this k-mer.
-            kmer = sequence[i_seq: i_seq + k]
+            kmer = sequence[i_seq : i_seq + k]
 
             # If we're doing reverse complement, store the count in the
             # the version that starts with A or C.
@@ -197,7 +202,7 @@ def MakeSequenceVector(sequence,
                     for letter in alphabet:
 
                         # Don't count yourself as a mismatch.
-                        if kmer[i_kmer:i_kmer + 1] != letter:
+                        if kmer[i_kmer : i_kmer + 1] != letter:
 
                             # Find the neighboring sequence.
                             neighbor = Substitute(i_kmer, letter, kmer)
@@ -205,8 +210,7 @@ def MakeSequenceVector(sequence,
                             # If we're doing reverse complement, store the
                             # count in the version that starts with A or C.
                             if revcomp == 1:
-                                rev_kmer = FindRevcomp(kmer,
-                                                        revcomp_dictionary)
+                                rev_kmer = FindRevcomp(kmer, revcomp_dictionary)
                                 if cmp(kmer, rev_kmer) > 0:
                                     kmer = rev_kmer
 
@@ -226,16 +230,14 @@ def MakeSequenceVector(sequence,
                 sequence_vector.append(pseudocount)
 
     # Normalize it
-    return_value = NormalizeVector(normalize_method,
-                                    k_values,
-                                    sequence_vector,
-                                    kmer_list)
+    return_value = NormalizeVector(
+        normalize_method, k_values, sequence_vector, kmer_list
+    )
 
     return return_value
 
 
-def ReadFastaSequence(numeric,
-                        fasta_file):
+def ReadFastaSequence(numeric, fasta_file):
     # Read 1 byte.
     first_char = fasta_file.read(1)
     # If it's empty, we're done.
@@ -284,9 +286,7 @@ def ReadFastaSequence(numeric,
     return [id, sequence]
 
 
-def ReadSequenceAndNumbers(fasta_file,
-                              numbers_filename,
-                              numbers_file):
+def ReadSequenceAndNumbers(fasta_file, numbers_filename, numbers_file):
     [fasta_id, fasta_sequence] = ReadFastaSequence(0, fasta_file)
 
     if numbers_filename != "":
@@ -294,8 +294,9 @@ def ReadSequenceAndNumbers(fasta_file,
 
         # Make sure we got the same ID.
         if fasta_id != number_id:
-            sys.stderr.write("Found mismatching IDs (%s != %d)\n" %
-                             (fasta_id, number_id))
+            sys.stderr.write(
+                "Found mismatching IDs (%s != %d)\n" % (fasta_id, number_id)
+            )
             sys.exit(1)
 
         # Split the numbers into a list.
@@ -303,8 +304,10 @@ def ReadSequenceAndNumbers(fasta_file,
 
         # Verify that they are the same length.
         if len(fasta_sequence) != len(number_list):
-            sys.stderr.write("Found sequence of length %d with %d numbers.\n"
-                             % (len(sequence), len(number_list)))
+            sys.stderr.write(
+                "Found sequence of length %d with %d numbers.\n"
+                % (len(sequence), len(number_list))
+            )
             print(sequence)
             print(numbers)
             sys.exit(1)
@@ -314,8 +317,7 @@ def ReadSequenceAndNumbers(fasta_file,
     return fasta_id, fasta_sequence, number_list
 
 
-def FindRevcomp(sequence,
-                 revcomp_dictionary):
+def FindRevcomp(sequence, revcomp_dictionary):
     # Save time by storing reverse complements in a hash.
     if sequence in revcomp_dictionary:
         return revcomp_dictionary[sequence]
@@ -323,7 +325,7 @@ def FindRevcomp(sequence,
     # Make a reversed version of the string.
     rev_sequence = list(sequence)
     rev_sequence.reverse()
-    rev_sequence = ''.join(rev_sequence)
+    rev_sequence = "".join(rev_sequence)
 
     return_value = ""
     for letter in rev_sequence:
@@ -347,9 +349,7 @@ def FindRevcomp(sequence,
     return return_value
 
 
-def ComputeQuantileBoundaries(num_bins,
-                                k_values,
-                                number_filename):
+def ComputeQuantileBoundaries(num_bins, k_values, number_filename):
     if num_bins == 1:
         return
 
@@ -372,7 +372,7 @@ def ComputeQuantileBoundaries(num_bins,
             num_numbers = len(number_list) - k
             for i_number in range(0, num_numbers):
                 if i_number == 0:
-                    sum = 0;
+                    sum = 0
                     for i in range(0, k):
                         sum += float(number_list[i])
                 else:
@@ -411,7 +411,11 @@ def cmp(a, b):
 
 def MakeRevcompKmerList(kmer_list):
     revcomp_dictionary = {}
-    new_kmer_list = [kmer for kmer in kmer_list if cmp(kmer, FindRevcomp(kmer, revcomp_dictionary)) <= 0]
+    new_kmer_list = [
+        kmer
+        for kmer in kmer_list
+        if cmp(kmer, FindRevcomp(kmer, revcomp_dictionary)) <= 0
+    ]
     return new_kmer_list
 
 
@@ -425,7 +429,7 @@ def MakeIndexUptoKRevcomp(k):
     index = [0]
     for i in range(1, k + 1):
         if i % 2 == 0:
-            sum += (math.pow(2, 2 * i - 1) + math.pow(2, i - 1))
+            sum += math.pow(2, 2 * i - 1) + math.pow(2, i - 1)
             index.append(int(sum))
         else:
             sum += math.pow(2, 2 * i - 1)
@@ -513,7 +517,7 @@ def MakeKmerVector(seq_list, kmer_list, rev_kmer_list, k, upto, revcomp, normali
         if normalize:
             i = 0
             if not upto:
-                temp_vec = [round(float(e)/sum[i], 3) for e in temp_vec]
+                temp_vec = [round(float(e) / sum[i], 3) for e in temp_vec]
             if upto:
                 if revcomp:
                     upto_index = MakeIndexUptoKRevcomp(k)
@@ -545,7 +549,8 @@ def Diversity(vec):
     """
     m_sum = sum(vec)
     from math import log
-    return m_sum*log(m_sum, 2) - sum([e*log(e, 2) for e in vec if e != 0])
+
+    return m_sum * log(m_sum, 2) - sum([e * log(e, 2) for e in vec if e != 0])
 
 
 def IdXS(vec_x, vec_s, diversity_s):
@@ -573,7 +578,7 @@ def IdXS(vec_x, vec_s, diversity_s):
 ##############################################################################
 # MAIN
 ##############################################################################
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # Define the command line usage.
     usage = """Usage: fasta2matrix [options] <k> <fasta file>
@@ -632,8 +637,9 @@ if __name__ == '__main__':
             normalize_method = sys.argv[0]
             sys.argv = sys.argv[1:]
             if (normalize_method != "unitsphere") and (normalize_method != "frequency"):
-                sys.stderr.write("Invalid normalization method (%s).\n"
-                                 % normalize_method);
+                sys.stderr.write(
+                    "Invalid normalization method (%s).\n" % normalize_method
+                )
                 sys.exit(1)
         elif next_arg == "-protein":
             alphabet = "ACDEFGHIKLMNPQRSTVWY"
@@ -710,9 +716,9 @@ if __name__ == '__main__':
         number_file = open(number_filename, "r")
 
     # Read the first sequence.
-    [id, sequence, numbers] = ReadSequenceAndNumbers(fasta_file,
-                                                        number_filename,
-                                                        number_file)
+    [id, sequence, numbers] = ReadSequenceAndNumbers(
+        fasta_file, number_filename, number_file
+    )
 
     # Iterate till we've read the whole file.
     i_sequence = 1
@@ -723,18 +729,20 @@ if __name__ == '__main__':
             sys.stderr.write("Read %d sequences.\n" % i_sequence)
 
         # Compute the sequence vector.
-        vector = MakeSequenceVector(sequence,
-                                      numbers,
-                                      num_bins,
-                                      revcomp,
-                                      revcomp_dictionary,
-                                      normalize_method,
-                                      k_values,
-                                      mismatch,
-                                      alphabet,
-                                      kmer_list,
-                                      boundaries,
-                                      pseudocount)
+        vector = MakeSequenceVector(
+            sequence,
+            numbers,
+            num_bins,
+            revcomp,
+            revcomp_dictionary,
+            normalize_method,
+            k_values,
+            mismatch,
+            alphabet,
+            kmer_list,
+            boundaries,
+            pseudocount,
+        )
 
         # Print the formatted vector.
         sys.stdout.write(id)
@@ -742,12 +750,11 @@ if __name__ == '__main__':
         for element in vector:
             sys.stdout.write("\t%g" % element)
         sys.stdout.write("\n")
-        
 
         # Read the next sequence.
-        [id, sequence, numbers] = ReadSequenceAndNumbers(fasta_file,
-                                                            number_filename,
-                                                            number_file)
+        [id, sequence, numbers] = ReadSequenceAndNumbers(
+            fasta_file, number_filename, number_file
+        )
         i_sequence += 1
 
     # Close the file.

@@ -8,9 +8,9 @@
 """
 ##############################################################################
 
-A class used for computing different types of DNA descriptors! 
+A class used for computing different types of DNA descriptors!
 
-You can freely use and distribute it. If you have any problem, 
+You can freely use and distribute it. If you have any problem,
 
 you could contact with us timely.
 
@@ -24,9 +24,10 @@ Email: gadsby@163.com and oriental-cds@163.com
 """
 
 
+# Core Library modules
 import sys
 
-ALPHABET = 'ACGT'
+ALPHABET = "ACGT"
 
 
 """Used for process original data."""
@@ -41,7 +42,12 @@ class Seq:
 
     def __str__(self):
         """Output seq when 'print' method is called."""
-        return "%s\tNo:%s\tlength:%s\n%s" % (self.name, str(self.no), str(self.length), self.seq)
+        return "%s\tNo:%s\tlength:%s\n%s" % (
+            self.name,
+            str(self.no),
+            str(self.length),
+            self.seq,
+        )
 
 
 def IsUnderAlphabet(s, alphabet):
@@ -75,16 +81,16 @@ def IsFasta(seq):
     #################################################################
     """
     if not seq.name:
-        error_info = 'Error, sequence ' + str(seq.no) + ' has no sequence name.'
+        error_info = "Error, sequence " + str(seq.no) + " has no sequence name."
         print(seq)
         sys.stderr.write(error_info)
         return False
-    if -1 != seq.name.find('>'):
-        error_info = 'Error, sequence ' + str(seq.no) + ' name has > character.'
+    if -1 != seq.name.find(">"):
+        error_info = "Error, sequence " + str(seq.no) + " name has > character."
         sys.stderr.write(error_info)
         return False
     if 0 == seq.length:
-        error_info = 'Error, sequence ' + str(seq.no) + ' is null.'
+        error_info = "Error, sequence " + str(seq.no) + " is null."
         sys.stderr.write(error_info)
         return False
 
@@ -101,7 +107,7 @@ def ReadFasta(f):
     Return Seq obj list.
     #################################################################
     """
-    name, seq = '', ''
+    name, seq = "", ""
     count = 0
     seq_list = []
     lines = f.readlines()
@@ -109,14 +115,14 @@ def ReadFasta(f):
         if not line:
             break
 
-        if '>' == line[0]:
-            if 0 != count or (0 == count and seq != ''):
+        if ">" == line[0]:
+            if 0 != count or (0 == count and seq != ""):
                 if IsFasta(Seq(name, seq, count)):
                     seq_list.append(Seq(name, seq, count))
                 else:
                     sys.exit(0)
 
-            seq = ''
+            seq = ""
             name = line[1:].strip()
             count += 1
         else:
@@ -139,21 +145,21 @@ def ReadFastaYield(f):
     :param f: HANDLE to input. e.g. sys.stdin, or open(<file>)
     #################################################################
     """
-    name, seq = '', ''
+    name, seq = "", ""
     count = 0
     while True:
         line = f.readline()
         if not line:
             break
 
-        if '>' == line[0]:
-            if 0 != count or (0 == count and seq != ''):
+        if ">" == line[0]:
+            if 0 != count or (0 == count and seq != ""):
                 if IsFasta(Seq(name, seq, count)):
                     yield Seq(name, seq, count)
                 else:
                     sys.exit(0)
 
-            seq = ''
+            seq = ""
             name = line[1:].strip()
             count += 1
         else:
@@ -182,8 +188,13 @@ def ReadFastaCheckDna(f):
         if res:
             seq_list.append(e)
         else:
-            error_info = 'Sorry, sequence ' + str(e.no) \
-                         + ' has character ' + str(res) + '.(The character must be A or C or G or T)'
+            error_info = (
+                "Sorry, sequence "
+                + str(e.no)
+                + " has character "
+                + str(res)
+                + ".(The character must be A or C or G or T)"
+            )
             sys.stderr(error_info)
             sys.exit(0)
 
@@ -205,8 +216,13 @@ def GetSequenceCheckDna(f):
         # print e
         res = IsUnderAlphabet(e.seq, ALPHABET)
         if res is not True:
-            error_info = 'Sorry, sequence ' + str(e.no) \
-                         + ' has character ' + str(res) + '.(The character must be A, C, G or T)'
+            error_info = (
+                "Sorry, sequence "
+                + str(e.no)
+                + " has character "
+                + str(res)
+                + ".(The character must be A, C, G or T)"
+            )
             sys.stderr.write(error_info)
             sys.exit(0)
         else:
@@ -218,7 +234,7 @@ def GetSequenceCheckDna(f):
 def IsSequenceList(sequence_list):
     """
     #################################################################
-    Judge the sequence list is within the scope of alphabet and 
+    Judge the sequence list is within the scope of alphabet and
     change the lowercase to capital.
     #################################################################
     """
@@ -230,8 +246,13 @@ def IsSequenceList(sequence_list):
         count += 1
         res = IsUnderAlphabet(e, ALPHABET)
         if res is not True:
-            error_info = 'Sorry, sequence ' + str(count) \
-                         + ' has illegal character ' + str(res) + '.(The character must be A, C, G or T)'
+            error_info = (
+                "Sorry, sequence "
+                + str(count)
+                + " has illegal character "
+                + str(res)
+                + ".(The character must be A, C, G or T)"
+            )
             sys.stderr.write(error_info)
             return False
         else:
@@ -250,7 +271,7 @@ def GetData(input_data, desc=False):
     :return: sequence data or shutdown.
     #################################################################
     """
-    if hasattr(input_data, 'read'):
+    if hasattr(input_data, "read"):
         if desc is False:
             return GetSequenceCheckDna(input_data)
         else:
@@ -262,7 +283,9 @@ def GetData(input_data, desc=False):
         else:
             sys.exit(0)
     else:
-        error_info = 'Sorry, the parameter in get_data method must be list or file type.'
+        error_info = (
+            "Sorry, the parameter in get_data method must be list or file type."
+        )
         sys.stderr.write(error_info)
         sys.exit(0)
 
@@ -315,20 +338,22 @@ def WriteLibsvm(vector_list, label_list, write_file):
         sys.stderr.write("The length of vector and label is different.")
         sys.exit(1)
 
-    with open(write_file, 'w') as f:
+    with open(write_file, "w") as f:
         len_vector = len(vector_list[0])
         for i in range(len_vector_list):
             temp_write = str(label_list[i])
             for j in range(0, len_vector):
-                temp_write += ' ' + str(j + 1) + ':' + str(vector_list[i][j])
+                temp_write += " " + str(j + 1) + ":" + str(vector_list[i][j])
             f.write(temp_write)
-            f.write('\n')
+            f.write("\n")
 
 
-def GeneratePhycheValue(k, phyche_index=None, all_property=False, extra_phyche_index=None):
+def GeneratePhycheValue(
+    k, phyche_index=None, all_property=False, extra_phyche_index=None
+):
     """
     #################################################################
-    Combine the user selected phyche_list, is_all_property and 
+    Combine the user selected phyche_list, is_all_property and
     extra_phyche_index to a new standard phyche_value.
     #################################################################
     """
@@ -337,18 +362,60 @@ def GeneratePhycheValue(k, phyche_index=None, all_property=False, extra_phyche_i
     if extra_phyche_index is None:
         extra_phyche_index = {}
 
-    diphyche_list = ['Base stacking', 'Protein induced deformability', 'B-DNA twist', 'Dinucleotide GC Content',
-                     'A-philicity', 'Propeller twist', 'Duplex stability:(freeenergy)',
-                     'Duplex tability(disruptenergy)', 'DNA denaturation', 'Bending stiffness', 'Protein DNA twist',
-                     'Stabilising energy of Z-DNA', 'Aida_BA_transition', 'Breslauer_dG', 'Breslauer_dH',
-                     'Breslauer_dS', 'Electron_interaction', 'Hartman_trans_free_energy', 'Helix-Coil_transition',
-                     'Ivanov_BA_transition', 'Lisser_BZ_transition', 'Polar_interaction', 'SantaLucia_dG',
-                     'SantaLucia_dH', 'SantaLucia_dS', 'Sarai_flexibility', 'Stability', 'Stacking_energy',
-                     'Sugimoto_dG', 'Sugimoto_dH', 'Sugimoto_dS', 'Watson-Crick_interaction', 'Twist', 'Tilt',
-                     'Roll', 'Shift', 'Slide', 'Rise']
-    triphyche_list = ['Dnase I', 'Bendability (DNAse)', 'Bendability (consensus)', 'Trinucleotide GC Content',
-                      'Nucleosome positioning', 'Consensus_roll', 'Consensus-Rigid', 'Dnase I-Rigid', 'MW-Daltons',
-                      'MW-kg', 'Nucleosome', 'Nucleosome-Rigid']
+    diphyche_list = [
+        "Base stacking",
+        "Protein induced deformability",
+        "B-DNA twist",
+        "Dinucleotide GC Content",
+        "A-philicity",
+        "Propeller twist",
+        "Duplex stability:(freeenergy)",
+        "Duplex tability(disruptenergy)",
+        "DNA denaturation",
+        "Bending stiffness",
+        "Protein DNA twist",
+        "Stabilising energy of Z-DNA",
+        "Aida_BA_transition",
+        "Breslauer_dG",
+        "Breslauer_dH",
+        "Breslauer_dS",
+        "Electron_interaction",
+        "Hartman_trans_free_energy",
+        "Helix-Coil_transition",
+        "Ivanov_BA_transition",
+        "Lisser_BZ_transition",
+        "Polar_interaction",
+        "SantaLucia_dG",
+        "SantaLucia_dH",
+        "SantaLucia_dS",
+        "Sarai_flexibility",
+        "Stability",
+        "Stacking_energy",
+        "Sugimoto_dG",
+        "Sugimoto_dH",
+        "Sugimoto_dS",
+        "Watson-Crick_interaction",
+        "Twist",
+        "Tilt",
+        "Roll",
+        "Shift",
+        "Slide",
+        "Rise",
+    ]
+    triphyche_list = [
+        "Dnase I",
+        "Bendability (DNAse)",
+        "Bendability (consensus)",
+        "Trinucleotide GC Content",
+        "Nucleosome positioning",
+        "Consensus_roll",
+        "Consensus-Rigid",
+        "Dnase I-Rigid",
+        "MW-Daltons",
+        "MW-kg",
+        "Nucleosome",
+        "Nucleosome-Rigid",
+    ]
 
     # Set and check physicochemical properties.
     if 2 == k:
@@ -357,7 +424,9 @@ def GeneratePhycheValue(k, phyche_index=None, all_property=False, extra_phyche_i
         else:
             for e in phyche_index:
                 if e not in diphyche_list:
-                    error_info = 'Sorry, the physicochemical properties ' + e + ' is not exit.'
+                    error_info = (
+                        "Sorry, the physicochemical properties " + e + " is not exit."
+                    )
                     import sys
 
                     sys.stderr.write(error_info)
@@ -368,7 +437,9 @@ def GeneratePhycheValue(k, phyche_index=None, all_property=False, extra_phyche_i
         else:
             for e in phyche_index:
                 if e not in triphyche_list:
-                    error_info = 'Sorry, the physicochemical properties ' + e + ' is not exit.'
+                    error_info = (
+                        "Sorry, the physicochemical properties " + e + " is not exit."
+                    )
                     import sys
 
                     sys.stderr.write(error_info)
@@ -391,14 +462,15 @@ def ConvertPhycheIndexToDict(phyche_index):
     len_index_value = len(phyche_index[0])
     k = 0
     for i in range(1, 10):
-        if len_index_value < 4**i:
-            error_infor = 'Sorry, the number of each index value is must be 4^k.'
+        if len_index_value < 4 ** i:
+            error_infor = "Sorry, the number of each index value is must be 4^k."
             sys.stdout.write(error_infor)
             sys.exit(0)
-        if len_index_value == 4**i:
+        if len_index_value == 4 ** i:
             k = i
             break
     from PyDNAnacutil import MakeKmerList
+
     kmer_list = MakeKmerList(k, ALPHABET)
     # print kmer_list
     len_kmer = len(kmer_list)
@@ -421,9 +493,10 @@ def StandardDeviation(value_list):
     """
     from math import sqrt
     from math import pow
+
     n = len(value_list)
     average_value = sum(value_list) * 1.0 / n
-    return sqrt(sum([pow(e - average_value, 2) for e in value_list]) * 1.0 / (n-1))
+    return sqrt(sum([pow(e - average_value, 2) for e in value_list]) * 1.0 / (n - 1))
 
 
 def NormalizeIndex(phyche_index, is_convert_dict=False):
@@ -436,20 +509,41 @@ def NormalizeIndex(phyche_index, is_convert_dict=False):
     for phyche_value in phyche_index:
         average_phyche_value = sum(phyche_value) * 1.0 / len(phyche_value)
         sd_phyche = StandardDeviation(phyche_value)
-        normalize_phyche_value.append([round((e - average_phyche_value) / sd_phyche, 2) for e in phyche_value])
+        normalize_phyche_value.append(
+            [round((e - average_phyche_value) / sd_phyche, 2) for e in phyche_value]
+        )
 
     if is_convert_dict is True:
         return ConvertPhycheIndexToDict(normalize_phyche_value)
 
     return normalize_phyche_value
 
+
 if __name__ == "__main__":
 
-    re = ['GACTGAACTGCACTTTGGTTTCATATTATTTGCTC', 'GACTGAACTGCACTTTGGTTTCATATTATTTGCTC']
+    re = ["GACTGAACTGCACTTTGGTTTCATATTATTTGCTC", "GACTGAACTGCACTTTGGTTTCATATTATTTGCTC"]
 
+    phyche_index = [
+        [
+            1.019,
+            -0.918,
+            0.488,
+            0.567,
+            0.567,
+            -0.070,
+            -0.579,
+            0.488,
+            -0.654,
+            -2.455,
+            -0.070,
+            -0.918,
+            1.603,
+            -0.654,
+            0.567,
+            1.019,
+        ]
+    ]
+    print(NormalizeIndex(phyche_index, is_convert_dict=False)[0])
+    import os
 
-    phyche_index = [[1.019, -0.918, 0.488, 0.567, 0.567, -0.070, -0.579, 0.488, -0.654, -2.455,-0.070, -0.918, 1.603, -0.654, 0.567, 1.019]]
-    print(NormalizeIndex(phyche_index,is_convert_dict = False)[0])
-    import os    
-    print(os.path.abspath('.'))
-    
+    print(os.path.abspath("."))

@@ -24,4 +24,3 @@ PyMolecule
    topology
    Scaffolds
    PubChemFingerprints
-   

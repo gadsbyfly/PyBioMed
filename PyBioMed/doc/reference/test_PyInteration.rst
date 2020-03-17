@@ -1,6 +1,6 @@
 test_PyInteration module
 ========================
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: test_PyInteration
     :members:
     :undoc-members:

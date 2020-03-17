@@ -1,6 +1,6 @@
 test_PyProtein module
 =====================
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: test_PyProtein
     :members:
     :undoc-members:

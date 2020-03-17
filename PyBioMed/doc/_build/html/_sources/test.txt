@@ -15,7 +15,7 @@ Testing an installed package
 ============================
 
 If you have a file-based (not a Python egg) installation you can
-test the installed package with 
+test the installed package with
 
->>> from PyBioMed.test import test_PyBioMed  
+>>> from PyBioMed.test import test_PyBioMed
 >>> test_PyBioMed.test_pybiomed()

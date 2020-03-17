@@ -1,6 +1,6 @@
 test_PyDNA module
 =================
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: test_PyDNA
     :members:
     :undoc-members:

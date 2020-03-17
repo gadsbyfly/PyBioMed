@@ -10,30 +10,30 @@ Who uses PyBioMed?
 
 For those researchers from different biomedical fields, the PyBioMed package can be used to analyze and represent various complex molecular data under investigation. PyBioMed will be helpful when exploring questions concerning structures, functions and interactions of various molecular data in the context of chemoinformatics, bioinformatics, and systems biology.
 
- 
+
 Motivation
 ~~~~~~~~~~
 PyBioMed is intended to provide
 
 -  Tools for pretreating molecules, proteins sequence and DNA sequence
 
--  Calculating chemical descriptors or molecular fingerprints from 
+-  Calculating chemical descriptors or molecular fingerprints from
    molecules' structures
-   
+
 -  Calculating structural and physicochemical features of proteins and peptides
-   from amino acid sequence 
-   
--  Calculating composition and physicochemical features of DNA 
+   from amino acid sequence
+
+-  Calculating composition and physicochemical features of DNA
    from their primary sequences
 
--  Calculating interaction features including chemical-chemical interaction features, 
-   chemical-protein interaction features, chemical-DNA interaction features, 
-   protein-protein interaction features, protein-DNA interaction features 
+-  Calculating interaction features including chemical-chemical interaction features,
+   chemical-protein interaction features, chemical-DNA interaction features,
+   protein-protein interaction features, protein-DNA interaction features
    and DNA-DNA interaction features.
 
 -  Getting molecular structures, protein sequence and DNA sequence from Internet through
-   the molecular ID, protein ID and DNA ID. 
-   
+   the molecular ID, protein ID and DNA ID.
+
 Feature overview
 ~~~~~~~~~~~~~~~~
 
@@ -59,7 +59,7 @@ The table below shows the descriptors and the number of the descriptor that PyBi
 +                  +-------------------------------------------------------+              +
 |                  | - Daylight-type fingerprints (2048)                   |              |
 |                  | - MACCS fingerprints (166)                            |              |
-|                  | - Atom pairs fingerprints (1024)                      |              |   
+|                  | - Atom pairs fingerprints (1024)                      |              |
 |                  | - TopologicalTorsion fingerprints (1024)              |              |
 |                  | - E-state fingerprints (79)                           |              |
 |                  | - FP2 fingerprints (1024)                             |              |
@@ -124,6 +124,3 @@ Python is a powerful programming language that allows simple and flexible repres
 .. _`PyProtein`: https://github.com/gadsbyfly/PyBioMed/blob/master/PyBioMed/download/PyBioMed%20Protein.pdf
 .. _`PyDNA`: https://github.com/gadsbyfly/PyBioMed/blob/master/PyBioMed/download/PyBioMed%20DNA.pdf
 .. _`PyInter`: https://github.com/gadsbyfly/PyBioMed/blob/master/PyBioMed/download/PyBioMed%20Interaction.pdf
-
-
-

@@ -8,9 +8,9 @@
 """
 ##############################################################################
 
-A class used for computing different types of DNA descriptors! 
+A class used for computing different types of DNA descriptors!
 
-You can freely use and distribute it. If you have any problem, 
+You can freely use and distribute it. If you have any problem,
 
 you could contact with us timely.
 
@@ -24,12 +24,12 @@ Email: gadsby@163.com and oriental-cds@163.com
 """
 
 
-
-from PyDNAnacutil import MakeUptoKmerList, MakeRevcompKmerList, MakeKmerVector
+# Third party modules
+from PyDNAnacutil import MakeKmerVector, MakeRevcompKmerList, MakeUptoKmerList
 from PyDNAutil import GetData
 
 
-def CheckNacPara(k, normalize=False, upto=False, alphabet='ACGT'):
+def CheckNacPara(k, normalize=False, upto=False, alphabet="ACGT"):
     """
     ###########################################################################
     Check the nac parameter's validation.
@@ -42,7 +42,7 @@ def CheckNacPara(k, normalize=False, upto=False, alphabet='ACGT'):
             raise ValueError("Error, parameter normalize must be bool type.")
         elif not isinstance(upto, bool):
             raise ValueError("Error, parameter upto must be bool type.")
-        elif alphabet != 'ACGT':
+        elif alphabet != "ACGT":
             raise ValueError("Error, parameter alphabet must be 'ACGT'.")
     except ValueError:
         raise
@@ -71,7 +71,7 @@ def GetKmer(data, **kwargs):
     """
     ###########################################################################
     Make a kmer dictionary with options k, upto, revcomp, normalize.
-    
+
     :param k: int, the k value of kmer, it should be larger than 0.
     :param normalize: bool, normalize the result vector or not.
     :param upto: bool, whether to generate 1-kmer, 2-kmer, ..., k-mer.
@@ -80,34 +80,36 @@ def GetKmer(data, **kwargs):
     :return: kmer vector.
     ###########################################################################
     """
-    if 'k' in kwargs:
-        k = kwargs['k']
+    if "k" in kwargs:
+        k = kwargs["k"]
     else:
-        k = 1            
-    if 'normalize' in kwargs:
-        normalize = kwargs['normalize']
+        k = 1
+    if "normalize" in kwargs:
+        normalize = kwargs["normalize"]
     else:
         normalize = False
-    if 'upto' in kwargs:
-        upto =kwargs['upto']
+    if "upto" in kwargs:
+        upto = kwargs["upto"]
     else:
-        upto = False        
-    if 'alphabet' in kwargs:
-        alphabet = kwargs['alphabet']
+        upto = False
+    if "alphabet" in kwargs:
+        alphabet = kwargs["alphabet"]
     else:
         alphabet = "ACGT"
-    
-    data = [data]    
+
+    data = [data]
     sequence_list = GetData(data)
 
     kmer_list = GetKmerList(k, upto, alphabet)
 
     rev_kmer_list = []
     revcomp = False
-    vec = MakeKmerVector(sequence_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize)
-    
-    dict_keys = ['Kmer_%s'%i for i in range(1,len(vec[0])+1)]
-    res = dict(zip(dict_keys,vec[0]))
+    vec = MakeKmerVector(
+        sequence_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize
+    )
+
+    dict_keys = ["Kmer_%s" % i for i in range(1, len(vec[0]) + 1)]
+    res = dict(zip(dict_keys, vec[0]))
     return res
 
 
@@ -120,24 +122,23 @@ def GetRevcKmer(data, **kwargs):
     :return: reverse compliment kmer vector.
     ###########################################################################
     """
-    if 'k' in kwargs:
-        k = kwargs['k']
+    if "k" in kwargs:
+        k = kwargs["k"]
     else:
-        k = 1            
-    if 'normalize' in kwargs:
-        normalize = kwargs['normalize']
+        k = 1
+    if "normalize" in kwargs:
+        normalize = kwargs["normalize"]
     else:
         normalize = False
-    if 'upto' in kwargs:
-        upto =kwargs['upto']
+    if "upto" in kwargs:
+        upto = kwargs["upto"]
     else:
-        upto = False        
-    if 'alphabet' in kwargs:
-        alphabet = kwargs['alphabet']
+        upto = False
+    if "alphabet" in kwargs:
+        alphabet = kwargs["alphabet"]
     else:
         alphabet = "ACGT"
-        
-    
+
     data = [data]
     sequence_list = GetData(data)
 
@@ -146,16 +147,16 @@ def GetRevcKmer(data, **kwargs):
     # Use lexicographically first version of {kmer, revcomp(kmer)}.
     rev_kmer_list = MakeRevcompKmerList(kmer_list)
     revcomp = True
-    vec = MakeKmerVector(sequence_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize)
-    
-    dict_keys = ['RevcKmer_%s'%i for i in range(1,len(vec[0])+1)]
-    res = dict(zip(dict_keys,vec[0]))
+    vec = MakeKmerVector(
+        sequence_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize
+    )
+
+    dict_keys = ["RevcKmer_%s" % i for i in range(1, len(vec[0]) + 1)]
+    res = dict(zip(dict_keys, vec[0]))
     return res
 
 
-
-
-def GetIdKmer(data, hs, non_hs,**kwargs):
+def GetIdKmer(data, hs, non_hs, **kwargs):
     """
     ###########################################################################
     Make IDKmer vector.
@@ -168,20 +169,19 @@ def GetIdKmer(data, hs, non_hs,**kwargs):
     :param alphabet: string.
     ###########################################################################
     """
-    if 'k' in kwargs:
-        k = kwargs['k']
+    if "k" in kwargs:
+        k = kwargs["k"]
     else:
-        k = 6            
-    if 'upto' in kwargs:
-        upto =kwargs['upto']
+        k = 6
+    if "upto" in kwargs:
+        upto = kwargs["upto"]
     else:
-        upto = True        
-    if 'alphabet' in kwargs:
-        alphabet = kwargs['alphabet']
+        upto = True
+    if "alphabet" in kwargs:
+        alphabet = kwargs["alphabet"]
     else:
         alphabet = "ACGT"
-        
-    
+
     from PyDNAnacutil import MakeKmerList
     from PyDNAnacutil import Diversity
     from PyDNAnacutil import IdXS
@@ -194,7 +194,7 @@ def GetIdKmer(data, hs, non_hs,**kwargs):
     if upto is False:
         k_list = [k]
     else:
-        k_list = list(range(1, k+1))
+        k_list = list(range(1, k + 1))
 
     # print 'k_list =', k_list
 
@@ -205,8 +205,12 @@ def GetIdKmer(data, hs, non_hs,**kwargs):
     for k in k_list:
         kmer_list = MakeKmerList(k, alphabet)
 
-        temp_pos_s_vec = MakeKmerVector(pos_s_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize)
-        temp_neg_s_vec = MakeKmerVector(neg_s_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize)
+        temp_pos_s_vec = MakeKmerVector(
+            pos_s_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize
+        )
+        temp_neg_s_vec = MakeKmerVector(
+            neg_s_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize
+        )
 
         temp_pos_s_vec = [sum(e) for e in zip(*[e for e in temp_pos_s_vec])]
         temp_neg_s_vec = [sum(e) for e in zip(*[e for e in temp_neg_s_vec])]
@@ -227,7 +231,9 @@ def GetIdKmer(data, hs, non_hs,**kwargs):
         for k in k_list:
             kmer_list = MakeKmerList(k, alphabet)
             seq_list = [seq]
-            kmer_vec = MakeKmerVector(seq_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize)
+            kmer_vec = MakeKmerVector(
+                seq_list, kmer_list, rev_kmer_list, k, upto, revcomp, normalize
+            )
             # print 'k', k
             # print 'kmer_vec', kmer_vec
 
@@ -239,34 +245,41 @@ def GetIdKmer(data, hs, non_hs,**kwargs):
             # print 'neg_vec', neg_s_vec
             # print 'diversity_pos_s', diversity_pos_s
 
-            temp_vec.append(round(IdXS(kmer_vec[0], pos_s_vec[k-1], diversity_pos_s[k-1]), 3))
-            temp_vec.append(round(IdXS(kmer_vec[0], neg_s_vec[k-1], diversity_neg_s[k-1]), 3))
+            temp_vec.append(
+                round(IdXS(kmer_vec[0], pos_s_vec[k - 1], diversity_pos_s[k - 1]), 3)
+            )
+            temp_vec.append(
+                round(IdXS(kmer_vec[0], neg_s_vec[k - 1], diversity_neg_s[k - 1]), 3)
+            )
 
         vec.append(temp_vec)
 
     return vec
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # kmer =Kmer(k=1)
     # kmer =RevcKmer(k=1, normalize=True, alphabet='ACGT')
     # kmer =IDkmer(k=1)
-    
-    kmer = GetKmer('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC',k=2)
-    print(kmer)
- 
-    kmer = GetKmer('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC',k=2,normalize=True)
+
+    kmer = GetKmer("GACTGAACTGCACTTTGGTTTCATATTATTTGCTC", k=2)
     print(kmer)
 
-    kmer = GetKmer('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC',k=2,normalize=True,upto=True)
+    kmer = GetKmer("GACTGAACTGCACTTTGGTTTCATATTATTTGCTC", k=2, normalize=True)
     print(kmer)
 
+    kmer = GetKmer(
+        "GACTGAACTGCACTTTGGTTTCATATTATTTGCTC", k=2, normalize=True, upto=True
+    )
+    print(kmer)
 
-    revckmer = GetRevcKmer('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC',k=2, normalize=False, upto=False)
+    revckmer = GetRevcKmer(
+        "GACTGAACTGCACTTTGGTTTCATATTATTTGCTC", k=2, normalize=False, upto=False
+    )
     print(revckmer)
 
-
-    revckmer = GetRevcKmer('GACTGAACTGCACTTTGGTTTCATATTATTTGCTC',k=2,normalize=True, upto=True)
+    revckmer = GetRevcKmer(
+        "GACTGAACTGCACTTTGGTTTCATATTATTTGCTC", k=2, normalize=True, upto=True
+    )
     print(revckmer)
-    print('\n')
-
+    print("\n")

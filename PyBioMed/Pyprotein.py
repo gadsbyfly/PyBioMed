@@ -6,9 +6,9 @@
 #  which is included in the file license.txt, found at the root
 #  of the PyBioMed source tree.
 """
-A class used for computing different types of protein descriptors! 
+A class used for computing different types of protein descriptors!
 
-You can freely use and distribute it. If you have any problem, 
+You can freely use and distribute it. If you have any problem,
 
 you could contact with us timely.
 
@@ -19,43 +19,72 @@ Date: 2016.06.04
 Email: gadsby@163.com
 
 """
-from PyProtein.AAComposition import CalculateAAComposition, CalculateDipeptideComposition, GetSpectrumDict
-
-from PyProtein.Autocorrelation import CalculateNormalizedMoreauBrotoAutoTotal, CalculateMoranAutoTotal, \
-    CalculateGearyAutoTotal
-
-from PyProtein.Autocorrelation import CalculateEachGearyAuto, CalculateEachMoranAuto, \
-    CalculateEachNormalizedMoreauBrotoAuto
-
-from PyProtein.CTD import CalculateCTD
-
-from PyProtein.QuasiSequenceOrder import GetSequenceOrderCouplingNumberTotal, GetQuasiSequenceOrder, \
-    GetSequenceOrderCouplingNumberp, GetQuasiSequenceOrderp
-
-from PyProtein.PseudoAAC import _GetPseudoAAC, GetAPseudoAAC, GetPseudoAAC
-
-from PyProtein.GetSubSeq import GetSubSequence
-
+# Third party modules
+from PyProtein.AAComposition import (
+    CalculateAAComposition,
+    CalculateDipeptideComposition,
+    GetSpectrumDict,
+)
 from PyProtein.AAIndex import GetAAIndex1, GetAAIndex23
-
+from PyProtein.Autocorrelation import (
+    CalculateEachGearyAuto,
+    CalculateEachMoranAuto,
+    CalculateEachNormalizedMoreauBrotoAuto,
+    CalculateGearyAutoTotal,
+    CalculateMoranAutoTotal,
+    CalculateNormalizedMoreauBrotoAutoTotal,
+)
 from PyProtein.ConjointTriad import CalculateConjointTriad
+from PyProtein.CTD import CalculateCTD
+from PyProtein.GetSubSeq import GetSubSequence
+from PyProtein.PseudoAAC import GetAPseudoAAC, GetPseudoAAC, _GetPseudoAAC
+from PyProtein.QuasiSequenceOrder import (
+    GetQuasiSequenceOrder,
+    GetQuasiSequenceOrderp,
+    GetSequenceOrderCouplingNumberp,
+    GetSequenceOrderCouplingNumberTotal,
+)
 
 
-class PyProtein():
+class PyProtein:
     """
     This GetProDes class aims at collecting all descriptor calcualtion modules into a simple class.
 
     """
-    AALetter = ["A", "R", "N", "D", "C", "E", "Q", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"]
+
+    AALetter = [
+        "A",
+        "R",
+        "N",
+        "D",
+        "C",
+        "E",
+        "Q",
+        "G",
+        "H",
+        "I",
+        "L",
+        "K",
+        "M",
+        "F",
+        "P",
+        "S",
+        "T",
+        "W",
+        "Y",
+        "V",
+    ]
 
     Version = 1.0
 
-    def __init__(self, ProteinSequence=''):
+    def __init__(self, ProteinSequence=""):
         """
         input a protein sequence
         """
         if len(ProteinSequence) == 0:
-            print("You must input a protein sequence when constructing a object. It is a string!")
+            print(
+                "You must input a protein sequence when constructing a object. It is a string!"
+            )
         else:
             self.ProteinSequence = ProteinSequence
 
@@ -245,7 +274,9 @@ class PyProtein():
 
         distancematrix is a dict form containing 400 distance values
         """
-        res = GetSequenceOrderCouplingNumberp(self.ProteinSequence, maxlag=maxlag, distancematrix=distancematrix)
+        res = GetSequenceOrderCouplingNumberp(
+            self.ProteinSequence, maxlag=maxlag, distancematrix=distancematrix
+        )
         return res
 
     def GetQSO(self, maxlag=30, weight=0.1):
@@ -273,10 +304,15 @@ class PyProtein():
 
         distancematrix is a dict form containing 400 distance values
         """
-        res = GetQuasiSequenceOrderp(self.ProteinSequence, maxlag=maxlag, weight=weight, distancematrix=distancematrix)
+        res = GetQuasiSequenceOrderp(
+            self.ProteinSequence,
+            maxlag=maxlag,
+            weight=weight,
+            distancematrix=distancematrix,
+        )
         return res
 
-    def GetMoreauBrotoAutop(self, AAP={}, AAPName='p'):
+    def GetMoreauBrotoAutop(self, AAP={}, AAPName="p"):
         """
         Normalized Moreau-Broto autocorrelation descriptors for the given property (30)
 
@@ -286,10 +322,12 @@ class PyProtein():
 
         AAP is a dict containing physicochemical properities of 20 amino acids
         """
-        res = CalculateEachNormalizedMoreauBrotoAuto(self.ProteinSequence, AAP=AAP, AAPName=AAPName)
+        res = CalculateEachNormalizedMoreauBrotoAuto(
+            self.ProteinSequence, AAP=AAP, AAPName=AAPName
+        )
         return res
 
-    def GetMoranAutop(self, AAP={}, AAPName='p'):
+    def GetMoranAutop(self, AAP={}, AAPName="p"):
         """
         Moran autocorrelation descriptors for the given property (30)
 
@@ -302,7 +340,7 @@ class PyProtein():
         res = CalculateEachMoranAuto(self.ProteinSequence, AAP=AAP, AAPName=AAPName)
         return res
 
-    def GetGearyAutop(self, AAP={}, AAPName='p'):
+    def GetGearyAutop(self, AAP={}, AAPName="p"):
         """
         Geary autocorrelation descriptors for the given property (30)
 
@@ -315,7 +353,7 @@ class PyProtein():
         res = CalculateEachGearyAuto(self.ProteinSequence, AAP=AAP, AAPName=AAPName)
         return res
 
-    def GetSubSeq(self, ToAA='S', window=3):
+    def GetSubSeq(self, ToAA="S", window=3):
         """
         obtain the sub sequences wit length 2*window+1, whose central point is ToAA
 
@@ -362,7 +400,7 @@ class PyProtein():
         res.update(self.GetTriad())
         return res
 
-    def GetAAindex1(self, name, path='.'):
+    def GetAAindex1(self, name, path="."):
         """
         Get the amino acid property values from aaindex1
 
@@ -377,7 +415,7 @@ class PyProtein():
 
         return GetAAIndex1(name, path=path)
 
-    def GetAAindex23(self, name, path='.'):
+    def GetAAindex23(self, name, path="."):
         """
         Get the amino acid property values from aaindex2 and aaindex3
 
@@ -407,16 +445,16 @@ if __name__ == "__main__":
     print(cds.GetCTD())
     print(cds.GetPAAC(lamda=5))
     print(cds.GetALL())
-    print(cds.GetMoreauBrotoAutop(AAP=_Steric, AAPName='Steric'))
-    print(cds.GetMoranAutop(AAP=_Steric, AAPName='Steric'))
-    print(cds.GetGearyAutop(AAP=_Steric, AAPName='Steric'))
+    print(cds.GetMoreauBrotoAutop(AAP=_Steric, AAPName="Steric"))
+    print(cds.GetMoranAutop(AAP=_Steric, AAPName="Steric"))
+    print(cds.GetGearyAutop(AAP=_Steric, AAPName="Steric"))
 
     print(cds.GetPAACp(lamda=5, weight=0.05, AAP=[_Hydrophobicity, _hydrophilicity]))
 
-    print(cds.GetSubSeq(ToAA='D', window=5))
+    print(cds.GetSubSeq(ToAA="D", window=5))
     print(cds.GetTriad())
-    proper = cds.GetAAindex23('GRAR740104')
-    print(cds.GetAAindex1('KRIW790103'))
+    proper = cds.GetAAindex23("GRAR740104")
+    print(cds.GetAAindex1("KRIW790103"))
 
     print(cds.GetQSOp(maxlag=30, weight=0.1, distancematrix=proper))
     print(cds.GetSOCNp(maxlag=30, distancematrix=proper))

@@ -1,6 +1,6 @@
 test_PyPretreat module
 ======================
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: test_PyPretreat
     :members:
     :undoc-members:

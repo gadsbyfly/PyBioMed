@@ -10,25 +10,25 @@
 
 Instead of using the conventional 20-D amino acid composition to represent the sample
 
-of a protein, Prof. Kuo-Chen Chou proposed the pseudo amino acid (PseAA) composition 
+of a protein, Prof. Kuo-Chen Chou proposed the pseudo amino acid (PseAA) composition
 
-in order for inluding the sequence-order information. Based on the concept of Chou's 
- 
-pseudo amino acid composition, the server PseAA was designed in a flexible way, allowing 
- 
+in order for inluding the sequence-order information. Based on the concept of Chou's
+
+pseudo amino acid composition, the server PseAA was designed in a flexible way, allowing
+
 users to generate various kinds of pseudo amino acid composition for a given protein
- 
-sequence by selecting different parameters and their combinations. This module aims at 
- 
-computing two types of PseAA descriptors: Type I and Type II. 
- 
-You can freely use and distribute it. If you have any problem, you could contact 
- 
+
+sequence by selecting different parameters and their combinations. This module aims at
+
+computing two types of PseAA descriptors: Type I and Type II.
+
+You can freely use and distribute it. If you have any problem, you could contact
+
 with us timely.
 
 References:
 
-[1]: Kuo-Chen Chou. Prediction of Protein Cellular Attributes Using Pseudo-Amino Acid 
+[1]: Kuo-Chen Chou. Prediction of Protein Cellular Attributes Using Pseudo-Amino Acid
 
 Composition. PROTEINS: Structure, Function, and Genetics, 2001, 43: 246-255.
 
@@ -36,7 +36,7 @@ Composition. PROTEINS: Structure, Function, and Genetics, 2001, 43: 246-255.
 
 [3]: http://www.csbio.sjtu.edu.cn/bioinf/PseAAC/type2.htm
 
-[4]: Kuo-Chen Chou. Using amphiphilic pseudo amino acid composition to predict enzyme 
+[4]: Kuo-Chen Chou. Using amphiphilic pseudo amino acid composition to predict enzyme
 
 subfamily classes. Bioinformatics, 2005,21,10-19.
 
@@ -49,36 +49,177 @@ Email: gadsby@163.com
 #########################################################################################
 """
 
-import string
+# Core Library modules
 import math
+import string
+
 # import scipy
 
 
-AALetter = ["A", "R", "N", "D", "C", "E", "Q", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"]
+AALetter = [
+    "A",
+    "R",
+    "N",
+    "D",
+    "C",
+    "E",
+    "Q",
+    "G",
+    "H",
+    "I",
+    "L",
+    "K",
+    "M",
+    "F",
+    "P",
+    "S",
+    "T",
+    "W",
+    "Y",
+    "V",
+]
 
-_Hydrophobicity = {"A": 0.62, "R": -2.53, "N": -0.78, "D": -0.90, "C": 0.29, "Q": -0.85, "E": -0.74, "G": 0.48,
-                   "H": -0.40, "I": 1.38, "L": 1.06, "K": -1.50, "M": 0.64, "F": 1.19, "P": 0.12, "S": -0.18,
-                   "T": -0.05, "W": 0.81, "Y": 0.26, "V": 1.08}
+_Hydrophobicity = {
+    "A": 0.62,
+    "R": -2.53,
+    "N": -0.78,
+    "D": -0.90,
+    "C": 0.29,
+    "Q": -0.85,
+    "E": -0.74,
+    "G": 0.48,
+    "H": -0.40,
+    "I": 1.38,
+    "L": 1.06,
+    "K": -1.50,
+    "M": 0.64,
+    "F": 1.19,
+    "P": 0.12,
+    "S": -0.18,
+    "T": -0.05,
+    "W": 0.81,
+    "Y": 0.26,
+    "V": 1.08,
+}
 
-_hydrophilicity = {"A": -0.5, "R": 3.0, "N": 0.2, "D": 3.0, "C": -1.0, "Q": 0.2, "E": 3.0, "G": 0.0, "H": -0.5,
-                   "I": -1.8, "L": -1.8, "K": 3.0, "M": -1.3, "F": -2.5, "P": 0.0, "S": 0.3, "T": -0.4, "W": -3.4,
-                   "Y": -2.3, "V": -1.5}
+_hydrophilicity = {
+    "A": -0.5,
+    "R": 3.0,
+    "N": 0.2,
+    "D": 3.0,
+    "C": -1.0,
+    "Q": 0.2,
+    "E": 3.0,
+    "G": 0.0,
+    "H": -0.5,
+    "I": -1.8,
+    "L": -1.8,
+    "K": 3.0,
+    "M": -1.3,
+    "F": -2.5,
+    "P": 0.0,
+    "S": 0.3,
+    "T": -0.4,
+    "W": -3.4,
+    "Y": -2.3,
+    "V": -1.5,
+}
 
-_residuemass = {"A": 15.0, "R": 101.0, "N": 58.0, "D": 59.0, "C": 47.0, "Q": 72.0, "E": 73.0, "G": 1.000, "H": 82.0,
-                "I": 57.0, "L": 57.0, "K": 73.0, "M": 75.0, "F": 91.0, "P": 42.0, "S": 31.0, "T": 45.0, "W": 130.0,
-                "Y": 107.0, "V": 43.0}
+_residuemass = {
+    "A": 15.0,
+    "R": 101.0,
+    "N": 58.0,
+    "D": 59.0,
+    "C": 47.0,
+    "Q": 72.0,
+    "E": 73.0,
+    "G": 1.000,
+    "H": 82.0,
+    "I": 57.0,
+    "L": 57.0,
+    "K": 73.0,
+    "M": 75.0,
+    "F": 91.0,
+    "P": 42.0,
+    "S": 31.0,
+    "T": 45.0,
+    "W": 130.0,
+    "Y": 107.0,
+    "V": 43.0,
+}
 
-_pK1 = {"A": 2.35, "C": 1.71, "D": 1.88, "E": 2.19, "F": 2.58, "G": 2.34, "H": 1.78, "I": 2.32, "K": 2.20, "L": 2.36,
-        "M": 2.28, "N": 2.18, "P": 1.99, "Q": 2.17, "R": 2.18, "S": 2.21, "T": 2.15, "V": 2.29, "W": 2.38, "Y": 2.20}
+_pK1 = {
+    "A": 2.35,
+    "C": 1.71,
+    "D": 1.88,
+    "E": 2.19,
+    "F": 2.58,
+    "G": 2.34,
+    "H": 1.78,
+    "I": 2.32,
+    "K": 2.20,
+    "L": 2.36,
+    "M": 2.28,
+    "N": 2.18,
+    "P": 1.99,
+    "Q": 2.17,
+    "R": 2.18,
+    "S": 2.21,
+    "T": 2.15,
+    "V": 2.29,
+    "W": 2.38,
+    "Y": 2.20,
+}
 
-_pK2 = {"A": 9.87, "C": 10.78, "D": 9.60, "E": 9.67, "F": 9.24, "G": 9.60, "H": 8.97, "I": 9.76, "K": 8.90, "L": 9.60,
-        "M": 9.21, "N": 9.09, "P": 10.6, "Q": 9.13, "R": 9.09, "S": 9.15, "T": 9.12, "V": 9.74, "W": 9.39, "Y": 9.11}
+_pK2 = {
+    "A": 9.87,
+    "C": 10.78,
+    "D": 9.60,
+    "E": 9.67,
+    "F": 9.24,
+    "G": 9.60,
+    "H": 8.97,
+    "I": 9.76,
+    "K": 8.90,
+    "L": 9.60,
+    "M": 9.21,
+    "N": 9.09,
+    "P": 10.6,
+    "Q": 9.13,
+    "R": 9.09,
+    "S": 9.15,
+    "T": 9.12,
+    "V": 9.74,
+    "W": 9.39,
+    "Y": 9.11,
+}
 
-_pI = {"A": 6.11, "C": 5.02, "D": 2.98, "E": 3.08, "F": 5.91, "G": 6.06, "H": 7.64, "I": 6.04, "K": 9.47, "L": 6.04,
-       "M": 5.74, "N": 10.76, "P": 6.30, "Q": 5.65, "R": 10.76, "S": 5.68, "T": 5.60, "V": 6.02, "W": 5.88, "Y": 5.63}
+_pI = {
+    "A": 6.11,
+    "C": 5.02,
+    "D": 2.98,
+    "E": 3.08,
+    "F": 5.91,
+    "G": 6.06,
+    "H": 7.64,
+    "I": 6.04,
+    "K": 9.47,
+    "L": 6.04,
+    "M": 5.74,
+    "N": 10.76,
+    "P": 6.30,
+    "Q": 5.65,
+    "R": 10.76,
+    "S": 5.68,
+    "T": 5.60,
+    "V": 6.02,
+    "W": 5.88,
+    "Y": 5.63,
+}
 
 
 #############################################################################################
+
 
 def _mean(listvalue):
     """
@@ -130,7 +271,7 @@ def NormalizeEachAAP(AAP):
     ########################################################################################
     """
     if len(AAP.values()) != 20:
-        print('You can not input the correct number of properities of Amino acids!')
+        print("You can not input the correct number of properities of Amino acids!")
     else:
         Result = {}
         for i, j in AAP.items():
@@ -145,7 +286,9 @@ def NormalizeEachAAP(AAP):
 ####################### Pseudo-Amino Acid Composition descriptors############################
 #############################################################################################
 #############################################################################################
-def _GetCorrelationFunction(Ri='S', Rj='D', AAP=[_Hydrophobicity, _hydrophilicity, _residuemass]):
+def _GetCorrelationFunction(
+    Ri="S", Rj="D", AAP=[_Hydrophobicity, _hydrophilicity, _residuemass]
+):
     """
     ########################################################################################
     Computing the correlation between two given amino acids using the above three
@@ -172,6 +315,7 @@ def _GetCorrelationFunction(Ri='S', Rj='D', AAP=[_Hydrophobicity, _hydrophilicit
 
 
 #############################################################################################
+
 
 def _GetSequenceOrderCorrelationFactor(ProteinSequence, k=1):
     """
@@ -202,6 +346,7 @@ def _GetSequenceOrderCorrelationFactor(ProteinSequence, k=1):
 
 
 #############################################################################################
+
 
 def GetAAComposition(ProteinSequence):
     """
@@ -239,13 +384,15 @@ def _GetPseudoAAC1(ProteinSequence, lamda=10, weight=0.05):
     """
     rightpart = 0.0
     for i in range(lamda):
-        rightpart = rightpart + _GetSequenceOrderCorrelationFactor(ProteinSequence, k=i + 1)
+        rightpart = rightpart + _GetSequenceOrderCorrelationFactor(
+            ProteinSequence, k=i + 1
+        )
     AAC = GetAAComposition(ProteinSequence)
 
     result = {}
     temp = 1 + weight * rightpart
     for index, i in enumerate(AALetter):
-        result['PAAC' + str(index + 1)] = round(AAC[i] / temp, 3)
+        result["PAAC" + str(index + 1)] = round(AAC[i] / temp, 3)
 
     return result
 
@@ -266,12 +413,15 @@ def _GetPseudoAAC2(ProteinSequence, lamda=10, weight=0.05):
     result = {}
     temp = 1 + weight * sum(rightpart)
     for index in range(20, 20 + lamda):
-        result['PAAC' + str(index + 1)] = round(weight * rightpart[index - 20] / temp * 100, 3)
+        result["PAAC" + str(index + 1)] = round(
+            weight * rightpart[index - 20] / temp * 100, 3
+        )
 
     return result
 
 
 #############################################################################################
+
 
 def _GetPseudoAAC(ProteinSequence, lamda=10, weight=0.05):
     """
@@ -320,7 +470,9 @@ def _GetPseudoAAC(ProteinSequence, lamda=10, weight=0.05):
 ###############Amphiphilic Pseudo-Amino Acid Composition descriptors#########################
 #############################################################################################
 #############################################################################################
-def _GetCorrelationFunctionForAPAAC(Ri='S', Rj='D', AAP=[_Hydrophobicity, _hydrophilicity]):
+def _GetCorrelationFunctionForAPAAC(
+    Ri="S", Rj="D", AAP=[_Hydrophobicity, _hydrophilicity]
+):
     """
     ########################################################################################
     Computing the correlation between two given amino acids using the above two
@@ -389,13 +541,15 @@ def GetAPseudoAAC1(ProteinSequence, lamda=30, weight=0.5):
     """
     rightpart = 0.0
     for i in range(lamda):
-        rightpart = rightpart + sum(GetSequenceOrderCorrelationFactorForAPAAC(ProteinSequence, k=i + 1))
+        rightpart = rightpart + sum(
+            GetSequenceOrderCorrelationFactorForAPAAC(ProteinSequence, k=i + 1)
+        )
     AAC = GetAAComposition(ProteinSequence)
 
     result = {}
     temp = 1 + weight * rightpart
     for index, i in enumerate(AALetter):
-        result['APAAC' + str(index + 1)] = round(AAC[i] / temp, 3)
+        result["APAAC" + str(index + 1)] = round(AAC[i] / temp, 3)
 
     return result
 
@@ -418,7 +572,9 @@ def GetAPseudoAAC2(ProteinSequence, lamda=30, weight=0.5):
     result = {}
     temp = 1 + weight * sum(rightpart)
     for index in range(20, 20 + 2 * lamda):
-        result['PAAC' + str(index + 1)] = round(weight * rightpart[index - 20] / temp * 100, 3)
+        result["PAAC" + str(index + 1)] = round(
+            weight * rightpart[index - 20] / temp * 100, 3
+        )
 
     return result
 
@@ -471,7 +627,7 @@ def GetAPseudoAAC(ProteinSequence, lamda=30, weight=0.5):
 #############################based on different properties###################################
 #############################################################################################
 #############################################################################################
-def GetCorrelationFunction(Ri='S', Rj='D', AAP=[]):
+def GetCorrelationFunction(Ri="S", Rj="D", AAP=[]):
     """
     ########################################################################################
     Computing the correlation between two given amino acids using the given
@@ -540,13 +696,15 @@ def GetPseudoAAC1(ProteinSequence, lamda=30, weight=0.05, AAP=[]):
     """
     rightpart = 0.0
     for i in range(lamda):
-        rightpart = rightpart + GetSequenceOrderCorrelationFactor(ProteinSequence, i + 1, AAP)
+        rightpart = rightpart + GetSequenceOrderCorrelationFactor(
+            ProteinSequence, i + 1, AAP
+        )
     AAC = GetAAComposition(ProteinSequence)
 
     result = {}
     temp = 1 + weight * rightpart
     for index, i in enumerate(AALetter):
-        result['PAAC' + str(index + 1)] = round(AAC[i] / temp, 3)
+        result["PAAC" + str(index + 1)] = round(AAC[i] / temp, 3)
 
     return result
 
@@ -567,12 +725,15 @@ def GetPseudoAAC2(ProteinSequence, lamda=30, weight=0.05, AAP=[]):
     result = {}
     temp = 1 + weight * sum(rightpart)
     for index in range(20, 20 + lamda):
-        result['PAAC' + str(index + 1)] = round(weight * rightpart[index - 20] / temp * 100, 3)
+        result["PAAC" + str(index + 1)] = round(
+            weight * rightpart[index - 20] / temp * 100, 3
+        )
 
     return result
 
 
 #############################################################################################
+
 
 def GetPseudoAAC(ProteinSequence, lamda=30, weight=0.05, AAP=[]):
     """
@@ -630,30 +791,30 @@ SMLEFSETAMQDAVKAYVGLEDFLHRVRTRVGAVCPGDPTPRFAEALDDDLSVPIALAEI\
 HHVRAEGNRALDAGDHDGALRSASAIRAMMGILGCDPLDQRWESRDETSAALAAVDVLVQ\
 AELQNREKAREQRNWALADEIRGRLKRAGIEVTDTADGPQWSLLGGDTK"
     protein = string.strip(protein)
-    #	temp=_GetCorrelationFunction('S','D')
-    #	print temp
+    # 	temp=_GetCorrelationFunction('S','D')
+    # 	print temp
     #
-    #	print _GetSequenceOrderCorrelationFactor(protein,k=4)
+    # 	print _GetSequenceOrderCorrelationFactor(protein,k=4)
     #
-    #	PAAC1=_GetPseudoAAC1(protein,lamda=4)
-    #	for i in PAAC1:
-    #		print i, PAAC1[i]
-    #	PAAC2=_GetPseudoAAC2(protein,lamda=4)
-    #	for i in PAAC2:
-    #		print i, PAAC2[i]
-    #	print len(PAAC1)
-    #	print _GetSequenceOrderCorrelationFactorForAPAAC(protein,k=1)
-    #	APAAC1=_GetAPseudoAAC1(protein,lamda=4)
-    #	for i in APAAC1:
-    #		print i, APAAC1[i]
+    # 	PAAC1=_GetPseudoAAC1(protein,lamda=4)
+    # 	for i in PAAC1:
+    # 		print i, PAAC1[i]
+    # 	PAAC2=_GetPseudoAAC2(protein,lamda=4)
+    # 	for i in PAAC2:
+    # 		print i, PAAC2[i]
+    # 	print len(PAAC1)
+    # 	print _GetSequenceOrderCorrelationFactorForAPAAC(protein,k=1)
+    # 	APAAC1=_GetAPseudoAAC1(protein,lamda=4)
+    # 	for i in APAAC1:
+    # 		print i, APAAC1[i]
 
-    #	APAAC2=GetAPseudoAAC2(protein,lamda=4)
-    #	for i in APAAC2:
-    #		print i, APAAC2[i]
-    #	APAAC=GetAPseudoAAC(protein,lamda=4)
+    # 	APAAC2=GetAPseudoAAC2(protein,lamda=4)
+    # 	for i in APAAC2:
+    # 		print i, APAAC2[i]
+    # 	APAAC=GetAPseudoAAC(protein,lamda=4)
     #
-    #	for i in APAAC:
-    #		print i, APAAC[i]
+    # 	for i in APAAC:
+    # 		print i, APAAC[i]
 
     PAAC = GetPseudoAAC(protein, lamda=5, AAP=[_Hydrophobicity, _hydrophilicity])
 

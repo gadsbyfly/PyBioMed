@@ -8,11 +8,11 @@
 """
 ###############################################################################
 
-The module is used for computing the composition of amino acids, dipetide and 
+The module is used for computing the composition of amino acids, dipetide and
 
-3-mers (tri-peptide) for a given protein sequence. You can get 8420 descriptors 
+3-mers (tri-peptide) for a given protein sequence. You can get 8420 descriptors
 
-for a given protein sequence. You can freely use and distribute it. If you hava 
+for a given protein sequence. You can freely use and distribute it. If you hava
 
 any problem, you could contact with us timely!
 
@@ -42,9 +42,31 @@ Email: oriental-cds@163.com and gadsby@163.com
 ###############################################################################
 """
 
+# Core Library modules
 import re
 
-AALetter = ["A", "R", "N", "D", "C", "E", "Q", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"]
+AALetter = [
+    "A",
+    "R",
+    "N",
+    "D",
+    "C",
+    "E",
+    "Q",
+    "G",
+    "H",
+    "I",
+    "L",
+    "K",
+    "M",
+    "F",
+    "P",
+    "S",
+    "T",
+    "W",
+    "Y",
+    "V",
+]
 
 
 #############################################################################################
@@ -96,11 +118,14 @@ def CalculateDipeptideComposition(ProteinSequence):
     for i in AALetter:
         for j in AALetter:
             Dipeptide = i + j
-            Result[Dipeptide] = round(float(ProteinSequence.count(Dipeptide)) / (LengthSequence - 1) * 100, 2)
+            Result[Dipeptide] = round(
+                float(ProteinSequence.count(Dipeptide)) / (LengthSequence - 1) * 100, 2
+            )
     return Result
 
 
 #############################################################################################
+
 
 def Getkmers():
     """

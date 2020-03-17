@@ -12,25 +12,11 @@ Authors: Zhijiang Yao and Dongsheng Cao.
 
 Date: 2016.06.14
 
-Email: gadsby@163.com 
+Email: gadsby@163.com
 """
 
 
-from PyBioMed.test import test_PyBioMed  
+# First party modules
+from PyBioMed.test import test_PyBioMed
 
 test_PyBioMed.test_pybiomed()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

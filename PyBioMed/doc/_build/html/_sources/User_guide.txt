@@ -36,7 +36,7 @@ On Linux:
 
 Getting molecules
 -----------------
-The :mod:`PyGetMol` provide different formats to get molecular structures, protein sequence and DNA sequence. 
+The :mod:`PyGetMol` provide different formats to get molecular structures, protein sequence and DNA sequence.
 
 Getting molecular structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -103,7 +103,7 @@ Reading protein sequence
 >>> print protein
 ['MLIHQYDHATAQYIASHLADPDPLNDGRWLIPAFATATPLPERPARTWPFFLDGAWVLRPDHRGQRLYRTDTGEAAEIVAAG
 IAPEAAGLTPTPRPSDEHRWIDGAWQIDPQIVAQRARDAAMREFDLRMASARQANAGRADAYAAGLLSDAEIAVFKAWAIYQMD
-LVRVVSAASFPDDVQWPAEPDEAAVIEQADGKASAGDAAAA', 
+LVRVVSAASFPDDVQWPAEPDEAAVIEQADGKASAGDAAAA',
 'MLIHQYDHATAQYIASHLADPDPLNDGRWLIPAFATATPLPERPARTWPFFLDGAWVLRPDHRGQRLYRTDTGEAAEIVAAGI
 APEAAGLTPTPRPSDEHRWIDGAWQIDPQIVAQRARDAAMREFDLRMASARQANAGRADAYAAGLLSDAEIAVFKAWAIYQMDL
 VRVVSAASFPDDVQWPAEPDEAAVIEQADGKASAGDAAAA']
@@ -115,7 +115,7 @@ The :mod:`GetDNA` module provides the tool to get DNA sequence by the Gene ID fr
 >>> from PyBioMed.PyGetMol import GetDNA
 >>> seq = GetDNA.GetDNAFromUniGene('AA954964')
 >>> print seq
->ENA|AA954964|AA954964.1 op24b10.s1 Soares_NFL_T_GBC_S1 Homo sapiens cDNA clone IMAGE:1577755 3&apos;, mRNA sequence. 
+>ENA|AA954964|AA954964.1 op24b10.s1 Soares_NFL_T_GBC_S1 Homo sapiens cDNA clone IMAGE:1577755 3&apos;, mRNA sequence.
 TTTTAAAATATAAAAGGATAACTTTATTGAATATACAAATTCAAGAGCATTCAATTTTTT
 TTTAAGATTATGGCATAAGACAGATCAATGGTAATGGTTTATATATCCTATACTTACCAA
 ACAGATTAGGTAGATATACTGACCTATCAATGCTCAAAATAACAAAATGAATACATGTCC
@@ -139,7 +139,7 @@ The :mod:`PyPretreat` can pretreat the molecular structure, the protein sequence
 Pretreating molecules
 ~~~~~~~~~~~~~~~~~~~~~
 The :mod:`PyPretreatMol` can pretreat the molecular structure. The :mod:`PyPretreatMol` proivdes the following functions:
- 
+
 - Normalization of functional groups to a consistent format.
 - Recombination of separated charges.
 - Breaking of bonds to metal atoms.
@@ -197,15 +197,15 @@ U
 
 Calculating molecular descriptors
 ---------------------------------
-The PyBioMed package could calculate a large number of molecular descriptors. These descriptors capture and magnify distinct aspects of chemical structures. Generally speaking, all descriptors could be divided into two classes: descriptors and fingerprints. Descriptors only used the property of molecular topology, including constitutional descriptors, topological descriptors, connectivity indices, E-state indices, Basak information indices, Burden descriptors, autocorrelation descriptors, charge descriptors, molecular properties, kappa shape indices, MOE-type descriptors. Molecular fingerprints contain FP2, FP3, FP4,topological fingerprints, Estate, atompairs, torsions, morgan and MACCS. 
+The PyBioMed package could calculate a large number of molecular descriptors. These descriptors capture and magnify distinct aspects of chemical structures. Generally speaking, all descriptors could be divided into two classes: descriptors and fingerprints. Descriptors only used the property of molecular topology, including constitutional descriptors, topological descriptors, connectivity indices, E-state indices, Basak information indices, Burden descriptors, autocorrelation descriptors, charge descriptors, molecular properties, kappa shape indices, MOE-type descriptors. Molecular fingerprints contain FP2, FP3, FP4,topological fingerprints, Estate, atompairs, torsions, morgan and MACCS.
 
 .. figure:: /image/single_features.png
 	:width: 400px
 	:align: center
-	
+
 	The descriptors could be calculated through PyBioMed package
 
-Calculating descriptors 
+Calculating descriptors
 ~~~~~~~~~~~~~~~~~~~~~~~
 We could import the corresponding module to calculate the molecular descriptors as need. There is 14 modules to compute descriptors. Moreover, a easier way to compute these descriptors is construct a PyMolecule object, which encapsulates all methods for the calculation of descriptors.
 
@@ -256,10 +256,10 @@ The :class:`PyMolecule` class can read molecules in different format including M
 237
 
 The object can also read molecules in the format of MOL file and calculate charge descriptors (25).
-	
+
 >>> from PyBioMed import Pymolecule
 >>> mol = Pymolecule.PyMolecule()
->>> mol.ReadMolFromMol('test/test_data/test.mol')   #change path to the real path in your own computer 
+>>> mol.ReadMolFromMol('test/test_data/test.mol')   #change path to the real path in your own computer
 >>> molecular_descriptor = mol.GetCharge()
 >>> print molecular_descriptor
 {'QNmin': 0, 'QOss': 0.534, 'Mpc': 0.122, 'QHss': 0.108, 'SPP': 0.817, 'LDI': 0.322, 'QCmin': -0.061, 'Mac': 0.151, 'Qass': 0.893, 'QNss': 0, 'QCmax': 0.339, 'QOmax': -0.246, 'Tpc': 1.584, 'Qmax': 0.339, 'QOmin': -0.478, 'Tnc': -1.584, 'QHmin': 0.035, 'QCss': 0.252, 'QHmax': 0.297, 'QNmax': 0, 'Rnc': 0.302, 'Rpc': 0.214, 'Qmin': -0.478, 'Tac': 3.167, 'Mnc': -0.198}
@@ -298,7 +298,7 @@ The :func:`CalculateFP2Fingerprint` function calculates the FP2 fingerprint.
 >>> from PyBioMed.PyMolecule.fingerprint import CalculateFP2Fingerprint
 >>> import pybel
 >>> smi = 'CCC1(c2ccccc2)C(=O)N(C)C(=N1)O'
->>> mol = pybel.readstring("smi", smi) 
+>>> mol = pybel.readstring("smi", smi)
 >>> mol_fingerprint = CalculateFP2Fingerprint(mol)
 >>> print len(mol_fingerprint[1])
 103
@@ -364,7 +364,7 @@ GKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFATTDWIAIYQRKVEAPFIPKFKGPGDTSNFDDYEE
 VXINEKCGKEFTEFTTYADFIASGRTGRRNAIHD
 >>> from PyBioMed.PyProtein import CTD
 >>> protein_descriptor = CTD.CalculateC(protein)
->>> print protein_descriptor 
+>>> print protein_descriptor
 {'_NormalizedVDWVC2': 0.224, '_PolarizabilityC2': 0.328, '_PolarizabilityC3': 0.179, '_ChargeC1': 0.03, '_PolarizabilityC1': 0.493, '_SecondaryStrC2': 0.239, '_SecondaryStrC3': 0.418, '_NormalizedVDWVC3': 0.179, '_SecondaryStrC1': 0.343, '_SolventAccessibilityC1': 0.448, '_SolventAccessibilityC2': 0.328, '_SolventAccessibilityC3': 0.224, '_NormalizedVDWVC1': 0.522, '_HydrophobicityC3': 0.284, '_HydrophobicityC1': 0.328, '_ChargeC3': 0.239, '_PolarityC2': 0.179, '_PolarityC1': 0.299, '_HydrophobicityC2': 0.388, '_PolarityC3': 0.03, '_ChargeC2': 0.731}
 
 Calculate protein descriptors via object
@@ -447,18 +447,18 @@ For example, the :class:`PyDNA` can calculate SCPseDNC.
 
 Calculating Interaction descriptors
 -----------------------------------
-The PyInteraction module can generate six types of interaction descriptors indcluding chemical-chemical interaction features, chemical-protein interaction features, chemical-DNA interaction features, protein-protein interaction features, protein-DNA interaction features, and DNA-DNA interaction features by integrating two groups of features. 
+The PyInteraction module can generate six types of interaction descriptors indcluding chemical-chemical interaction features, chemical-protein interaction features, chemical-DNA interaction features, protein-protein interaction features, protein-DNA interaction features, and DNA-DNA interaction features by integrating two groups of features.
 
 The user can choose three different types of methods to calculate interaction descriptors. The function :func:`CalculateInteraction1` can calculate two interaction features by combining two features.
 
-.. math:: 
-	F_{ab} = \bigl(F_a, F_b\bigr)	
-	
-The function :func:`CalculateInteraction2` can calculate two interaction features by two multiplied features. 
+.. math::
+	F_{ab} = \bigl(F_a, F_b\bigr)
+
+The function :func:`CalculateInteraction2` can calculate two interaction features by two multiplied features.
 
 .. math::  F = \{F(k)= F_a(i) ×F_b(j), i = 1, 2, …, p, j = 1, 2 ,… , p, k = (i-1) ×p+j\}
 
-The function :func:`CalculateInteraction3` can calculate two interaction features by 
+The function :func:`CalculateInteraction3` can calculate two interaction features by
 
 .. math:: F=[F_a(i)+F_b(i)),F_a(i)*F_b(i)]
 
@@ -469,7 +469,7 @@ The user can calculate chemical-chemical features using three methods .
 .. figure:: /image/CCI.png
 	:width: 400px
 	:align: center
-	
+
 	The calculation process for chemical-chemical interaction descriptors.
 
 >>> from PyBioMed.PyInteraction import PyInteraction
@@ -496,7 +496,7 @@ The user can calculate chemical-protein feature using two methods.
 .. figure:: /image/CPI.png
 	:width: 400px
 	:align: center
-	
+
 	The calculation process for chemical-protein interaction descriptors.
 
 
@@ -529,29 +529,3 @@ The user can calculate chemical-DNA feature using two methods.
 >>> mol_DNA_interaction2 = PyInteraction.CalculateInteraction2(mol_des,DNA_des)
 >>> print len(mol_DNA_interaction2)
 720
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

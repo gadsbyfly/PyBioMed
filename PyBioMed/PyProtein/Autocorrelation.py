@@ -12,11 +12,11 @@ This module is used for computing the Autocorrelation descriptors based differen
 
  properties of AADs.You can also input your properties of AADs, then it can help you
 
-to compute Autocorrelation descriptors based on the property of AADs. Currently, You 
+to compute Autocorrelation descriptors based on the property of AADs. Currently, You
 
 can get 720 descriptors for a given protein sequence based on our provided physicochemical
 
-properties of AADs. You can freely use and distribute it. If you hava  any problem, 
+properties of AADs. You can freely use and distribute it. If you hava  any problem,
 
 you could contact with us timely!
 
@@ -47,51 +47,242 @@ Email: gadsby@163.com
 ##########################################################################################
 """
 
-import math, string
+# Core Library modules
+import math
+import string
 
-AALetter = ["A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"]
+AALetter = [
+    "A",
+    "R",
+    "N",
+    "D",
+    "C",
+    "Q",
+    "E",
+    "G",
+    "H",
+    "I",
+    "L",
+    "K",
+    "M",
+    "F",
+    "P",
+    "S",
+    "T",
+    "W",
+    "Y",
+    "V",
+]
 
-_Hydrophobicity = {"A": 0.02, "R": -0.42, "N": -0.77, "D": -1.04, "C": 0.77, "Q": -1.10, "E": -1.14, "G": -0.80,
-                   "H": 0.26, "I": 1.81, "L": 1.14, "K": -0.41, "M": 1.00, "F": 1.35, "P": -0.09, "S": -0.97,
-                   "T": -0.77, "W": 1.71, "Y": 1.11, "V": 1.13}
+_Hydrophobicity = {
+    "A": 0.02,
+    "R": -0.42,
+    "N": -0.77,
+    "D": -1.04,
+    "C": 0.77,
+    "Q": -1.10,
+    "E": -1.14,
+    "G": -0.80,
+    "H": 0.26,
+    "I": 1.81,
+    "L": 1.14,
+    "K": -0.41,
+    "M": 1.00,
+    "F": 1.35,
+    "P": -0.09,
+    "S": -0.97,
+    "T": -0.77,
+    "W": 1.71,
+    "Y": 1.11,
+    "V": 1.13,
+}
 
-_AvFlexibility = {"A": 0.357, "R": 0.529, "N": 0.463, "D": 0.511, "C": 0.346, "Q": 0.493, "E": 0.497, "G": 0.544,
-                  "H": 0.323, "I": 0.462, "L": 0.365, "K": 0.466, "M": 0.295, "F": 0.314, "P": 0.509, "S": 0.507,
-                  "T": 0.444, "W": 0.305, "Y": 0.420, "V": 0.386}
+_AvFlexibility = {
+    "A": 0.357,
+    "R": 0.529,
+    "N": 0.463,
+    "D": 0.511,
+    "C": 0.346,
+    "Q": 0.493,
+    "E": 0.497,
+    "G": 0.544,
+    "H": 0.323,
+    "I": 0.462,
+    "L": 0.365,
+    "K": 0.466,
+    "M": 0.295,
+    "F": 0.314,
+    "P": 0.509,
+    "S": 0.507,
+    "T": 0.444,
+    "W": 0.305,
+    "Y": 0.420,
+    "V": 0.386,
+}
 
-_Polarizability = {"A": 0.046, "R": 0.291, "N": 0.134, "D": 0.105, "C": 0.128, "Q": 0.180, "E": 0.151, "G": 0.000,
-                   "H": 0.230, "I": 0.186, "L": 0.186, "K": 0.219, "M": 0.221, "F": 0.290, "P": 0.131, "S": 0.062,
-                   "T": 0.108, "W": 0.409, "Y": 0.298, "V": 0.140}
+_Polarizability = {
+    "A": 0.046,
+    "R": 0.291,
+    "N": 0.134,
+    "D": 0.105,
+    "C": 0.128,
+    "Q": 0.180,
+    "E": 0.151,
+    "G": 0.000,
+    "H": 0.230,
+    "I": 0.186,
+    "L": 0.186,
+    "K": 0.219,
+    "M": 0.221,
+    "F": 0.290,
+    "P": 0.131,
+    "S": 0.062,
+    "T": 0.108,
+    "W": 0.409,
+    "Y": 0.298,
+    "V": 0.140,
+}
 
-_FreeEnergy = {"A": -0.368, "R": -1.03, "N": 0.0, "D": 2.06, "C": 4.53, "Q": 0.731, "E": 1.77, "G": -0.525, "H": 0.0,
-               "I": 0.791, "L": 1.07, "K": 0.0, "M": 0.656, "F": 1.06, "P": -2.24, "S": -0.524, "T": 0.0, "W": 1.60,
-               "Y": 4.91, "V": 0.401}
+_FreeEnergy = {
+    "A": -0.368,
+    "R": -1.03,
+    "N": 0.0,
+    "D": 2.06,
+    "C": 4.53,
+    "Q": 0.731,
+    "E": 1.77,
+    "G": -0.525,
+    "H": 0.0,
+    "I": 0.791,
+    "L": 1.07,
+    "K": 0.0,
+    "M": 0.656,
+    "F": 1.06,
+    "P": -2.24,
+    "S": -0.524,
+    "T": 0.0,
+    "W": 1.60,
+    "Y": 4.91,
+    "V": 0.401,
+}
 
-_ResidueASA = {"A": 115.0, "R": 225.0, "N": 160.0, "D": 150.0, "C": 135.0, "Q": 180.0, "E": 190.0, "G": 75.0,
-               "H": 195.0, "I": 175.0, "L": 170.0, "K": 200.0, "M": 185.0, "F": 210.0, "P": 145.0, "S": 115.0,
-               "T": 140.0, "W": 255.0, "Y": 230.0, "V": 155.0}
+_ResidueASA = {
+    "A": 115.0,
+    "R": 225.0,
+    "N": 160.0,
+    "D": 150.0,
+    "C": 135.0,
+    "Q": 180.0,
+    "E": 190.0,
+    "G": 75.0,
+    "H": 195.0,
+    "I": 175.0,
+    "L": 170.0,
+    "K": 200.0,
+    "M": 185.0,
+    "F": 210.0,
+    "P": 145.0,
+    "S": 115.0,
+    "T": 140.0,
+    "W": 255.0,
+    "Y": 230.0,
+    "V": 155.0,
+}
 
-_ResidueVol = {"A": 52.6, "R": 109.1, "N": 75.7, "D": 68.4, "C": 68.3, "Q": 89.7, "E": 84.7, "G": 36.3, "H": 91.9,
-               "I": 102.0, "L": 102.0, "K": 105.1, "M": 97.7, "F": 113.9, "P": 73.6, "S": 54.9, "T": 71.2, "W": 135.4,
-               "Y": 116.2, "V": 85.1}
+_ResidueVol = {
+    "A": 52.6,
+    "R": 109.1,
+    "N": 75.7,
+    "D": 68.4,
+    "C": 68.3,
+    "Q": 89.7,
+    "E": 84.7,
+    "G": 36.3,
+    "H": 91.9,
+    "I": 102.0,
+    "L": 102.0,
+    "K": 105.1,
+    "M": 97.7,
+    "F": 113.9,
+    "P": 73.6,
+    "S": 54.9,
+    "T": 71.2,
+    "W": 135.4,
+    "Y": 116.2,
+    "V": 85.1,
+}
 
-_Steric = {"A": 0.52, "R": 0.68, "N": 0.76, "D": 0.76, "C": 0.62, "Q": 0.68, "E": 0.68, "G": 0.00, "H": 0.70, "I": 1.02,
-           "L": 0.98, "K": 0.68, "M": 0.78, "F": 0.70, "P": 0.36, "S": 0.53, "T": 0.50, "W": 0.70, "Y": 0.70, "V": 0.76}
+_Steric = {
+    "A": 0.52,
+    "R": 0.68,
+    "N": 0.76,
+    "D": 0.76,
+    "C": 0.62,
+    "Q": 0.68,
+    "E": 0.68,
+    "G": 0.00,
+    "H": 0.70,
+    "I": 1.02,
+    "L": 0.98,
+    "K": 0.68,
+    "M": 0.78,
+    "F": 0.70,
+    "P": 0.36,
+    "S": 0.53,
+    "T": 0.50,
+    "W": 0.70,
+    "Y": 0.70,
+    "V": 0.76,
+}
 
-_Mutability = {"A": 100.0, "R": 65.0, "N": 134.0, "D": 106.0, "C": 20.0, "Q": 93.0, "E": 102.0, "G": 49.0, "H": 66.0,
-               "I": 96.0, "L": 40.0, "K": -56.0, "M": 94.0, "F": 41.0, "P": 56.0, "S": 120.0, "T": 97.0, "W": 18.0,
-               "Y": 41.0, "V": 74.0}
+_Mutability = {
+    "A": 100.0,
+    "R": 65.0,
+    "N": 134.0,
+    "D": 106.0,
+    "C": 20.0,
+    "Q": 93.0,
+    "E": 102.0,
+    "G": 49.0,
+    "H": 66.0,
+    "I": 96.0,
+    "L": 40.0,
+    "K": -56.0,
+    "M": 94.0,
+    "F": 41.0,
+    "P": 56.0,
+    "S": 120.0,
+    "T": 97.0,
+    "W": 18.0,
+    "Y": 41.0,
+    "V": 74.0,
+}
 
 
 ###You can continuely add other properties of AADs to compute the descriptors of protein sequence.
 
 
 _AAProperty = (
-_Hydrophobicity, _AvFlexibility, _Polarizability, _FreeEnergy, _ResidueASA, _ResidueVol, _Steric, _Mutability)
+    _Hydrophobicity,
+    _AvFlexibility,
+    _Polarizability,
+    _FreeEnergy,
+    _ResidueASA,
+    _ResidueVol,
+    _Steric,
+    _Mutability,
+)
 
 _AAPropertyName = (
-'_Hydrophobicity', '_AvFlexibility', '_Polarizability', '_FreeEnergy', '_ResidueASA', '_ResidueVol', '_Steric',
-'_Mutability')
+    "_Hydrophobicity",
+    "_AvFlexibility",
+    "_Polarizability",
+    "_FreeEnergy",
+    "_ResidueASA",
+    "_ResidueVol",
+    "_Steric",
+    "_Mutability",
+)
 
 
 ##################################################################################################
@@ -115,6 +306,7 @@ def _std(listvalue, ddof=1):
 
 ##################################################################################################
 
+
 def NormalizeEachAAP(AAP):
     """
     ####################################################################################
@@ -134,7 +326,7 @@ def NormalizeEachAAP(AAP):
     ####################################################################################
     """
     if len(AAP.values()) != 20:
-        print('You can not input the correct number of properities of Amino acids!')
+        print("You can not input the correct number of properities of Amino acids!")
     else:
         Result = {}
         for i, j in AAP.items():
@@ -174,9 +366,13 @@ def CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, AAP, AAPName):
         for j in range(len(ProteinSequence) - i):
             temp = temp + AAPdic[ProteinSequence[j]] * AAPdic[ProteinSequence[j + 1]]
         if len(ProteinSequence) - i == 0:
-            Result['MoreauBrotoAuto' + AAPName + str(i)] = round(temp / (len(ProteinSequence)), 3)
+            Result["MoreauBrotoAuto" + AAPName + str(i)] = round(
+                temp / (len(ProteinSequence)), 3
+            )
         else:
-            Result['MoreauBrotoAuto' + AAPName + str(i)] = round(temp / (len(ProteinSequence) - i), 3)
+            Result["MoreauBrotoAuto" + AAPName + str(i)] = round(
+                temp / (len(ProteinSequence) - i), 3
+            )
 
     return Result
 
@@ -221,11 +417,17 @@ def CalculateEachMoranAuto(ProteinSequence, AAP, AAPName):
     for i in range(1, 31):
         temp = 0
         for j in range(len(ProteinSequence) - i):
-            temp = temp + (AAPdic[ProteinSequence[j]] - Pmean) * (AAPdic[ProteinSequence[j + i]] - Pmean)
+            temp = temp + (AAPdic[ProteinSequence[j]] - Pmean) * (
+                AAPdic[ProteinSequence[j + i]] - Pmean
+            )
         if len(ProteinSequence) - i == 0:
-            Result['MoranAuto' + AAPName + str(i)] = round(temp / (len(ProteinSequence)) / K, 3)
+            Result["MoranAuto" + AAPName + str(i)] = round(
+                temp / (len(ProteinSequence)) / K, 3
+            )
         else:
-            Result['MoranAuto' + AAPName + str(i)] = round(temp / (len(ProteinSequence) - i) / K, 3)
+            Result["MoranAuto" + AAPName + str(i)] = round(
+                temp / (len(ProteinSequence) - i) / K, 3
+            )
 
     return Result
 
@@ -264,15 +466,23 @@ def CalculateEachGearyAuto(ProteinSequence, AAP, AAPName):
     for i in range(1, 31):
         temp = 0
         for j in range(len(ProteinSequence) - i):
-            temp = temp + (AAPdic[ProteinSequence[j]] - AAPdic[ProteinSequence[j + i]]) ** 2
+            temp = (
+                temp
+                + (AAPdic[ProteinSequence[j]] - AAPdic[ProteinSequence[j + i]]) ** 2
+            )
         if len(ProteinSequence) - i == 0:
-            Result['GearyAuto' + AAPName + str(i)] = round(temp / (2 * (len(ProteinSequence))) / K, 3)
+            Result["GearyAuto" + AAPName + str(i)] = round(
+                temp / (2 * (len(ProteinSequence))) / K, 3
+            )
         else:
-            Result['GearyAuto' + AAPName + str(i)] = round(temp / (2 * (len(ProteinSequence) - i)) / K, 3)
+            Result["GearyAuto" + AAPName + str(i)] = round(
+                temp / (2 * (len(ProteinSequence) - i)) / K, 3
+            )
     return Result
 
 
 ##################################################################################################
+
 
 def CalculateNormalizedMoreauBrotoAuto(ProteinSequence, AAProperty, AAPropertyName):
     """
@@ -297,8 +507,9 @@ def CalculateNormalizedMoreauBrotoAuto(ProteinSequence, AAProperty, AAPropertyNa
     """
     Result = {}
     for i in range(len(AAProperty)):
-        Result[AAPropertyName[i]] = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, AAProperty[i],
-                                                                           AAPropertyName[i])
+        Result[AAPropertyName[i]] = CalculateEachNormalizedMoreauBrotoAuto(
+            ProteinSequence, AAProperty[i], AAPropertyName[i]
+        )
 
     return Result
 
@@ -325,7 +536,9 @@ def CalculateMoranAuto(ProteinSequence, AAProperty, AAPropertyName):
     """
     Result = {}
     for i in range(len(AAProperty)):
-        Result[AAPropertyName[i]] = CalculateEachMoranAuto(ProteinSequence, AAProperty[i], AAPropertyName[i])
+        Result[AAPropertyName[i]] = CalculateEachMoranAuto(
+            ProteinSequence, AAProperty[i], AAPropertyName[i]
+        )
 
     return Result
 
@@ -352,7 +565,9 @@ def CalculateGearyAuto(ProteinSequence, AAProperty, AAPropertyName):
     """
     Result = {}
     for i in range(len(AAProperty)):
-        Result[AAPropertyName[i]] = CalculateEachGearyAuto(ProteinSequence, AAProperty[i], AAPropertyName[i])
+        Result[AAPropertyName[i]] = CalculateEachGearyAuto(
+            ProteinSequence, AAProperty[i], AAPropertyName[i]
+        )
 
     return Result
 
@@ -377,7 +592,9 @@ def CalculateNormalizedMoreauBrotoAutoHydrophobicity(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _Hydrophobicity, '_Hydrophobicity')
+    result = CalculateEachNormalizedMoreauBrotoAuto(
+        ProteinSequence, _Hydrophobicity, "_Hydrophobicity"
+    )
     return result
 
 
@@ -400,7 +617,9 @@ def CalculateNormalizedMoreauBrotoAutoAvFlexibility(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _AvFlexibility, '_AvFlexibility')
+    result = CalculateEachNormalizedMoreauBrotoAuto(
+        ProteinSequence, _AvFlexibility, "_AvFlexibility"
+    )
     return result
 
 
@@ -423,7 +642,9 @@ def CalculateNormalizedMoreauBrotoAutoPolarizability(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _Polarizability, '_Polarizability')
+    result = CalculateEachNormalizedMoreauBrotoAuto(
+        ProteinSequence, _Polarizability, "_Polarizability"
+    )
     return result
 
 
@@ -446,7 +667,9 @@ def CalculateNormalizedMoreauBrotoAutoFreeEnergy(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _FreeEnergy, '_FreeEnergy')
+    result = CalculateEachNormalizedMoreauBrotoAuto(
+        ProteinSequence, _FreeEnergy, "_FreeEnergy"
+    )
     return result
 
 
@@ -469,7 +692,9 @@ def CalculateNormalizedMoreauBrotoAutoResidueASA(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _ResidueASA, '_ResidueASA')
+    result = CalculateEachNormalizedMoreauBrotoAuto(
+        ProteinSequence, _ResidueASA, "_ResidueASA"
+    )
     return result
 
 
@@ -492,7 +717,9 @@ def CalculateNormalizedMoreauBrotoAutoResidueVol(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _ResidueVol, '_ResidueVol')
+    result = CalculateEachNormalizedMoreauBrotoAuto(
+        ProteinSequence, _ResidueVol, "_ResidueVol"
+    )
     return result
 
 
@@ -513,7 +740,7 @@ def CalculateNormalizedMoreauBrotoAutoSteric(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _Steric, '_Steric')
+    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _Steric, "_Steric")
     return result
 
 
@@ -534,7 +761,9 @@ def CalculateNormalizedMoreauBrotoAutoMutability(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachNormalizedMoreauBrotoAuto(ProteinSequence, _Mutability, '_Mutability')
+    result = CalculateEachNormalizedMoreauBrotoAuto(
+        ProteinSequence, _Mutability, "_Mutability"
+    )
     return result
 
 
@@ -558,7 +787,7 @@ def CalculateMoranAutoHydrophobicity(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachMoranAuto(ProteinSequence, _Hydrophobicity, '_Hydrophobicity')
+    result = CalculateEachMoranAuto(ProteinSequence, _Hydrophobicity, "_Hydrophobicity")
     return result
 
 
@@ -581,7 +810,7 @@ def CalculateMoranAutoAvFlexibility(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachMoranAuto(ProteinSequence, _AvFlexibility, '_AvFlexibility')
+    result = CalculateEachMoranAuto(ProteinSequence, _AvFlexibility, "_AvFlexibility")
     return result
 
 
@@ -604,7 +833,7 @@ def CalculateMoranAutoPolarizability(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachMoranAuto(ProteinSequence, _Polarizability, '_Polarizability')
+    result = CalculateEachMoranAuto(ProteinSequence, _Polarizability, "_Polarizability")
     return result
 
 
@@ -627,7 +856,7 @@ def CalculateMoranAutoFreeEnergy(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachMoranAuto(ProteinSequence, _FreeEnergy, '_FreeEnergy')
+    result = CalculateEachMoranAuto(ProteinSequence, _FreeEnergy, "_FreeEnergy")
     return result
 
 
@@ -650,7 +879,7 @@ def CalculateMoranAutoResidueASA(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachMoranAuto(ProteinSequence, _ResidueASA, '_ResidueASA')
+    result = CalculateEachMoranAuto(ProteinSequence, _ResidueASA, "_ResidueASA")
     return result
 
 
@@ -673,7 +902,7 @@ def CalculateMoranAutoResidueVol(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachMoranAuto(ProteinSequence, _ResidueVol, '_ResidueVol')
+    result = CalculateEachMoranAuto(ProteinSequence, _ResidueVol, "_ResidueVol")
     return result
 
 
@@ -696,7 +925,7 @@ def CalculateMoranAutoSteric(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachMoranAuto(ProteinSequence, _Steric, '_Steric')
+    result = CalculateEachMoranAuto(ProteinSequence, _Steric, "_Steric")
     return result
 
 
@@ -719,7 +948,7 @@ def CalculateMoranAutoMutability(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachMoranAuto(ProteinSequence, _Mutability, '_Mutability')
+    result = CalculateEachMoranAuto(ProteinSequence, _Mutability, "_Mutability")
     return result
 
 
@@ -746,7 +975,7 @@ def CalculateGearyAutoHydrophobicity(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachGearyAuto(ProteinSequence, _Hydrophobicity, '_Hydrophobicity')
+    result = CalculateEachGearyAuto(ProteinSequence, _Hydrophobicity, "_Hydrophobicity")
     return result
 
 
@@ -768,7 +997,7 @@ def CalculateGearyAutoAvFlexibility(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachGearyAuto(ProteinSequence, _AvFlexibility, '_AvFlexibility')
+    result = CalculateEachGearyAuto(ProteinSequence, _AvFlexibility, "_AvFlexibility")
     return result
 
 
@@ -791,7 +1020,7 @@ def CalculateGearyAutoPolarizability(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachGearyAuto(ProteinSequence, _Polarizability, '_Polarizability')
+    result = CalculateEachGearyAuto(ProteinSequence, _Polarizability, "_Polarizability")
     return result
 
 
@@ -814,7 +1043,7 @@ def CalculateGearyAutoFreeEnergy(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachGearyAuto(ProteinSequence, _FreeEnergy, '_FreeEnergy')
+    result = CalculateEachGearyAuto(ProteinSequence, _FreeEnergy, "_FreeEnergy")
     return result
 
 
@@ -837,7 +1066,7 @@ def CalculateGearyAutoResidueASA(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachGearyAuto(ProteinSequence, _ResidueASA, '_ResidueASA')
+    result = CalculateEachGearyAuto(ProteinSequence, _ResidueASA, "_ResidueASA")
     return result
 
 
@@ -860,7 +1089,7 @@ def CalculateGearyAutoResidueVol(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachGearyAuto(ProteinSequence, _ResidueVol, '_ResidueVol')
+    result = CalculateEachGearyAuto(ProteinSequence, _ResidueVol, "_ResidueVol")
     return result
 
 
@@ -883,7 +1112,7 @@ def CalculateGearyAutoSteric(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachGearyAuto(ProteinSequence, _Steric, '_Steric')
+    result = CalculateEachGearyAuto(ProteinSequence, _Steric, "_Steric")
     return result
 
 
@@ -906,11 +1135,12 @@ def CalculateGearyAutoMutability(ProteinSequence):
     ####################################################################################
     """
 
-    result = CalculateEachGearyAuto(ProteinSequence, _Mutability, '_Mutability')
+    result = CalculateEachGearyAuto(ProteinSequence, _Mutability, "_Mutability")
     return result
 
 
 ##################################################################################################
+
 
 def CalculateNormalizedMoreauBrotoAutoTotal(ProteinSequence):
     """
@@ -1025,7 +1255,9 @@ def CalculateAutoTotal(ProteinSequence):
 ##################################################################################################
 if __name__ == "__main__":
     protein = "ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS"
-    temp1 = CalculateNormalizedMoreauBrotoAuto(protein, AAProperty=_AAProperty, AAPropertyName=_AAPropertyName)
+    temp1 = CalculateNormalizedMoreauBrotoAuto(
+        protein, AAProperty=_AAProperty, AAPropertyName=_AAPropertyName
+    )
     # print temp1
     temp2 = CalculateMoranAutoMutability(protein)
     print(temp2)
