@@ -19,14 +19,14 @@ Date: 2016.06.04
 Email: gadsby@163.com
 
 """
-# Third party modules
-from PyProtein.AAComposition import (
+# First party modules
+from PyBioMed.PyProtein.AAComposition import (
     CalculateAAComposition,
     CalculateDipeptideComposition,
     GetSpectrumDict,
 )
-from PyProtein.AAIndex import GetAAIndex1, GetAAIndex23
-from PyProtein.Autocorrelation import (
+from PyBioMed.PyProtein.AAIndex import GetAAIndex1, GetAAIndex23
+from PyBioMed.PyProtein.Autocorrelation import (
     CalculateEachGearyAuto,
     CalculateEachMoranAuto,
     CalculateEachNormalizedMoreauBrotoAuto,
@@ -34,11 +34,11 @@ from PyProtein.Autocorrelation import (
     CalculateMoranAutoTotal,
     CalculateNormalizedMoreauBrotoAutoTotal,
 )
-from PyProtein.ConjointTriad import CalculateConjointTriad
-from PyProtein.CTD import CalculateCTD
-from PyProtein.GetSubSeq import GetSubSequence
-from PyProtein.PseudoAAC import GetAPseudoAAC, GetPseudoAAC, _GetPseudoAAC
-from PyProtein.QuasiSequenceOrder import (
+from PyBioMed.PyProtein.ConjointTriad import CalculateConjointTriad
+from PyBioMed.PyProtein.CTD import CalculateCTD
+from PyBioMed.PyProtein.GetSubSeq import GetSubSequence
+from PyBioMed.PyProtein.PseudoAAC import GetAPseudoAAC, GetPseudoAAC, _GetPseudoAAC
+from PyBioMed.PyProtein.QuasiSequenceOrder import (
     GetQuasiSequenceOrder,
     GetQuasiSequenceOrderp,
     GetSequenceOrderCouplingNumberp,
@@ -433,8 +433,12 @@ class PyProtein:
 #####################################################################################################
 if __name__ == "__main__":
     import os
-    from PyProtein.Autocorrelation import _Steric
-    from PyProtein.PseudoAAC import _Hydrophobicity, _hydrophilicity, _residuemass
+    from PyBioMed.PyProtein.Autocorrelation import _Steric
+    from PyBioMed.PyProtein.PseudoAAC import (
+        _Hydrophobicity,
+        _hydrophilicity,
+        _residuemass,
+    )
 
     protein = "ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS"
     cds = PyProtein(protein)

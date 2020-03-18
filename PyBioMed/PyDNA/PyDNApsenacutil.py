@@ -29,9 +29,9 @@ import pickle
 import sys
 from math import pow
 
-# Third party modules
-from PyDNAnacutil import MakeKmerList
-from PyDNAutil import Frequency
+# First party modules
+from PyBioMed.PyDNA.PyDNAnacutil import MakeKmerList
+from PyBioMed.PyDNA.PyDNAutil import Frequency
 
 ALPHABET = "ACGT"
 

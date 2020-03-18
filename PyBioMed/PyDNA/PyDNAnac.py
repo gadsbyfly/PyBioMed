@@ -24,9 +24,13 @@ Email: gadsby@163.com and oriental-cds@163.com
 """
 
 
-# Third party modules
-from PyDNAnacutil import MakeKmerVector, MakeRevcompKmerList, MakeUptoKmerList
-from PyDNAutil import GetData
+# First party modules
+from PyBioMed.PyDNA.PyDNAnacutil import (
+    MakeKmerVector,
+    MakeRevcompKmerList,
+    MakeUptoKmerList,
+)
+from PyBioMed.PyDNA.PyDNAutil import GetData
 
 
 def CheckNacPara(k, normalize=False, upto=False, alphabet="ACGT"):
@@ -182,9 +186,9 @@ def GetIdKmer(data, hs, non_hs, **kwargs):
     else:
         alphabet = "ACGT"
 
-    from PyDNAnacutil import MakeKmerList
-    from PyDNAnacutil import Diversity
-    from PyDNAnacutil import IdXS
+    from PyBioMed.PyDNA.PyDNAnacutil import MakeKmerList
+    from PyBioMed.PyDNA.PyDNAnacutil import Diversity
+    from PyBioMed.PyDNA.PyDNAnacutil import IdXS
 
     rev_kmer_list, upto, revcomp, normalize = [], False, False, False
 

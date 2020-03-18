@@ -19,14 +19,14 @@ Date: 2016.06.04
 Email: gadsby@163.com
 
 """
-# Third party modules
-from AAComposition import (
+# First party modules
+from PyBioMed.PyProtein.AAComposition import (
     CalculateAAComposition,
     CalculateDipeptideComposition,
     GetSpectrumDict,
 )
-from AAIndex import GetAAIndex1, GetAAIndex23
-from Autocorrelation import (
+from PyBioMed.PyProtein.AAIndex import GetAAIndex1, GetAAIndex23
+from PyBioMed.PyProtein.Autocorrelation import (
     CalculateEachGearyAuto,
     CalculateEachMoranAuto,
     CalculateEachNormalizedMoreauBrotoAuto,
@@ -34,11 +34,11 @@ from Autocorrelation import (
     CalculateMoranAutoTotal,
     CalculateNormalizedMoreauBrotoAutoTotal,
 )
-from ConjointTriad import CalculateConjointTriad
-from CTD import CalculateCTD
-from GetSubSeq import GetSubSequence
-from PseudoAAC import GetAPseudoAAC, GetPseudoAAC, _GetPseudoAAC
-from QuasiSequenceOrder import (
+from PyBioMed.PyProtein.ConjointTriad import CalculateConjointTriad
+from PyBioMed.PyProtein.CTD import CalculateCTD
+from PyBioMed.PyProtein.GetSubSeq import GetSubSequence
+from PyBioMed.PyProtein.PseudoAAC import GetAPseudoAAC, GetPseudoAAC, _GetPseudoAAC
+from PyBioMed.PyProtein.QuasiSequenceOrder import (
     GetQuasiSequenceOrder,
     GetQuasiSequenceOrderp,
     GetSequenceOrderCouplingNumberp,

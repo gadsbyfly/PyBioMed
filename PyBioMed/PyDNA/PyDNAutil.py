@@ -30,7 +30,7 @@ import sys
 ALPHABET = "ACGT"
 
 
-"""Used for process original data."""
+# Used for process original data
 
 
 class Seq:
@@ -290,17 +290,15 @@ def GetData(input_data, desc=False):
         sys.exit(0)
 
 
-"""Some basic function for generate feature vector."""
+# Some basic function for generate feature vector
 
 
 def Frequency(tol_str, tar_str):
     """
-    #################################################################
     Generate the frequency of tar_str in tol_str.
 
     :param tol_str: mother string.
     :param tar_str: substring.
-    #################################################################
     """
     i, j, tar_count = 0, 0, 0
     len_tol_str = len(tol_str)
@@ -446,7 +444,7 @@ def GeneratePhycheValue(
                     sys.exit(0)
 
     # Generate phyche_value.
-    from PyDNApsenacutil import GetPhycheIndex, ExtendPhycheIndex
+    from PyBioMed.PyDNA.PyDNApsenacutil import GetPhycheIndex, ExtendPhycheIndex
 
     return ExtendPhycheIndex(GetPhycheIndex(k, phyche_index), extra_phyche_index)
 
@@ -469,7 +467,7 @@ def ConvertPhycheIndexToDict(phyche_index):
         if len_index_value == 4 ** i:
             k = i
             break
-    from PyDNAnacutil import MakeKmerList
+    from PyBioMed.PyDNA.PyDNAnacutil import MakeKmerList
 
     kmer_list = MakeKmerList(k, ALPHABET)
     # print kmer_list

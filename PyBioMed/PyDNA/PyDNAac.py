@@ -26,8 +26,8 @@ Email: gadsby@163.com and oriental-cds@163.com
 # Core Library modules
 from functools import reduce
 
-# Third party modules
-from PyDNAutil import GeneratePhycheValue, GetData
+# First party modules
+from PyBioMed.PyDNA.PyDNAutil import GeneratePhycheValue, GetData
 
 
 def CheckAcc(lag, k):
@@ -108,7 +108,7 @@ def GetDAC(input_data, **kwargs):
     sequence_list, phyche_value = ReadyAcc(
         input_data, k, phyche_index, all_property, extra_phyche_index
     )
-    from PyDNAacutil import MakeACVector
+    from PyBioMed.PyDNA.PyDNAacutil import MakeACVector
 
     vec = MakeACVector(sequence_list, lag, phyche_value, k)
     dict_keys = ["DAC_%s" % i for i in range(1, len(vec[0]) + 1)]
@@ -154,7 +154,7 @@ def GetDCC(input_data, **kwargs):
     sequence_list, phyche_value = ReadyAcc(
         input_data, k, phyche_index, all_property, extra_phyche_index
     )
-    from PyDNAacutil import MakeCCVector
+    from PyBioMed.PyDNA.PyDNAacutil import MakeCCVector
 
     vec = MakeCCVector(sequence_list, lag, phyche_value, k)
     dict_keys = ["DCC_%s" % i for i in range(1, len(vec[0]) + 1)]
@@ -201,7 +201,7 @@ def GetDACC(input_data, **kwargs):
     sequence_list, phyche_value = ReadyAcc(
         input_data, k, phyche_index, all_property, extra_phyche_index
     )
-    from PyDNAacutil import MakeACVector, MakeCCVector
+    from PyBioMed.PyDNA.PyDNAacutil import MakeACVector, MakeCCVector
 
     zipped = list(
         zip(
@@ -254,7 +254,7 @@ def GetTAC(input_data, **kwargs):
     sequence_list, phyche_value = ReadyAcc(
         input_data, k, phyche_index, all_property, extra_phyche_index
     )
-    from PyDNAacutil import MakeACVector
+    from PyBioMed.PyDNA.PyDNAacutil import MakeACVector
 
     vec = MakeACVector(sequence_list, lag, phyche_value, k)
     dict_keys = ["TAC_%s" % i for i in range(1, len(vec[0]) + 1)]
@@ -300,7 +300,7 @@ def GetTCC(input_data, **kwargs):
     sequence_list, phyche_value = ReadyAcc(
         input_data, k, phyche_index, all_property, extra_phyche_index
     )
-    from PyDNAacutil import MakeCCVector
+    from PyBioMed.PyDNA.PyDNAacutil import MakeCCVector
 
     vec = MakeCCVector(sequence_list, lag, phyche_value, k)
     dict_keys = ["TCC_%s" % i for i in range(1, len(vec[0]) + 1)]
@@ -347,7 +347,7 @@ def GetTACC(input_data, **kwargs):
         input_data, k, phyche_index, all_property, extra_phyche_index
     )
 
-    from PyDNAacutil import MakeACVector, MakeCCVector
+    from PyBioMed.PyDNA.PyDNAacutil import MakeACVector, MakeCCVector
 
     zipped = list(
         zip(
@@ -419,7 +419,7 @@ if __name__ == "__main__":
         ],
     ]
 
-    from PyDNAutil import NormalizeIndex
+    from PyBioMed.PyDNA.PyDNAutil import NormalizeIndex
 
     dac = GetDAC("GACTGAACTGCACTTTGGTTTCATATTATTTGCTC", phyche_index=["Twist", "Tilt"])
     print(dac)

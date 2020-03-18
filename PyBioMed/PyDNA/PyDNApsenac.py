@@ -23,9 +23,9 @@ Email: gadsby@163.com and oriental-cds@163.com
 ##############################################################################
 """
 
-# Third party modules
-from PyDNApsenacutil import ExtendPhycheIndex
-from PyDNAutil import GetData
+# First party modules
+from PyBioMed.PyDNA.PyDNApsenacutil import ExtendPhycheIndex
+from PyBioMed.PyDNA.PyDNAutil import GetData
 
 
 def CheckPsenac(lamada, w, k):
@@ -212,7 +212,7 @@ def GetSequenceListAndPhycheValue(
         raise
 
     # Generate phyche_value and sequence_list.
-    from PyDNApsenacutil import GetPhycheIndex
+    from PyBioMed.PyDNA.PyDNApsenacutil import GetPhycheIndex
 
     phyche_value = ExtendPhycheIndex(
         GetPhycheIndex(k, phyche_index), extra_phyche_index
@@ -253,7 +253,7 @@ def GetPseDNC(input_data, **kwargs):
     sequence_list, phyche_value = GetSequenceListAndPhycheValuePsednc(
         input_data, extra_phyche_index
     )
-    from PyDNApsenacutil import MakePsekncVector
+    from PyBioMed.PyDNA.PyDNApsenacutil import MakePsekncVector
 
     vector = MakePsekncVector(sequence_list, lamada, w, k, phyche_value, theta_type=1)
     dict_keys = ["PseDNC_%s" % i for i in range(1, len(vector[0]) + 1)]
@@ -292,7 +292,7 @@ def GetPseKNC(input_data, **kwargs):
     sequence_list, phyche_value = GetSequenceListAndPhycheValuePseknc(
         input_data, extra_phyche_index
     )
-    from PyDNApsenacutil import MakeOldPsekncVector
+    from PyBioMed.PyDNA.PyDNApsenacutil import MakeOldPsekncVector
 
     vector = MakeOldPsekncVector(
         sequence_list, lamada, w, k, phyche_value, theta_type=1
@@ -344,7 +344,7 @@ def GetPCPseDNC(input_data, **kwargs):
     sequence_list, phyche_value = GetSequenceListAndPhycheValue(
         input_data, k, phyche_index, extra_phyche_index, all_property
     )
-    from PyDNApsenacutil import MakePsekncVector
+    from PyBioMed.PyDNA.PyDNApsenacutil import MakePsekncVector
 
     vector = MakePsekncVector(sequence_list, lamada, w, k, phyche_value, theta_type=1)
 
@@ -394,7 +394,7 @@ def GetPCPseTNC(input_data, **kwargs):
         input_data, k, phyche_index, extra_phyche_index, all_property
     )
     # Make vector.
-    from PyDNApsenacutil import MakePsekncVector
+    from PyBioMed.PyDNA.PyDNApsenacutil import MakePsekncVector
 
     vector = MakePsekncVector(sequence_list, lamada, w, k, phyche_value, theta_type=1)
     dict_keys = ["PCPseTNC_%s" % i for i in range(1, len(vector[0]) + 1)]
@@ -443,7 +443,7 @@ def GetSCPseDNC(input_data, **kwargs):
         input_data, k, phyche_index, extra_phyche_index, all_property
     )
     # Make vector.
-    from PyDNApsenacutil import MakePsekncVector
+    from PyBioMed.PyDNA.PyDNApsenacutil import MakePsekncVector
 
     vector = MakePsekncVector(sequence_list, lamada, w, k, phyche_value, theta_type=2)
     dict_keys = ["SCPseDNC_%s" % i for i in range(1, len(vector[0]) + 1)]
@@ -493,7 +493,7 @@ def GetSCPseTNC(input_data, **kwargs):
         input_data, k, phyche_index, extra_phyche_index, all_property
     )
     # Make vector.
-    from PyDNApsenacutil import MakePsekncVector
+    from PyBioMed.PyDNA.PyDNApsenacutil import MakePsekncVector
 
     vector = MakePsekncVector(sequence_list, lamada, w, k, phyche_value, theta_type=2)
 
@@ -533,7 +533,7 @@ if __name__ == "__main__":
     print(sc_psetnc)
 
     import time
-    from PyDNAutil import NormalizeIndex
+    from PyBioMed.PyDNA.PyDNAutil import NormalizeIndex
 
     start_time = time.time()
 
@@ -653,7 +653,7 @@ if __name__ == "__main__":
             7.176,
         ]
     ]
-    from PyDNAutil import NormalizeIndex
+    from PyBioMed.PyDNA.PyDNAutil import NormalizeIndex
 
     dic = GetPCPseTNC(
         "GACTGAACTGCACTTTGGTTTCATATTATTTGCTC",
@@ -696,7 +696,7 @@ if __name__ == "__main__":
             1.019,
         ]
     ]
-    from PyDNAutil import NormalizeIndex
+    from PyBioMed.PyDNA.PyDNAutil import NormalizeIndex
 
     dic = GetSCPseDNC(
         "GACTGAACTGCACTTTGGTTTCATATTATTTGCTC",
@@ -788,7 +788,7 @@ if __name__ == "__main__":
             7.176,
         ]
     ]
-    from PyDNAutil import NormalizeIndex
+    from PyBioMed.PyDNA.PyDNAutil import NormalizeIndex
 
     dic = GetSCPseTNC(
         "GACTGAACTGCACTTTGGTTTCATATTATTTGCTC",

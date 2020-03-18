@@ -13,8 +13,10 @@
 import logging
 
 # Third party modules
-from PyPretreatMolutil import *
 from rdkit import Chem
+
+# First party modules
+from PyBioMed.PyPretreat.PyPretreatMolutil import *
 
 log = logging.getLogger(__name__)
 

@@ -101,7 +101,7 @@ def CalculateInteraction3(dict1={}, dict2={}):
 if __name__ == "__main__":
     import os
 
-    from PyDNA import PyDNAac
+    from PyBioMed.PyDNA import PyDNAac
 
     DNA_des = PyDNAac.GetTCC(
         "GACTGAACTGCACTTTGGTTTCATATTATTTGCTC",
@@ -110,12 +110,12 @@ if __name__ == "__main__":
 
     print(DNA_des)
 
-    from PyProtein import CTD
+    from PyBioMed.PyProtein import CTD
 
     protein = "ADGCGVGEGTGQGPMCNCMCMKWVYADEDAADLESDSFADEDASLESDSFPWSNQRVFCSFADEDAS"
     protein_des = CTD.CalculateCTD(protein)
 
-    from PyMolecule import moe
+    from PyBioMed.PyMolecule import moe
     from rdkit import Chem
 
     smis = ["CCCC", "CCCCC", "CCCCCC", "CC(N)C(=O)O", "CC(N)C(=O)[O-].[Na+]"]

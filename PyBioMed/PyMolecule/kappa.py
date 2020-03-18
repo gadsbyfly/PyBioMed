@@ -27,8 +27,14 @@ Email: gadsby@163.com and oriental-cds@163.com
 
 # Third party modules
 from rdkit import Chem
-from rdkit.Chem import pyPeriodicTable as PeriodicTable
 from rdkit.Chem import rdchem
+
+try:
+    # TODO: Is this deprecated?
+    # https://github.com/rdkit/rdkit/issues/2741#issuecomment-546709239
+    from rdkit.Chem import pyPeriodicTable as PeriodicTable
+except ImportError:
+    from rdkit.Chem import PeriodicTable
 
 periodicTable = rdchem.GetPeriodicTable()
 

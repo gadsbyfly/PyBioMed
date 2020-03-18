@@ -27,7 +27,11 @@ Email: oriental-cds@163.com
 import string
 
 # Third party modules
-from PyMolecule import (
+from rdkit import Chem
+
+# First party modules
+from PyBioMed.PyGetMol import Getmol as getmol
+from PyBioMed.PyMolecule import (
     AtomTypes,
     basak,
     bcut,
@@ -46,10 +50,6 @@ from PyMolecule import (
     moreaubroto,
     topology,
 )
-from rdkit import Chem
-
-# First party modules
-from PyBioMed.PyGetMol import Getmol as getmol
 
 Version = 1.0
 FingerprintName = [

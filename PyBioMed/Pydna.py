@@ -23,11 +23,11 @@ Email: gadsby@163.com and oriental-cds@163.com
 ##############################################################################
 """
 
-# Third party modules
-from PyDNA.PyDNAac import *
-from PyDNA.PyDNAnac import *
-from PyDNA.PyDNApsenac import *
-from PyDNA.PyDNAutil import *
+# First party modules
+from PyBioMed.PyDNA.PyDNAac import *
+from PyBioMed.PyDNA.PyDNAnac import *
+from PyBioMed.PyDNA.PyDNApsenac import *
+from PyBioMed.PyDNA.PyDNAutil import *
 
 
 class PyDNA:
