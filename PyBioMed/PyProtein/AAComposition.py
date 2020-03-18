@@ -6,40 +6,30 @@
 #  which is included in the file license.txt, found at the root
 #  of the PyBioMed source tree.
 """
-###############################################################################
-
 The module is used for computing the composition of amino acids, dipetide and
-
 3-mers (tri-peptide) for a given protein sequence. You can get 8420 descriptors
 
 for a given protein sequence. You can freely use and distribute it. If you hava
 
 any problem, you could contact with us timely!
 
-References:
+References
+----------
+.. [1] Reczko, M. and Bohr, H. (1994) The DEF data base of sequence based protein
+   fold class predictions. Nucleic Acids Res, 22, 3616-3619.
 
-[1]: Reczko, M. and Bohr, H. (1994) The DEF data base of sequence based protein
+.. [2] Hua, S. and Sun, Z. (2001) Support vector machine approach for protein
+   subcellular localization prediction. Bioinformatics, 17, 721-728.
 
-fold class predictions. Nucleic Acids Res, 22, 3616-3619.
-
-[2]: Hua, S. and Sun, Z. (2001) Support vector machine approach for protein
-
-subcellular localization prediction. Bioinformatics, 17, 721-728.
-
-
-[3]:Grassmann, J., Reczko, M., Suhai, S. and Edler, L. (1999) Protein fold class
-
-prediction: new methods of statistical classification. Proc Int Conf Intell Syst Mol
-
-Biol, 106-112.
+.. [3] Grassmann, J., Reczko, M., Suhai, S. and Edler, L. (1999) Protein fold
+   class prediction: new methods of statistical classification. Proc Int Conf
+   Intell Syst Mol Biol, 106-112.
 
 Authors: Dongsheng Cao and Zhijiang Yao.
 
 Date: 2016.7.27
 
 Email: oriental-cds@163.com and gadsby@163.com
-
-###############################################################################
 """
 
 # Core Library modules
@@ -95,10 +85,8 @@ def CalculateAAComposition(ProteinSequence):
     return Result
 
 
-#############################################################################################
 def CalculateDipeptideComposition(ProteinSequence):
     """
-    ########################################################################
     Calculate the composition of dipeptidefor a given protein sequence.
 
     Usage:
@@ -110,7 +98,6 @@ def CalculateDipeptideComposition(ProteinSequence):
     Output: result is a dict form containing the composition of
 
     400 dipeptides.
-    ########################################################################
     """
 
     LengthSequence = len(ProteinSequence)
@@ -148,7 +135,6 @@ def Getkmers():
     return kmers
 
 
-#############################################################################################
 def GetSpectrumDict(proteinsequence):
     """
     ########################################################################
@@ -163,7 +149,6 @@ def GetSpectrumDict(proteinsequence):
     Output: result is a dict form containing the composition values of 8000
 
     3-mers.
-    ########################################################################
     """
     result = {}
     kmers = Getkmers()

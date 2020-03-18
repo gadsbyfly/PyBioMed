@@ -21,10 +21,12 @@ Email: gadsby@163.com and oriental-cds@163.com
 """
 
 # Third party modules
-import AtomTypes as ATEstate
 import numpy
 from rdkit import Chem
 from rdkit.Chem.EState import Fingerprinter as ESFP
+
+# First party modules
+import PyBioMed.PyMolecule.AtomTypes as ATEstate
 
 Version = 1.0
 ################################################################

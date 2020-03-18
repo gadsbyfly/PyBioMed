@@ -6,45 +6,33 @@
 #  which is included in the file license.txt, found at the root
 #  of the PyBioMed source tree.
 """
-#####################################################################################
+Compute the composition, transition and distribution descriptors based on the
+different properties of AADs.
 
-This module is used for computing the composition, transition and distribution
+The AADs with the same properties is marked as the same number. You can get 147
+descriptors for a given protein sequence.
 
-descriptors based on the different properties of AADs. The AADs with the same
+References
+----------
+.. [1] Inna Dubchak, Ilya Muchink, Stephen R.Holbrook and Sung-Hou Kim.
+       Prediction of protein folding class using global description of amino
+       acid sequence. Proc.Natl. Acad.Sci.USA, 1995, 92, 8700-8704.
 
-properties is marked as the same number. You can get 147 descriptors for a given
-
-protein sequence. You can freely use and distribute it. If you hava  any problem,
-
-you could contact with us timely!
-
-References:
-
-[1]: Inna Dubchak, Ilya Muchink, Stephen R.Holbrook and Sung-Hou Kim. Prediction
-
-of protein folding class using global description of amino acid sequence. Proc.Natl.
-
-Acad.Sci.USA, 1995, 92, 8700-8704.
-
-[2]:Inna Dubchak, Ilya Muchink, Christopher Mayor, Igor Dralyuk and Sung-Hou Kim.
-
-Recognition of a Protein Fold in the Context of the SCOP classification. Proteins:
-
-Structure, Function and Genetics,1999,35,401-407.
+.. [2] Inna Dubchak, Ilya Muchink, Christopher Mayor, Igor Dralyuk and Sung-Hou
+       Kim. Recognition of a Protein Fold in the Context of the SCOP
+       classification. Proteins: Structure, Function and
+       Genetics, 1999, 35, 401-407.
 
 Authors: Zhijiang Yao and Dongsheng Cao.
 
 Date: 2016.06.04
 
 Email: gadsby@163.com
-
-#####################################################################################
 """
 
 # Core Library modules
 import copy
 import math
-import string
 
 AALetter = [
     "A",
@@ -91,7 +79,8 @@ _Polarizability = {"1": "GASDT", "2": "CPNVEQIL", "3": "KMHFRYW"}
 # '1'stand for (0-0.108); '2'stand for (0.128-0.186), '3' stand for (0.219-0.409)
 
 
-##You can continuely add other properties of AADs to compute descriptors of protein sequence.
+# You can continuely add other properties of AADs to compute descriptors of
+# protein sequence.
 
 _AATProperty = (
     _Hydrophobicity,
@@ -114,12 +103,8 @@ _AATPropertyName = (
 )
 
 
-##################################################################################################
-
-
 def StringtoNum(ProteinSequence, AAProperty):
     """
-    ###############################################################################################
     Tranform the protein sequence into the string form such as 32123223132121123.
 
     Usage:
@@ -131,13 +116,11 @@ def StringtoNum(ProteinSequence, AAProperty):
     AAProperty is a dict form containing classifciation of amino acids such as _Polarizability.
 
     Output: result is a string such as 123321222132111123222
-    ###############################################################################################
     """
-
     hardProteinSequence = copy.deepcopy(ProteinSequence)
     for k, m in AAProperty.items():
         for index in m:
-            hardProteinSequence = string.replace(hardProteinSequence, index, k)
+            hardProteinSequence = hardProteinSequence.replace(index, k)
     TProteinSequence = hardProteinSequence
 
     return TProteinSequence
@@ -226,14 +209,13 @@ def CalculateDistribution(ProteinSequence, AAProperty, AAPName):
     TProteinSequence = StringtoNum(ProteinSequence, AAProperty)
     Result = {}
     Num = len(TProteinSequence)
-    temp = ("1", "2", "3")
-    for i in temp:
+    for i in ("1", "2", "3"):
         num = TProteinSequence.count(i)
         ink = 1
         indexk = 0
         cds = []
         while ink <= num:
-            indexk = string.find(TProteinSequence, i, indexk) + 1
+            indexk = TProteinSequence.find(i, indexk) + 1
             cds.append(indexk)
             ink = ink + 1
 
@@ -244,7 +226,6 @@ def CalculateDistribution(ProteinSequence, AAProperty, AAPName):
             Result[AAPName + "D" + i + "075"] = 0
             Result[AAPName + "D" + i + "100"] = 0
         else:
-
             Result[AAPName + "D" + i + "001"] = round(float(cds[0]) / Num * 100, 3)
             Result[AAPName + "D" + i + "025"] = round(
                 float(cds[int(math.floor(num * 0.25)) - 1]) / Num * 100, 3
@@ -260,7 +241,6 @@ def CalculateDistribution(ProteinSequence, AAProperty, AAPName):
     return Result
 
 
-##################################################################################################
 def CalculateCompositionHydrophobicity(ProteinSequence):
     """
     ###############################################################################################

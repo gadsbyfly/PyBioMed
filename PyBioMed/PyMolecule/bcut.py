@@ -26,8 +26,10 @@ Email: gadsby@163.com
 # Third party modules
 import numpy
 import numpy.linalg
-from AtomProperty import GetRelativeAtomicProperty
 from rdkit import Chem
+
+# First party modules
+from PyBioMed.PyMolecule.AtomProperty import GetRelativeAtomicProperty
 
 Version = 1.0
 ################################################################

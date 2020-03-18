@@ -6,6 +6,8 @@
 #  which is included in the file license.txt, found at the root
 #  of the PyBioMed source tree.
 """
+Used for process original data.
+
 Created on Wed May 18 14:06:37 2016
 
 @author: yzj
@@ -16,9 +18,6 @@ Created on Wed May 18 14:06:37 2016
 import sys
 
 ALPHABET = "ACGT"
-
-
-"""Used for process original data."""
 
 
 class Seq:
@@ -278,7 +277,7 @@ def GetData(input_data, desc=False):
         sys.exit(0)
 
 
-"""Some basic function for generate feature vector."""
+# Some basic function for generate feature vector
 
 
 def Frequency(tol_str, tar_str):
@@ -537,4 +536,4 @@ if __name__ == "__main__":
             1.019,
         ]
     ]
-    print((NormalizeIndex(phyche_index, is_convert_dict=False)[0]))
+    print(NormalizeIndex(phyche_index, is_convert_dict=False)[0])

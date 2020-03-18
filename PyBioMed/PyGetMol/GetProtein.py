@@ -206,7 +206,7 @@ def pdbSeq(pdb, use_atoms=False):
     seq = [l for l in pdb if l[0:6] == "SEQRES"]
     if len(seq) != 0 and not use_atoms:
         seq_type = "SEQRES"
-        chain_dict = dict([(l[11], []) for l in seq])
+        chain_dict = {l[11]: [] for l in seq}
         for c in chain_dict.keys():
             chain_seq = [l[19:70].split() for l in seq if l[11] == c]
             for x in chain_seq:
@@ -245,7 +245,7 @@ def pdbSeq(pdb, use_atoms=False):
 
                 atoms.append(l)
 
-        chain_dict = dict([(l[21], []) for l in atoms])
+        chain_dict = {l[21]: [] for l in atoms}
         for c in chain_dict.keys():
             chain_dict[c] = [l[17:20] for l in atoms if l[21] == c]
 

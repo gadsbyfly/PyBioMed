@@ -21,15 +21,17 @@ Email: gadsby@163.com and oriental-cds@163.com
 """
 # Third party modules
 import pybel
-from estate import CalculateEstateFingerprint as EstateFingerprint
-from ghosecrippen import GhoseCrippenFingerprint
-from PubChemFingerprints import calcPubChemFingerAll
 from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem, ChemicalFeatures, MACCSkeys
 from rdkit.Chem.AtomPairs import Pairs, Torsions
 from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit.Chem.Pharm2D import Generate
 from rdkit.Chem.Pharm2D.SigFactory import SigFactory
+
+# First party modules
+from PyBioMed.PyMolecule.estate import CalculateEstateFingerprint as EstateFingerprint
+from PyBioMed.PyMolecule.ghosecrippen import GhoseCrippenFingerprint
+from PyBioMed.PyMolecule.PubChemFingerprints import calcPubChemFingerAll
 
 Version = 1.0
 similaritymeasure = [i[0] for i in DataStructs.similarityFunctions]

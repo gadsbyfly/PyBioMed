@@ -18,13 +18,13 @@ Email: gadsby@163.com
 # Core Library modules
 import os
 
-# Third party modules
-from test_PyDNA import test_pydna
-from test_PyGetMol import test_pygetmol
-from test_PyInteration import test_pyinteration
-from test_PyMolecule import test_pymolecule
-from test_PyPretreat import test_pypretreat
-from test_PyProtein import test_pyprotein
+# First party modules
+from PyBioMed.test.test_PyDNA import test_pydna
+from PyBioMed.test.test_PyGetMol import test_pygetmol
+from PyBioMed.test.test_PyInteration import test_pyinteration
+from PyBioMed.test.test_PyMolecule import test_pymolecule
+from PyBioMed.test.test_PyPretreat import test_pypretreat
+from PyBioMed.test.test_PyProtein import test_pyprotein
 
 
 def test_pybiomed():

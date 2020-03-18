@@ -56,7 +56,7 @@ def _ReadPatts(fileName):
                         l.append((sma, p))
                         patts[cha] = l
                 else:
-                    print(("Problems parsing smarts: %s" % (sma)))
+                    print("Problems parsing smarts: %s" % (sma))
     return order, patts
 
 
