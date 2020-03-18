@@ -29,12 +29,11 @@ Email: gadsby@163.com
 import ftplib
 import gzip
 import os
+import signal
 import string
 import sys
 import time
-from threading import Thread
-
-ThreadStop = Thread._Thread__stop
+from contextlib import contextmanager
 
 
 class TimeoutException(Exception):
@@ -78,48 +77,19 @@ _aa_index = [
 # AA1_TO_AA3 = dict([(aa[1],aa[0]) for aa in _aa_index])
 
 
-def timelimited(timeout):
-    """
-    A decorator to limit the execution time.
-    """
+@contextmanager
+def timelimited(seconds):
+    """A decorator to limit the execution time."""
 
-    def decorator(function):
-        def decorator2(*args, **kwargs):
-            class TimeLimited(Thread):
-                def __init__(self, _error=None):
-                    Thread.__init__(self)
-                    self._error = _error
+    def signal_handler(signum, frame):
+        raise TimeoutException("Network timeout, skip!!")
 
-                def run(self):
-                    try:
-                        self.result = function(*args, **kwargs)
-                    except Exception as e:
-                        self._error = e
-
-                def _stop(self):
-                    if self.isAlive():
-                        ThreadStop(self)
-
-            t = TimeLimited()
-            t.start()
-            t.join(timeout)
-
-            if isinstance(t._error, TimeoutException):
-                t._stop()
-                print("Network timeout, skip!!")
-                return "Network timeout, skip!!"
-
-            if t.isAlive():
-                t._stop()
-                print("Network timeout, skip!!")
-                return "Network timeout, skip!!"
-
-            if t._error is None:
-                return t.result
-
-        return decorator2
-
-    return decorator
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.alarm(seconds)
+    try:
+        yield
+    finally:
+        signal.alarm(0)
 
 
 def unZip(some_file, some_output):
