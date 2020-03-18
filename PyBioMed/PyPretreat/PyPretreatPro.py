@@ -9,7 +9,7 @@
 #####################################################################################
 This module is used for checking whether the input protein sequence is valid amino acid
 
-sequence. You can freely use and distribute it. If you hava any problem, you could 
+sequence. You can freely use and distribute it. If you hava any problem, you could
 
 contact with us timely!
 
@@ -23,7 +23,28 @@ Email: gadsby@163.com
 
 """
 
-AALetter = ["A", "R", "N", "D", "C", "E", "Q", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"]
+AALetter = [
+    "A",
+    "R",
+    "N",
+    "D",
+    "C",
+    "E",
+    "Q",
+    "G",
+    "H",
+    "I",
+    "L",
+    "K",
+    "M",
+    "F",
+    "P",
+    "S",
+    "T",
+    "W",
+    "Y",
+    "V",
+]
 
 
 def ProteinCheck(ProteinSequence):

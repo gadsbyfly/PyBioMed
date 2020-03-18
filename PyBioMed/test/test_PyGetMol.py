@@ -12,37 +12,35 @@ Authors: Zhijiang Yao and Dongsheng Cao.
 
 Date: 2016.06.14
 
-Email: gadsby@163.com 
+Email: gadsby@163.com
 """
+# Core Library modules
 import os
-
 import string
 
+# First party modules
 from PyBioMed.PyGetMol.GetDNA import GetDNAFromUniGene
-
-from PyBioMed.PyGetMol.GetProtein import GetSeqFromPDB
-from PyBioMed.PyGetMol.GetProtein import GetPDB
-
-from PyBioMed.PyGetMol.Getmol import ReadMolFromSDF
-from PyBioMed.PyGetMol.Getmol import ReadMolFromMOL
-from PyBioMed.PyGetMol.Getmol import ReadMolFromSmile
-from PyBioMed.PyGetMol.Getmol import GetMolFromCAS
-from PyBioMed.PyGetMol.Getmol import GetMolFromNCBI
-from PyBioMed.PyGetMol.Getmol import GetMolFromDrugbank
-from PyBioMed.PyGetMol.Getmol import GetMolFromKegg
-from PyBioMed.PyGetMol.GetProtein import timelimited
-
+from PyBioMed.PyGetMol.Getmol import (
+    GetMolFromCAS,
+    GetMolFromDrugbank,
+    GetMolFromKegg,
+    GetMolFromNCBI,
+    ReadMolFromMOL,
+    ReadMolFromSDF,
+    ReadMolFromSmile,
+)
+from PyBioMed.PyGetMol.GetProtein import GetPDB, GetSeqFromPDB, timelimited
 
 
 def test_pygetmol():
-    print('-'*10+'START'+'-'*10)
-    #==============================================================================
+    print("-" * 10 + "START" + "-" * 10)
+    # ==============================================================================
     # GetDNA
-    #==============================================================================
+    # ==============================================================================
     @timelimited(30)
     def test_GetDNAFromUniGene():
-        seqid = 'AA954964'
-        seqid2 = 'CB216422'
+        seqid = "AA954964"
+        seqid2 = "CB216422"
 
         try:
             sequence1 = GetDNAFromUniGene(seqid)
@@ -52,56 +50,51 @@ def test_pygetmol():
             print(sequence2)
         except:
             print("Can't visit the internet")
+
     test_GetDNAFromUniGene()
-    print('-'*25)
-    #==============================================================================
+    print("-" * 25)
+    # ==============================================================================
     # Get protein
-    #==============================================================================
+    # ==============================================================================
     @timelimited(30)
     def test_GetPDB():
         try:
-            GetPDB(['1atp','1efz','1f88'])
+            GetPDB(["1atp", "1efz", "1f88"])
 
-            seq = GetSeqFromPDB('1atp.pdb')
+            seq = GetSeqFromPDB("1atp.pdb")
             print(seq)
 
-            seq2 = GetSeqFromPDB('1efz.pdb')
+            seq2 = GetSeqFromPDB("1efz.pdb")
             print(seq2)
 
-            seq3 = GetSeqFromPDB('1f88.pdb')
+            seq3 = GetSeqFromPDB("1f88.pdb")
             print(seq3)
         except:
             print("Can't visit the internet")
+
     test_GetPDB()
-    print('-'*25)
-    #==============================================================================
+    print("-" * 25)
+    # ==============================================================================
     # Get molecule
-    #==============================================================================
+    # ==============================================================================
     @timelimited(30)
     def test_GetSmallMol():
         try:
-            temp=GetMolFromCAS(casid="50-12-4")
+            temp = GetMolFromCAS(casid="50-12-4")
             print(temp)
-            temp=GetMolFromNCBI(cid="2244")
+            temp = GetMolFromNCBI(cid="2244")
             print(temp)
-            temp=GetMolFromDrugbank(dbid="DB00133")
+            temp = GetMolFromDrugbank(dbid="DB00133")
             print(temp)
-            temp=GetMolFromKegg(kid="D02176")
+            temp = GetMolFromKegg(kid="D02176")
             print(temp)
         except:
             print("Can't visit the internet")
+
     test_GetSmallMol()
 
-    print('-'*10+'END'+'-'*10)
+    print("-" * 10 + "END" + "-" * 10)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test_pygetmol()
-
-
-
-
-
-
-
-
-

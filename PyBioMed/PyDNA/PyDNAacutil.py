@@ -8,9 +8,9 @@
 """
 ##############################################################################
 
-A class used for computing different types of DNA descriptors! 
+A class used for computing different types of DNA descriptors!
 
-You can freely use and distribute it. If you have any problem, 
+You can freely use and distribute it. If you have any problem,
 
 you could contact with us timely.
 
@@ -23,7 +23,7 @@ Email: gadsby@163.com and oriental-cds@163.com
 ##############################################################################
 """
 
-ALPHABET = 'ACGT'
+ALPHABET = "ACGT"
 
 
 def ExtendPhycheIndex(original_index, extend_index):
@@ -50,17 +50,18 @@ def MakeACVector(sequence_list, lag, phyche_value, k):
                 # Calculate average phyche_value for a nucleotide.
                 ave_phyche_value = 0.0
                 for i in range(len_seq - temp_lag - k + 1):
-                    nucleotide = sequence[i: i + k]
+                    nucleotide = sequence[i : i + k]
                     ave_phyche_value += float(phyche_value[nucleotide][j])
                 ave_phyche_value /= len_seq
 
                 # Calculate the vector.
                 temp_sum = 0.0
                 for i in range(len_seq - temp_lag - k + 1):
-                    nucleotide1 = sequence[i: i + k]
-                    nucleotide2 = sequence[i + temp_lag: i + temp_lag + k]
-                    temp_sum += (float(phyche_value[nucleotide1][j]) - ave_phyche_value) * (
-                        float(phyche_value[nucleotide2][j]))
+                    nucleotide1 = sequence[i : i + k]
+                    nucleotide2 = sequence[i + temp_lag : i + temp_lag + k]
+                    temp_sum += (
+                        float(phyche_value[nucleotide1][j]) - ave_phyche_value
+                    ) * (float(phyche_value[nucleotide2][j]))
 
                 each_vec.append(round(temp_sum / (len_seq - temp_lag - k + 1), 3))
         vec_ac.append(each_vec)
@@ -85,7 +86,7 @@ def MakeCCVector(sequence_list, lag, phyche_value, k):
                         ave_phyche_value1 = 0.0
                         ave_phyche_value2 = 0.0
                         for j in range(len_seq - temp_lag - k + 1):
-                            nucleotide = sequence[j: j + k]
+                            nucleotide = sequence[j : j + k]
                             ave_phyche_value1 += float(phyche_value[nucleotide][i1])
                             ave_phyche_value2 += float(phyche_value[nucleotide][i2])
                         ave_phyche_value1 /= len_seq
@@ -94,16 +95,21 @@ def MakeCCVector(sequence_list, lag, phyche_value, k):
                         # Calculate the vector.
                         temp_sum = 0.0
                         for j in range(len_seq - temp_lag - k + 1):
-                            nucleotide1 = sequence[j: j + k]
-                            nucleotide2 = sequence[j + temp_lag: j + temp_lag + k]
-                            temp_sum += (float(phyche_value[nucleotide1][i1]) - ave_phyche_value1) * \
-                                        (float(phyche_value[nucleotide2][i2]) - ave_phyche_value2)
-                        each_vec.append(round(temp_sum / (len_seq - temp_lag - k + 1), 3))
+                            nucleotide1 = sequence[j : j + k]
+                            nucleotide2 = sequence[j + temp_lag : j + temp_lag + k]
+                            temp_sum += (
+                                float(phyche_value[nucleotide1][i1]) - ave_phyche_value1
+                            ) * (
+                                float(phyche_value[nucleotide2][i2]) - ave_phyche_value2
+                            )
+                        each_vec.append(
+                            round(temp_sum / (len_seq - temp_lag - k + 1), 3)
+                        )
 
         vec_cc.append(each_vec)
 
     return vec_cc
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

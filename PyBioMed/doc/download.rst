@@ -38,17 +38,3 @@ https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/download/PyBioMed%20I
 *HTML in zip file*
 
 https://github.com/gadsbyfly/PyBioMed/tree/master/PyBioMed/download/PyBioMedDocumentationHTML.zip
-
-
-
-
-
-
-
-
-
-
-
-
-
-

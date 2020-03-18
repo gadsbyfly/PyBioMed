@@ -1,6 +1,6 @@
 test module
 ===========
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: test
     :members:
     :undoc-members:

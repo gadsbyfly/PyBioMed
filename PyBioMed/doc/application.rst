@@ -4,8 +4,8 @@ The PyBioMed Python package can generate various feature vectors for molecular s
 
 .. figure:: /image/brief.png
 	:width: 400px
-	:align: center 
-	
+	:align: center
+
 	The overview of PyBioMed python package. PyBioMed could calculate various molecular descriptors from chemicals, proteins, DNAs/RNAs and their interactions. PyBioMed can also pretreat molecules, protein sequences and DNA sequences.
 
 
@@ -17,13 +17,13 @@ Caco-2 cell monolayer model is a popular surrogate in predicting the in vitro hu
 .. figure:: /image/caco2.png
 	:width: 400px
 	:align: center
-	
+
 	The receiver operating characteristic curve of Caco-2 classification.
 
 
 .. code-block:: python
 	:linenos:
-	
+
 	from PyBioMed import Pymolecule
 	import pandas as pd
 	from sklearn.ensemble import RandomForestClassifier
@@ -64,7 +64,7 @@ Caco-2 cell monolayer model is a popular surrogate in predicting the in vitro hu
 	#==============================================================================
 	# Calculating auc score
 	#==============================================================================
-	AUC_score = round(metrics.roc_auc_score(test_set_label, proba),2)      
+	AUC_score = round(metrics.roc_auc_score(test_set_label, proba),2)
 	TPR = round(metrics.recall_score(test_set_label, predict_label),2)
 	ACC = round(metrics.accuracy_score(test_set_label, predict_label),2)
 	P = float(test_set_label.sum())
@@ -78,15 +78,15 @@ Caco-2 cell monolayer model is a popular surrogate in predicting the in vitro hu
 	#==============================================================================
 	plt.figure(figsize = (10,7))
 	plt.plot(fpr_cv, tpr_cv, 'r', label='auc = %0.2f'% AUC_score, lw=2)
-	plt.xlabel('False positive rate',{'fontsize':20}); 
-	plt.ylabel('True positive rate',{'fontsize':20}); 
+	plt.xlabel('False positive rate',{'fontsize':20});
+	plt.ylabel('True positive rate',{'fontsize':20});
 	plt.title('ROC of Caco-2 Classification',{'fontsize':25})
 	plt.legend(loc="lower right",numpoints=15)
-	plt.show() 
+	plt.show()
 
 >>> print 'sensitivity:',TPR, 'specificity:', SPE, 'accuracy:', ACC, 'AUC:', AUC_score, 'MACCS:', matthews_corrcoef, 'F1:', f1_score
 sensitivity: 0.91 specificity: 0.8 accuracy: 0.86 AUC: 0.93 MACCS: 0.72 F1: 0.88
-	
+
 
 
 Application 2 Prediction of aqueous solubility
@@ -96,13 +96,13 @@ Aqueous solubility is one of the major drug properties to be optimized in drug d
 .. figure:: /image/solubility.png
 	:width: 400px
 	:align: center
-	
+
 	The aqueous solubility prediction. The X-axis represents experimental values and the Y-axis represents predicted values.
-	
+
 
 .. code-block:: python
 	:linenos:
-	
+
 	from PyBioMed import Pymolecule
 	import pandas as pd
 	import numpy as np
@@ -116,8 +116,8 @@ Aqueous solubility is one of the major drug properties to be optimized in drug d
 	#==============================================================================
 	#change the path to your own path
 	solubility_set = pd.read_excel('./example/solubility/Solubility-total.xlsx',sheetname = 0)
-	
-	
+
+
 	smis = solubility_set['SMI']
 	logS = solubility_set['logS']
 	#==============================================================================
@@ -136,7 +136,7 @@ Aqueous solubility is one of the major drug properties to be optimized in drug d
 	#==============================================================================
 	# building the model and predict
 	#==============================================================================
-	train_set_des, test_set_des, train_logS, test_logS = train_test_split(solubility_set_des, 
+	train_set_des, test_set_des, train_logS, test_logS = train_test_split(solubility_set_des,
 	logS, test_size = 0.33, random_state = 42)
 
 	kf = cross_validation.KFold(train_set_des.shape[0], n_folds=10, random_state=0)
@@ -155,7 +155,7 @@ Aqueous solubility is one of the major drug properties to be optimized in drug d
 	pred_logS_test = clf.predict(test_set_des)
 	r2_test = metrics.r2_score(test_logS, pred_logS_test)
 	#==============================================================================
-	# plotting the figure 
+	# plotting the figure
 	#==============================================================================
 	plt.figure(figsize = (10,10))
 	plt.plot(range(-15,5),range(-15,5),'black')
@@ -164,10 +164,10 @@ Aqueous solubility is one of the major drug properties to be optimized in drug d
 	plt.title('Aqueous Solubility Prediction',{'fontsize':25})
 	plt.legend(loc="lower right",numpoints=1)
 	plt.plot()
-	
+
 >>> print 'CV_R^2:',r2_cv,'Test_R^2:',r2_test
 CV_R^2: 0.86 Test_R^2: 0.84
-	
+
 Application 3 Prediction of drug–target interaction from the integration of chemical and protein spaces
 -------------------------------------------------------------------------------------------------------
 Drug-target interactions (DTIs) are central to current drug discovery processes and public health fields. The rapidly increasing amount of publicly available data in biology and chemistry enables researchers to revisit drug-target interaction problems by systematic integration and analysis of heterogeneous data. To identify the interactions between drugs and targets is of important in drug discovery today. Interaction with ligands can modulate the function of many targets in the processes of signal transport, catalytic reaction and so on. With the enrichment of data repository, automatically prediction of target-protein interactions is an alternative method to facilitate drug discovery. Our previous work (Cao et al, 2014) proved that the calculated features perform well in the prediction of chemical-protein interaction. The benchmark data set for building the drug-target interaction predictor was taken from (Yamanishi, Araki et al. 2008). The dataset contains 6888 samples, among them 2922 drug-protein pairs have interactions which are defined as positive dataset and 3966 drug-protein pairs do not have interactions which are defined as negative dataset. To represent each drug-protein pairs, 150 CATS molecular fingerprints and 147 CTD composition, transition and distribution features of protein, a total number of 297 features were used. The random forest (RF) classifier was employed to build model.
@@ -175,12 +175,12 @@ Drug-target interactions (DTIs) are central to current drug discovery processes 
 .. figure:: /image/DPI.png
 	:width: 400px
 	:align: center
-	
+
 	The receiver operating characteristic curve of drug-target interaction classification.
 
 .. code-block:: python
 	:linenos:
-	
+
 	from PyBioMed import Pymolecule
 	from PyBioMed import Pyprotein
 	import pandas as pd
@@ -210,7 +210,7 @@ Drug-target interactions (DTIs) are central to current drug discovery processes 
 		pair_des = {}
 		drugclass = Pymolecule.PyMolecule()
 		drugclass.ReadMolFromSmile(smi)
-		pair_des.update(drugclass.GetCATS2D())    
+		pair_des.update(drugclass.GetCATS2D())
 		proclass = Pyprotein.PyProtein(seq)
 		pair_des.update(proclass.GetCTD())
 		return pair_des
@@ -221,8 +221,8 @@ Drug-target interactions (DTIs) are central to current drug discovery processes 
 			positive_pairs_des[n] = pair_des
 		except:
 			continue
-		
-	negative_pairs_des = {}    
+
+	negative_pairs_des = {}
 	for n, negative_pair in enumerate(negative_pairs):
 		try:
 			pair_des = calculate_pair_des(smis.ix[negative_pair[1]][1],protein_seq.ix[negative_pair[0]][1])
@@ -269,7 +269,7 @@ Drug-target interactions (DTIs) are central to current drug discovery processes 
 	plt.title('ROC of Drug-target Interaction Classification',{'fontsize':25})
 	plt.legend(loc="lower right",numpoints=15)
 	plt.show()
-	
+
 >>> print 'sensitivity:',TPR, 'specificity:', SPE, 'accuracy:', ACC, 'AUC:', AUC_score, 'MCC:', matthews_corrcoef, 'F1:', f1_score
 sensitivity: 0.84 specificity: 0.93 accuracy: 0.89 AUC: 0.95 MCC: 0.78 F1: 0.87
 
@@ -285,7 +285,7 @@ To build the classification model, the CSV file containing the calculated descri
 .. figure:: /image/subcell.png
 	:width: 400px
 	:align: center
-	
+
 	The receiver operating characteristic curve of protein subcellular location classification.
 
 .. code-block:: python
@@ -367,12 +367,12 @@ Nucleosome positioning participates in many cellular activities and plays signif
 .. figure:: /image/DNA.png
 	:width: 400px
 	:align: center
-	
+
 	The receiver operating characteristic curve of nucleosome positioning in genomes classification.
 
 .. code-block:: python
 	:linenos:
-	
+
 	import pandas as pd
 	from PyBioMed import Pydna
 	from PyBioMed.PyGetMol import GetDNA
@@ -389,7 +389,7 @@ Nucleosome positioning participates in many cellular activities and plays signif
 	seqs_neg = GetDNA.ReadFasta(open(path + '/example/dna/H_sapiens_neg.fasta'))
 	#==============================================================================
 	# calculating descriptors
-	#==============================================================================	
+	#==============================================================================
 	def calculate_des(seq):
 		des = []
 		dnaclass = Pydna.PyDNA(seq)
@@ -400,7 +400,7 @@ Nucleosome positioning participates in many cellular activities and plays signif
 		return des
 	pos_des = []
 	for seq_pos in seqs_pos:
-		pos_des.append(calculate_des(seq_pos))		
+		pos_des.append(calculate_des(seq_pos))
 	neg_des = []
 	for seq_neg in seqs_neg:
 		neg_des.append(calculate_des(seq_neg))
@@ -441,20 +441,6 @@ Nucleosome positioning participates in many cellular activities and plays signif
 	plt.title('ROC of Nucleosome Positioning in Genomes Classification',{'fontsize':25})
 	plt.legend(loc="lower right",numpoints=15)
 	plt.show()
-	
+
 >>> print 'sensitivity:',TPR, 'specificity:', SPE, 'accuracy:', ACC, 'AUC:', AUC_score, 'MACCS:', matthews_corrcoef, 'F1:', f1_score
 sensitivity: 0.82 specificity: 0.80 accuracy: 0.81 AUC: 0.88 MACCS: 0.62 F1: 0.81
-
-
-
-
-
-
-
-
-
-
-
-
-
-

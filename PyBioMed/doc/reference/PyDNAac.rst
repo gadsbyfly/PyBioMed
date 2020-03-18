@@ -1,6 +1,6 @@
 PyDNAac module
 ==============
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: PyDNAac
     :members:
     :undoc-members:

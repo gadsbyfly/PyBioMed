@@ -2094,7 +2094,7 @@ H LINK010101
 D Substitution matrices from an neural network model (Lin et al., 2001)
 R PMID:11694178
 A Lin, K., May, A.C. and Taylor, W.R.
-T Amino acid substitution matrices from an artificial neural network 
+T Amino acid substitution matrices from an artificial neural network
   model
 J J Comput Biol. 8, 471-481 (2001)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -2153,7 +2153,7 @@ D Structure derived matrix (SDM) for alignment of distantly related sequences
   (Prlic et al., 2000)
 R PMID:10964983
 A Prlic, A., Domingues, F.S. and Sippl, M.J.
-T Structure-derived substitution matrices for alignment of distantly 
+T Structure-derived substitution matrices for alignment of distantly
   related sequences
 J Protein Eng. 13, 545-550 (2000)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -2183,7 +2183,7 @@ D Homologous structure dereived matrix (HSDM) for alignment of distantly
   related sequences (Prlic et al., 2000)
 R PMID:10964983
 A Prlic, A., Domingues, F.S. and Sippl, M.J.
-T Structure-derived substitution matrices for alignment of distantly 
+T Structure-derived substitution matrices for alignment of distantly
   related sequences
 J Protein Eng. 13, 545-550 (2000)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -2222,7 +2222,7 @@ J Bioinformatics. 17, 686-699 (2001)
 * #Zsuzsanna Doszt?yi and Andrew E. Torda
 * #Amino acid similarity matrices based on force fields
 * #The amino acids are ordered according to the first principal component of the SM_SAUSAGE matrix.
-* #The native cysteine residues were devided into two subsets depending on  their covalent state. 
+* #The native cysteine residues were devided into two subsets depending on  their covalent state.
 * #Three rows correspond to cysteines: disulfide bonded (O), free cysteines (J) and all cysteines (C).
 M rows = ARNDCQEGHILKMFPSTWYVJO, cols rows = ARNDCQEGHILKMFPSTWYV
     15.4    -4.9    -8.1   -10.7    38.6    -7.4   -10.7    -6.0     0.2    23.0    20.9   -10.9    17.8    18.9    -9.3    -1.6    -5.2    17.6    18.9    23.7
@@ -2327,7 +2327,7 @@ A Dosztanyi, Z. and Torda, A.E.
 T Amino acid similarity matrices based on force fields
 J Bioinformatics. 17, 686-699 (2001)
 * #SM_THREAD_NORM
-* #Normalised version of SM_THREADER 
+* #Normalised version of SM_THREADER
 * #based on the THREADER force field (Jones, DT et al.Nature, 358,86-89)
 * #For each matrix element of SM_THREADER, the average over its column and row were subtracted.
 * #Supplementary material
@@ -2465,7 +2465,7 @@ D STROMA score matrix for the alignment of known distant homologs
   (Qian-Goldstein, 2002)
 R PMID:12211027
 A Qian, B. and Goldstein, R.A.
-T Optimization of a new score function for the generation of accurate 
+T Optimization of a new score function for the generation of accurate
   alignments
 J Proteins. 48, 605-610 (2002)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV

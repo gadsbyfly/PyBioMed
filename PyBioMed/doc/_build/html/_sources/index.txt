@@ -15,10 +15,10 @@ The python package PyBioMed is designed by `CBDD Group`_ (Computational Biology 
    overview
    User_guide
    application
-   
+
 .. toctree::
    :maxdepth: 2
-   
+
    modules
    test
    download
@@ -38,10 +38,3 @@ Indices and tables
 .. figure:: /image/logocbdd.png
     :width: 500px
     :align: center
-
-
-
-
-
-
-

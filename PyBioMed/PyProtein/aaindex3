@@ -2,7 +2,7 @@ H TANS760101
 D Statistical contact potential derived from 25 x-ray protein structures
 R PMID:1004017
 A Tanaka, S. and Scheraga, H.A.
-T Medium- and long-range interaction parameters between amino acids 
+T Medium- and long-range interaction parameters between amino acids
   for predicting three-dimensional structures of proteins
 J Macromolecules 9, 945-950 (1976)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -62,7 +62,7 @@ D Interaction energies derived from side chain contacts in the interiors of
 R PMID:513136
 A Robson, B. and Osguthorpe, D.J.
 T Refined Models for Computer-Simulation of Protein Folding - Applications
-  to the Study of Conserved Secondary Structure and Flexible Hinge Points 
+  to the Study of Conserved Secondary Structure and Flexible Hinge Points
   During the Folding of Pancreatic Trypsin-Inhibitor
 J J. Mol. Biol. 132, 19-51 (1979)
 * (Glu is not available)
@@ -120,9 +120,9 @@ M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
 //
 H THOP960101
 D Mixed quasichemical and optimization-based protein contact potential
-R PMID:8876187 
+R PMID:8876187
 A Thomas, P.D. and Dill, K.A.
-T An iterative method for extracting energy-like quantities 
+T An iterative method for extracting energy-like quantities
   from protein structures
 J Proc. Natl. Acad. Sci. USA 93, 11628-11633 (1996)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -152,7 +152,7 @@ D Statistical potential derived by the maximization of the harmonic mean of Z
   scores
 R PMID:9000638
 A Mirny, L.A. and Shakhnovich, E.I.
-T How to derive a protein folding potential? A new approach 
+T How to derive a protein folding potential? A new approach
   to an old problem
 J J. Mol. Biol. 264, 1164-1179 (1996)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -179,7 +179,7 @@ M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
 //
 H VENM980101
 D Statistical potential derived by the maximization of the perceptron criterion
-R 
+R
 A Vendruscolo, M. and Domany E.
 T Pairwise contact potentials are unsuitable for protein folding
 J J. Chem. Phys. 109, 11101-11108 (1998)
@@ -209,7 +209,7 @@ H BASU010101
 D Optimization-based potential derived by the modified perceptron criterion
 R PMID:11391771
 A Bastolla, U., Farwer, J., Knapp, E.W. and Vendruscolo, M.
-T How to guarantee optimal stability for most representative 
+T How to guarantee optimal stability for most representative
   structures in the protein data bank
 J Proteins 44, 79-96 (2001)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -266,7 +266,7 @@ M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
 H MIYS850103
 D Quasichemical energy of interactions in an average buried environment
 A Miyazawa, S. and Jernigan, R.L.
-T Estimation of Effective Interresidue Contact Energies 
+T Estimation of Effective Interresidue Contact Energies
   from Protein Crystal-Structures-Quasi-Chemical Approximation
 J Macromolecules 18, 534-552 (1985)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -567,7 +567,7 @@ D Modified version of the Miyazawa-Jernigan transfer energy
 R PMID:10048329
 A Betancourt,M.R. and Thirumalai,D.
 T Pair potentials for protein folding: Choice of reference states
-  and sensitivity of predicted native states to variations 
+  and sensitivity of predicted native states to variations
   in the interaction schemes
 J Protein Science 8, 361-369 (1999)
 M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
@@ -887,7 +887,7 @@ M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
 H BONM030102
 D Quasichemical statistical potential for the intermediate orientation of
   interacting side groups
-R PMID:15072433 
+R PMID:15072433
 A Boniecki, M., Rotkiewicz, P., Skolnick, J. and Kolinski, A.
 T Protein fragment reconstruction using various modeling techniques
 J J. Comput. Aided Mol. Des. 17, 725-738 (2003)
@@ -916,7 +916,7 @@ M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
 H BONM030103
 D Quasichemical statistical potential for the parallel orientation of interacting
   side groups
-R PMID:15072433 
+R PMID:15072433
 A Boniecki, M., Rotkiewicz, P., Skolnick, J. and Kolinski, A.
 T Protein fragment reconstruction using various modeling techniques
 J J. Comput. Aided Mol. Des. 17, 725-738 (2003)
@@ -1031,7 +1031,7 @@ M rows = ARNDCQEGHILKMFPSTWYV, cols = ARNDCQEGHILKMFPSTWYV
 //
 H MICC010101
 D Optimization-derived potential
-R PMID:11151013 
+R PMID:11151013
 A Micheletti, C., Seno, F., Banavar, J.R. and Maritan, A.
 T Learning effective amino acid interactions through iterative
   stochastic techniques

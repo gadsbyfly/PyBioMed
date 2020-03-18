@@ -8,15 +8,15 @@
 """
 Created on Sat Jul 13 11:18:26 2013
 
-This module is used for downloading the PDB file from RCSB PDB web and 
+This module is used for downloading the PDB file from RCSB PDB web and
 
-extract its amino acid sequence. This module can also download the protein 
+extract its amino acid sequence. This module can also download the protein
 
-sequence from the uniprot (http://www.uniprot.org/) website. You can only 
+sequence from the uniprot (http://www.uniprot.org/) website. You can only
 
 need input a protein ID or prepare a file (ID.txt) related to ID. You can
 
-obtain a .txt (ProteinSequence.txt) file saving protein sequence you need.  
+obtain a .txt (ProteinSequence.txt) file saving protein sequence you need.
 
 Authors: Zhijiang Yao and Dongsheng Cao.
 
@@ -25,42 +25,53 @@ Date: 2016.06.04
 Email: gadsby@163.com
 """
 
-import os, ftplib, gzip, sys
+# Core Library modules
+import ftplib
+import gzip
+import os
+import string
+import sys
 import time
 from threading import Thread
 
 ThreadStop = Thread._Thread__stop
+
+
 class TimeoutException(Exception):
     pass
+
+
 HOSTNAME = "ftp.wwpdb.org"
 DIRECTORY = "/pub/pdb/data/structures/all/pdb/"
 PREFIX = "pdb"
 SUFFIX = ".ent.gz"
 
 # List of three and one letter amino acid codes
-_aa_index = [('ALA', 'A'),
-             ('CYS', 'C'),
-             ('ASP', 'D'),
-             ('GLU', 'E'),
-             ('PHE', 'F'),
-             ('GLY', 'G'),
-             ('HIS', 'H'),
-             ('HSE', 'H'),
-             ('HSD', 'H'),
-             ('ILE', 'I'),
-             ('LYS', 'K'),
-             ('LEU', 'L'),
-             ('MET', 'M'),
-             ('MSE', 'M'),
-             ('ASN', 'N'),
-             ('PRO', 'P'),
-             ('GLN', 'Q'),
-             ('ARG', 'R'),
-             ('SER', 'S'),
-             ('THR', 'T'),
-             ('VAL', 'V'),
-             ('TRP', 'W'),
-             ('TYR', 'Y')]
+_aa_index = [
+    ("ALA", "A"),
+    ("CYS", "C"),
+    ("ASP", "D"),
+    ("GLU", "E"),
+    ("PHE", "F"),
+    ("GLY", "G"),
+    ("HIS", "H"),
+    ("HSE", "H"),
+    ("HSD", "H"),
+    ("ILE", "I"),
+    ("LYS", "K"),
+    ("LEU", "L"),
+    ("MET", "M"),
+    ("MSE", "M"),
+    ("ASN", "N"),
+    ("PRO", "P"),
+    ("GLN", "Q"),
+    ("ARG", "R"),
+    ("SER", "S"),
+    ("THR", "T"),
+    ("VAL", "V"),
+    ("TRP", "W"),
+    ("TYR", "Y"),
+]
 
 
 # AA3_TO_AA1 = dict(_aa_index)
@@ -71,16 +82,17 @@ def timelimited(timeout):
     """
     A decorator to limit the execution time.
     """
+
     def decorator(function):
-        def decorator2(*args,**kwargs):
+        def decorator2(*args, **kwargs):
             class TimeLimited(Thread):
-                def __init__(self,_error= None,):
+                def __init__(self, _error=None):
                     Thread.__init__(self)
                     self._error = _error
 
                 def run(self):
                     try:
-                        self.result = function(*args,**kwargs)
+                        self.result = function(*args, **kwargs)
                     except Exception as e:
                         self._error = e
 
@@ -92,20 +104,21 @@ def timelimited(timeout):
             t.start()
             t.join(timeout)
 
-            if isinstance(t._error,TimeoutException):
+            if isinstance(t._error, TimeoutException):
                 t._stop()
-                print('Network timeout, skip!!')
-                return 'Network timeout, skip!!'
+                print("Network timeout, skip!!")
+                return "Network timeout, skip!!"
 
             if t.isAlive():
                 t._stop()
-                print('Network timeout, skip!!')
-                return 'Network timeout, skip!!'
+                print("Network timeout, skip!!")
+                return "Network timeout, skip!!"
 
             if t._error is None:
                 return t.result
 
         return decorator2
+
     return decorator
 
 
@@ -114,8 +127,8 @@ def unZip(some_file, some_output):
     Unzip some_file using the gzip library and write to some_output.
     """
 
-    f = gzip.open(some_file, 'r')
-    g = open(some_output, 'w')
+    f = gzip.open(some_file, "r")
+    g = open(some_output, "w")
     g.writelines(f.readlines())
     f.close()
     g.close()
@@ -123,8 +136,9 @@ def unZip(some_file, some_output):
     os.remove(some_file)
 
 
-def pdbDownload(file_list, hostname=HOSTNAME, directory=DIRECTORY, prefix=PREFIX,
-                suffix=SUFFIX):
+def pdbDownload(
+    file_list, hostname=HOSTNAME, directory=DIRECTORY, prefix=PREFIX, suffix=SUFFIX
+):
     """
     Download all pdb files in file_list and unzip them.
     """
@@ -140,7 +154,7 @@ def pdbDownload(file_list, hostname=HOSTNAME, directory=DIRECTORY, prefix=PREFIX
     # Remove .pdb extensions from file_list
     for file_index, file in enumerate(file_list):
         try:
-            file_list[file_index] = file[:file.index(".pdb")]
+            file_list[file_index] = file[: file.index(".pdb")]
         except ValueError:
             pass
 
@@ -151,7 +165,7 @@ def pdbDownload(file_list, hostname=HOSTNAME, directory=DIRECTORY, prefix=PREFIX
     for i in range(len(to_get)):
         try:
             ftp.retrbinary("RETR %s" % to_get[i], open(to_write[i], "wb").write)
-            final_name = "%s.pdb" % to_write[i][:to_write[i].index(".")]
+            final_name = "%s.pdb" % to_write[i][: to_write[i].index(".")]
             unZip(to_write[i], final_name)
             print("%s retrieved successfully." % final_name)
         except ftplib.error_perm:
@@ -207,7 +221,7 @@ def pdbSeq(pdb, use_atoms=False):
         # at the first model.
         models = [i for i, l in enumerate(pdb) if l.startswith("MODEL")]
         if len(models) > 1:
-            pdb = pdb[models[0]:models[1]]
+            pdb = pdb[models[0] : models[1]]
 
             # Grab all CA from ATOM entries, as well as MSE from HETATM
         atoms = []
@@ -238,13 +252,13 @@ def pdbSeq(pdb, use_atoms=False):
     AA3_TO_AA1 = dict(_aa_index)
     tempchain = chain_dict.keys()
     tempchain.sort()
-    seq = ''
+    seq = ""
     for i in tempchain:
         for j in chain_dict[i]:
             if j in AA3_TO_AA1.keys():
                 seq = seq + (AA3_TO_AA1[j])
             else:
-                seq = seq + ('X')
+                seq = seq + ("X")
 
     return seq, seq_type
 
@@ -255,7 +269,6 @@ try:
 except ImportError:
     # Python 2
     from urllib2 import urlopen
-import string
 
 
 ##################################################################################################
@@ -275,9 +288,9 @@ def GetProteinSequence(ProteinID):
     """
 
     ID = str(ProteinID)
-    localfile = urlopen('http://www.uniprot.org/uniprot/' + ID + '.fasta')
+    localfile = urlopen("http://www.uniprot.org/uniprot/" + ID + ".fasta")
     temp = localfile.readlines()
-    res = ''
+    res = ""
     for i in range(1, len(temp)):
         res = res + string.strip(temp[i])
     return res
@@ -300,9 +313,9 @@ def GetProteinSequenceFromTxt(path, openfile, savefile):
     savefile is the file saving the obtained protein sequences such as "protein.txt"
     #########################################################################################
     """
-    f1 = file(path + savefile, 'wb')
-    f2 = file(path + openfile, 'r')
-    #	res=[]
+    f1 = file(path + savefile, "wb")
+    f2 = file(path + openfile, "r")
+    # 	res=[]
     for index, i in enumerate(f2):
 
         itrim = string.strip(i)
@@ -313,20 +326,20 @@ def GetProteinSequenceFromTxt(path, openfile, savefile):
             print("--------------------------------------------------------")
             print("The %d protein sequence has been downloaded!" % (index + 1))
             print(temp)
-            f1.write(temp + '\n')
+            f1.write(temp + "\n")
             print("--------------------------------------------------------")
-        #		res.append(temp+'\n')
-        #	f1.writelines(res)
+        # 		res.append(temp+'\n')
+        # 	f1.writelines(res)
     f2.close()
     f1.close()
     return 0
 
 
-def GetSeqFromPDB(pdbfile=''):
+def GetSeqFromPDB(pdbfile=""):
     """
     Get the amino acids sequences from pdb file.
     """
-    f1 = file(pdbfile, 'r')
+    f1 = file(pdbfile, "r")
     res1, res2 = pdbSeq(f1)
     f1.close()
     return res1
@@ -341,7 +354,12 @@ class Seq:
 
     def __str__(self):
         """Output seq when 'print' method is called."""
-        return "%s\tNo:%s\tlength:%s\n%s" % (self.name, str(self.no), str(self.length), self.seq)
+        return "%s\tNo:%s\tlength:%s\n%s" % (
+            self.name,
+            str(self.no),
+            str(self.length),
+            self.seq,
+        )
 
 
 def IsFasta(seq):
@@ -357,16 +375,16 @@ def IsFasta(seq):
     #################################################################
     """
     if not seq.name:
-        error_info = 'Error, sequence ' + str(seq.no) + ' has no sequence name.'
+        error_info = "Error, sequence " + str(seq.no) + " has no sequence name."
         print(seq)
         sys.stderr.write(error_info)
         return False
-    if -1 != seq.name.find('>'):
-        error_info = 'Error, sequence ' + str(seq.no) + ' name has > character.'
+    if -1 != seq.name.find(">"):
+        error_info = "Error, sequence " + str(seq.no) + " name has > character."
         sys.stderr.write(error_info)
         return False
     if 0 == seq.length:
-        error_info = 'Error, sequence ' + str(seq.no) + ' is null.'
+        error_info = "Error, sequence " + str(seq.no) + " is null."
         sys.stderr.write(error_info)
         return False
 
@@ -383,7 +401,7 @@ def ReadFasta(f):
     Return Seq obj list.
     #################################################################
     """
-    name, seq = '', ''
+    name, seq = "", ""
     count = 0
     seq_list = []
     lines = f.readlines()
@@ -391,14 +409,14 @@ def ReadFasta(f):
         if not line:
             break
 
-        if '>' == line[0]:
-            if 0 != count or (0 == count and seq != ''):
+        if ">" == line[0]:
+            if 0 != count or (0 == count and seq != ""):
                 if IsFasta(Seq(name, seq, count)):
                     seq_list.append(seq)
                 else:
                     sys.exit(0)
 
-            seq = ''
+            seq = ""
             name = line[1:].strip()
             count += 1
         else:
@@ -416,27 +434,28 @@ def ReadFasta(f):
 ####################################################################
 if __name__ == "__main__":
 
-    print('-'*10+'START'+'-'*10)
+    print("-" * 10 + "START" + "-" * 10)
+
     @timelimited(10)
     def run_GetPDB():
 
-        GetPDB(['1atp', '1efz', '1f88'])
+        GetPDB(["1atp", "1efz", "1f88"])
 
     @timelimited(10)
     def run_GetSeqFromPDB():
 
-        seq = GetSeqFromPDB('1atp.pdb')
+        seq = GetSeqFromPDB("1atp.pdb")
         print(seq)
 
     @timelimited(10)
     def run_GetProteinSequence():
-        GetProteinSequence('O00560')
+        GetProteinSequence("O00560")
 
-        print(ReadFasta(open('../test/test_data/protein.fasta')))
+        print(ReadFasta(open("../test/test_data/protein.fasta")))
 
     run_GetPDB()
-    print('-'*25)
+    print("-" * 25)
     run_GetSeqFromPDB()
-    print('-'*25)
+    print("-" * 25)
     run_GetProteinSequence()
-    print('-'*10+'END'+'-'*10)
+    print("-" * 10 + "END" + "-" * 10)

@@ -17,13 +17,20 @@ This module contains tools for enumerating tautomers and determining a canonical
 :copyright: Copyright 2014 by Matt Swain.
 :license: MIT, see LICENSE file for more details.
 """
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import division
+from __future__ import division, print_function, unicode_literals
+
+# Core Library modules
 import copy
-import logging
 import functools
+import logging
+import sys
 from itertools import tee
+
+# Third party modules
+from rdkit import Chem
+from rdkit.Chem import AllChem, rdMolDescriptors
+from rdkit.Chem.rdchem import BondDir, BondStereo, BondType
+
 try:
     # Python 2
     from itertools import izip
@@ -31,47 +38,54 @@ except ImportError:
     # Python 3
     izip = zip
     xrange = range
-import sys
 
-from rdkit import Chem
-from rdkit.Chem import rdMolDescriptors
-from rdkit.Chem import AllChem
-from rdkit.Chem.rdchem import BondDir, BondStereo, BondType
 
 log = logging.getLogger(__name__)
-#==============================================================================
+# ==============================================================================
 # from .utils import memoized_property
-#==============================================================================
+# ==============================================================================
 def memoized_property(fget):
     """Decorator to create memoized properties."""
-    attr_name = '_{}'.format(fget.__name__)
+    attr_name = "_{}".format(fget.__name__)
 
     @functools.wraps(fget)
     def fget_memoized(self):
         if not hasattr(self, attr_name):
             setattr(self, attr_name, fget(self))
         return getattr(self, attr_name)
+
     return property(fget_memoized)
+
 
 def pairwise(iterable):
     """Utility function to iterate in a pairwise fashion."""
     a, b = tee(iterable)
     next(b, None)
     return izip(a, b)
-#==============================================================================
+
+
+# ==============================================================================
 # from .metal import MetalDisconnector
-#==============================================================================
+# ==============================================================================
 class MetalDisconnector(object):
     """Class for breaking covalent bonds between metals and organic atoms under certain conditions."""
 
     def __init__(self):
-        log.debug('Initializing MetalDisconnector')
+        log.debug("Initializing MetalDisconnector")
         # Initialize SMARTS to identify relevant substructures
         # TODO: Use atomic numbers instead of element symbols in SMARTS to allow for isotopes?
-        self._metal_nof = Chem.MolFromSmarts('[Li,Na,K,Rb,Cs,F,Be,Mg,Ca,Sr,Ba,Ra,Sc,Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Zn,Al,Ga,Y,Zr,Nb,Mo,Tc,Ru,Rh,Pd,Ag,Cd,In,Sn,Hf,Ta,W,Re,Os,Ir,Pt,Au,Hg,Tl,Pb,Bi]~[N,O,F]'.encode('utf8'))
-        self._metal_non = Chem.MolFromSmarts('[Al,Sc,Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Zn,Y,Zr,Nb,Mo,Tc,Ru,Rh,Pd,Ag,Cd,Hf,Ta,W,Re,Os,Ir,Pt,Au]~[B,C,Si,P,As,Sb,S,Se,Te,Cl,Br,I,At]'.encode('utf8'))
-        self._free_metal = Chem.MolFromSmarts('[Li,Na,K,Mg,CaX0+0]'.encode('utf8'))
-        self._carboxylic = Chem.MolFromSmarts('[CX3](=O)[OX2H1]'.encode('utf8'))
+        self._metal_nof = Chem.MolFromSmarts(
+            "[Li,Na,K,Rb,Cs,F,Be,Mg,Ca,Sr,Ba,Ra,Sc,Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Zn,Al,Ga,Y,Zr,Nb,Mo,Tc,Ru,Rh,Pd,Ag,Cd,In,Sn,Hf,Ta,W,Re,Os,Ir,Pt,Au,Hg,Tl,Pb,Bi]~[N,O,F]".encode(
+                "utf8"
+            )
+        )
+        self._metal_non = Chem.MolFromSmarts(
+            "[Al,Sc,Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Zn,Y,Zr,Nb,Mo,Tc,Ru,Rh,Pd,Ag,Cd,Hf,Ta,W,Re,Os,Ir,Pt,Au]~[B,C,Si,P,As,Sb,S,Se,Te,Cl,Br,I,At]".encode(
+                "utf8"
+            )
+        )
+        self._free_metal = Chem.MolFromSmarts("[Li,Na,K,Mg,CaX0+0]".encode("utf8"))
+        self._carboxylic = Chem.MolFromSmarts("[CX3](=O)[OX2H1]".encode("utf8"))
 
     def __call__(self, mol):
         """Calling a MetalDisconnector instance like a function is the same as calling its disconnect(mol) method."""
@@ -91,7 +105,7 @@ class MetalDisconnector(object):
         :return: The molecule with metals disconnected.
         :rtype: :rdkit:`Mol <Chem.rdchem.Mol-class.html>`
         """
-        log.debug('Running MetalDisconnector')
+        log.debug("Running MetalDisconnector")
         # TODO: In future, maybe insert zero-order complex/ionic/dative bonds instead of disconnecting?
         # Remove bonds that match SMARTS
         for smarts in [self._metal_nof, self._metal_non]:
@@ -110,7 +124,11 @@ class MetalDisconnector(object):
                 atom1.SetFormalCharge(atom1.GetFormalCharge() + chg)
                 atom2 = mol.GetAtomWithIdx(j)
                 atom2.SetFormalCharge(atom2.GetFormalCharge() - chg)
-                log.info('Removed covalent bond between %s and %s', atom1.GetSymbol(), atom2.GetSymbol())
+                log.info(
+                    "Removed covalent bond between %s and %s",
+                    atom1.GetSymbol(),
+                    atom2.GetSymbol(),
+                )
         # Ionize a free neutral metal with a protonated carboxylic acid
         # TODO: Extend this to other acids?
         # TODO: Move to charge module?
@@ -126,9 +144,11 @@ class MetalDisconnector(object):
         log.debug(Chem.MolToSmiles(mol))
         Chem.SanitizeMol(mol)
         return mol
-#==============================================================================
-#from .fragment import PREFER_ORGANIC, LargestFragmentChooser, FragmentRemover
-#==============================================================================
+
+
+# ==============================================================================
+# from .fragment import PREFER_ORGANIC, LargestFragmentChooser, FragmentRemover
+# ==============================================================================
 class FragmentPattern(object):
     """A fragment defined by a SMARTS pattern."""
 
@@ -143,10 +163,10 @@ class FragmentPattern(object):
 
     @memoized_property
     def smarts(self):
-        return Chem.MolFromSmarts(self.smarts_str.encode('utf8'))
+        return Chem.MolFromSmarts(self.smarts_str.encode("utf8"))
 
     def __repr__(self):
-        return 'FragmentPattern({!r}, {!r})'.format(self.name, self.smarts_str)
+        return "FragmentPattern({!r}, {!r})".format(self.name, self.smarts_str)
 
     def __str__(self):
         return self.name
@@ -155,66 +175,73 @@ class FragmentPattern(object):
 #: The default list of :class:`FragmentPatterns <molvs.fragment.FragmentPattern>` to be used by
 #: :class:`~molvs.fragment.FragmentRemover`.
 REMOVE_FRAGMENTS = (
-    FragmentPattern('fluorine', '[F]'),
-    FragmentPattern('chlorine', '[Cl]'),
-    FragmentPattern('bromine', '[Br]'),
-    FragmentPattern('iodine', '[I]'),
-    FragmentPattern('lithium', '[Li]'),
-    FragmentPattern('sodium', '[Na]'),
-    FragmentPattern('potassium', '[K]'),
-    FragmentPattern('calcium', '[Ca]'),
-    FragmentPattern('magnesium', '[Mg]'),
-    FragmentPattern('aluminium', '[Al]'),
-    FragmentPattern('barium', '[Ba]'),
-    FragmentPattern('bismuth', '[Bi]'),
-    FragmentPattern('silver', '[Ag]'),
-    FragmentPattern('strontium', '[Sr]'),
-    FragmentPattern('zinc', '[Zn]'),
-    FragmentPattern('ammonia/ammonium', '[#7]'),
-    FragmentPattern('water/hydroxide', '[#8]'),
-    FragmentPattern('methyl amine', '[#6]-[#7]'),
-    FragmentPattern('sulfide', 'S'),
-    FragmentPattern('nitrate', '[#7](=[#8])(-[#8])-[#8]'),
-    FragmentPattern('phosphate', '[P](=[#8])(-[#8])(-[#8])-[#8]'),
-    FragmentPattern('hexafluorophosphate', '[P](-[#9])(-[#9])(-[#9])(-[#9])(-[#9])-[#9]'),
-    FragmentPattern('sulfate', '[S](=[#8])(=[#8])(-[#8])-[#8]'),
-    FragmentPattern('methyl sulfonate', '[#6]-[S](=[#8])(=[#8])(-[#8])'),
-    FragmentPattern('trifluoromethanesulfonic acid', '[#8]-[S](=[#8])(=[#8])-[#6](-[#9])(-[#9])-[#9]'),
-    FragmentPattern('trifluoroacetic acid', '[#9]-[#6](-[#9])(-[#9])-[#6](=[#8])-[#8]'),
-    FragmentPattern('1,2-dichloroethane', '[Cl]-[#6]-[#6]-[Cl]'),
-    FragmentPattern('1,2-dimethoxyethane', '[#6]-[#8]-[#6]-[#6]-[#8]-[#6]'),
-    FragmentPattern('1,4-dioxane', '[#6]-1-[#6]-[#8]-[#6]-[#6]-[#8]-1'),
-    FragmentPattern('1-methyl-2-pyrrolidinone', '[#6]-[#7]-1-[#6]-[#6]-[#6]-[#6]-1=[#8]'),
-    FragmentPattern('2-butanone', '[#6]-[#6]-[#6](-[#6])=[#8]'),
-    FragmentPattern('acetate/acetic acid', '[#8]-[#6](-[#6])=[#8]'),
-    FragmentPattern('acetone', '[#6]-[#6](-[#6])=[#8]'),
-    FragmentPattern('acetonitrile', '[#6]-[#6]#[N]'),
-    FragmentPattern('benzene', '[#6]1[#6][#6][#6][#6][#6]1'),
-    FragmentPattern('butanol', '[#8]-[#6]-[#6]-[#6]-[#6]'),
-    FragmentPattern('t-butanol', '[#8]-[#6](-[#6])(-[#6])-[#6]'),
-    FragmentPattern('chloroform', '[Cl]-[#6](-[Cl])-[Cl]'),
-    FragmentPattern('cycloheptane', '[#6]-1-[#6]-[#6]-[#6]-[#6]-[#6]-[#6]-1'),
-    FragmentPattern('cyclohexane', '[#6]-1-[#6]-[#6]-[#6]-[#6]-[#6]-1'),
-    FragmentPattern('dichloromethane', '[Cl]-[#6]-[Cl]'),
-    FragmentPattern('diethyl ether', '[#6]-[#6]-[#8]-[#6]-[#6]'),
-    FragmentPattern('diisopropyl ether', '[#6]-[#6](-[#6])-[#8]-[#6](-[#6])-[#6]'),
-    FragmentPattern('dimethyl formamide', '[#6]-[#7](-[#6])-[#6]=[#8]'),
-    FragmentPattern('dimethyl sulfoxide', '[#6]-[S](-[#6])=[#8]'),
-    FragmentPattern('ethanol', '[#8]-[#6]-[#6]'),
-    FragmentPattern('ethyl acetate', '[#6]-[#6]-[#8]-[#6](-[#6])=[#8]'),
-    FragmentPattern('formic acid', '[#8]-[#6]=[#8]'),
-    FragmentPattern('heptane', '[#6]-[#6]-[#6]-[#6]-[#6]-[#6]-[#6]'),
-    FragmentPattern('hexane', '[#6]-[#6]-[#6]-[#6]-[#6]-[#6]'),
-    FragmentPattern('isopropanol', '[#8]-[#6](-[#6])-[#6]'),
-    FragmentPattern('methanol', '[#8]-[#6]'),
-    FragmentPattern('N,N-dimethylacetamide', '[#6]-[#7](-[#6])-[#6](-[#6])=[#8]'),
-    FragmentPattern('pentane', '[#6]-[#6]-[#6]-[#6]-[#6]'),
-    FragmentPattern('propanol', '[#8]-[#6]-[#6]-[#6]'),
-    FragmentPattern('pyridine', '[#6]-1=[#6]-[#6]=[#7]-[#6]=[#6]-1'),
-    FragmentPattern('t-butyl methyl ether', '[#6]-[#8]-[#6](-[#6])(-[#6])-[#6]'),
-    FragmentPattern('tetrahydrofurane', '[#6]-1-[#6]-[#6]-[#8]-[#6]-1'),
-    FragmentPattern('toluene', '[#6]-[#6]~1~[#6]~[#6]~[#6]~[#6]~[#6]~1'),
-    FragmentPattern('xylene', '[#6]-[#6]~1~[#6](-[#6])~[#6]~[#6]~[#6]~[#6]~1')
+    FragmentPattern("fluorine", "[F]"),
+    FragmentPattern("chlorine", "[Cl]"),
+    FragmentPattern("bromine", "[Br]"),
+    FragmentPattern("iodine", "[I]"),
+    FragmentPattern("lithium", "[Li]"),
+    FragmentPattern("sodium", "[Na]"),
+    FragmentPattern("potassium", "[K]"),
+    FragmentPattern("calcium", "[Ca]"),
+    FragmentPattern("magnesium", "[Mg]"),
+    FragmentPattern("aluminium", "[Al]"),
+    FragmentPattern("barium", "[Ba]"),
+    FragmentPattern("bismuth", "[Bi]"),
+    FragmentPattern("silver", "[Ag]"),
+    FragmentPattern("strontium", "[Sr]"),
+    FragmentPattern("zinc", "[Zn]"),
+    FragmentPattern("ammonia/ammonium", "[#7]"),
+    FragmentPattern("water/hydroxide", "[#8]"),
+    FragmentPattern("methyl amine", "[#6]-[#7]"),
+    FragmentPattern("sulfide", "S"),
+    FragmentPattern("nitrate", "[#7](=[#8])(-[#8])-[#8]"),
+    FragmentPattern("phosphate", "[P](=[#8])(-[#8])(-[#8])-[#8]"),
+    FragmentPattern(
+        "hexafluorophosphate", "[P](-[#9])(-[#9])(-[#9])(-[#9])(-[#9])-[#9]"
+    ),
+    FragmentPattern("sulfate", "[S](=[#8])(=[#8])(-[#8])-[#8]"),
+    FragmentPattern("methyl sulfonate", "[#6]-[S](=[#8])(=[#8])(-[#8])"),
+    FragmentPattern(
+        "trifluoromethanesulfonic acid",
+        "[#8]-[S](=[#8])(=[#8])-[#6](-[#9])(-[#9])-[#9]",
+    ),
+    FragmentPattern("trifluoroacetic acid", "[#9]-[#6](-[#9])(-[#9])-[#6](=[#8])-[#8]"),
+    FragmentPattern("1,2-dichloroethane", "[Cl]-[#6]-[#6]-[Cl]"),
+    FragmentPattern("1,2-dimethoxyethane", "[#6]-[#8]-[#6]-[#6]-[#8]-[#6]"),
+    FragmentPattern("1,4-dioxane", "[#6]-1-[#6]-[#8]-[#6]-[#6]-[#8]-1"),
+    FragmentPattern(
+        "1-methyl-2-pyrrolidinone", "[#6]-[#7]-1-[#6]-[#6]-[#6]-[#6]-1=[#8]"
+    ),
+    FragmentPattern("2-butanone", "[#6]-[#6]-[#6](-[#6])=[#8]"),
+    FragmentPattern("acetate/acetic acid", "[#8]-[#6](-[#6])=[#8]"),
+    FragmentPattern("acetone", "[#6]-[#6](-[#6])=[#8]"),
+    FragmentPattern("acetonitrile", "[#6]-[#6]#[N]"),
+    FragmentPattern("benzene", "[#6]1[#6][#6][#6][#6][#6]1"),
+    FragmentPattern("butanol", "[#8]-[#6]-[#6]-[#6]-[#6]"),
+    FragmentPattern("t-butanol", "[#8]-[#6](-[#6])(-[#6])-[#6]"),
+    FragmentPattern("chloroform", "[Cl]-[#6](-[Cl])-[Cl]"),
+    FragmentPattern("cycloheptane", "[#6]-1-[#6]-[#6]-[#6]-[#6]-[#6]-[#6]-1"),
+    FragmentPattern("cyclohexane", "[#6]-1-[#6]-[#6]-[#6]-[#6]-[#6]-1"),
+    FragmentPattern("dichloromethane", "[Cl]-[#6]-[Cl]"),
+    FragmentPattern("diethyl ether", "[#6]-[#6]-[#8]-[#6]-[#6]"),
+    FragmentPattern("diisopropyl ether", "[#6]-[#6](-[#6])-[#8]-[#6](-[#6])-[#6]"),
+    FragmentPattern("dimethyl formamide", "[#6]-[#7](-[#6])-[#6]=[#8]"),
+    FragmentPattern("dimethyl sulfoxide", "[#6]-[S](-[#6])=[#8]"),
+    FragmentPattern("ethanol", "[#8]-[#6]-[#6]"),
+    FragmentPattern("ethyl acetate", "[#6]-[#6]-[#8]-[#6](-[#6])=[#8]"),
+    FragmentPattern("formic acid", "[#8]-[#6]=[#8]"),
+    FragmentPattern("heptane", "[#6]-[#6]-[#6]-[#6]-[#6]-[#6]-[#6]"),
+    FragmentPattern("hexane", "[#6]-[#6]-[#6]-[#6]-[#6]-[#6]"),
+    FragmentPattern("isopropanol", "[#8]-[#6](-[#6])-[#6]"),
+    FragmentPattern("methanol", "[#8]-[#6]"),
+    FragmentPattern("N,N-dimethylacetamide", "[#6]-[#7](-[#6])-[#6](-[#6])=[#8]"),
+    FragmentPattern("pentane", "[#6]-[#6]-[#6]-[#6]-[#6]"),
+    FragmentPattern("propanol", "[#8]-[#6]-[#6]-[#6]"),
+    FragmentPattern("pyridine", "[#6]-1=[#6]-[#6]=[#7]-[#6]=[#6]-1"),
+    FragmentPattern("t-butyl methyl ether", "[#6]-[#8]-[#6](-[#6])(-[#6])-[#6]"),
+    FragmentPattern("tetrahydrofurane", "[#6]-1-[#6]-[#6]-[#8]-[#6]-1"),
+    FragmentPattern("toluene", "[#6]-[#6]~1~[#6]~[#6]~[#6]~[#6]~[#6]~1"),
+    FragmentPattern("xylene", "[#6]-[#6]~1~[#6](-[#6])~[#6]~[#6]~[#6]~[#6]~1"),
 )
 
 #: The default value for whether to ensure at least one fragment is left after FragmentRemover is applied.
@@ -251,7 +278,7 @@ class FragmentRemover(object):
         :param fragments: A list of :class:`~molvs.fragment.FragmentPattern` to remove.
         :param bool leave_last: Whether to ensure at least one fragment is left.
         """
-        log.debug('Initializing FragmentRemover')
+        log.debug("Initializing FragmentRemover")
         self.fragments = fragments
         self.leave_last = leave_last
 
@@ -267,16 +294,18 @@ class FragmentRemover(object):
         :return: The molecule with fragments removed.
         :rtype: :rdkit:`Mol <Chem.rdchem.Mol-class.html>`
         """
-        log.debug('Running FragmentRemover')
+        log.debug("Running FragmentRemover")
         # Iterate FragmentPatterns and remove matching fragments
         for frag in self.fragments:
             # If nothing is left or leave_last and only one fragment, end here
-            if mol.GetNumAtoms() == 0 or (self.leave_last and len(Chem.GetMolFrags(mol)) <= 1):
+            if mol.GetNumAtoms() == 0 or (
+                self.leave_last and len(Chem.GetMolFrags(mol)) <= 1
+            ):
                 break
             # Apply removal for this FragmentPattern
             removed = Chem.DeleteSubstructs(mol, frag.smarts, onlyFrags=True)
             if not mol.GetNumAtoms() == removed.GetNumAtoms():
-                log.info('Removed fragment: %s', frag.name)
+                log.info("Removed fragment: %s", frag.name)
             if self.leave_last and removed.GetNumAtoms() == 0:
                 # All the remaining fragments match this pattern - leave them all
                 break
@@ -295,7 +324,7 @@ class LargestFragmentChooser(object):
 
         :param bool prefer_organic: Whether to prioritize organic fragments above all others.
         """
-        log.debug('Initializing LargestFragmentChooser')
+        log.debug("Initializing LargestFragmentChooser")
         self.prefer_organic = prefer_organic
 
     def __call__(self, mol):
@@ -313,45 +342,55 @@ class LargestFragmentChooser(object):
         :return: The largest fragment.
         :rtype: :rdkit:`Mol <Chem.rdchem.Mol-class.html>`
         """
-        log.debug('Running LargestFragmentChooser')
+        log.debug("Running LargestFragmentChooser")
         # TODO: Alternatively allow a list of fragments to be passed as the mol parameter
         fragments = Chem.GetMolFrags(mol, asMols=True)
         largest = None
         for f in fragments:
             smiles = Chem.MolToSmiles(f, isomericSmiles=True)
-            log.debug('Fragment: %s', smiles)
+            log.debug("Fragment: %s", smiles)
             organic = is_organic(f)
             if self.prefer_organic:
                 # Skip this fragment if not organic and we already have an organic fragment as the largest so far
-                if largest and largest['organic'] and not organic:
+                if largest and largest["organic"] and not organic:
                     continue
                 # Reset largest if it wasn't organic and this fragment is organic
-                if largest and organic and not largest['organic']:
+                if largest and organic and not largest["organic"]:
                     largest = None
             # Count atoms
             atoms = 0
             for a in f.GetAtoms():
                 atoms += 1 + a.GetTotalNumHs()
             # Skip this fragment if fewer atoms than the largest
-            if largest and atoms < largest['atoms']:
+            if largest and atoms < largest["atoms"]:
                 continue
             # Skip this fragment if equal number of atoms but weight is lower
             weight = rdMolDescriptors.CalcExactMolWt(f)
-            if largest and atoms == largest['atoms'] and weight < largest['weight']:
+            if largest and atoms == largest["atoms"] and weight < largest["weight"]:
                 continue
             # Skip this fragment if equal atoms and equal weight but smiles comes last alphabetically
-            if largest and atoms == largest['atoms'] and weight == largest['weight'] and smiles > largest['smiles']:
+            if (
+                largest
+                and atoms == largest["atoms"]
+                and weight == largest["weight"]
+                and smiles > largest["smiles"]
+            ):
                 continue
             # Otherwise this is the largest so far
-            log.debug('New largest fragment: %s (%s)', smiles, atoms)
-            largest = {'smiles': smiles, 'fragment': f, 'atoms': atoms, 'weight': weight, 'organic': organic}
-        return largest['fragment']
+            log.debug("New largest fragment: %s (%s)", smiles, atoms)
+            largest = {
+                "smiles": smiles,
+                "fragment": f,
+                "atoms": atoms,
+                "weight": weight,
+                "organic": organic,
+            }
+        return largest["fragment"]
 
 
-
-#==============================================================================
-#from .normalize import NORMALIZATIONS, MAX_RESTARTS, Normalizer
-#==============================================================================
+# ==============================================================================
+# from .normalize import NORMALIZATIONS, MAX_RESTARTS, Normalizer
+# ==============================================================================
 class Normalization(object):
     """A normalization transform defined by reaction SMARTS."""
 
@@ -360,47 +399,112 @@ class Normalization(object):
         :param string name: A name for this Normalization
         :param string transform: Reaction SMARTS to define the transformation.
         """
-        log.debug('Initializing Normalization: %s', name)
+        log.debug("Initializing Normalization: %s", name)
         self.name = name
         self.transform_str = transform
 
     @memoized_property
     def transform(self):
-        log.debug('Loading Normalization transform: %s', self.name)
-        return AllChem.ReactionFromSmarts(self.transform_str.encode('utf8'))
+        log.debug("Loading Normalization transform: %s", self.name)
+        return AllChem.ReactionFromSmarts(self.transform_str.encode("utf8"))
 
     def __repr__(self):
-        return 'Normalization({!r}, {!r})'.format(self.name, self.transform_str)
+        return "Normalization({!r}, {!r})".format(self.name, self.transform_str)
 
     def __str__(self):
         return self.name
-#: The default list of Normalization transforms.        
+
+
+#: The default list of Normalization transforms.
 NORMALIZATIONS = (
-    Normalization('Nitro to N+(O-)=O', '[*:1][N,P,As,Sb:2](=[O,S,Se,Te:3])=[O,S,Se,Te:4]>>[*:1][*+1:2]([*-1:3])=[*:4]'),
-    Normalization('Sulfone to S(=O)(=O)', '[S+2:1]([O-:2])([O-:3])>>[S+0:1](=[O-0:2])(=[O-0:3])'),
-    Normalization('Pyridine oxide to n+O-', '[n:1]=[O:2]>>[n+:1][O-:2]'),
-    Normalization('Azide to N=N+=N-', '[*,H:1][N:2]=[N:3]#[N:4]>>[*,H:1][N:2]=[N+:3]=[N-:4]'),
-    Normalization('Diazo/azo to =N+=N-', '[*:1]=[N:2]#[N:3]>>[*:1]=[N+:2]=[N-:3]'),
-    Normalization('Sulfoxide to -S+(O-)-', '[!O:1][S+0;X3:2](=[O:3])[!O:4]>>[*:1][S+1:2]([O-:3])[*:4]'),
-    Normalization('Phosphate to P(O-)=O', '[O,S,Se,Te;-1:1][P+;D4:2][O,S,Se,Te;-1:3]>>[*+0:1]=[P+0;D5:2][*-1:3]'),
-    Normalization('Amidinium to C(=NH2+)NH2', '[C,S;X3+1:1]([NX3:2])[NX3!H0:3]>>[*+0:1]([N:2])=[N+:3]'),
-    Normalization('Normalize hydrazine-diazonium', '[CX4:1][NX3H:2]-[NX3H:3][CX4:4][NX2+:5]#[NX1:6]>>[CX4:1][NH0:2]=[NH+:3][C:4][N+0:5]=[NH:6]'),
-    Normalization('Recombine 1,3-separated charges', '[N,P,As,Sb,O,S,Se,Te;-1:1]-[A:2]=[N,P,As,Sb,O,S,Se,Te;+1:3]>>[*-0:1]=[*:2]-[*+0:3]'),
-    Normalization('Recombine 1,3-separated charges', '[n,o,p,s;-1:1]:[a:2]=[N,O,P,S;+1:3]>>[*-0:1]:[*:2]-[*+0:3]'),
-    Normalization('Recombine 1,3-separated charges', '[N,O,P,S;-1:1]-[a:2]:[n,o,p,s;+1:3]>>[*-0:1]=[*:2]:[*+0:3]'),
-    Normalization('Recombine 1,5-separated charges', '[N,P,As,Sb,O,S,Se,Te;-1:1]-[A+0:2]=[A:3]-[A:4]=[N,P,As,Sb,O,S,Se,Te;+1:5]>>[*-0:1]=[*:2]-[*:3]=[*:4]-[*+0:5]'),
-    Normalization('Recombine 1,5-separated charges', '[n,o,p,s;-1:1]:[a:2]:[a:3]:[c:4]=[N,O,P,S;+1:5]>>[*-0:1]:[*:2]:[*:3]:[c:4]-[*+0:5]'),
-    Normalization('Recombine 1,5-separated charges', '[N,O,P,S;-1:1]-[c:2]:[a:3]:[a:4]:[n,o,p,s;+1:5]>>[*-0:1]=[c:2]:[*:3]:[*:4]:[*+0:5]'),
-    Normalization('Normalize 1,3 conjugated cation', '[N,O;+0!H0:1]-[A:2]=[N!$(*[O-]),O;+1H0:3]>>[*+1:1]=[*:2]-[*+0:3]'),
-    Normalization('Normalize 1,3 conjugated cation', '[n;+0!H0:1]:[c:2]=[N!$(*[O-]),O;+1H0:3]>>[*+1:1]:[*:2]-[*+0:3]'),
-    Normalization('Normalize 1,3 conjugated cation', '[N,O;+0!H0:1]-[c:2]:[n!$(*[O-]),o;+1H0:3]>>[*+1:1]=[*:2]:[*+0:3]'),
-    Normalization('Normalize 1,5 conjugated cation', '[N,O;+0!H0:1]-[A:2]=[A:3]-[A:4]=[N!$(*[O-]),O;+1H0:5]>>[*+1:1]=[*:2]-[*:3]=[*:4]-[*+0:5]'),
-    Normalization('Normalize 1,5 conjugated cation', '[n;+0!H0:1]:[a:2]:[a:3]:[c:4]=[N!$(*[O-]),O;+1H0:5]>>[n+1:1]:[*:2]:[*:3]:[*:4]-[*+0:5]'),
-    Normalization('Normalize 1,5 conjugated cation', '[N,O;+0!H0:1]-[c:2]:[a:3]:[a:4]:[n!$(*[O-]),o;+1H0:5]>>[*+1:1]=[c:2]:[*:3]:[*:4]:[*+0:5]'),
-    Normalization('Normalize 1,5 conjugated cation', '[n;+0!H0:1]1:[a:2]:[a:3]:[a:4]:[n!$(*[O-]);+1H0:5]1>>[n+1:1]1:[*:2]:[*:3]:[*:4]:[n+0:5]1'),
-    Normalization('Normalize 1,5 conjugated cation', '[n;+0!H0:1]:[a:2]:[a:3]:[a:4]:[n!$(*[O-]);+1H0:5]>>[n+1:1]:[*:2]:[*:3]:[*:4]:[n+0:5]'),
-    Normalization('Charge normalization', '[F,Cl,Br,I,At;-1:1]=[O:2]>>[*-0:1][O-:2]'),
-    Normalization('Charge recombination', '[N,P,As,Sb;-1:1]=[C+;v3:2]>>[*+0:1]#[C+0:2]'),
+    Normalization(
+        "Nitro to N+(O-)=O",
+        "[*:1][N,P,As,Sb:2](=[O,S,Se,Te:3])=[O,S,Se,Te:4]>>[*:1][*+1:2]([*-1:3])=[*:4]",
+    ),
+    Normalization(
+        "Sulfone to S(=O)(=O)", "[S+2:1]([O-:2])([O-:3])>>[S+0:1](=[O-0:2])(=[O-0:3])"
+    ),
+    Normalization("Pyridine oxide to n+O-", "[n:1]=[O:2]>>[n+:1][O-:2]"),
+    Normalization(
+        "Azide to N=N+=N-", "[*,H:1][N:2]=[N:3]#[N:4]>>[*,H:1][N:2]=[N+:3]=[N-:4]"
+    ),
+    Normalization("Diazo/azo to =N+=N-", "[*:1]=[N:2]#[N:3]>>[*:1]=[N+:2]=[N-:3]"),
+    Normalization(
+        "Sulfoxide to -S+(O-)-",
+        "[!O:1][S+0;X3:2](=[O:3])[!O:4]>>[*:1][S+1:2]([O-:3])[*:4]",
+    ),
+    Normalization(
+        "Phosphate to P(O-)=O",
+        "[O,S,Se,Te;-1:1][P+;D4:2][O,S,Se,Te;-1:3]>>[*+0:1]=[P+0;D5:2][*-1:3]",
+    ),
+    Normalization(
+        "Amidinium to C(=NH2+)NH2",
+        "[C,S;X3+1:1]([NX3:2])[NX3!H0:3]>>[*+0:1]([N:2])=[N+:3]",
+    ),
+    Normalization(
+        "Normalize hydrazine-diazonium",
+        "[CX4:1][NX3H:2]-[NX3H:3][CX4:4][NX2+:5]#[NX1:6]>>[CX4:1][NH0:2]=[NH+:3][C:4][N+0:5]=[NH:6]",
+    ),
+    Normalization(
+        "Recombine 1,3-separated charges",
+        "[N,P,As,Sb,O,S,Se,Te;-1:1]-[A:2]=[N,P,As,Sb,O,S,Se,Te;+1:3]>>[*-0:1]=[*:2]-[*+0:3]",
+    ),
+    Normalization(
+        "Recombine 1,3-separated charges",
+        "[n,o,p,s;-1:1]:[a:2]=[N,O,P,S;+1:3]>>[*-0:1]:[*:2]-[*+0:3]",
+    ),
+    Normalization(
+        "Recombine 1,3-separated charges",
+        "[N,O,P,S;-1:1]-[a:2]:[n,o,p,s;+1:3]>>[*-0:1]=[*:2]:[*+0:3]",
+    ),
+    Normalization(
+        "Recombine 1,5-separated charges",
+        "[N,P,As,Sb,O,S,Se,Te;-1:1]-[A+0:2]=[A:3]-[A:4]=[N,P,As,Sb,O,S,Se,Te;+1:5]>>[*-0:1]=[*:2]-[*:3]=[*:4]-[*+0:5]",
+    ),
+    Normalization(
+        "Recombine 1,5-separated charges",
+        "[n,o,p,s;-1:1]:[a:2]:[a:3]:[c:4]=[N,O,P,S;+1:5]>>[*-0:1]:[*:2]:[*:3]:[c:4]-[*+0:5]",
+    ),
+    Normalization(
+        "Recombine 1,5-separated charges",
+        "[N,O,P,S;-1:1]-[c:2]:[a:3]:[a:4]:[n,o,p,s;+1:5]>>[*-0:1]=[c:2]:[*:3]:[*:4]:[*+0:5]",
+    ),
+    Normalization(
+        "Normalize 1,3 conjugated cation",
+        "[N,O;+0!H0:1]-[A:2]=[N!$(*[O-]),O;+1H0:3]>>[*+1:1]=[*:2]-[*+0:3]",
+    ),
+    Normalization(
+        "Normalize 1,3 conjugated cation",
+        "[n;+0!H0:1]:[c:2]=[N!$(*[O-]),O;+1H0:3]>>[*+1:1]:[*:2]-[*+0:3]",
+    ),
+    Normalization(
+        "Normalize 1,3 conjugated cation",
+        "[N,O;+0!H0:1]-[c:2]:[n!$(*[O-]),o;+1H0:3]>>[*+1:1]=[*:2]:[*+0:3]",
+    ),
+    Normalization(
+        "Normalize 1,5 conjugated cation",
+        "[N,O;+0!H0:1]-[A:2]=[A:3]-[A:4]=[N!$(*[O-]),O;+1H0:5]>>[*+1:1]=[*:2]-[*:3]=[*:4]-[*+0:5]",
+    ),
+    Normalization(
+        "Normalize 1,5 conjugated cation",
+        "[n;+0!H0:1]:[a:2]:[a:3]:[c:4]=[N!$(*[O-]),O;+1H0:5]>>[n+1:1]:[*:2]:[*:3]:[*:4]-[*+0:5]",
+    ),
+    Normalization(
+        "Normalize 1,5 conjugated cation",
+        "[N,O;+0!H0:1]-[c:2]:[a:3]:[a:4]:[n!$(*[O-]),o;+1H0:5]>>[*+1:1]=[c:2]:[*:3]:[*:4]:[*+0:5]",
+    ),
+    Normalization(
+        "Normalize 1,5 conjugated cation",
+        "[n;+0!H0:1]1:[a:2]:[a:3]:[a:4]:[n!$(*[O-]);+1H0:5]1>>[n+1:1]1:[*:2]:[*:3]:[*:4]:[n+0:5]1",
+    ),
+    Normalization(
+        "Normalize 1,5 conjugated cation",
+        "[n;+0!H0:1]:[a:2]:[a:3]:[a:4]:[n!$(*[O-]);+1H0:5]>>[n+1:1]:[*:2]:[*:3]:[*:4]:[n+0:5]",
+    ),
+    Normalization("Charge normalization", "[F,Cl,Br,I,At;-1:1]=[O:2]>>[*-0:1][O-:2]"),
+    Normalization(
+        "Charge recombination", "[N,P,As,Sb;-1:1]=[C+;v3:2]>>[*+0:1]#[C+0:2]"
+    ),
 )
 
 #: The default value for the maximum number of times to attempt to apply the series of normalizations.
@@ -422,7 +526,7 @@ class Normalizer(object):
         :param int max_restarts: The maximum number of times to attempt to apply the series of normalizations (default
                                  200).
         """
-        log.debug('Initializing Normalizer')
+        log.debug("Initializing Normalizer")
         self.normalizations = normalizations
         self.max_restarts = max_restarts
 
@@ -443,7 +547,7 @@ class Normalizer(object):
         :return: The normalized fragment.
         :rtype: :rdkit:`Mol <Chem.rdchem.Mol-class.html>`
         """
-        log.debug('Running Normalizer')
+        log.debug("Running Normalizer")
         # Normalize each fragment separately to get around quirky RunReactants behaviour
         fragments = []
         for fragment in Chem.GetMolFrags(mol, asMols=True):
@@ -462,14 +566,14 @@ class Normalizer(object):
                 product = self._apply_transform(mol, normalization.transform)
                 if product:
                     # If transform changed mol, go back to first rule and apply each again
-                    log.info('Rule applied: %s', normalization.name)
+                    log.info("Rule applied: %s", normalization.name)
                     mol = product
                     break
             else:
                 # For loop finishes normally, all applicable transforms have been applied
                 return mol
         # If we're still going after max_restarts (default 200), stop and warn, but still return the mol
-        log.warn('Gave up normalization after %s restarts', self.max_restarts)
+        log.warn("Gave up normalization after %s restarts", self.max_restarts)
         return mol
 
     def _apply_transform(self, mol, rule):
@@ -485,15 +589,19 @@ class Normalizer(object):
             for mol in mols:
                 for product in [x[0] for x in rule.RunReactants((mol,))]:
                     if Chem.SanitizeMol(product, catchErrors=True) == 0:
-                        products[Chem.MolToSmiles(product, isomericSmiles=True)] = product
+                        products[
+                            Chem.MolToSmiles(product, isomericSmiles=True)
+                        ] = product
             if products:
                 mols = [products[s] for s in sorted(products)]
             else:
                 # If n == 0, the rule was not applicable and we return None
                 return mols[0] if n > 0 else None
-#==============================================================================
+
+
+# ==============================================================================
 # from .tautomer import TAUTOMER_TRANSFORMS, TAUTOMER_SCORES, MAX_TAUTOMERS, TautomerCanonicalizer, TautomerEnumerator
-#==============================================================================
+# ==============================================================================
 class TautomerTransform(object):
     """Rules to transform one tautomer to another.
 
@@ -503,8 +611,13 @@ class TautomerTransform(object):
     custom resulting bond orders and also resulting atom charges.
     """
 
-    BONDMAP = {'-': BondType.SINGLE, '=': BondType.DOUBLE, '#': BondType.TRIPLE, ':': BondType.AROMATIC}
-    CHARGEMAP = {'+': 1, '0': 0, '-': -1}
+    BONDMAP = {
+        "-": BondType.SINGLE,
+        "=": BondType.DOUBLE,
+        "#": BondType.TRIPLE,
+        ":": BondType.AROMATIC,
+    }
+    CHARGEMAP = {"+": 1, "0": 0, "-": -1}
 
     def __init__(self, name, smarts, bonds=(), charges=()):
         """Initialize a TautomerTransform with a name, SMARTS pattern and optional bonds and charges.
@@ -525,10 +638,12 @@ class TautomerTransform(object):
 
     @memoized_property
     def tautomer(self):
-        return Chem.MolFromSmarts(self.tautomer_str.encode('utf8'))
+        return Chem.MolFromSmarts(self.tautomer_str.encode("utf8"))
 
     def __repr__(self):
-        return 'TautomerTransform({!r}, {!r}, {!r}, {!r})'.format(self.name, self.tautomer_str, self.bonds, self.charges)
+        return "TautomerTransform({!r}, {!r}, {!r}, {!r})".format(
+            self.name, self.tautomer_str, self.bonds, self.charges
+        )
 
     def __str__(self):
         return self.name
@@ -550,10 +665,12 @@ class TautomerScore(object):
 
     @memoized_property
     def smarts(self):
-        return Chem.MolFromSmarts(self.smarts_str.encode('utf8'))
+        return Chem.MolFromSmarts(self.smarts_str.encode("utf8"))
 
     def __repr__(self):
-        return 'TautomerScore({!r}, {!r}, {!r})'.format(self.name, self.smarts_str, self.score)
+        return "TautomerScore({!r}, {!r}, {!r})".format(
+            self.name, self.smarts_str, self.score
+        )
 
     def __str__(self):
         return self.name
@@ -561,56 +678,88 @@ class TautomerScore(object):
 
 #: The default list of TautomerTransforms.
 TAUTOMER_TRANSFORMS = (
-    TautomerTransform('1,3 (thio)keto/enol f', '[CX4!H0][C]=[O,S,Se,Te;X1]'),
-    TautomerTransform('1,3 (thio)keto/enol r', '[O,S,Se,Te;X2!H0][C]=[C]'),
-    TautomerTransform('1,5 (thio)keto/enol f', '[CX4,NX3;!H0][C]=[C][CH0]=[O,S,Se,Te;X1]'),
-    TautomerTransform('1,5 (thio)keto/enol r', '[O,S,Se,Te;X2!H0][CH0]=,:[C][C]=,:[C,N]'),
-    TautomerTransform('aliphatic imine f', '[CX4!H0][C]=[NX2]'),
-    TautomerTransform('aliphatic imine r', '[NX3!H0][C]=[CX3]'),
-    TautomerTransform('special imine f', '[N!H0][C]=[CX3R0]'),
-    TautomerTransform('special imine r', '[CX4!H0][c]=,:[n]'),
-    TautomerTransform('1,3 aromatic heteroatom H shift f', '[#7!H0][#6R1]=[O,#7X2]'),
-    TautomerTransform('1,3 aromatic heteroatom H shift r', '[O,#7;!H0][#6R1]=,:[#7X2]'),
-    TautomerTransform('1,3 heteroatom H shift', '[#7,S,O,Se,Te;!H0][#7X2,#6,#15]=[#7,#16,#8,Se,Te]'),
-    TautomerTransform('1,5 aromatic heteroatom H shift', '[n,s,o;!H0]:[c,n]:[c]:[c,n]:[n,s,o;H0]'),
-    TautomerTransform('1,5 aromatic heteroatom H shift f', '[#7,#16,#8,Se,Te;!H0][#6,nX2]=,:[#6,nX2][#6,#7X2]=,:[#7X2,S,O,Se,Te]'),
-    TautomerTransform('1,5 aromatic heteroatom H shift r', '[#7,S,O,Se,Te;!H0][#6,#7X2]=,:[#6,nX2][#6,nX2]=,:[#7,#16,#8,Se,Te]'),
-    TautomerTransform('1,7 aromatic heteroatom H shift f', '[#7,#8,#16,Se,Te;!H0][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6][#6,#7X2]=,:[#7X2,S,O,Se,Te,CX3]'),
-    TautomerTransform('1,7 aromatic heteroatom H shift r', '[#7,S,O,Se,Te,CX4;!H0][#6,#7X2]=,:[#6][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[NX2,S,O,Se,Te]'),
-    TautomerTransform('1,9 aromatic heteroatom H shift f', '[#7,O;!H0][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#7,O]'),
-    TautomerTransform('1,11 aromatic heteroatom H shift f', '[#7,O;!H0][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#7X2,O]'),
-    TautomerTransform('furanone f', '[O,S,N;!H0][#6X3r5;$([#6][!#6])]=,:[#6X3r5]'),
-    TautomerTransform('furanone r', '[#6r5!H0][#6X3r5;$([#6][!#6])]=[O,S,N]'),
-    TautomerTransform('keten/ynol f', '[C!H0]=[C]=[O,S,Se,Te;X1]', bonds='#-'),
-    TautomerTransform('keten/ynol r', '[O,S,Se,Te;!H0X2][C]#[C]', bonds='=='),
-    TautomerTransform('ionic nitro/aci-nitro f', '[C!H0][N+;$([N][O-])]=[O]'),
-    TautomerTransform('ionic nitro/aci-nitro r', '[O!H0][N+;$([N][O-])]=[C]'),
-    TautomerTransform('oxim/nitroso f', '[O!H0][N]=[C]'),
-    TautomerTransform('oxim/nitroso r', '[C!H0][N]=[O]'),
-    TautomerTransform('oxim/nitroso via phenol f', '[O!H0][N]=[C][C]=[C][C]=[OH0]'),
-    TautomerTransform('oxim/nitroso via phenol r', '[O!H0][c]:[c]:[c]:[c][N]=[OH0]'),
-    TautomerTransform('cyano/iso-cyanic acid f', '[O!H0][C]#[N]', bonds='=='),
-    TautomerTransform('cyano/iso-cyanic acid r', '[N!H0]=[C]=[O]', bonds='#-'),
-    TautomerTransform('formamidinesulfinic acid f', '[O,N;!H0][C][S,Se,Te]=[O]', bonds='=--'),
-    TautomerTransform('formamidinesulfinic acid r', '[O!H0][S,Se,Te][C]=[O,N]', bonds='=--'),
-    TautomerTransform('isocyanide f', '[C-0!H0]#[N+0]', bonds='#', charges='-+'),
-    TautomerTransform('isocyanide r', '[N+!H0]#[C-]', bonds='#', charges='-+'),
-    TautomerTransform('phosphonic acid f', '[OH][PH0]', bonds='='),
-    TautomerTransform('phosphonic acid r', '[PH]=[O]', bonds='-'),
+    TautomerTransform("1,3 (thio)keto/enol f", "[CX4!H0][C]=[O,S,Se,Te;X1]"),
+    TautomerTransform("1,3 (thio)keto/enol r", "[O,S,Se,Te;X2!H0][C]=[C]"),
+    TautomerTransform(
+        "1,5 (thio)keto/enol f", "[CX4,NX3;!H0][C]=[C][CH0]=[O,S,Se,Te;X1]"
+    ),
+    TautomerTransform(
+        "1,5 (thio)keto/enol r", "[O,S,Se,Te;X2!H0][CH0]=,:[C][C]=,:[C,N]"
+    ),
+    TautomerTransform("aliphatic imine f", "[CX4!H0][C]=[NX2]"),
+    TautomerTransform("aliphatic imine r", "[NX3!H0][C]=[CX3]"),
+    TautomerTransform("special imine f", "[N!H0][C]=[CX3R0]"),
+    TautomerTransform("special imine r", "[CX4!H0][c]=,:[n]"),
+    TautomerTransform("1,3 aromatic heteroatom H shift f", "[#7!H0][#6R1]=[O,#7X2]"),
+    TautomerTransform("1,3 aromatic heteroatom H shift r", "[O,#7;!H0][#6R1]=,:[#7X2]"),
+    TautomerTransform(
+        "1,3 heteroatom H shift", "[#7,S,O,Se,Te;!H0][#7X2,#6,#15]=[#7,#16,#8,Se,Te]"
+    ),
+    TautomerTransform(
+        "1,5 aromatic heteroatom H shift", "[n,s,o;!H0]:[c,n]:[c]:[c,n]:[n,s,o;H0]"
+    ),
+    TautomerTransform(
+        "1,5 aromatic heteroatom H shift f",
+        "[#7,#16,#8,Se,Te;!H0][#6,nX2]=,:[#6,nX2][#6,#7X2]=,:[#7X2,S,O,Se,Te]",
+    ),
+    TautomerTransform(
+        "1,5 aromatic heteroatom H shift r",
+        "[#7,S,O,Se,Te;!H0][#6,#7X2]=,:[#6,nX2][#6,nX2]=,:[#7,#16,#8,Se,Te]",
+    ),
+    TautomerTransform(
+        "1,7 aromatic heteroatom H shift f",
+        "[#7,#8,#16,Se,Te;!H0][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6][#6,#7X2]=,:[#7X2,S,O,Se,Te,CX3]",
+    ),
+    TautomerTransform(
+        "1,7 aromatic heteroatom H shift r",
+        "[#7,S,O,Se,Te,CX4;!H0][#6,#7X2]=,:[#6][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[NX2,S,O,Se,Te]",
+    ),
+    TautomerTransform(
+        "1,9 aromatic heteroatom H shift f",
+        "[#7,O;!H0][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#6,#7X2][#6,#7X2]=,:[#7,O]",
+    ),
+    TautomerTransform(
+        "1,11 aromatic heteroatom H shift f",
+        "[#7,O;!H0][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#6,nX2][#6,nX2]=,:[#7X2,O]",
+    ),
+    TautomerTransform("furanone f", "[O,S,N;!H0][#6X3r5;$([#6][!#6])]=,:[#6X3r5]"),
+    TautomerTransform("furanone r", "[#6r5!H0][#6X3r5;$([#6][!#6])]=[O,S,N]"),
+    TautomerTransform("keten/ynol f", "[C!H0]=[C]=[O,S,Se,Te;X1]", bonds="#-"),
+    TautomerTransform("keten/ynol r", "[O,S,Se,Te;!H0X2][C]#[C]", bonds="=="),
+    TautomerTransform("ionic nitro/aci-nitro f", "[C!H0][N+;$([N][O-])]=[O]"),
+    TautomerTransform("ionic nitro/aci-nitro r", "[O!H0][N+;$([N][O-])]=[C]"),
+    TautomerTransform("oxim/nitroso f", "[O!H0][N]=[C]"),
+    TautomerTransform("oxim/nitroso r", "[C!H0][N]=[O]"),
+    TautomerTransform("oxim/nitroso via phenol f", "[O!H0][N]=[C][C]=[C][C]=[OH0]"),
+    TautomerTransform("oxim/nitroso via phenol r", "[O!H0][c]:[c]:[c]:[c][N]=[OH0]"),
+    TautomerTransform("cyano/iso-cyanic acid f", "[O!H0][C]#[N]", bonds="=="),
+    TautomerTransform("cyano/iso-cyanic acid r", "[N!H0]=[C]=[O]", bonds="#-"),
+    TautomerTransform(
+        "formamidinesulfinic acid f", "[O,N;!H0][C][S,Se,Te]=[O]", bonds="=--"
+    ),
+    TautomerTransform(
+        "formamidinesulfinic acid r", "[O!H0][S,Se,Te][C]=[O,N]", bonds="=--"
+    ),
+    TautomerTransform("isocyanide f", "[C-0!H0]#[N+0]", bonds="#", charges="-+"),
+    TautomerTransform("isocyanide r", "[N+!H0]#[C-]", bonds="#", charges="-+"),
+    TautomerTransform("phosphonic acid f", "[OH][PH0]", bonds="="),
+    TautomerTransform("phosphonic acid r", "[PH]=[O]", bonds="-"),
 )
 
 #: The default list of TautomerScores.
 TAUTOMER_SCORES = (
-    TautomerScore('benzoquinone', '[#6]1([#6]=[#6][#6]([#6]=[#6]1)=,:[N,S,O])=,:[N,S,O]', 25),
-    TautomerScore('oxim', '[#6]=[N][OH]', 4),
-    TautomerScore('C=O', '[#6]=,:[#8]', 2),
-    TautomerScore('N=O', '[#7]=,:[#8]', 2),
-    TautomerScore('P=O', '[#15]=,:[#8]', 2),
-    TautomerScore('C=hetero', '[#6]=[!#1;!#6]', 1),
-    TautomerScore('methyl', '[CX4H3]', 1),
-    TautomerScore('guanidine terminal=N', '[#7][#6](=[NR0])[#7H0]', 1),
-    TautomerScore('guanidine endocyclic=N', '[#7;R][#6;R]([N])=[#7;R]', 2),
-    TautomerScore('aci-nitro', '[#6]=[N+]([O-])[OH]', -4),
+    TautomerScore(
+        "benzoquinone", "[#6]1([#6]=[#6][#6]([#6]=[#6]1)=,:[N,S,O])=,:[N,S,O]", 25
+    ),
+    TautomerScore("oxim", "[#6]=[N][OH]", 4),
+    TautomerScore("C=O", "[#6]=,:[#8]", 2),
+    TautomerScore("N=O", "[#7]=,:[#8]", 2),
+    TautomerScore("P=O", "[#15]=,:[#8]", 2),
+    TautomerScore("C=hetero", "[#6]=[!#1;!#6]", 1),
+    TautomerScore("methyl", "[CX4H3]", 1),
+    TautomerScore("guanidine terminal=N", "[#7][#6](=[NR0])[#7H0]", 1),
+    TautomerScore("guanidine endocyclic=N", "[#7;R][#6;R]([N])=[#7;R]", 2),
+    TautomerScore("aci-nitro", "[#6]=[N+]([O-])[OH]", -4),
 )
 
 #: The default value for the maximum number of tautomers to enumerate, a limit to prevent combinatorial explosion.
@@ -622,7 +771,12 @@ class TautomerCanonicalizer(object):
 
     """
 
-    def __init__(self, transforms=TAUTOMER_TRANSFORMS, scores=TAUTOMER_SCORES, max_tautomers=MAX_TAUTOMERS):
+    def __init__(
+        self,
+        transforms=TAUTOMER_TRANSFORMS,
+        scores=TAUTOMER_SCORES,
+        max_tautomers=MAX_TAUTOMERS,
+    ):
         """
 
         :param transforms: A list of TautomerTransforms to use to enumerate tautomers.
@@ -653,36 +807,43 @@ class TautomerCanonicalizer(object):
         highest = None
         for t in tautomers:
             smiles = Chem.MolToSmiles(t, isomericSmiles=True)
-            log.debug('Tautomer: %s', smiles)
+            log.debug("Tautomer: %s", smiles)
             score = 0
             # Add aromatic ring scores
             ssr = Chem.GetSymmSSSR(t)
             for ring in ssr:
-                btypes = {t.GetBondBetweenAtoms(*pair).GetBondType() for pair in pairwise(ring)}
+                btypes = {
+                    t.GetBondBetweenAtoms(*pair).GetBondType()
+                    for pair in pairwise(ring)
+                }
                 elements = {t.GetAtomWithIdx(idx).GetAtomicNum() for idx in ring}
                 if btypes == {BondType.AROMATIC}:
-                    log.debug('Score +100 (aromatic ring)')
+                    log.debug("Score +100 (aromatic ring)")
                     score += 100
                     if elements == {6}:
-                        log.debug('Score +150 (carbocyclic aromatic ring)')
+                        log.debug("Score +150 (carbocyclic aromatic ring)")
                         score += 150
             # Add SMARTS scores
             for tscore in self.scores:
                 for match in t.GetSubstructMatches(tscore.smarts):
-                    log.debug('Score %+d (%s)', tscore.score, tscore.name)
+                    log.debug("Score %+d (%s)", tscore.score, tscore.name)
                     score += tscore.score
             # Add (P,S,Se,Te)-H scores
             for atom in t.GetAtoms():
                 if atom.GetAtomicNum() in {15, 16, 34, 52}:
                     hs = atom.GetTotalNumHs()
                     if hs:
-                        log.debug('Score %+d (%s-H bonds)', -hs, atom.GetSymbol())
+                        log.debug("Score %+d (%s-H bonds)", -hs, atom.GetSymbol())
                         score -= hs
             # Set as highest if score higher or if score equal and smiles comes first alphabetically
-            if not highest or highest['score'] < score or (highest['score'] == score and smiles < highest['smiles']):
-                log.debug('New highest tautomer: %s (%s)', smiles, score)
-                highest = {'smiles': smiles, 'tautomer': t, 'score': score}
-        return highest['tautomer']
+            if (
+                not highest
+                or highest["score"] < score
+                or (highest["score"] == score and smiles < highest["smiles"])
+            ):
+                log.debug("New highest tautomer: %s (%s)", smiles, score)
+                highest = {"smiles": smiles, "tautomer": t, "score": score}
+        return highest["tautomer"]
 
     @memoized_property
     def _enumerate_tautomers(self):
@@ -722,7 +883,9 @@ class TautomerEnumerator(object):
                 if tsmiles in done:
                     continue
                 for transform in self.transforms:
-                    for match in tautomers[tsmiles].GetSubstructMatches(transform.tautomer):
+                    for match in tautomers[tsmiles].GetSubstructMatches(
+                        transform.tautomer
+                    ):
                         # Adjust hydrogens
                         product = copy.deepcopy(tautomers[tsmiles])
                         first = product.GetAtomWithIdx(match[0])
@@ -732,50 +895,78 @@ class TautomerEnumerator(object):
                         # Adjust bond orders
                         for bi, pair in enumerate(pairwise(match)):
                             if transform.bonds:
-                                product.GetBondBetweenAtoms(*pair).SetBondType(transform.bonds[bi])
+                                product.GetBondBetweenAtoms(*pair).SetBondType(
+                                    transform.bonds[bi]
+                                )
                             else:
-                                product.GetBondBetweenAtoms(*pair).SetBondType(BondType.DOUBLE if bi % 2 == 0 else BondType.SINGLE)
+                                product.GetBondBetweenAtoms(*pair).SetBondType(
+                                    BondType.DOUBLE if bi % 2 == 0 else BondType.SINGLE
+                                )
                         # Adjust charges
                         if transform.charges:
                             for ci, idx in enumerate(match):
                                 atom = product.GetAtomWithIdx(idx)
-                                atom.SetFormalCharge(atom.GetFormalCharge() + transform.charges[ci])
+                                atom.SetFormalCharge(
+                                    atom.GetFormalCharge() + transform.charges[ci]
+                                )
                         try:
                             Chem.SanitizeMol(product)
                             smiles = Chem.MolToSmiles(product, isomericSmiles=True)
-                            log.debug('Applied rule: %s to %s', transform.name, tsmiles)
+                            log.debug("Applied rule: %s to %s", transform.name, tsmiles)
                             if smiles not in tautomers:
-                                log.debug('New tautomer produced: %s' % smiles)
+                                log.debug("New tautomer produced: %s" % smiles)
                                 tautomers[smiles] = product
                             else:
-                                log.debug('Previous tautomer produced again: %s' % smiles)
+                                log.debug(
+                                    "Previous tautomer produced again: %s" % smiles
+                                )
                         except ValueError:
-                            log.debug('ValueError')
+                            log.debug("ValueError")
                 done.add(tsmiles)
             if len(tautomers) == len(done):
                 break
         else:
-            log.warn('Tautomer enumeration stopped at maximum %s', self.max_tautomers)
+            log.warn("Tautomer enumeration stopped at maximum %s", self.max_tautomers)
         # Clean up stereochemistry
         for tautomer in tautomers.values():
             Chem.AssignStereochemistry(tautomer, force=True, cleanIt=True)
             for bond in tautomer.GetBonds():
-                if bond.GetBondType() == BondType.DOUBLE and bond.GetStereo() > BondStereo.STEREOANY:
+                if (
+                    bond.GetBondType() == BondType.DOUBLE
+                    and bond.GetStereo() > BondStereo.STEREOANY
+                ):
                     begin = bond.GetBeginAtomIdx()
                     end = bond.GetEndAtomIdx()
                     for othertautomer in tautomers.values():
-                        if not othertautomer.GetBondBetweenAtoms(begin, end).GetBondType() == BondType.DOUBLE:
-                            neighbours = tautomer.GetAtomWithIdx(begin).GetBonds() + tautomer.GetAtomWithIdx(end).GetBonds()
+                        if (
+                            not othertautomer.GetBondBetweenAtoms(
+                                begin, end
+                            ).GetBondType()
+                            == BondType.DOUBLE
+                        ):
+                            neighbours = (
+                                tautomer.GetAtomWithIdx(begin).GetBonds()
+                                + tautomer.GetAtomWithIdx(end).GetBonds()
+                            )
                             for otherbond in neighbours:
-                                if otherbond.GetBondDir() in {BondDir.ENDUPRIGHT, BondDir.ENDDOWNRIGHT}:
+                                if otherbond.GetBondDir() in {
+                                    BondDir.ENDUPRIGHT,
+                                    BondDir.ENDDOWNRIGHT,
+                                }:
                                     otherbond.SetBondDir(BondDir.NONE)
-                            Chem.AssignStereochemistry(tautomer, force=True, cleanIt=True)
-                            log.debug('Removed stereochemistry from unfixed double bond')
+                            Chem.AssignStereochemistry(
+                                tautomer, force=True, cleanIt=True
+                            )
+                            log.debug(
+                                "Removed stereochemistry from unfixed double bond"
+                            )
                             break
         return tautomers.values()
-#==============================================================================
+
+
+# ==============================================================================
 # from .charge import ACID_BASE_PAIRS, Reionizer, Uncharger
-#==============================================================================
+# ==============================================================================
 class AcidBasePair(object):
     """An acid and its conjugate base, defined by SMARTS.
 
@@ -789,23 +980,25 @@ class AcidBasePair(object):
         :param string acid: SMARTS pattern for the protonated acid.
         :param string base: SMARTS pattern for the conjugate ionized base.
         """
-        log.debug('Initializing AcidBasePair: %s', name)
+        log.debug("Initializing AcidBasePair: %s", name)
         self.name = name
         self.acid_str = acid
         self.base_str = base
 
     @memoized_property
     def acid(self):
-        log.debug('Loading AcidBasePair acid: %s', self.name)
-        return Chem.MolFromSmarts(self.acid_str.encode('utf8'))
+        log.debug("Loading AcidBasePair acid: %s", self.name)
+        return Chem.MolFromSmarts(self.acid_str.encode("utf8"))
 
     @memoized_property
     def base(self):
-        log.debug('Loading AcidBasePair base: %s', self.name)
-        return Chem.MolFromSmarts(self.base_str.encode('utf8'))
+        log.debug("Loading AcidBasePair base: %s", self.name)
+        return Chem.MolFromSmarts(self.base_str.encode("utf8"))
 
     def __repr__(self):
-        return 'AcidBasePair({!r}, {!r}, {!r})'.format(self.name, self.acid_str, self.base_str)
+        return "AcidBasePair({!r}, {!r}, {!r})".format(
+            self.name, self.acid_str, self.base_str
+        )
 
     def __str__(self):
         return self.name
@@ -814,39 +1007,45 @@ class AcidBasePair(object):
 #: The default list of AcidBasePairs, sorted from strongest to weakest. This list is derived from the Food and Drug
 #: Administration Substance Registration System Standard Operating Procedure guide.
 ACID_BASE_PAIRS = (
-    AcidBasePair('-OSO3H', 'OS(=O)(=O)[OH]', 'OS(=O)(=O)[O-]'),
-    AcidBasePair('–SO3H', '[!O]S(=O)(=O)[OH]', '[!O]S(=O)(=O)[O-]'),
-    AcidBasePair('-OSO2H', 'O[SD3](=O)[OH]', 'O[SD3](=O)[O-]'),
-    AcidBasePair('-SO2H', '[!O][SD3](=O)[OH]', '[!O][SD3](=O)[O-]'),
-    AcidBasePair('-OPO3H2', 'OP(=O)([OH])[OH]', 'OP(=O)([OH])[O-]'),
-    AcidBasePair('-PO3H2', '[!O]P(=O)([OH])[OH]', '[!O]P(=O)([OH])[O-]'),
-    AcidBasePair('-CO2H', 'C(=O)[OH]', 'C(=O)[O-]'),
-    AcidBasePair('thiophenol', 'c[SH]', 'c[S-]'),
-    AcidBasePair('(-OPO3H)-', 'OP(=O)([OH])[O-]', 'OP(=O)([O-])[O-]'),
-    AcidBasePair('(-PO3H)-', '[!O]P(=O)([OH])[O-]', '[!O]P(=O)([O-])[O-]'),
-    AcidBasePair('phthalimide', 'O=C2c1ccccc1C(=O)[NH]2', 'O=C2c1ccccc1C(=O)[N-]2'),
-    AcidBasePair('CO3H (peracetyl)', 'C(=O)O[OH]', 'C(=O)O[O-]'),
-    AcidBasePair('alpha-carbon-hydrogen-nitro group', 'O=N(O)[CH]', 'O=N(O)[C-]'),
-    AcidBasePair('-SO2NH2', 'S(=O)(=O)[NH2]', 'S(=O)(=O)[NH-]'),
-    AcidBasePair('-OBO2H2', 'OB([OH])[OH]', 'OB([OH])[O-]'),
-    AcidBasePair('-BO2H2', '[!O]B([OH])[OH]', '[!O]B([OH])[O-]'),
-    AcidBasePair('phenol', 'c[OH]', 'c[O-]'),
-    AcidBasePair('SH (aliphatic)', 'C[SH]', 'C[S-]'),
-    AcidBasePair('(-OBO2H)-', 'OB([OH])[O-]', 'OB([O-])[O-]'),
-    AcidBasePair('(-BO2H)-', '[!O]B([OH])[O-]', '[!O]B([O-])[O-]'),
-    AcidBasePair('cyclopentadiene', '[CH2]1C=CC=C1', '[C-]1C=CC=C1'),
-    AcidBasePair('-CONH2', 'C(=O)[NH2]', 'C(=O)[NH-]'),
-    AcidBasePair('imidazole', 'c1cnc[n]1', 'c1cnc[n-]1'),
-    AcidBasePair('-OH', '[CX4][OH]', '[CX4][O-]'),
-    AcidBasePair('alpha-carbon-hydrogen-keto group', 'O=C[CH]', 'O=C[C-]'),
-    AcidBasePair('alpha-carbon-hydrogen-acetyl ester group', 'OC(=O)[CH]', 'OC(=O)[C-]'),
-    AcidBasePair('sp carbon hydrogen', 'C#[CH]', 'C#[C-]'),
-    AcidBasePair('alpha-carbon-hydrogen-sulfone group', 'CS(=O)(=O)C[CH]', 'CS(=O)(=O)C[C-]'),
-    AcidBasePair('alpha-carbon-hydrogen-sulfoxide group', 'C[SD3](=O)C[CH]', 'C[SD3](=O)C[C-]'),
-    AcidBasePair('-NH2', '[CX4][NH2]', '[CX4][NH-]'),
-    AcidBasePair('benzyl hydrogen', 'c[CD4H]', 'c[CD3-]'),
-    AcidBasePair('sp2-carbon hydrogen', '[CX3]=[CX3H]', '[CX3]=[CX2-]'),
-    AcidBasePair('sp3-carbon hydrogen', '[CX4H]', '[CX3-]'),
+    AcidBasePair("-OSO3H", "OS(=O)(=O)[OH]", "OS(=O)(=O)[O-]"),
+    AcidBasePair("–SO3H", "[!O]S(=O)(=O)[OH]", "[!O]S(=O)(=O)[O-]"),
+    AcidBasePair("-OSO2H", "O[SD3](=O)[OH]", "O[SD3](=O)[O-]"),
+    AcidBasePair("-SO2H", "[!O][SD3](=O)[OH]", "[!O][SD3](=O)[O-]"),
+    AcidBasePair("-OPO3H2", "OP(=O)([OH])[OH]", "OP(=O)([OH])[O-]"),
+    AcidBasePair("-PO3H2", "[!O]P(=O)([OH])[OH]", "[!O]P(=O)([OH])[O-]"),
+    AcidBasePair("-CO2H", "C(=O)[OH]", "C(=O)[O-]"),
+    AcidBasePair("thiophenol", "c[SH]", "c[S-]"),
+    AcidBasePair("(-OPO3H)-", "OP(=O)([OH])[O-]", "OP(=O)([O-])[O-]"),
+    AcidBasePair("(-PO3H)-", "[!O]P(=O)([OH])[O-]", "[!O]P(=O)([O-])[O-]"),
+    AcidBasePair("phthalimide", "O=C2c1ccccc1C(=O)[NH]2", "O=C2c1ccccc1C(=O)[N-]2"),
+    AcidBasePair("CO3H (peracetyl)", "C(=O)O[OH]", "C(=O)O[O-]"),
+    AcidBasePair("alpha-carbon-hydrogen-nitro group", "O=N(O)[CH]", "O=N(O)[C-]"),
+    AcidBasePair("-SO2NH2", "S(=O)(=O)[NH2]", "S(=O)(=O)[NH-]"),
+    AcidBasePair("-OBO2H2", "OB([OH])[OH]", "OB([OH])[O-]"),
+    AcidBasePair("-BO2H2", "[!O]B([OH])[OH]", "[!O]B([OH])[O-]"),
+    AcidBasePair("phenol", "c[OH]", "c[O-]"),
+    AcidBasePair("SH (aliphatic)", "C[SH]", "C[S-]"),
+    AcidBasePair("(-OBO2H)-", "OB([OH])[O-]", "OB([O-])[O-]"),
+    AcidBasePair("(-BO2H)-", "[!O]B([OH])[O-]", "[!O]B([O-])[O-]"),
+    AcidBasePair("cyclopentadiene", "[CH2]1C=CC=C1", "[C-]1C=CC=C1"),
+    AcidBasePair("-CONH2", "C(=O)[NH2]", "C(=O)[NH-]"),
+    AcidBasePair("imidazole", "c1cnc[n]1", "c1cnc[n-]1"),
+    AcidBasePair("-OH", "[CX4][OH]", "[CX4][O-]"),
+    AcidBasePair("alpha-carbon-hydrogen-keto group", "O=C[CH]", "O=C[C-]"),
+    AcidBasePair(
+        "alpha-carbon-hydrogen-acetyl ester group", "OC(=O)[CH]", "OC(=O)[C-]"
+    ),
+    AcidBasePair("sp carbon hydrogen", "C#[CH]", "C#[C-]"),
+    AcidBasePair(
+        "alpha-carbon-hydrogen-sulfone group", "CS(=O)(=O)C[CH]", "CS(=O)(=O)C[C-]"
+    ),
+    AcidBasePair(
+        "alpha-carbon-hydrogen-sulfoxide group", "C[SD3](=O)C[CH]", "C[SD3](=O)C[C-]"
+    ),
+    AcidBasePair("-NH2", "[CX4][NH2]", "[CX4][NH-]"),
+    AcidBasePair("benzyl hydrogen", "c[CD4H]", "c[CD3-]"),
+    AcidBasePair("sp2-carbon hydrogen", "[CX3]=[CX3H]", "[CX3]=[CX2-]"),
+    AcidBasePair("sp3-carbon hydrogen", "[CX4H]", "[CX3-]"),
 )
 
 
@@ -859,7 +1058,7 @@ class Reionizer(object):
         :param acid_base_pairs: A list of :class:`AcidBasePairs <molvs.charge.AcidBasePair>` to reionize, sorted from
                                 strongest to weakest.
         """
-        log.debug('Initializing Reionizer')
+        log.debug("Initializing Reionizer")
         self.acid_base_pairs = acid_base_pairs
 
     def __call__(self, mol):
@@ -879,12 +1078,16 @@ class Reionizer(object):
         :return: The reionized molecule.
         :rtype: :rdkit:`Mol <Chem.rdchem.Mol-class.html>`
         """
-        log.debug('Running Reionizer')
+        log.debug("Running Reionizer")
         while True:
             ppos, poccur = self._strongest_protonated(mol)
             ipos, ioccur = self._weakest_ionized(mol)
             if ioccur and poccur and ppos < ipos:
-                log.info('Moved proton from %s to %s', self.acid_base_pairs[ppos].name, self.acid_base_pairs[ipos].name)
+                log.info(
+                    "Moved proton from %s to %s",
+                    self.acid_base_pairs[ppos].name,
+                    self.acid_base_pairs[ipos].name,
+                )
                 patom = mol.GetAtomWithIdx(poccur[-1])
                 patom.SetFormalCharge(patom.GetFormalCharge() - 1)
                 patom.SetNumExplicitHs(max(0, patom.GetNumExplicitHs() - 1))
@@ -920,15 +1123,17 @@ class Uncharger(object):
     """
 
     def __init__(self):
-        log.debug('Initializing Uncharger')
+        log.debug("Initializing Uncharger")
         #: Neutralizable positive charge (with hydrogens attached)
-        self._pos_h = Chem.MolFromSmarts('[+!H0!$(*~[-])]'.encode('utf8'))
+        self._pos_h = Chem.MolFromSmarts("[+!H0!$(*~[-])]".encode("utf8"))
         #: Non-neutralizable positive charge (no hydrogens attached)
-        self._pos_quat = Chem.MolFromSmarts('[+H0!$(*~[-])]'.encode('utf8'))
+        self._pos_quat = Chem.MolFromSmarts("[+H0!$(*~[-])]".encode("utf8"))
         #: Negative charge, not bonded to a positive charge with no hydrogens
-        self._neg = Chem.MolFromSmarts('[-!$(*~[+H0])]'.encode('utf8'))
+        self._neg = Chem.MolFromSmarts("[-!$(*~[+H0])]".encode("utf8"))
         #: Negative oxygen bonded to [C,P,S]=O, negative aromatic nitrogen?
-        self._neg_acid = Chem.MolFromSmarts('[$([O-][C,P,S]=O),$([n-]1nnnc1),$(n1[n-]nnc1)]'.encode('utf8'))
+        self._neg_acid = Chem.MolFromSmarts(
+            "[$([O-][C,P,S]=O),$([n-]1nnnc1),$(n1[n-]nnc1)]".encode("utf8")
+        )
 
     def __call__(self, mol):
         """Calling an Uncharger instance like a function is the same as calling its uncharge(mol) method."""
@@ -942,7 +1147,7 @@ class Uncharger(object):
         :return: The uncharged molecule.
         :rtype: :rdkit:`Mol <Chem.rdchem.Mol-class.html>`
         """
-        log.debug('Running Uncharger')
+        log.debug("Running Uncharger")
         mol = copy.deepcopy(mol)
         # Get atom ids for matches
         p = [x[0] for x in mol.GetSubstructMatches(self._pos_h)]
@@ -962,22 +1167,23 @@ class Uncharger(object):
                     atom.SetNumExplicitHs(atom.GetNumExplicitHs() + 1)
                     atom.SetFormalCharge(atom.GetFormalCharge() + 1)
                     neg_surplus -= 1
-                    log.info('Removed negative charge')
+                    log.info("Removed negative charge")
         else:
             #
             for atom in [mol.GetAtomWithIdx(x) for x in n]:
                 while atom.GetFormalCharge() < 0:
                     atom.SetNumExplicitHs(atom.GetNumExplicitHs() + 1)
                     atom.SetFormalCharge(atom.GetFormalCharge() + 1)
-                    log.info('Removed negative charge')
+                    log.info("Removed negative charge")
         # Neutralize positive charges
         for atom in [mol.GetAtomWithIdx(x) for x in p]:
             # Remove hydrogen and reduce formal change until neutral or no more hydrogens
             while atom.GetFormalCharge() > 0 and atom.GetNumExplicitHs() > 0:
                 atom.SetNumExplicitHs(atom.GetNumExplicitHs() - 1)
                 atom.SetFormalCharge(atom.GetFormalCharge() - 1)
-                log.info('Removed positive charge')
+                log.info("Removed positive charge")
         return mol
+
 
 class Standardizer(object):
     """The main class for performing standardization of molecules and deriving parent molecules.
@@ -992,9 +1198,16 @@ class Standardizer(object):
 
     """
 
-    def __init__(self, normalizations=NORMALIZATIONS, acid_base_pairs=ACID_BASE_PAIRS,
-                 tautomer_transforms=TAUTOMER_TRANSFORMS, tautomer_scores=TAUTOMER_SCORES,
-                 max_restarts=MAX_RESTARTS, max_tautomers=MAX_TAUTOMERS, prefer_organic=PREFER_ORGANIC):
+    def __init__(
+        self,
+        normalizations=NORMALIZATIONS,
+        acid_base_pairs=ACID_BASE_PAIRS,
+        tautomer_transforms=TAUTOMER_TRANSFORMS,
+        tautomer_scores=TAUTOMER_SCORES,
+        max_restarts=MAX_RESTARTS,
+        max_tautomers=MAX_TAUTOMERS,
+        prefer_organic=PREFER_ORGANIC,
+    ):
         """Initialize a Standardizer with optional custom parameters.
 
         :param normalizations: A list of Normalizations to apply (default: :data:`~molvs.normalize.NORMALIZATIONS`).
@@ -1008,7 +1221,7 @@ class Standardizer(object):
         :param max_tautomers: The maximum number of tautomers to enumerate (default 1000).
         :param prefer_organic: Whether to prioritize organic fragments when choosing fragment parent (default False).
         """
-        log.debug('Initializing Standardizer')
+        log.debug("Initializing Standardizer")
         self.normalizations = normalizations
         self.acid_base_pairs = acid_base_pairs
         self.tautomer_transforms = tautomer_transforms
@@ -1021,15 +1234,15 @@ class Standardizer(object):
         """Calling a Standardizer instance like a function is the same as calling its
         :meth:`~molvs.standardize.Standardizer.standardize` method."""
         return self.standardize(mol)
-    
-    
-    def addhs(self,mol):
+
+    def addhs(self, mol):
         from rdkit.Chem import AddHs
+
         return AddHs(mol)
-    
-    
+
     def rmhs(self, mol):
         from rdkit.Chem import RemoveHs
+
         return RemoveHs(mol)
 
     def standardize(self, mol):
@@ -1177,9 +1390,9 @@ class Standardizer(object):
         super = self.super_parent(standardized, skip_standardize=True)
         # TODO: Add other parents - have optional argument to specify which are wanted
         mols = {
-            'standardized': standardized,
-            'tautomer_parent': tautomer,
-            'super_parent': super
+            "standardized": standardized,
+            "tautomer_parent": tautomer,
+            "super_parent": super,
         }
         return mols
 
@@ -1198,7 +1411,9 @@ class Standardizer(object):
         """
         :returns: A callable :class:`~molvs.normalize.Normalizer` instance.
         """
-        return Normalizer(normalizations=self.normalizations, max_restarts=self.max_restarts)
+        return Normalizer(
+            normalizations=self.normalizations, max_restarts=self.max_restarts
+        )
 
     @memoized_property
     def reionize(self):
@@ -1233,19 +1448,25 @@ class Standardizer(object):
         """
         :returns: A callable :class:`~molvs.tautomer.TautomerEnumerator` instance.
         """
-        return TautomerEnumerator(transforms=self.tautomer_transforms, max_tautomers=self.max_tautomers)
+        return TautomerEnumerator(
+            transforms=self.tautomer_transforms, max_tautomers=self.max_tautomers
+        )
 
     @memoized_property
     def canonicalize_tautomer(self):
         """
         :returns: A callable :class:`~molvs.tautomer.TautomerCanonicalizer` instance.
         """
-        return TautomerCanonicalizer(transforms=self.tautomer_transforms, scores=self.tautomer_scores,
-                                     max_tautomers=self.max_tautomers)
+        return TautomerCanonicalizer(
+            transforms=self.tautomer_transforms,
+            scores=self.tautomer_scores,
+            max_tautomers=self.max_tautomers,
+        )
 
-#==============================================================================
-# 
-#==============================================================================
+
+# ==============================================================================
+#
+# ==============================================================================
 class StandardizeMol(object):
     """The main class for performing standardization of molecules and deriving parent molecules.
 
@@ -1259,9 +1480,16 @@ class StandardizeMol(object):
 
     """
 
-    def __init__(self, normalizations=NORMALIZATIONS, acid_base_pairs=ACID_BASE_PAIRS,
-                 tautomer_transforms=TAUTOMER_TRANSFORMS, tautomer_scores=TAUTOMER_SCORES,
-                 max_restarts=MAX_RESTARTS, max_tautomers=MAX_TAUTOMERS, prefer_organic=PREFER_ORGANIC):
+    def __init__(
+        self,
+        normalizations=NORMALIZATIONS,
+        acid_base_pairs=ACID_BASE_PAIRS,
+        tautomer_transforms=TAUTOMER_TRANSFORMS,
+        tautomer_scores=TAUTOMER_SCORES,
+        max_restarts=MAX_RESTARTS,
+        max_tautomers=MAX_TAUTOMERS,
+        prefer_organic=PREFER_ORGANIC,
+    ):
         """Initialize a Standardizer with optional custom parameters.
 
         :param normalizations: A list of Normalizations to apply (default: :data:`~molvs.normalize.NORMALIZATIONS`).
@@ -1275,7 +1503,7 @@ class StandardizeMol(object):
         :param max_tautomers: The maximum number of tautomers to enumerate (default 1000).
         :param prefer_organic: Whether to prioritize organic fragments when choosing fragment parent (default False).
         """
-        log.debug('Initializing Standardizer')
+        log.debug("Initializing Standardizer")
         self.normalizations = normalizations
         self.acid_base_pairs = acid_base_pairs
         self.tautomer_transforms = tautomer_transforms
@@ -1288,15 +1516,15 @@ class StandardizeMol(object):
         """Calling a Standardizer instance like a function is the same as calling its
         :meth:`~molvs.standardize.Standardizer.standardize` method."""
         return self.standardize(mol)
-    
-    
-    def addhs(self,mol):
+
+    def addhs(self, mol):
         from rdkit.Chem import AddHs
+
         return AddHs(mol)
-    
-    
+
     def rmhs(self, mol):
         from rdkit.Chem import RemoveHs
+
         return RemoveHs(mol)
 
     @memoized_property
@@ -1311,7 +1539,9 @@ class StandardizeMol(object):
         """
         :returns: A callable :class:`~molvs.normalize.Normalizer` instance.
         """
-        return Normalizer(normalizations=self.normalizations, max_restarts=self.max_restarts)
+        return Normalizer(
+            normalizations=self.normalizations, max_restarts=self.max_restarts
+        )
 
     @memoized_property
     def reionize(self):
@@ -1339,11 +1569,16 @@ class StandardizeMol(object):
         """
         :returns: A callable :class:`~molvs.tautomer.TautomerCanonicalizer` instance.
         """
-        return TautomerCanonicalizer(transforms=self.tautomer_transforms, scores=self.tautomer_scores,
-                                     max_tautomers=self.max_tautomers)
-#==============================================================================
-# 
-#==============================================================================
+        return TautomerCanonicalizer(
+            transforms=self.tautomer_transforms,
+            scores=self.tautomer_scores,
+            max_tautomers=self.max_tautomers,
+        )
+
+
+# ==============================================================================
+#
+# ==============================================================================
 
 
 def standardize_smiles(smiles):
@@ -1358,7 +1593,7 @@ def standardize_smiles(smiles):
     :rtype: string.
     """
     # Skip sanitize as standardize does this anyway
-    mol = Chem.MolFromSmiles(smiles.encode('utf8'), sanitize=False)
+    mol = Chem.MolFromSmiles(smiles.encode("utf8"), sanitize=False)
     mol = Standardizer().standardize(mol)
     return Chem.MolToSmiles(mol, isomericSmiles=True)
 
@@ -1371,7 +1606,7 @@ def enumerate_tautomers_smiles(smiles):
     :rtype: set of strings.
     """
     # Skip sanitize as standardize does this anyway
-    mol = Chem.MolFromSmiles(smiles.encode('utf8'), sanitize=False)
+    mol = Chem.MolFromSmiles(smiles.encode("utf8"), sanitize=False)
     mol = Standardizer().standardize(mol)
     tautomers = TautomerEnumerator().enumerate(mol)
     return {Chem.MolToSmiles(m, isomericSmiles=True) for m in tautomers}
@@ -1389,46 +1624,51 @@ def canonicalize_tautomer_smiles(smiles):
     :rtype: string.
     """
     # Skip sanitize as standardize does this anyway
-    mol = Chem.MolFromSmiles(smiles.encode('utf8'), sanitize=False)
+    mol = Chem.MolFromSmiles(smiles.encode("utf8"), sanitize=False)
     mol = Standardizer().standardize(mol)
     tautomer = TautomerCanonicalizer().canonicalize(mol)
     return Chem.MolToSmiles(tautomer, isomericSmiles=True)
 
 
-#==============================================================================
-#from .errors import StopValidateError
-#==============================================================================
+# ==============================================================================
+# from .errors import StopValidateError
+# ==============================================================================
 class MolVSError(Exception):
     pass
+
 
 class StandardizeError(MolVSError):
     pass
 
+
 class ValidateError(MolVSError):
     pass
 
+
 class StopValidateError(ValidateError):
     """Called by Validations to stop any further validations from being performed."""
+
     pass
 
-#==============================================================================
+
+# ==============================================================================
 # from .validations import VALIDATIONS
-#==============================================================================
+# ==============================================================================
 class Validation(object):
     """The base class that all :class:`~molvs.validations.Validation` subclasses must inherit from."""
 
     def __init__(self, log):
-        self.log = logging.LoggerAdapter(log, {'validation': type(self).__name__})
+        self.log = logging.LoggerAdapter(log, {"validation": type(self).__name__})
 
     def __call__(self, mol):
         try:
-            self.log.debug('Running %s', type(self).__name__)
+            self.log.debug("Running %s", type(self).__name__)
             self.run(mol)
         except Exception as e:
             if isinstance(e, StopValidateError):
                 raise e
             else:
-                self.log.debug('Validation failed: %s', e)
+                self.log.debug("Validation failed: %s", e)
 
     def run(self, mol):
         """"""
@@ -1446,7 +1686,7 @@ class SmartsValidation(Validation):
     level = logging.INFO
 
     #: The message to log if the SMARTS pattern matches the molecule.
-    message = 'Molecule matched %(smarts)s'
+    message = "Molecule matched %(smarts)s"
 
     #: Whether the SMARTS pattern should match an entire covalent unit.
     entire_fragment = False
@@ -1458,17 +1698,21 @@ class SmartsValidation(Validation):
     @property
     def smarts(self):
         """The SMARTS pattern as a string. Subclasses must implement this."""
-        raise NotImplementedError('SmartsValidation subclasses must have a smarts attribute')
+        raise NotImplementedError(
+            "SmartsValidation subclasses must have a smarts attribute"
+        )
 
     def _check_matches(self, mol):
         if mol.HasSubstructMatch(self._smarts):
-            self.log.log(self.level, self.message, {'smarts': self.smarts})
+            self.log.log(self.level, self.message, {"smarts": self.smarts})
 
     def _check_matches_fragment(self, mol):
-        matches = frozenset(frozenset(match) for match in mol.GetSubstructMatches(self._smarts))
+        matches = frozenset(
+            frozenset(match) for match in mol.GetSubstructMatches(self._smarts)
+        )
         fragments = frozenset(frozenset(frag) for frag in Chem.GetMolFrags(mol))
         if matches & fragments:
-            self.log.log(self.level, self.message, {'smarts': self.smarts})
+            self.log.log(self.level, self.message, {"smarts": self.smarts})
 
     def run(self, mol):
         if self.entire_fragment:
@@ -1486,7 +1730,7 @@ class IsNoneValidation(Validation):
 
     def run(self, mol):
         if mol is None:
-            self.log.error('Molecule is None')
+            self.log.error("Molecule is None")
             raise StopValidateError()
 
 
@@ -1498,7 +1742,7 @@ class NoAtomValidation(Validation):
 
     def run(self, mol):
         if mol.GetNumAtoms() == 0:
-            self.log.error('No atoms are present')
+            self.log.error("No atoms are present")
             raise StopValidateError()
 
 
@@ -1508,10 +1752,11 @@ class DichloroethaneValidation(SmartsValidation):
     This is provided as an example of how to subclass :class:`~molvs.validations.SmartsValidation` to check for the
     presence of a substructure.
     """
+
     level = logging.INFO
-    smarts = '[Cl]-[#6]-[#6]-[Cl]'
+    smarts = "[Cl]-[#6]-[#6]-[Cl]"
     entire_fragment = True
-    message = '1,2-Dichloroethane is present'
+    message = "1,2-Dichloroethane is present"
 
 
 class FragmentValidation(Validation):
@@ -1526,10 +1771,12 @@ class FragmentValidation(Validation):
 
     def run(self, mol):
         for fp in self.fragments:
-            matches = frozenset(frozenset(match) for match in mol.GetSubstructMatches(fp.smarts))
+            matches = frozenset(
+                frozenset(match) for match in mol.GetSubstructMatches(fp.smarts)
+            )
             fragments = frozenset(frozenset(frag) for frag in Chem.GetMolFrags(mol))
             if matches & fragments:
-                self.log.info('%s is present', fp.name)
+                self.log.info("%s is present", fp.name)
 
 
 class NeutralValidation(Validation):
@@ -1538,8 +1785,8 @@ class NeutralValidation(Validation):
     def run(self, mol):
         charge = Chem.GetFormalCharge(mol)
         if not charge == 0:
-            chargestring = '+%s' % charge if charge > 0 else '%s' % charge
-            self.log.info('Not an overall neutral system (%s)', chargestring)
+            chargestring = "+%s" % charge if charge > 0 else "%s" % charge
+            self.log.info("Not an overall neutral system (%s)", chargestring)
 
 
 class IsotopeValidation(Validation):
@@ -1550,26 +1797,26 @@ class IsotopeValidation(Validation):
         for atom in mol.GetAtoms():
             isotope = atom.GetIsotope()
             if not isotope == 0:
-                isotopes.add('%s%s' % (isotope, atom.GetSymbol()))
+                isotopes.add("%s%s" % (isotope, atom.GetSymbol()))
         for isotope in isotopes:
-            self.log.info('Molecule contains isotope %s', isotope)
+            self.log.info("Molecule contains isotope %s", isotope)
 
 
 #: The default list of :class:`Validations <molvs.validations.Validation>` used by :class:`~molvs.validate.Validator`.
 VALIDATIONS = (
     IsNoneValidation,
     NoAtomValidation,
-    #DichloroethaneValidation,
+    # DichloroethaneValidation,
     FragmentValidation,
     NeutralValidation,
     IsotopeValidation,
 )
 
 #: The default format for log messages.
-SIMPLE_FORMAT = '%(levelname)s: [%(validation)s] %(message)s'
+SIMPLE_FORMAT = "%(levelname)s: [%(validation)s] %(message)s"
 
 #: A more detailed format for log messages. Specify when initializing a Validator.
-LONG_FORMAT = '%(asctime)s - %(levelname)s - %(validation)s - %(message)s'
+LONG_FORMAT = "%(asctime)s - %(levelname)s - %(validation)s - %(message)s"
 
 
 class LogHandler(logging.Handler):
@@ -1604,7 +1851,14 @@ class LogHandler(logging.Handler):
 class Validator(object):
     """The main class for running :class:`Validations <molvs.validations.Validation>` on molecules."""
 
-    def __init__(self, validations=VALIDATIONS, log_format=SIMPLE_FORMAT, level=logging.INFO, stdout=False, raw=False):
+    def __init__(
+        self,
+        validations=VALIDATIONS,
+        log_format=SIMPLE_FORMAT,
+        level=logging.INFO,
+        stdout=False,
+        raw=False,
+    ):
         """Initialize a Validator with the following parameters:
 
         :param validations: A list of Validations to apply (default: :data:`~molvs.validations.VALIDATIONS`).
@@ -1658,31 +1912,20 @@ def validate_smiles(smiles):
     :rtype: list of strings.
     """
     # Skip sanitize as standardize does this anyway
-    mol = Chem.MolFromSmiles(smiles.encode('utf8'))
+    mol = Chem.MolFromSmiles(smiles.encode("utf8"))
     logs = Validator().validate(mol)
     return logs
 
 
-if __name__ == '__main__':
-    mol = Chem.MolFromSmiles('[Na]OC(=O)c1ccc(C[S+2]([O-])([O-]))cc1')
+if __name__ == "__main__":
+    mol = Chem.MolFromSmiles("[Na]OC(=O)c1ccc(C[S+2]([O-])([O-]))cc1")
     from rdkit.Chem import AddHs
-    
+
     mol = AddHs(mol)
     s = Standardizer()
     smol = s.standardize(mol)
-    standardize_smiles('[Na]OC(=O)c1ccc(C[S+2]([O-])([O-]))cc1')
+    standardize_smiles("[Na]OC(=O)c1ccc(C[S+2]([O-])([O-]))cc1")
     l = LargestFragmentChooser()
     lmol = l.choose(mol)
     print(Chem.MolToSmiles(lmol, isomericSmiles=True))
-    print (standardize_smiles('C[n+]1c([N-](C))cccc1'))
-
-
-
-
-
-
-
-
-
-
-
+    print(standardize_smiles("C[n+]1c([N-](C))cccc1"))

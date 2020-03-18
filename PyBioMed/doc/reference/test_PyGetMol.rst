@@ -1,6 +1,6 @@
 test_PyGetMol module
 ====================
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: test_PyGetMol
     :members:
     :undoc-members:

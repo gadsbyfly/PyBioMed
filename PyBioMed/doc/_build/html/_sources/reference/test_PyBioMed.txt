@@ -1,6 +1,6 @@
 test_PyBioMed module
 ====================
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: test_PyBioMed
     :members:
     :undoc-members:

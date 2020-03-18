@@ -7,7 +7,7 @@
 #  of the PyBioMed source tree.
 """
 
-This module is used for downloading the DNA sequence from ncbi web. You can only 
+This module is used for downloading the DNA sequence from ncbi web. You can only
 
 need input a DNA ID.
 
@@ -27,9 +27,11 @@ try:
 except ImportError:
     # Python 2
     from urllib2 import urlopen
+# Core Library modules
 import sys
 
-ALPHABET = 'ACGT'
+ALPHABET = "ACGT"
+
 
 class Seq:
     def __init__(self, name, seq, no):
@@ -40,19 +42,26 @@ class Seq:
 
     def __str__(self):
         """Output seq when 'print' method is called."""
-        return "%s\tNo:%s\tlength:%s\n%s" % (self.name, str(self.no), str(self.length), self.seq)
+        return "%s\tNo:%s\tlength:%s\n%s" % (
+            self.name,
+            str(self.no),
+            str(self.length),
+            self.seq,
+        )
 
-def GetDNAFromUniGene(SeqID = ''):
-    
-    '''
-    This module is used for downloading the DNA sequence from ncbi web. You can only 
+
+def GetDNAFromUniGene(SeqID=""):
+
+    """
+    This module is used for downloading the DNA sequence from ncbi web. You can only
 
     need input a DNA ID.
-    
-    '''
-    url = 'http://www.ebi.ac.uk/ena/data/view/{0}&display=fasta'.format(SeqID)
-    temp = urlopen(url).read()    
+
+    """
+    url = "http://www.ebi.ac.uk/ena/data/view/{0}&display=fasta".format(SeqID)
+    temp = urlopen(url).read()
     return temp
+
 
 def IsUnderAlphabet(s, alphabet):
     """
@@ -69,7 +78,8 @@ def IsUnderAlphabet(s, alphabet):
         if e not in alphabet:
             return e
 
-    return True	
+    return True
+
 
 def IsFasta(seq):
     """
@@ -84,20 +94,21 @@ def IsFasta(seq):
     #################################################################
     """
     if not seq.name:
-        error_info = 'Error, sequence ' + str(seq.no) + ' has no sequence name.'
+        error_info = "Error, sequence " + str(seq.no) + " has no sequence name."
         print(seq)
         sys.stderr.write(error_info)
         return False
-    if -1 != seq.name.find('>'):
-        error_info = 'Error, sequence ' + str(seq.no) + ' name has > character.'
+    if -1 != seq.name.find(">"):
+        error_info = "Error, sequence " + str(seq.no) + " name has > character."
         sys.stderr.write(error_info)
         return False
     if 0 == seq.length:
-        error_info = 'Error, sequence ' + str(seq.no) + ' is null.'
+        error_info = "Error, sequence " + str(seq.no) + " is null."
         sys.stderr.write(error_info)
         return False
 
     return True
+
 
 def ReadFasta(f):
     """
@@ -109,7 +120,7 @@ def ReadFasta(f):
     Return Seq obj list.
     #################################################################
     """
-    name, seq = '', ''
+    name, seq = "", ""
     count = 0
     seq_list = []
     lines = f.readlines()
@@ -117,14 +128,14 @@ def ReadFasta(f):
         if not line:
             break
 
-        if '>' == line[0]:
-            if 0 != count or (0 == count and seq != ''):
+        if ">" == line[0]:
+            if 0 != count or (0 == count and seq != ""):
                 if IsFasta(Seq(name, seq, count)):
                     seq_list.append(seq)
                 else:
                     sys.exit(0)
 
-            seq = ''
+            seq = ""
             name = line[1:].strip()
             count += 1
         else:
@@ -139,25 +150,24 @@ def ReadFasta(f):
     return seq_list
 
 
-if __name__ == '__main__':
-    print('-'*10+'START'+'-'*10)
-    print('Only PyBioMed is successfully installed the code below can be run！')
+if __name__ == "__main__":
+    print("-" * 10 + "START" + "-" * 10)
+    print("Only PyBioMed is successfully installed the code below can be run！")
     from PyBioMed.PyGetMol.GetProtein import timelimited
+
     @timelimited(10)
     def run_GetDNAFromUniGene():
-        seqid = 'AA954964'
-        seqid2 = 'CB216422'
+        seqid = "AA954964"
+        seqid2 = "CB216422"
         print(GetDNAFromUniGene(seqid))
 
     @timelimited(10)
     def run_ReadFasta():
 
-        dna = ReadFasta(open('../test/test_data/example.fasta'))
+        dna = ReadFasta(open("../test/test_data/example.fasta"))
         print(dna)
 
     run_GetDNAFromUniGene()
-    print('-'*25)
+    print("-" * 25)
     run_ReadFasta()
-    print('-'*10+'END'+'-'*10)
-
-
+    print("-" * 10 + "END" + "-" * 10)

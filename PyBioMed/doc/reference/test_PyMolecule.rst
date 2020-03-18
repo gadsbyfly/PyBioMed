@@ -1,6 +1,6 @@
 test_PyMolecule module
 ======================
-.. highlight:: python 
+.. highlight:: python
 .. automodule:: test_PyMolecule
     :members:
     :undoc-members:
