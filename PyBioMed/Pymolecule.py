@@ -141,7 +141,7 @@ class PyMolecule:
             Output: res is a molecule object.
         #################################################################
         """
-        import pybel
+        from openbabel import pybel
 
         temp = pybel.readstring("inchi", inchi)
         smi = temp.write("smi")

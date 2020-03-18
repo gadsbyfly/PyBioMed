@@ -32,8 +32,8 @@ import os
 import signal
 import string
 import sys
+import threading
 import time
-from contextlib import contextmanager
 
 
 class TimeoutException(Exception):
@@ -77,19 +77,36 @@ _aa_index = [
 # AA1_TO_AA3 = dict([(aa[1],aa[0]) for aa in _aa_index])
 
 
-@contextmanager
-def timelimited(seconds):
-    """A decorator to limit the execution time."""
+class InterruptableThread(threading.Thread):
+    def __init__(self, func, *args, **kwargs):
+        threading.Thread.__init__(self)
+        self._func = func
+        self._args = args
+        self._kwargs = kwargs
+        self._result = None
 
-    def signal_handler(signum, frame):
-        raise TimeoutException("Network timeout, skip!!")
+    def run(self):
+        self._result = self._func(*self._args, **self._kwargs)
 
-    signal.signal(signal.SIGALRM, signal_handler)
-    signal.alarm(seconds)
-    try:
-        yield
-    finally:
-        signal.alarm(0)
+    @property
+    def result(self):
+        return self._result
+
+
+class timelimited(object):
+    def __init__(self, sec):
+        self._sec = sec
+
+    def __call__(self, f):
+        def wrapped_f(*args, **kwargs):
+            it = InterruptableThread(f, *args, **kwargs)
+            it.start()
+            it.join(self._sec)
+            if not it.is_alive():
+                return it.result
+            raise TimeoutException("Network timeout, skip!!")
+
+        return wrapped_f
 
 
 def unZip(some_file, some_output):
