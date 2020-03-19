@@ -29,12 +29,11 @@ Email: gadsby@163.com
 import ftplib
 import gzip
 import os
+import signal
 import string
 import sys
+import threading
 import time
-from threading import Thread
-
-ThreadStop = Thread._Thread__stop
 
 
 class TimeoutException(Exception):
@@ -78,48 +77,36 @@ _aa_index = [
 # AA1_TO_AA3 = dict([(aa[1],aa[0]) for aa in _aa_index])
 
 
-def timelimited(timeout):
-    """
-    A decorator to limit the execution time.
-    """
+class InterruptableThread(threading.Thread):
+    def __init__(self, func, *args, **kwargs):
+        threading.Thread.__init__(self)
+        self._func = func
+        self._args = args
+        self._kwargs = kwargs
+        self._result = None
 
-    def decorator(function):
-        def decorator2(*args, **kwargs):
-            class TimeLimited(Thread):
-                def __init__(self, _error=None):
-                    Thread.__init__(self)
-                    self._error = _error
+    def run(self):
+        self._result = self._func(*self._args, **self._kwargs)
 
-                def run(self):
-                    try:
-                        self.result = function(*args, **kwargs)
-                    except Exception as e:
-                        self._error = e
+    @property
+    def result(self):
+        return self._result
 
-                def _stop(self):
-                    if self.isAlive():
-                        ThreadStop(self)
 
-            t = TimeLimited()
-            t.start()
-            t.join(timeout)
+class timelimited(object):
+    def __init__(self, sec):
+        self._sec = sec
 
-            if isinstance(t._error, TimeoutException):
-                t._stop()
-                print("Network timeout, skip!!")
-                return "Network timeout, skip!!"
+    def __call__(self, f):
+        def wrapped_f(*args, **kwargs):
+            it = InterruptableThread(f, *args, **kwargs)
+            it.start()
+            it.join(self._sec)
+            if not it.is_alive():
+                return it.result
+            raise TimeoutException("Network timeout, skip!!")
 
-            if t.isAlive():
-                t._stop()
-                print("Network timeout, skip!!")
-                return "Network timeout, skip!!"
-
-            if t._error is None:
-                return t.result
-
-        return decorator2
-
-    return decorator
+        return wrapped_f
 
 
 def unZip(some_file, some_output):

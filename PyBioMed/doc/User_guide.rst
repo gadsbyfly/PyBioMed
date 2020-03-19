@@ -296,7 +296,7 @@ Calculating fingerprint via functions
 The :func:`CalculateFP2Fingerprint` function calculates the FP2 fingerprint.
 
 >>> from PyBioMed.PyMolecule.fingerprint import CalculateFP2Fingerprint
->>> import pybel
+>>> from openbabel import pybel
 >>> smi = 'CCC1(c2ccccc2)C(=O)N(C)C(=N1)O'
 >>> mol = pybel.readstring("smi", smi)
 >>> mol_fingerprint = CalculateFP2Fingerprint(mol)

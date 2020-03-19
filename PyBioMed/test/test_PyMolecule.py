@@ -21,7 +21,7 @@ import os
 def test_pymolecule():
 
     from rdkit import Chem
-    import pybel
+    from openbabel import pybel
     from PyBioMed.PyMolecule.AtomProperty import (
         AtomProperty,
         GetAbsoluteAtomicProperty,

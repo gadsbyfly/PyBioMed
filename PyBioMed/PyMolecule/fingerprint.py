@@ -20,7 +20,7 @@ Email: gadsby@163.com and oriental-cds@163.com
 ##############################################################################
 """
 # Third party modules
-import pybel
+from openbabel import pybel
 from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem, ChemicalFeatures, MACCSkeys
 from rdkit.Chem.AtomPairs import Pairs, Torsions

@@ -20,6 +20,8 @@ Email: gadsby@163.com
 
 """
 
+from __future__ import print_function
+
 # Core Library modules
 import os
 import string

@@ -105,7 +105,7 @@ def ReadMolFromInchi(inchi=""):
         Output: res is a molecule object.
     #################################################################
     """
-    import pybel
+    from openbabel import pybel
 
     temp = pybel.readstring("inchi", inchi)
     smi = temp.write("smi")
@@ -140,7 +140,7 @@ def GetMolFromCAS(casid=""):
     Downloading the molecules from http://www.chemnet.com/cas/ by CAS ID (casid).
     if you want to use this function, you must be install pybel.
     """
-    import pybel
+    from openbabel import pybel
 
     casid = string.strip(casid)
     localfile = urlopen(
