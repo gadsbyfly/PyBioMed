@@ -15,8 +15,8 @@ Date: 2016.06.14
 Email: gadsby@163.com
 """
 
-# Core Library modules
-import os
+# Third party modules
+import pytest
 
 # First party modules
 from PyBioMed.test.test_PyDNA import test_pydna
@@ -27,18 +27,15 @@ from PyBioMed.test.test_PyPretreat import test_pypretreat
 from PyBioMed.test.test_PyProtein import test_pyprotein
 
 
+@pytest.mark.skip(
+    reason="This only calls all other tests which are executed by pytest anyway."
+)
 def test_pybiomed():
-
     test_pydna()
-
     test_pyinteration()
-
     test_pypretreat()
-
     test_pygetmol()
-
     test_pymolecule()
-
     test_pyprotein()
 
 

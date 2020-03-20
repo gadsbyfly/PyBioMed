@@ -1,4 +1,6 @@
-![](https://img.shields.io/pypi/l/Django.svg) ![](https://img.shields.io/badge/dependencies-rdkit%2C%20pybel-green.svg) ![](https://img.shields.io/badge/platforms-linux%2C%20windows-brightgreen.svg)
+[![Build Status](https://travis-ci.org/gadsbyfly/PyBioMed.svg?branch=master)](https://travis-ci.org/gadsbyfly/PyBioMed)
+![](https://img.shields.io/pypi/l/Django.svg) ![](https://img.shields.io/badge/dependencies-rdkit%2C%20pybel-green.svg)
+![](https://img.shields.io/badge/platforms-linux%2C%20windows-brightgreen.svg)
 
 ## Introduction
 PyBioMed provides various user-friendly and highly customized APIs to calculate various features(descriptors) of biological molecules(chemicals, proteins and DNA/RNA descriptors) and complex interaction samples conveniently, which aims at building integrated analysis pipelines from data acquisition, data checking, and descriptor calculation to modeling.
