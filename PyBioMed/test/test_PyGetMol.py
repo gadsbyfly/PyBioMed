@@ -14,9 +14,8 @@ Date: 2016.06.14
 
 Email: gadsby@163.com
 """
-# Core Library modules
-import os
-import string
+# Third party modules
+import pytest
 
 # First party modules
 from PyBioMed.PyGetMol.GetDNA import GetDNAFromUniGene
@@ -25,19 +24,17 @@ from PyBioMed.PyGetMol.Getmol import (
     GetMolFromDrugbank,
     GetMolFromKegg,
     GetMolFromNCBI,
-    ReadMolFromMOL,
-    ReadMolFromSDF,
-    ReadMolFromSmile,
 )
-from PyBioMed.PyGetMol.GetProtein import GetPDB, GetSeqFromPDB, timelimited
+from PyBioMed.PyGetMol.GetProtein import GetPDB, GetSeqFromPDB
 
 
+@pytest.mark.skip(reason="Timeout on Travis; needs mocking")
 def test_pygetmol():
     print("-" * 10 + "START" + "-" * 10)
     # ==============================================================================
     # GetDNA
     # ==============================================================================
-    @timelimited(30)
+    @pytest.mark.timeout(30)
     def test_GetDNAFromUniGene():
         seqid = "AA954964"
         seqid2 = "CB216422"
@@ -56,7 +53,7 @@ def test_pygetmol():
     # ==============================================================================
     # Get protein
     # ==============================================================================
-    @timelimited(30)
+    @pytest.mark.timeout(30)
     def test_GetPDB():
         try:
             GetPDB(["1atp", "1efz", "1f88"])
@@ -77,7 +74,7 @@ def test_pygetmol():
     # ==============================================================================
     # Get molecule
     # ==============================================================================
-    @timelimited(30)
+    @pytest.mark.timeout(30)
     def test_GetSmallMol():
         try:
             temp = GetMolFromCAS(casid="50-12-4")
