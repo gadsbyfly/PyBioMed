@@ -54,4 +54,4 @@ license which covers this software and its associated data and
 documents.
 
 
-# <center> Copyright (C) 2015-2019 CBDD Group </center>
+# <center> Copyright (C) 2015-2020 CBDD Group </center>
