@@ -22,6 +22,8 @@ Email: gadsby@163.com and oriental-cds@163.com
 ##############################################################################
 """
 
+# Standard library
+from collections import Counter
 # Third party modules
 import numpy
 import scipy
@@ -154,15 +156,11 @@ def CalculateGraphDistance(mol):
         Output: result is a numeric value
     #################################################################
     """
-    Distance = Chem.GetDistanceMatrix(mol)
-    n = int(Distance.max())
-    res = 0.0
-    for i in range(n):
-        # print Distance==i+1
-        temp = 1.0 / 2 * sum(sum(Distance == i + 1))
-        # print temp
-        res = res + temp ** 2
-
+    Distance= Chem.GetDistanceMatrix(mol) 
+    temp =  Counter(Distance.flatten())
+    res = sum(
+        map(lambda x: (x*0.5)**2, temp.values())
+    )
     return numpy.log10(res)
 
 
