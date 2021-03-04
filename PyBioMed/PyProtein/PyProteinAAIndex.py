@@ -306,7 +306,7 @@ def GetAAIndex1(name, path="."):
 
     init(path=path)
     name = str(name)
-    temp = get(string.strip(name))
+    temp = get(name.strip())
     res = {}
     for i in AALetter:
         res[i] = temp.get(i)
@@ -328,7 +328,7 @@ def GetAAIndex23(name, path="."):
     """
     init(path=path)
     name = str(name)
-    temp = get(string.strip(name))
+    temp = get(name.strip())
     res = {}
     for i in AALetter:
         for j in AALetter:

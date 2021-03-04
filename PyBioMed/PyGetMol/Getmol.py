@@ -86,7 +86,7 @@ def ReadMolFromSmile(smi=""):
         Output: res is a molecule object.
     #################################################################
     """
-    mol = Chem.MolFromSmiles(string.strip(smi))
+    mol = Chem.MolFromSmiles(smi.strip())
 
     return mol
 
@@ -109,7 +109,7 @@ def ReadMolFromInchi(inchi=""):
 
     temp = pybel.readstring("inchi", inchi)
     smi = temp.write("smi")
-    mol = Chem.MolFromSmiles(string.strip(smi))
+    mol = Chem.MolFromSmiles(smi.strip())
 
     return mol
 
@@ -142,7 +142,7 @@ def GetMolFromCAS(casid=""):
     """
     from openbabel import pybel
 
-    casid = string.strip(casid)
+    casid = casid.strip()
     localfile = urlopen(
         "http://www.chemnet.com/cas/supplier.cgi?terms=" + casid + "&l=&exact=dict"
     )
@@ -156,9 +156,9 @@ def GetMolFromCAS(casid=""):
             else:
                 res = "None"
     localfile.close()
-    mol = pybel.readstring("inchi", string.strip(res))
+    mol = pybel.readstring("inchi", res.strip())
     smile = mol.write("smi")
-    return string.strip(smile)
+    return smile.strip()
 
 
 def GetMolFromEBI():
@@ -171,7 +171,7 @@ def GetMolFromNCBI(cid=""):
     """
     Downloading the molecules from http://pubchem.ncbi.nlm.nih.gov/ by cid (cid).
     """
-    cid = string.strip(cid)
+    cid = cid.strip()
     localfile = urlopen(
         "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="
         + cid
@@ -192,7 +192,7 @@ def GetMolFromDrugbank(dbid=""):
     """
     Downloading the molecules from http://www.drugbank.ca/ by dbid (dbid).
     """
-    dbid = string.strip(dbid)
+    dbid = dbid.strip()
 
     localfile = urlopen("http://www.drugbank.ca/drugs/" + dbid + ".sdf")
     temp = localfile.readlines()
