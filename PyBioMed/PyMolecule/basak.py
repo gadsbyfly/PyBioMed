@@ -148,7 +148,7 @@ def _CalculateBasakICn(mol, NumPath=1):
         for i in range(nAtoms):
             temp = []
             at = Hmol.GetAtomWithIdx(i)
-            temp.append(at.GetAtomicNum())
+            temp.append([at.GetAtomicNum()])
             for index in TotalPath:
                 if i == index[0]:
                     temp.append(
@@ -165,7 +165,6 @@ def _CalculateBasakICn(mol, NumPath=1):
             IC[str(i)] = temp
         cds = []
         for value in IC.values():
-            print(value)
             value.sort()
             cds.append(value)
         kkk = list(range(len(cds)))
