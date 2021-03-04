@@ -165,6 +165,7 @@ def _CalculateBasakICn(mol, NumPath=1):
             IC[str(i)] = temp
         cds = []
         for value in IC.values():
+            print(value)
             value.sort()
             cds.append(value)
         kkk = list(range(len(cds)))
