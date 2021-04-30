@@ -145,7 +145,7 @@ class PyMolecule:
 
         temp = pybel.readstring("inchi", inchi)
         smi = temp.write("smi")
-        self.mol = Chem.MolFromSmiles(string.strip(smi))
+        self.mol = Chem.MolFromSmiles(smi.strip())
 
         return self.mol
 

@@ -49,7 +49,7 @@ def _ReadPatts(fileName):
                     sma.replace('"', "")
                     p = Chem.MolFromSmarts(sma)
                     if p:
-                        cha = string.strip(splitLine[0])
+                        cha = splitLine[0].strip()
                         if cha not in order:
                             order.append(cha)
                         l = patts.get(cha, [])

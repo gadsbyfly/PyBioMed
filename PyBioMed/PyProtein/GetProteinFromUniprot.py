@@ -56,7 +56,7 @@ def GetProteinSequence(ProteinID):
     temp = localfile.readlines()
     res = ""
     for i in range(1, len(temp)):
-        res = res + string.strip(temp[i])
+        res = res + temp[i].strip()
     return res
 
 
@@ -82,7 +82,7 @@ def GetProteinSequenceFromTxt(path, openfile, savefile):
     # 	res=[]
     for index, i in enumerate(f2):
 
-        itrim = string.strip(i)
+        itrim = i.strip()
         if itrim == "":
             continue
         else:
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
     localfile = ["P48039"]
     for index, i in enumerate(localfile):
-        itrim = string.strip(i)
+        itrim = i.strip()
         if itrim == "":
             continue
         else:
