@@ -108,9 +108,9 @@ def CalculateConjointTriad(proteinsequence):
     """
     res = {}
     proteinnum = _Str2Num(proteinsequence)
-    for i in range(8):
-        for j in range(8):
-            for k in range(8):
+    for i in range(1, 8):
+        for j in range(1, 8):
+            for k in range(1, 8):
                 temp = str(i) + str(j) + str(k)
                 res[temp] = proteinnum.count(temp)
     return res
