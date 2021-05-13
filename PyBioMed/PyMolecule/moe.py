@@ -72,6 +72,7 @@ def CalculateTPSA(mol):
     res = {}
     temp = MOE.TPSA(mol)
     res["MTPSA"] = round(temp, 3)
+    res['TPSA1']=round(temp,3)
     return res
 
 

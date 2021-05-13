@@ -29,14 +29,14 @@ Email: gadsby@163.com and oriental-cds@163.com
 from rdkit import Chem
 from rdkit.Chem import rdchem
 
-try:
+''' try:
     # TODO: Is this deprecated?
     # https://github.com/rdkit/rdkit/issues/2741#issuecomment-546709239
-    from rdkit.Chem import pyPeriodicTable as PeriodicTable
+    from rdkit.Chem import pyperiodicTable as periodicTable
 except ImportError:
-    from rdkit.Chem import PeriodicTable
+    from rdkit.Chem import periodicTable '''
 
-periodicTable = rdchem.GetPeriodicTable()
+periodicTable = Chem.GetPeriodicTable()
 
 
 Version = 1.0
@@ -135,13 +135,13 @@ def _HallKierAlpha(mol):
     #################################################################
     """
     alphaSum = 0.0
-    rC = PeriodicTable.nameTable["C"][5]
+    rC = periodicTable.GetRb0(6)
     for atom in mol.GetAtoms():
         atNum = atom.GetAtomicNum()
         if not atNum:
             continue
         symb = atom.GetSymbol()
-        alphaV = PeriodicTable.hallKierAlphas.get(symb, None)
+        alphaV = Chem.GraphDescriptors.hallKierAlphas.get(symb, None)
         if alphaV is not None:
             hyb = atom.GetHybridization() - 2
             if hyb < len(alphaV):
@@ -151,7 +151,7 @@ def _HallKierAlpha(mol):
             else:
                 alpha = alphaV[-1]
         else:
-            rA = PeriodicTable.nameTable[symb][5]
+            rA = periodicTable.GetRb0(atNum)
             alpha = rA / rC - 1
         alphaSum += alpha
     return alphaSum

@@ -297,6 +297,59 @@ def CalculateGutmanTopo(mol):
 
     return numpy.log10(res)
 
+def _HKDeltas(mol,skipHs=1):
+    """
+    #################################################################
+    *Internal Use Only*
+    
+    Calculation of modified delta value for a molecule
+    
+    res---->list type
+    #################################################################
+    """
+    global periodicTable
+    res=[]
+    for atom in mol.GetAtoms():
+        n=atom.GetAtomicNum()
+        if n>1:
+            nV=periodicTable.GetNOuterElecs(n)
+            nHs=atom.GetTotalNumHs()
+            if n<10:
+                res.append(float(nV-nHs))
+            else:
+                res.append(float(nV-nHs)/float(n-nV-1))
+        elif not skipHs:
+            res.append(0.0)
+    return res
+
+def CalculateGutmanVTopo(mol):
+    """
+    #################################################################
+    Calculation of Gutman molecular topological index based on
+    
+    valence vertex degree(log1o)
+    
+    ---->GMTIV
+    
+    Usage: 
+        
+        result=CalculateGutmanVTopo(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    nAT=mol.GetNumAtoms()
+    deltas=_HKDeltas(mol)
+    Distance= Chem.GetDistanceMatrix(mol)
+    res=0.0
+    for i in range(nAT):
+        for j in range(i+1,nAT):
+            res=res+deltas[i]*deltas[j]*Distance[i,j]
+
+    return numpy.log10(res)
+
 
 def CalculatePolarityNumber(mol):
     """
@@ -719,6 +772,280 @@ def CalculateArithmeticTopoIndex(mol):
     res = 2.0 * nBonds / nAtoms
     return res
 
+def CalculateDistanceEqualityTotalInf(mol):
+    
+    """
+    #################################################################
+    Total information index on distance equality
+    
+    -->DET
+    
+    Usage: 
+        
+        result=CalculateDistanceEqualityTotalInf(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    Distance= Chem.GetDistanceMatrix(mol)
+    nAT=mol.GetNumAtoms()
+    n=1./2*nAT**2-nAT
+    DisType=int(Distance.max())
+    res=0.0
+    #res=numpy.zeros(DisType,numpy.float)
+    for i in range(DisType):
+        cc=1./2*sum(sum(Distance==i+1))
+        res += cc*numpy.log2(cc)
+
+    return n*numpy.log2(n)-res
+
+
+def CalculateDistanceEqualityMeanInf(mol):
+    
+    """
+    #################################################################
+    Mean information index on distance equality
+    
+    -->IDE
+    
+    Usage: 
+        
+        result=CalculateDistanceEqualityMeanInf(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    Distance= Chem.GetDistanceMatrix(mol)
+
+    nAT=mol.GetNumAtoms()
+    n=1./2*nAT**2-nAT
+    DisType=int(Distance.max())
+    res=0.0
+    cc=numpy.zeros(DisType,numpy.float)
+    for i in range(DisType):
+        cc[i]=1./2*sum(sum(Distance==i+1))
+
+    res=_CalculateEntropy(cc/n)
+      
+    return res
+
+def CalculateMolSizeTotalInf(mol):
+    """
+    #################################################################
+    Total information index on molecular size
+    
+    -->ISIZ
+    
+    Usage: 
+        
+        result=CalculateMolSizeTotalInf(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    Hmol=Chem.AddHs(mol)
+    nAT=Hmol.GetNumAtoms()
+    ISIZ=nAT*numpy.log2(nAT)
+    return ISIZ
+
+def _CalculateEntropy(Probability):
+    """
+    #################################################################
+    **Internal used only**
+    
+    Calculation of entropy (Information content) for probability given
+    #################################################################
+    """
+    res=0.0
+    for i in Probability:
+        if i!=0:       
+            res=res-i*numpy.log2(i)
+
+    return res
+
+def CalculateVertexEqualityTotalInf(mol):
+    """
+    #################################################################
+    Total information index on vertex equality
+    
+    -->IVDE
+    
+    Usage: 
+        
+        result=CalculateVertexEqualityTotalInf(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    deltas=[x.GetDegree() for x in mol.GetAtoms()]
+    res=0.0
+    while 0 in deltas:
+        deltas.remove()
+    for i in range(max(deltas)):
+        cc=deltas.count(i+1)
+        if cc==0:
+            res=res
+        else:
+            res += cc*numpy.log2(cc)
+
+    n=len(deltas)
+
+    return n*numpy.log2(n)-res
+
+def CalculateAtomCompTotalInf(mol):
+    """
+    #################################################################
+    Total information index on atomic composition
+    
+    -->TIAC
+    
+    Usage: 
+        
+        result=CalculateAtomCompTotalInf(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    Hmol=Chem.AddHs(mol)
+    nAtoms=Hmol.GetNumAtoms()
+    IC=[]
+    for i in range(nAtoms):
+        at=Hmol.GetAtomWithIdx(i)
+        IC.append(at.GetAtomicNum())
+    Unique=numpy.unique(IC)
+    NAtomType=len(Unique)
+    #NTAtomType=numpy.zeros(NAtomType,numpy.float)
+    res=0.0
+    for i in range(NAtomType):
+        cc=IC.count(Unique[i])
+        res += cc*numpy.log2(cc)
+
+    if nAtoms!=0:
+        return nAtoms*numpy.log2(nAtoms)-res
+    else:
+        return 0.0
+
+    
+def CalculateGravitationalTopoIndex(mol):
+    """
+    #################################################################
+    Gravitational topological index based on topological distance 
+    
+    instead of intermolecular distance.
+    
+    ---->Gravto
+    
+    Usage: 
+        
+        result=CalculateGravitationalTopoIndex(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    nAT=mol.GetNumAtoms()
+    Distance= Chem.GetDistanceMatrix(mol) 
+    res=0.0
+    Atom=mol.GetAtoms()
+    for i in range(nAT-1):
+        for j in range(i+1,nAT):
+            temp=Atom[i].GetMass()*Atom[j].GetMass()
+            res=res+temp/numpy.power(Distance[i][j],2)
+    
+    return res/100      
+
+def CalculateSimpleTopovIndex(mol):
+    """
+    #################################################################
+    Calculation of the logarithm of the simple topological index by Narumi,
+    
+    which is defined as the product of the vertex degree.
+    
+    ---->Sitov
+    
+    Usage: 
+        
+        result=CalculateSimpleTopovIndex(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    deltas=_HKDeltas(mol,skipHs=0)
+    while 0 in deltas:
+        deltas.remove(0)
+    deltas=numpy.array(deltas,'d')
+    
+    res=numpy.prod(deltas)
+    
+    return numpy.log(res)
+
+def CalculateGeometricTopovIndex(mol):
+    """
+    #################################################################
+    Geometric topological index by Narumi
+    
+    ---->Getov
+    
+    Usage: 
+        
+        result=CalculateGeometricTopovIndex(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    nAtoms=mol.GetNumAtoms()
+    deltas=_HKDeltas(mol,skipHs=0)
+    while 0 in deltas:
+        deltas.remove(0)
+    deltas=numpy.array(deltas,'d')
+    
+    temp=numpy.prod(deltas)
+    res=numpy.power(temp,1./nAtoms)
+
+    return res 
+
+def CalculateHarmonicTopovIndex(mol):
+    """
+    #################################################################
+    Calculation of harmonic topological index proposed by Narnumi.
+    
+    ---->Hatov
+    
+    Usage: 
+        
+        result=CalculateHarmonicTopovIndex(mol)
+        
+        Input: mol is a molecule object
+        
+        Output: result is a numeric value
+    #################################################################
+    """
+    deltas=_HKDeltas(mol,skipHs=0)
+    while 0 in deltas:
+        deltas.remove(0)
+    deltas=numpy.array(deltas,'d')  
+    nAtoms=mol.GetNumAtoms()
+    
+    res=nAtoms/sum(1./deltas)
+    
+    return res
+
+
 
 _Topology = {
     "W": CalculateWeiner,
@@ -746,6 +1073,16 @@ _Topology = {
     "Hato": CalculateHarmonicTopoIndex,
     "Geto": CalculateGeometricTopoIndex,
     "Arto": CalculateArithmeticTopoIndex,
+    'GMTIV':CalculateGutmanVTopo,
+    'IDET':CalculateDistanceEqualityTotalInf,
+    'IDE':CalculateDistanceEqualityMeanInf,
+    'ISIZ':CalculateMolSizeTotalInf,
+    'IVDE':CalculateVertexEqualityTotalInf,
+    'TIAC':CalculateAtomCompTotalInf,
+    'Gravto':CalculateGravitationalTopoIndex,
+    'Hatov':CalculateHarmonicTopovIndex,
+    'Sitov':CalculateSimpleTopovIndex,
+    'Getov':CalculateGeometricTopovIndex,
 }
 
 
