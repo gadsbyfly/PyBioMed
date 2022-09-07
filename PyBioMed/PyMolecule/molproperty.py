@@ -49,7 +49,7 @@ def CalculateMolLogP(mol):
         Output: result is a numeric value.
     #################################################################
     """
-    return round(Crippen._pyMolLogP(mol), 3)
+    return round(Crippen.MolLogP(mol), 3)
 
 
 def CalculateMolLogP2(mol):
@@ -68,7 +68,7 @@ def CalculateMolLogP2(mol):
         Output: result is a numeric value.
     #################################################################
     """
-    res = Crippen._pyMolLogP(mol)
+    res = Crippen.MolLogP(mol)
 
     return round(res ** 2, 3)
 
@@ -89,7 +89,7 @@ def CalculateMolMR(mol):
         Output: result is a numeric value.
     #################################################################
     """
-    return round(Crippen._pyMolMR(mol), 3)
+    return round(Crippen.MolMR(mol), 3)
 
 
 def CalculateTPSA(mol):

@@ -69,6 +69,28 @@ def _CalculateEState(mol, skipH=1):
     res = accum + Is
     return res
 
+def _CalculateAtomEState(mol,AtomicNum=6):
+    """
+    #################################################################
+    **Internal used only**
+    
+    The sum of the EState indices over all atoms 
+    #################################################################
+    """
+    nAtoms=mol.GetNumAtoms()
+    Is=numpy.zeros(nAtoms,numpy.float)
+    Estate=_CalculateEState(mol)
+    
+    for i in range(nAtoms):
+        at=mol.GetAtomWithIdx(i)
+        atNum=at.GetAtomicNum()
+        if atNum==AtomicNum:
+            Is[i]=Estate[i]
+            
+    res=sum(Is)
+    
+    return res
+
 
 def _GetPrincipleQuantumNumber(atNum):
     """
@@ -174,6 +196,112 @@ def CalculateMaxAtomTypeEState(mol):
 
     return ESresult
 
+def CalculateHeavyAtomEState(mol):
+    
+    """
+    #################################################################
+    The sum of the EState indices over all non-hydrogen atoms
+    
+    -->Shev
+    #################################################################
+    """
+    
+    return round(sum(_CalculateEState(mol)),3)
+
+def CalculateCAtomEState(mol):
+    """
+    #################################################################
+    The sum of the EState indices over all C atoms
+    
+    -->Scar
+    #################################################################
+    """
+    return _CalculateAtomEState(mol,AtomicNum=6)
+
+
+
+def CalculateHalogenEState(mol):
+    
+    """
+    #################################################################
+    The sum of the EState indices over all Halogen atoms
+    
+    -->Shal
+    #################################################################
+    """
+    
+    Nf=_CalculateAtomEState(mol,AtomicNum=9)
+    Ncl=_CalculateAtomEState(mol,AtomicNum=17)
+    Nbr=_CalculateAtomEState(mol,AtomicNum=35)
+    Ni=_CalculateAtomEState(mol,AtomicNum=53)
+  
+    return round(Nf+Ncl+Nbr+Ni,3)
+
+
+
+def CalculateHeteroEState(mol):
+    """
+    #################################################################
+    The sum of the EState indices over all hetero atoms
+    
+    -->Shet
+    #################################################################
+    """
+    
+    Ntotal=sum(_CalculateEState(mol))
+    NC=_CalculateAtomEState(mol,AtomicNum=6)
+    NH=_CalculateAtomEState(mol,AtomicNum=1)
+    
+    return round(Ntotal-NC-NH,3)
+
+
+def CalculateAverageEState(mol):
+    """
+    #################################################################
+    The sum of the EState indices over all non-hydrogen atoms 
+    
+    divided by the number of non-hydrogen atoms.
+    
+    -->Save
+    #################################################################
+    """
+    N=mol.GetNumAtoms()
+    return round(sum(_CalculateEState(mol))/N,3)
+
+def CalculateMaxEState(mol):
+
+    """
+    #################################################################
+    Obtain the maximal Estate value in all atoms
+    
+    -->Smax
+    #################################################################
+    """
+    return round(max(_CalculateEState(mol)),3)
+
+
+def CalculateMinEState(mol):
+    """
+    #################################################################
+    Obtain the minimal Estate value in all atoms
+    
+    -->Smin
+    #################################################################
+    """
+    
+    return round(min(_CalculateEState(mol)),3)
+
+
+def CalculateDiffMaxMinEState(mol):
+    """
+    #################################################################
+    The difference between Smax and Smin
+    
+    -->DS
+    #################################################################
+    """
+    return round(max(_CalculateEState(mol))-min(_CalculateEState(mol)),3)
+    
 
 def CalculateMinAtomTypeEState(mol):
     """
@@ -225,6 +353,15 @@ def GetEstate(mol):
     result.update(CalculateEstateValue(mol))
     result.update(CalculateMaxAtomTypeEState(mol))
     result.update(CalculateMinAtomTypeEState(mol))
+    
+    result.update({'Shev':CalculateHeavyAtomEState(mol)})
+    result.update({'Scar':CalculateCAtomEState(mol)})
+    result.update({'Shal':CalculateHalogenEState(mol)})
+    result.update({'Shet':CalculateHeteroEState(mol)})
+    result.update({'Save':CalculateAverageEState(mol)})
+    result.update({'Smax':CalculateMaxEState(mol)})
+    result.update({'Smin':CalculateMinEState(mol)})
+    result.update({'DS':CalculateDiffMaxMinEState(mol)})
 
     return result
 
@@ -247,6 +384,15 @@ def _GetEstate(mol):
     result.update(CalculateEstateValue(mol))
     result.update(CalculateMaxAtomTypeEState(mol))
     result.update(CalculateMinAtomTypeEState(mol))
+    
+    result.update({'Shev':CalculateHeavyAtomEState(mol)})
+    result.update({'Scar':CalculateCAtomEState(mol)})
+    result.update({'Shal':CalculateHalogenEState(mol)})
+    result.update({'Shet':CalculateHeteroEState(mol)})
+    result.update({'Save':CalculateAverageEState(mol)})
+    result.update({'Smax':CalculateMaxEState(mol)})
+    result.update({'Smin':CalculateMinEState(mol)})
+    result.update({'DS':CalculateDiffMaxMinEState(mol)})
 
     return result
 
