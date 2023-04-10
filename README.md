@@ -2,6 +2,7 @@
 ![](https://img.shields.io/pypi/l/Django.svg) ![](https://img.shields.io/badge/dependencies-rdkit%2C%20pybel-green.svg)
 ![](https://img.shields.io/badge/platforms-linux%2C%20windows-brightgreen.svg)
 
+
 ## Introduction
 PyBioMed provides various user-friendly and highly customized APIs to calculate various features(descriptors) of biological molecules(chemicals, proteins and DNA/RNA descriptors) and complex interaction samples conveniently, which aims at building integrated analysis pipelines from data acquisition, data checking, and descriptor calculation to modeling.
 
@@ -11,7 +12,7 @@ PyBioMed provides various user-friendly and highly customized APIs to calculate 
 * To install [RDKit](http://www.rdkit.org/docs/Install.html)
 
 ### Install PyBioMed
-PyBioMed has been successfully tested on Linux and Windows systems. After installing RDKit and pybel successfully, The author could download the PyBioMed package via [GitHub](https://github.com/gadsbyfly/PyBioMed/blob/master/PyBioMed/download/PyBioMed-1.0.zip).
+PyBioMed has been successfully tested on Linux and Windows systems. After installing RDKit and pybel successfully, The author could download the PyBioMed package via [GitHub](https://codeload.github.com/gadsbyfly/PyBioMed/zip/refs/heads/master).
 
 The install process of PyBioMed is very easy:
 
