@@ -5,6 +5,7 @@
 
 ## Introduction
 PyBioMed provides various user-friendly and highly customized APIs to calculate various features(descriptors) of biological molecules(chemicals, proteins and DNA/RNA descriptors) and complex interaction samples conveniently, which aims at building integrated analysis pipelines from data acquisition, data checking, and descriptor calculation to modeling.
+The download link  https://codeload.github.com/gadsbyfly/PyBioMed/zip/refs/heads/master
 
 ## Installation
 ### Install Pybel and RDKit
