@@ -825,7 +825,7 @@ def CalculateDistanceEqualityMeanInf(mol):
     n=1./2*nAT**2-nAT
     DisType=int(Distance.max())
     res=0.0
-    cc=numpy.zeros(DisType,numpy.float)
+    cc=numpy.zeros(DisType,numpy.float64)
     for i in range(DisType):
         cc[i]=1./2*sum(sum(Distance==i+1))
 

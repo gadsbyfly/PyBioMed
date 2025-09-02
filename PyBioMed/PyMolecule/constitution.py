@@ -708,10 +708,16 @@ def GetConstitutional(mol):
     #################################################################
     """
     result = {}
-    for DesLabel in _constitutional.keys():
-        result[DesLabel] = round(_constitutional[DesLabel](mol), 3)
-    return result
+    #for DesLabel in _constitutional.keys():
+    #    result[DesLabel] = round(_constitutional[DesLabel](mol), 3)
+    #return result
 
+    # Check if the result is a vector and handle accordingly
+    value = _constitutional[DesLabel](mol)
+    if isinstance(value, list) or hasattr(value, "__iter__"):  # Check if it's a list or iterable
+        result[DesLabel] = [round(v, 3) for v in value]  # Round each element in the vector
+    else:
+        result[DesLabel] = round(value, 3)
 
 #############################################################
 

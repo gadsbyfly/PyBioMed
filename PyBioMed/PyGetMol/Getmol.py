@@ -19,14 +19,15 @@ Email: gadsby@163.com
 
 try:
     # Python 3
-    from urllib.request import urlopen
+    from urllib.request import urlopen, Request
 except ImportError:
     # Python 2
-    from urllib2 import urlopen
+    from urllib2 import urlopen, Request
 # Core Library modules
 import os
 import re
 import string
+import pybel
 
 # Third party modules
 from rdkit import Chem
@@ -134,31 +135,45 @@ def ReadMolFromMol(filename=""):
 
 #############################################################################
 
-
 def GetMolFromCAS(casid=""):
     """
-    Downloading the molecules from http://www.chemnet.com/cas/ by CAS ID (casid).
-    if you want to use this function, you must be install pybel.
+    Download molecules from http://www.chemnet.com/cas/ using CAS ID (casid).
+    Requires OpenBabel's pybel module.
     """
-    from openbabel import pybel
-
     casid = casid.strip()
-    localfile = urlopen(
-        "http://www.chemnet.com/cas/supplier.cgi?terms=" + casid + "&l=&exact=dict"
-    )
-    temp = localfile.readlines()
-    for i in temp:
-        if re.findall("InChI=", i) == ["InChI="]:
-            k = i.split('    <td align="left">')
-            kk = k[1].split("</td>\r\n")
-            if kk[0][0:5] == "InChI":
-                res = kk[0]
-            else:
-                res = "None"
+    
+    # Download page from chemnet
+    link = f"http://www.chemnet.com/cas/supplier.cgi?terms={casid}&l=&exact=dict"
+    localfile = urlopen(link)
+    
+    # Read and decode the content
+    temp = [line.decode('utf-8') for line in localfile.readlines()]
+    
+    # Close the connection
     localfile.close()
-    mol = pybel.readstring("inchi", res.strip())
-    smile = mol.write("smi")
-    return smile.strip()
+    
+    # Search for the InChI string in the page content
+    res = None
+    for i in temp:
+        if "InChI=" in i:  # Check if the line contains "InChI="
+            k = i.split('<td align="left">')
+            kk = k[1].split("</td>\r\n")
+            if kk[0].startswith("InChI"):
+                res = kk[0].strip()
+                break
+    
+    # Error handling if no InChI is found
+    if res is None:
+        raise ValueError(f"InChI string not found for CAS ID {casid}.")
+    
+    # Convert the InChI string to a molecule using pybel
+    #mol = pybel.readstring("inchi", res)
+    mol = pybel.Molecule(res)  # Use the Molecule constructor directly
+    
+    # Convert the molecule to SMILES format
+    smile = mol.write("smi").strip()
+    
+    return smile
 
 
 def GetMolFromEBI():
@@ -193,30 +208,71 @@ def GetMolFromDrugbank(dbid=""):
     Downloading the molecules from http://www.drugbank.ca/ by dbid (dbid).
     """
     dbid = dbid.strip()
-
-    localfile = urlopen("http://www.drugbank.ca/drugs/" + dbid + ".sdf")
-    temp = localfile.readlines()
-    f = file("temp.sdf", "w")
-    f.writelines(temp)
+    link = "http://www.drugbank.ca/drugs/" + dbid + ".sdf"
+    
+    # Create a request with headers
+    req = Request(link, headers={'User-Agent': 'Mozilla/5.0'})
+    localfile = urlopen(req)
+    lines = localfile.readlines()
+    #print(lines)
+    # Read and decode the contents of the file
+    temp = [line.decode('utf-8') for line in lines]  # Decode each line
+    #print(temp)
+    with open("temp.sdf", "w") as f:
+        f.write("".join(temp))  # Join the list into a single string and write it to the file
+    
+    # Close the files
     f.close()
     localfile.close()
+    
+    # Check if the file was written successfully
+    if os.path.getsize("temp.sdf") == 0:
+        raise ValueError("The downloaded SDF file is empty or corrupted.")
+    
+    # Load the molecule using RDKit
     m = Chem.MolFromMolFile("temp.sdf")
-    os.remove("temp.sdf")
+    
+    #print(f"extracted data: {m}")
+    
+    # Check if the molecule was successfully loaded
+    if m is None:
+        raise ValueError("RDKit could not load the molecule from the SDF file.")
+    
+    # Convert the molecule to SMILES
     temp = Chem.MolToSmiles(m, isomericSmiles=True)
+    
+    # Remove the temporary SDF file
+    os.remove("temp.sdf")
+    
     return temp
-
 
 def GetMolFromKegg(kid=""):
     """
     Downloading the molecules from http://www.genome.jp/ by kegg id (kid).
     """
     ID = str(kid)
-    localfile = urlopen("http://www.genome.jp/dbget-bin/www_bget?-f+m+drug+" + ID)
-    temp = localfile.readlines()
-    f = file("temp.mol", "w")
-    f.writelines(temp)
+    link = urlopen("http://www.genome.jp/dbget-bin/www_bget?-f+m+drug+" + ID)
+    #temp = localfile.readlines()
+    #f = open("temp.mol", "w")
+    #f.writelines(temp)
+    #f.close()
+    #localfile.close()
+    # Create a request with headers
+
+    req = Request(link, headers={'User-Agent': 'Mozilla/5.0'})
+    localfile = urlopen(req)
+    lines = localfile.readlines()
+    #print(lines)
+    # Read and decode the contents of the file
+    temp = [line.decode('utf-8') for line in lines]  # Decode each line
+    #print(temp)
+    with open("temp.sdf", "w") as f:
+        f.write("".join(temp))  # Join the list into a single string and write it to the file
+    
+    # Close the files
     f.close()
     localfile.close()
+
     m = Chem.MolFromMolFile("temp.mol")
     os.remove("temp.mol")
     temp = Chem.MolToSmiles(m, isomericSmiles=True)

@@ -22,6 +22,8 @@ Email: gadsby@163.com and oriental-cds@163.com
 ##############################################################################
 """
 # Third party modules
+import numpy as np
+# -*- coding: utf-8 -*-
 import numpy
 from rdkit import Chem
 from rdkit.Chem import rdchem
@@ -303,7 +305,7 @@ def CalculateChi10p(mol):
     """
     return _CalculateChinp(mol, NumPath=10)
 
-
+'''
 def CalculateChi3c(mol):
     """
     #################################################################
@@ -333,8 +335,39 @@ def CalculateChi3c(mol):
             deltas1 = numpy.array(deltas, numpy.float)
             accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
     return accum
+'''
+def CalculateChi3c(mol):
+    """
+    #################################################################
+    Calculation of molecular connectivity chi index for cluster
 
+    ---->Chi3c
 
+    Usage:
+
+        result=CalculateChi3c(mol)
+
+        Input: mol is a molecule object.
+
+        Output: result is a numeric value
+    #################################################################
+    """
+
+    accum = 0.0
+    deltas = [x.GetDegree() for x in mol.GetAtoms()]
+    patt = Chem.MolFromSmarts("*~*(~*)~*")
+    HPatt = mol.GetSubstructMatches(patt)
+    for cluster in HPatt:
+        deltas = [mol.GetAtomWithIdx(x).GetDegree() for x in cluster]
+        while 0 in deltas:
+            deltas.remove(0)
+        if deltas != []:
+            # Change numpy.float to float
+            deltas1 = numpy.array(deltas, float)  # or use numpy.float64 if needed
+            accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
+    return accum 
+
+''''''
 def CalculateChi4c(mol):
     """
     #################################################################
@@ -365,7 +398,18 @@ def CalculateChi4c(mol):
             accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
     return accum
 
+def CalculateChi4c(mol):
+    accum = 0.0
+    deltas = [x.GetDegree() for x in mol.GetAtoms()]
+    # Assuming similar logic as in CalculateChi3c
+    while 0 in deltas:
+        deltas.remove(0)
+    if deltas != []:
+        deltas1 = numpy.array(deltas, float)  # Change this line
+        accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
+    return accum
 
+'''
 def CalculateChi4pc(mol):
     """
     #################################################################
@@ -396,7 +440,16 @@ def CalculateChi4pc(mol):
             deltas1 = numpy.array(deltas, numpy.float)
             accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
     return accum
-
+'''
+def CalculateChi4pc(mol):
+    accum = 0.0
+    deltas = [x.GetDegree() for x in mol.GetAtoms()]
+    while 0 in deltas:
+        deltas.remove(0)
+    if deltas != []:
+        deltas1 = numpy.array(deltas, float)  # Change this line
+        accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
+    return accum
 
 def CalculateDeltaChi3c4pc(mol):
     """
@@ -924,7 +977,39 @@ def _AtomHKDeltas(atom, skipHs=0):
         res.append(0.0)
     return res
 
+def CalculateChiv3c(mol):
+    """
+    #################################################################
+    Calculation of valence molecular connectivity chi index for cluster
 
+    ---->Chiv3c
+
+    Usage:
+        result = CalculateChiv3c(mol)
+
+    Input:
+        mol is a molecule object.
+
+    Output:
+        result is a numeric value
+    #################################################################
+    """
+    accum = 0.0
+    deltas = [x.GetDegree() for x in mol.GetAtoms()]
+    patt = Chem.MolFromSmarts("*~*(~*)~*")
+    HPatt = mol.GetSubstructMatches(patt)
+    
+    for cluster in HPatt:
+        deltas = [_AtomHKDeltas(mol.GetAtomWithIdx(x)) for x in cluster]
+        while 0 in deltas:
+            deltas.remove(0)
+        if deltas:
+            # Convert deltas to a NumPy array of type float
+            deltas1 = numpy.array(deltas, float)
+            accum += 1.0 / np.sqrt(deltas1.prod())
+    
+    return accum
+'''
 def CalculateChiv3c(mol):
     """
     #################################################################
@@ -952,9 +1037,10 @@ def CalculateChiv3c(mol):
             deltas.remove(0)
         if deltas != []:
             deltas1 = numpy.array(deltas, numpy.float)
+            deltas1 = numpy.array(deltas, float)
             accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
     return accum
-
+'''
 
 def CalculateChiv4c(mol):
     """
@@ -982,7 +1068,7 @@ def CalculateChiv4c(mol):
         while 0 in deltas:
             deltas.remove(0)
         if deltas != []:
-            deltas1 = numpy.array(deltas, numpy.float)
+            deltas1 = numpy.array(deltas, numpy.float64)
             accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
     return accum
 
@@ -1015,7 +1101,7 @@ def CalculateChiv4pc(mol):
         while 0 in deltas:
             deltas.remove(0)
         if deltas != []:
-            deltas1 = numpy.array(deltas, numpy.float)
+            deltas1 = numpy.array(deltas, float)
             accum = accum + 1.0 / numpy.sqrt(deltas1.prod())
     return accum
 
